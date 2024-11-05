@@ -105,21 +105,6 @@ body {
     margin: 20px;
     /*background-color: #f8f9fa;*/
 }
-.question {
-    margin-bottom: 20px;
-    padding: 15px;
-    border-radius: 8px;
-    background-color: white;
-    box-shadow: 0 1px 13px rgba(0,0,0,0.3);
-}
-.question-text {
-    margin-bottom: 10px;
-    font-weight: 500;
-}
-.options label {
-    display: block;
-    margin-bottom: 8px;
-}
 .partner-logos {
     padding: 20px 0;
 }
@@ -1282,6 +1267,228 @@ body {
         margin: 0 -1rem;
     }
 }
+
+/* QUESTIONS */
+.question {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.question:hover,
+.question:focus-within {
+    border-color: #2196F3;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.15);
+}
+
+.question-text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    font-weight: 500;
+    padding: 0.8rem;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+/* Enhanced form check styles */
+.form-check {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    min-height: 3.5rem;
+}
+
+.form-check:hover {
+    background-color: #f5f9ff;
+    border-color: #90caf9;
+}
+
+/* Larger radio buttons */
+.form-check-input {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    cursor: pointer;
+}
+
+/* Enhanced label text */
+.form-check-label {
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    color: #455a64;
+    cursor: pointer;
+    user-select: none;
+    flex: 1;
+}
+
+/* Focus styles */
+.form-check:focus-within {
+    outline: 3px solid #2196F3;
+    outline-offset: 2px;
+}
+
+/* Help button and content */
+.help-button {
+    color: #666;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.help-button:hover {
+    color: #2196F3;
+}
+
+.help-content {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+/* Screen reader only class */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .form-check {
+        padding: 1.2rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .form-check-input {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .form-check-label {
+        font-size: 1.2rem;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .question {
+        border: 3px solid #000;
+    }
+    
+    .question-text {
+        color: #000;
+        background: #fff;
+        border: 2px solid #000;
+    }
+    
+    .form-check {
+        border: 2px solid #000;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .question,
+    .form-check {
+        transition: none;
+    }
+}
+
+/* HELP BUTTONS */
+/* Help button and content styles */
+.help-button {
+    color: #666;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+    border-radius: 4px;
+}
+
+.help-button:hover {
+    color: #2196F3;
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+.help-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.5);
+}
+
+.help-button[aria-expanded="true"] {
+    color: #2196F3;
+}
+
+.help-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease-out;
+    opacity: 0;
+    margin-top: 0;
+}
+
+.help-content:not([hidden]) {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 1rem;
+}
+
+.help-content .alert {
+    margin-bottom: 0;
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+    color: #0d47a1;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .help-button,
+    .help-content {
+        transition: none;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .help-button {
+        border: 1px solid currentColor;
+    }
+    
+    .help-button[aria-expanded="true"] {
+        background: #000;
+        color: #fff;
+    }
+    
+    .help-content .alert {
+        border: 2px solid #000;
+        background: #fff;
+        color: #000;
+    }
+}
 </style>
 
 </head>
@@ -2391,43 +2598,116 @@ const startBtn = document.getElementById('start-test');
 // Share button
 const shareBtn = document.getElementById('shareBtn');
 
-// Form generation with Bootstrap classes
-questions.forEach(question => {
+// Form generation with Bootstrap classes with enhanced accessibility
+questions.forEach((question, index) => {
     const questionDiv = document.createElement('div');
     questionDiv.classList.add('question', 'mb-4');
+    questionDiv.setAttribute('role', 'group');
+    questionDiv.setAttribute('aria-labelledby', `question-${question.id}-label`);
+    questionDiv.setAttribute('data-question-number', question.id);
 
-    const questionText = document.createElement('div');
-    questionText.classList.add('question-text');
-    questionText.textContent = `${question.id}. ${question.text}`;
-    questionDiv.appendChild(questionText);
+    // Question label container
+    const questionLabel = document.createElement('div');
+    questionLabel.id = `question-${question.id}-label`;
+    questionLabel.classList.add('question-text');
+    questionLabel.textContent = `${question.id}. ${question.text}`;
 
-    const optionsDiv = document.createElement('div');
-    optionsDiv.classList.add('options');
+    // Add inverse scoring indicator for screen readers
+    if (question.inverse) {
+        const inverseNote = document.createElement('span');
+        inverseNote.classList.add('sr-only');
+        inverseNote.textContent = ' (Întrebare cu scorare inversă)';
+        questionLabel.appendChild(inverseNote);
+    }
+
+    questionDiv.appendChild(questionLabel);
+
+    // Create fieldset for radio buttons
+    const fieldset = document.createElement('fieldset');
+    fieldset.classList.add('options');
+    
+    // Add legend for screen readers
+    const legend = document.createElement('legend');
+    legend.classList.add('sr-only');
+    legend.textContent = `Opțiuni pentru întrebarea ${question.id}`;
+    fieldset.appendChild(legend);
 
     const options = [
-        { label: "Adevărat acum și când eram mic(ă)", value: "3" },
-        { label: "Adevărat doar acum", value: "2" },
-        { label: "Adevărat doar când aveam sub 16 ani", value: "1" },
-        { label: "Niciodată adevărat", value: "0" },
+        { 
+            label: "Adevărat acum și când eram mic(ă)", 
+            value: "3",
+            description: "Selectați dacă afirmația este adevărată atât în prezent cât și în trecut"
+        },
+        { 
+            label: "Adevărat doar acum", 
+            value: "2",
+            description: "Selectați dacă afirmația este adevărată doar în prezent"
+        },
+        { 
+            label: "Adevărat doar când aveam sub 16 ani", 
+            value: "1",
+            description: "Selectați dacă afirmația era adevărată doar în copilărie"
+        },
+        { 
+            label: "Niciodată adevărat", 
+            value: "0",
+            description: "Selectați dacă afirmația nu a fost niciodată adevărată"
+        }
     ];
 
-    options.forEach(option => {
+    options.forEach((option, optionIndex) => {
         const label = document.createElement('label');
         label.classList.add('form-check');
+        label.setAttribute('for', `q${question.id}-opt${optionIndex}`);
+
         const input = document.createElement('input');
         input.type = 'radio';
+        input.id = `q${question.id}-opt${optionIndex}`;
         input.name = `question_${question.id}`;
         input.value = option.value;
         input.classList.add('form-check-input');
-        label.appendChild(input);
+        input.setAttribute('aria-describedby', `q${question.id}-opt${optionIndex}-desc`);
+
         const span = document.createElement('span');
         span.classList.add('form-check-label');
-        span.textContent = ` ${option.label}`;
+        span.textContent = option.label;
+
+        // Add description for screen readers
+        const description = document.createElement('span');
+        description.id = `q${question.id}-opt${optionIndex}-desc`;
+        description.classList.add('sr-only');
+        description.textContent = option.description;
+
+        label.appendChild(input);
         label.appendChild(span);
-        optionsDiv.appendChild(label);
+        label.appendChild(description);
+        fieldset.appendChild(label);
     });
 
-    questionDiv.appendChild(optionsDiv);
+    questionDiv.appendChild(fieldset);
+    
+    // Add help button
+    const helpButton = document.createElement('button');
+    helpButton.type = 'button';
+    helpButton.classList.add('help-button', 'btn', 'btn-link', 'mt-2');
+    helpButton.innerHTML = '<i class="fas fa-question-circle"></i> Ajutor pentru această întrebare';
+    helpButton.setAttribute('aria-expanded', 'false');
+    helpButton.setAttribute('aria-controls', `help-${question.id}`);
+
+    const helpContent = document.createElement('div');
+    helpContent.id = `help-${question.id}`;
+    helpContent.classList.add('help-content');
+    helpContent.setAttribute('hidden', '');
+    helpContent.innerHTML = `
+        <div class="alert alert-info mt-2">
+            <p>Selectați opțiunea care descrie cel mai bine experiența dumneavoastră.</p>
+            <p>Puteți naviga cu tastele săgeți sus/jos între opțiuni sau Tab între întrebări.</p>
+        </div>
+    `;
+
+    questionDiv.appendChild(helpButton);
+    questionDiv.appendChild(helpContent);
+
     form.appendChild(questionDiv);
 });
 
@@ -2499,39 +2779,135 @@ function getInterpretation(score) {
     return 'Scor foarte ridicat, specific persoanelor autiste.';
 }
 
+// Add this progress tracker at the top of the form
+const progressTracker = document.createElement('div');
+
+progressTracker.classList.add('progress-tracker', 'sticky-top', 'bg-white', 'py-3', 'mb-4');
+progressTracker.setAttribute('role', 'status');
+progressTracker.setAttribute('aria-live', 'polite');
+progressTracker.innerHTML = `
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="progress-text">0 din ${questions.length} întrebări completate</span>
+        <span class="remaining-text">${questions.length} rămase</span>
+    </div>
+    <div class="progress" style="height: 8px;">
+        <div class="progress-bar" role="progressbar" style="width: 0%" 
+             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+`;
+form.insertBefore(progressTracker, form.firstChild);
+
+// Function to update progress
+function updateProgress() {
+    const totalQuestions = questions.length;
+    const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+    const percentage = (answeredQuestions / totalQuestions) * 100;
+    
+    const progressBar = document.querySelector('.progress-bar');
+    const progressText = document.querySelector('.progress-text');
+    const remainingText = document.querySelector('.remaining-text');
+    
+    progressBar.style.width = `${percentage}%`;
+    progressBar.setAttribute('aria-valuenow', percentage);
+    progressText.textContent = `${answeredQuestions} din ${totalQuestions} întrebări completate`;
+    remainingText.textContent = `${totalQuestions - answeredQuestions} rămase`;
+}
+
 // Submit button click handler
-// First, make sure resultDiv is properly selected
 submitBtn.addEventListener('click', (e) => {
     e.preventDefault();
+    
+    // Clear previous error states
     errorDiv.style.display = 'none';
     errorBelowDiv.style.display = 'none';
     errorDiv.textContent = '';
     errorBelowDiv.textContent = '';
-    let unanswered = [];
-
-    // Remove any existing highlights
+    
+    // Remove previous highlights and alerts
     document.querySelectorAll('.highlight-unanswered').forEach(el => {
         el.classList.remove('highlight-unanswered');
+        el.removeAttribute('aria-invalid');
+        const alert = el.querySelector('.validation-alert');
+        if (alert) alert.remove();
     });
+
+    let unanswered = [];
+    let firstUnanswered = null;
 
     // Validate answers
     questions.forEach(question => {
+        const questionDiv = document.querySelector(`[data-question-number="${question.id}"]`);
         const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
+        
         if (!selected) {
             unanswered.push(question.id);
-            const questionDiv = document.querySelector(`input[name="question_${question.id}"]`)
-                .closest('.question');
+            
+            // Add accessibility attributes
             questionDiv.classList.add('highlight-unanswered');
+            questionDiv.setAttribute('aria-invalid', 'true');
+            
+            // Add visual and screen reader alert
+            const alert = document.createElement('div');
+            alert.classList.add('validation-alert', 'alert', 'alert-warning', 'mt-2');
+            alert.setAttribute('role', 'alert');
+            alert.innerHTML = `
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Această întrebare necesită un răspuns
+            `;
+            questionDiv.appendChild(alert);
+            
+            // Store first unanswered question for scrolling
+            if (!firstUnanswered) firstUnanswered = questionDiv;
         }
     });
 
     if (unanswered.length > 0) {
-        const errorMessage = `Te rog să răspunzi la toate întrebările. Întrebările fără răspuns: ${unanswered.join(', ')}`;
-        errorDiv.textContent = errorMessage;
-        errorBelowDiv.textContent = errorMessage;
+        // Create accessible error message
+        const errorMessage = `
+            <div role="alert" class="d-flex align-items-center">
+                <i class="fas fa-exclamation-circle text-danger me-2"></i>
+                <div>
+                    <p class="mb-1">Te rugăm să răspunzi la toate întrebările înainte de a continua.</p>
+                    <p class="mb-0">Întrebări fără răspuns: ${unanswered.map(id => 
+                        `<a href="#" class="alert-link" data-question="${id}">${id}</a>`
+                    ).join(', ')}</p>
+                </div>
+            </div>
+        `;
+        
+        errorDiv.innerHTML = errorMessage;
+        errorBelowDiv.innerHTML = errorMessage;
         errorDiv.style.display = 'block';
         errorBelowDiv.style.display = 'block';
-        resultDiv.style.display = 'none';
+        
+        // Add click handlers for question links
+        [errorDiv, errorBelowDiv].forEach(div => {
+            div.querySelectorAll('[data-question]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const questionId = e.target.dataset.question;
+                    const questionDiv = document.querySelector(`[data-question-number="${questionId}"]`);
+                    questionDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    questionDiv.querySelector('input[type="radio"]').focus();
+                });
+            });
+        });
+
+        // Scroll to first unanswered question
+        if (firstUnanswered) {
+            firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstUnanswered.querySelector('input[type="radio"]').focus();
+            
+            // Announce to screen readers
+            const announcement = document.createElement('div');
+            announcement.setAttribute('role', 'status');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.classList.add('sr-only');
+            announcement.textContent = `${unanswered.length} întrebări necesită răspuns. Prima întrebare fără răspuns este întrebarea ${unanswered[0]}.`;
+            document.body.appendChild(announcement);
+            setTimeout(() => announcement.remove(), 3000);
+        }
+
         return;
     }
 
@@ -2850,12 +3226,43 @@ restartBtn.addEventListener('click', (e) => {
 // Click handler for the confirm button in the modal
 confirmRestartBtn.addEventListener('click', restartTest);
 
-// Event listener to remove highlighting when an answer is selected
-document.querySelectorAll('input[type="radio"]').forEach(radio => {
-    radio.addEventListener('change', (e) => {
+// Event listener to remove highlighting when an answer is selected - Enhanced radio button change handler
+document.addEventListener('change', (e) => {
+    if (e.target.type === 'radio') {
         const questionDiv = e.target.closest('.question');
+        
+        // Remove error state
         questionDiv.classList.remove('highlight-unanswered');
-    });
+        questionDiv.removeAttribute('aria-invalid');
+        const alert = questionDiv.querySelector('.validation-alert');
+        if (alert) alert.remove();
+        
+        // Update progress
+        updateProgress();
+        
+        // Find next unanswered question
+        const nextUnanswered = Array.from(document.querySelectorAll('.question'))
+            .find(q => !q.querySelector('input[type="radio"]:checked'));
+            
+        if (nextUnanswered) {
+            // Smooth scroll to next unanswered after a short delay
+            setTimeout(() => {
+                nextUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Focus first radio button of next question
+                nextUnanswered.querySelector('input[type="radio"]').focus();
+            }, 300);
+        }
+        
+        // Announce progress to screen readers
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.classList.add('sr-only');
+        const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+        announcement.textContent = `Întrebarea ${questionDiv.dataset.questionNumber} completată. ${answered} din ${questions.length} întrebări completate.`;
+        document.body.appendChild(announcement);
+        setTimeout(() => announcement.remove(), 3000);
+    }
 });
 
 // Function to generate a random identifier
@@ -3208,6 +3615,71 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
 
 // Click handler for share button
 shareBtn.addEventListener('click', shareToFacebook);
+
+
+// ACCESSIBILITY FEATURES
+
+// Add keyboard navigation
+document.addEventListener('keydown', (e) => {
+    const activeElement = document.activeElement;
+    if (activeElement.type === 'radio') {
+        const currentQuestion = activeElement.closest('.question');
+        const radios = Array.from(currentQuestion.querySelectorAll('input[type="radio"]'));
+        const currentIndex = radios.indexOf(activeElement);
+
+        switch(e.key) {
+            case 'ArrowDown':
+            case 'ArrowRight':
+                e.preventDefault();
+                const nextIndex = (currentIndex + 1) % radios.length;
+                radios[nextIndex].focus();
+                break;
+            case 'ArrowUp':
+            case 'ArrowLeft':
+                e.preventDefault();
+                const prevIndex = (currentIndex - 1 + radios.length) % radios.length;
+                radios[prevIndex].focus();
+                break;
+            case 'Home':
+                e.preventDefault();
+                radios[0].focus();
+                break;
+            case 'End':
+                e.preventDefault();
+                radios[radios.length - 1].focus();
+                break;
+        }
+    }
+});
+
+// Add help button functionality
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.help-button')) {
+        const button = e.target.closest('.help-button');
+        const helpContent = button.nextElementSibling;
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        
+        // Toggle the help content
+        button.setAttribute('aria-expanded', !isExpanded);
+        helpContent.hidden = isExpanded;
+        
+        // Add animation class
+        if (!isExpanded) {
+            helpContent.classList.add('help-content-show');
+        } else {
+            helpContent.classList.remove('help-content-show');
+        }
+        
+        // Announce to screen readers
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.classList.add('sr-only');
+        announcement.textContent = `Ajutor pentru întrebare ${isExpanded ? 'închis' : 'deschis'}`;
+        document.body.appendChild(announcement);
+        setTimeout(() => announcement.remove(), 1000);
+    }
+});
 </script>
 </body>
 </html>
