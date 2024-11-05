@@ -2398,7 +2398,6 @@ body {
 <script>
 const questions = [
     // 80 de întrebări ca obiecte cu text și flag pentru inversare
-    // Întrebările inverse sunt marcate cu inverse: true
     // Indexarea începe de la 1 pentru claritate
     { id: 1, text: "Exprim grijă și empatie, deși nu întotdeauna într-un mod tipic.", inverse: true },
     { id: 2, text: "Repet adesea fraze din filme sau emisiuni TV în conversații pentru că mă ajută să mă exprim.", inverse: false },
@@ -2707,7 +2706,7 @@ questions.forEach((question, index) => {
     questionLabel.textContent = `${question.id}. ${question.text}`;
 
     // Add inverse scoring indicator for screen readers
-    if (question.inverse) {
+    if (INVERSE_SCORING_QUESTIONS.includes(question.id)) {
         const inverseNote = document.createElement('span');
         inverseNote.classList.add('sr-only');
         inverseNote.textContent = ' (Întrebare cu scorare inversă)';
