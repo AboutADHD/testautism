@@ -2863,7 +2863,7 @@ function generateUniqueId() {
     return 'raads_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 }
 
-// First, let's update the shareToFacebook function with better debugging and score handling
+// Update the shareToFacebook function
 async function shareToFacebook() {
     try {
         // Show loading state
@@ -2872,8 +2872,7 @@ async function shareToFacebook() {
 
         // Calculate scores using the proper RAADS-R scoring system
         const results = calculateSubscores(questions);
-        console.log('Raw results:', results);
-
+        
         // Format scores
         const formattedResults = {
             subscores: {
@@ -2885,8 +2884,6 @@ async function shareToFacebook() {
             totalScore: Math.round(results.totalScore) || 0
         };
 
-        console.log('Formatted results:', formattedResults);
-
         // Get interpretation based on total score
         const interpretation = getInterpretation(formattedResults.totalScore);
         
@@ -2894,38 +2891,125 @@ async function shareToFacebook() {
         const totalScoreColor = formattedResults.totalScore < 65 ? '#4CAF50' : 
                                formattedResults.totalScore < 90 ? '#FFC107' : '#F44336';
 
-        console.log('About to create sharing container with:', {
-            subscores: formattedResults.subscores,
-            totalScore: formattedResults.totalScore,
-            interpretation,
-            totalScoreColor
-        });
+        // Create a visible container for html2canvas
+        const container = document.createElement('div');
+        container.style.cssText = `
+            width: 1200px;
+            height: 630px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -9999;
+            background: white;
+        `;
+        document.body.appendChild(container);
 
-        // Create sharing image container
-        const sharingContainer = createSharingImage(
-            formattedResults.subscores,
-            formattedResults.totalScore,
-            interpretation,
-            totalScoreColor
-        );
+        // Define score categories
+        const scoreCategories = [
+            {
+                name: 'Limbaj',
+                score: formattedResults.subscores.language,
+                max: 21,
+                threshold: RAADS_R_THRESHOLDS.language
+            },
+            {
+                name: 'Relaționare socială',
+                score: formattedResults.subscores.socialRelatedness,
+                max: 117,
+                threshold: RAADS_R_THRESHOLDS.socialRelatedness
+            },
+            {
+                name: 'Senzorial-motor',
+                score: formattedResults.subscores.sensoryMotor,
+                max: 60,
+                threshold: RAADS_R_THRESHOLDS.sensoryMotor
+            },
+            {
+                name: 'Interese circumscrise',
+                score: formattedResults.subscores.circumscribedInterests,
+                max: 42,
+                threshold: RAADS_R_THRESHOLDS.circumscribedInterests
+            }
+        ];
+
+        // Create HTML content
+        container.innerHTML = `
+            <div style="width: 1200px; height: 630px; padding: 40px; box-sizing: border-box; font-family: Arial, sans-serif; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);">
+                <!-- Header -->
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h1 style="font-size: 42px; margin: 0; color: #333; letter-spacing: -0.5px;">
+                        Rezultate Test RAADS-R
+                    </h1>
+                </div>
+                
+                <!-- Total Score -->
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <div style="font-size: 120px; font-weight: bold; color: ${totalScoreColor}; line-height: 1.2; margin: 20px 0;">
+                        ${formattedResults.totalScore}
+                    </div>
+                    <div style="font-size: 28px; color: #666; margin-bottom: 20px;">
+                        Scor Total
+                    </div>
+                    <div style="font-size: 32px; color: #333; max-width: 90%; margin: 0 auto 30px; line-height: 1.4;">
+                        ${interpretation}
+                    </div>
+                </div>
+                
+                <!-- Score Categories -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; padding: 0 40px;">
+                    ${scoreCategories.map(category => {
+                        const percentage = Math.min(Math.max((category.score / category.max) * 100, 0), 100);
+                        const color = category.score < category.threshold ? '#4CAF50' : 
+                                    category.score < category.threshold * 1.5 ? '#FFC107' : '#F44336';
+                        
+                        return `
+                            <div style="text-align: center;">
+                                <div style="font-size: 24px; color: #333; margin-bottom: 15px; font-weight: 500;">
+                                    ${category.name}
+                                </div>
+                                <div style="position: relative; width: 100px; height: 100px; margin: 0 auto;">
+                                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; font-weight: bold;">
+                                        ${category.score}/${category.max}
+                                    </div>
+                                    <svg width="100" height="100" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="45" fill="none" stroke="#e9ecef" stroke-width="6"/>
+                                        <circle cx="50" cy="50" r="45" fill="none" stroke="${color}" stroke-width="6"
+                                            stroke-dasharray="${percentage * 2.827}, 282.7"
+                                            transform="rotate(-90 50 50)"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                
+                <!-- CTA -->
+                <div style="text-align: center; margin-top: 40px; font-size: 42px; font-weight: bold; color: ${totalScoreColor}; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(45deg, ${totalScoreColor}22, ${totalScoreColor}11); padding: 20px; border-radius: 12px;">
+                    Fă și tu un test!
+                </div>
+            </div>
+        `;
+
+        // Wait a brief moment for rendering
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         // Generate image
-        const canvas = await html2canvas(sharingContainer, {
+        const canvas = await html2canvas(container, {
             width: 1200,
             height: 630,
             scale: 1,
             useCORS: true,
-            logging: true,
+            allowTaint: true,
             backgroundColor: '#ffffff'
         });
 
-        // Remove temporary container
-        document.body.removeChild(sharingContainer);
+        // Remove the container
+        document.body.removeChild(container);
 
         // Convert canvas to blob
         const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
         
-        // Create FormData with formatted scores
+        // Create FormData
         const formData = new FormData();
         const uniqueId = generateUniqueId();
         formData.append('image', blob, uniqueId + '.jpg');
@@ -2945,7 +3029,6 @@ async function shareToFacebook() {
         }
 
         const data = await response.json();
-        console.log('Server response:', data);
         
         // Open Facebook share dialog
         const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.shareUrl)}`;
