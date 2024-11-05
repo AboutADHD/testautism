@@ -81,7 +81,7 @@ RAADS-R evaluează prezența și intensitatea trăsăturilor autiste la adulți,
 
 ### Variantă rapidă
 ```bash
-git clone https://github.com/username/testautism.git
+git clone https://github.com/hodorogandrei/testautism.git
 cd testautism
 # Deschideți index.html într-un browser modern
 ```
@@ -91,9 +91,10 @@ cd testautism
 
 2. Clonați local
 ```bash
-git clone https://github.com/username/testautism.git
+git clone https://github.com/hodorogandrei/testautism.git
 ```
 3. Configurați sharing endpoint în `config.js`:
+
 ```javascript
 const CONFIG = {
   SHARING_ENDPOINT: '/save-result-image.php',
@@ -102,16 +103,21 @@ const CONFIG = {
 ```
 
 4. Verificați că toate dependințele CDN sunt accesibile:
+
 ```html
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 ```
 
 ## 📊 Sistem de Scoring
 
-### Algoritm
+### Algoritm scorare
+
 ```javascript
 function calculateScore(answers) {
   const scoring = {
@@ -128,6 +134,7 @@ function calculateScore(answers) {
 ```
 
 ### Interpretare
+
 | Scor | Interpretare |
 |------|--------------|
 | ≤ 65 | Sub prag |
@@ -157,7 +164,7 @@ metrics = {
 
 ### 📑 Export PDF
 
-Generează un raport PDF complet care include:
+Prin această facilitate, utilizatorul poate genera un raport PDF complet care include:
 - Scor total și interpretare
 - Scoruri pe categorii cu vizualizări
 - Toate răspunsurile oferite
@@ -165,11 +172,13 @@ Generează un raport PDF complet care include:
 
 ### Sharing Facebook
 
-Generează o imagine personalizată cu:
+Prin această facilitate, utilizatorul poate genera o imagine personalizată cu:
 - Scor total și interpretare
 - Vizualizări pentru subscoruri
 - Design adaptativ bazat pe scoruri
 - Call-to-action pentru alți utilizatori
+
+Această imagine poate fi partajată în mod automat pe profilul personal de Facebook.
 
 ## 🤝 Contribuții
 
@@ -204,22 +213,30 @@ Proiect sub licență [GNU GPL v3](LICENSE). Bibliotecile externe își păstrea
 ### Echipa de dezvoltare
 
 - **Andrei Hodorog** - _Lead Developer & Technical Architect_
+
   - [GitHub](https://github.com/hodorogandrei)
+
   - [LinkedIn](https://www.linkedin.com/in/andreihodorog/)
+
   - Contribuții: Arhitectură tehnică, implementare frontend, implementare algoritmi de scoring
 
 - **Ovidiu Platon** - _Product Owner & Subject Matter Expert_
+
   - [Website - Ovidiu Platon - Cabinet de Consiliere Neuroafirmativă](https://www.ovidiuplaton.com)
+
   - [LinkedIn](https://www.linkedin.com/in/ovidiuplaton/)
+
   - Contribuții: Specificații funcționale, validare științifică, adaptare metodologie scoring
 
 ### Parteneri
 - [SuntAutist - Autismul explicat de autiști](https://www.suntautist.ro) - Comunitate pentru suport și diseminare
+
 - [About ADHD România](https://www.despreadhd.ro) - Resurse educaționale complementare
 
 ## 📬 Contact
 
 📧 andrei.hodorog@suntautist.ro [Lead Developer & Technical Architect]
+
 📧 hello@ovidiuplaton.com [Product Owner & Subject Matter Expert]
 
 ### Mulțumiri speciale
@@ -247,6 +264,7 @@ Proiect sub licență [GNU GPL v3](LICENSE). Bibliotecile externe își păstrea
 ## 📚 Citări academice
 
 ### Studiul original RAADS-R
+
 ```bibtex
 @article{ritvo2011raadsr,
     title={The Ritvo Autism Asperger Diagnostic Scale-Revised (RAADS-R): A Scale to Assist the Diagnosis of Autism Spectrum Disorder in Adults: An International Validation Study},
@@ -265,6 +283,7 @@ Proiect sub licență [GNU GPL v3](LICENSE). Bibliotecile externe își păstrea
 ### Studii de validare suplimentare
 
 #### Validare suedeză
+
 ```bibtex
 @article{andersen2011swedish,
     title={The Swedish Version of the Ritvo Autism and Asperger Diagnostic Scale: Revised (RAADS-R). A Validation Study of a Rating Scale for Adults},
@@ -279,6 +298,7 @@ Proiect sub licență [GNU GPL v3](LICENSE). Bibliotecile externe își păstrea
 ```
 
 ### Pentru a cita acest proiect
+
 Când folosiți acest software în cercetare, vă rugăm să citați atât studiul original RAADS-R, cât și această implementare:
 
 ```bibtex
