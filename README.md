@@ -5,7 +5,7 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/hodorogandrei/testautism/graphs/commit-activity)
 [![Live Demo](https://img.shields.io/badge/demo-online-green.svg)](https://www.testautism.ro/)
 
-O implementare open source a Scalei Ritvo pentru Autism / Asperger Revizuite (RAADS-R), un instrument validat științific pentru screening-ul trăsăturilor autiste la adulți.
+[TestAutism.ro](https://www.testautism.ro) - O implementare open source a Scalei Ritvo pentru Autism / Asperger Revizuite (RAADS-R), un instrument validat științific pentru screening-ul trăsăturilor autiste la adulți.
 
 ## 🎯 Descriere
 
