@@ -2807,6 +2807,7 @@ exportBtn.addEventListener('click', () => {
 const restartWarningModal = new bootstrap.Modal(document.getElementById('restartWarningModal'));
 const confirmRestartBtn = document.getElementById('confirmRestartBtn');
 
+// Update the restartTest function to hide the share button
 const restartTest = function() {
     // Enable all radio inputs and uncheck them
     document.querySelectorAll('input[type="radio"]').forEach(radio => {
@@ -2818,6 +2819,7 @@ const restartTest = function() {
     resultDiv.style.display = 'none';
     exportBtn.style.display = 'none';
     restartBtn.style.display = 'none';
+    shareBtn.style.display = 'none'; // Hide share button
 
     // Show submit button
     submitBtn.style.display = 'block';
@@ -2826,14 +2828,14 @@ const restartTest = function() {
     document.querySelectorAll('.highlight-unanswered').forEach(el => {
         el.classList.remove('highlight-unanswered');
     });
-
+    
     // Hide the modal
     restartWarningModal.hide();
-
+    
     // Smooth scroll to disclaimer section
     const disclaimerSection = document.getElementById('first-disclaimer');
     disclaimerSection.scrollIntoView({
-        behavior: 'smooth',
+        behavior: 'smooth', 
         block: 'start'
     });
 };
@@ -2861,8 +2863,26 @@ function generateUniqueId() {
     return 'raads_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 }
 
-// First create a function to generate the sharing image layout
+// Create a function to generate the sharing image layout
 function createSharingImage(subscores, totalScore, interpretation, totalScoreColor) {
+    // Format all scores
+    const formattedScores = {
+        language: formatScore(subscores.language),
+        socialRelatedness: formatScore(subscores.socialRelatedness),
+        sensoryMotor: formatScore(subscores.sensoryMotor),
+        circumscribedInterests: formatScore(subscores.circumscribedInterests)
+    };
+    
+    const formattedTotalScore = formatScore(totalScore);
+
+    // Define score categories with their maximums
+    const scoreCategories = {
+        'Limbaj': { score: formattedScores.language, max: 21 },
+        'Relaționare socială': { score: formattedScores.socialRelatedness, max: 117 },
+        'Senzorial-motor': { score: formattedScores.sensoryMotor, max: 60 },
+        'Interese circumscrise': { score: formattedScores.circumscribedInterests, max: 42 }
+    };
+
     const container = document.createElement('div');
     container.style.cssText = `
         width: 1200px;
@@ -2875,59 +2895,55 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
         box-sizing: border-box;
         overflow: hidden;
     `;
+
     // Update the interpretation text styling
     const interpretationStyle = `
         font-size: 32px;
         color: #333;
-        max-width: 90%; /* Increased from previous value */
+        max-width: 90%;
         margin: 0 auto 30px;
         line-height: 1.4;
-        word-spacing: 4px; /* Added to ensure proper word spacing */
-        letter-spacing: 0.2px; /* Subtle letter spacing */
-        white-space: normal; /* Ensure proper text wrapping */
+        word-spacing: 4px;
+        letter-spacing: 0.2px;
+        white-space: normal;
         text-align: center;
     `;
-
+    
     // Update the CTA styling
     const ctaStyle = `
         text-align: center;
         margin-top: 10px;
-        font-size: 42px; /* Increased from 32px */
+        font-size: 42px;
         font-weight: bold;
         color: ${totalScoreColor};
         text-transform: uppercase;
         letter-spacing: 2px;
         background: linear-gradient(45deg, ${totalScoreColor}22, ${totalScoreColor}11);
-        padding: 20px; /* Increased padding */
+        padding: 20px;
         border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);`
-    document.body.appendChild(container);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    `;
 
     // Helper function to create arc progress indicator
     function createArcProgress(score, max) {
-        const percentage = (score / max) * 100;
-        const color = score < max * 0.3 ? '#4CAF50' :
+        const percentage = Math.min(Math.max((score / max) * 100, 0), 100);
+        const color = score < max * 0.3 ? '#4CAF50' : 
                      score < max * 0.6 ? '#FFC107' : '#F44336';
-        const radius = 35;
-        const circumference = 2 * Math.PI * radius;
-        const offset = circumference - (percentage / 100) * circumference;
-        const startAngle = -90; // Start from top
-        const endAngle = startAngle + (percentage * 3.6); // 3.6 degrees per percentage point
-
+        
         return `
             <div style="position: relative; width: 100px; height: 100px; margin: 0 auto;">
                 <svg width="100" height="100" viewBox="0 0 100 100">
                     <!-- Background arc -->
-                    <path d="M50 10 A40 40 0 0 1 90 50" fill="none"
+                    <path d="M50 10 A40 40 0 0 1 90 50" fill="none" 
                         stroke="#e9ecef" stroke-width="6" stroke-linecap="round"/>
                     <!-- Progress arc -->
                     <path d="M50 10 A40 40 0 ${percentage > 50 ? '1' : '0'} 1 ${
-                        50 + 40 * Math.cos(endAngle * Math.PI / 180)} ${
-                        50 + 40 * Math.sin(endAngle * Math.PI / 180)
-                    }" fill="none"
+                        50 + 40 * Math.cos((percentage * 3.6 - 90) * Math.PI / 180)} ${
+                        50 + 40 * Math.sin((percentage * 3.6 - 90) * Math.PI / 180)
+                    }" fill="none" 
                         stroke="${color}" stroke-width="6" stroke-linecap="round"/>
                     <!-- Score text -->
-                    <text x="50" y="55" text-anchor="middle"
+                    <text x="50" y="55" text-anchor="middle" 
                         font-size="20" font-weight="bold" fill="#333">
                         ${score}/${max}
                     </text>
@@ -2946,7 +2962,7 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
                     letter-spacing: -0.5px;
                 ">Rezultate Test RAADS-R</h1>
             </div>
-
+            
             <!-- Total Score Section -->
             <div style="text-align: center; margin-bottom: 30px;">
                 <div style="
@@ -2955,7 +2971,7 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
                     color: ${totalScoreColor};
                     line-height: 1.2;
                     margin: 20px 0;
-                ">${totalScore}</div>
+                ">${formattedTotalScore}</div>
                 <div style="
                     font-size: 28px;
                     color: #666;
@@ -2965,7 +2981,7 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
                     ${interpretation}
                 </div>
             </div>
-
+            
             <!-- Subscores Grid -->
             <div style="
                 display: grid;
@@ -2973,41 +2989,18 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
                 gap: 30px;
                 padding: 0 40px;
             ">
-                <!-- Language Score -->
-                <div style="text-align: center;">
-                    <div style="font-size: 24px; color: #333; margin-bottom: 15px; font-weight: 500;">
-                        Limbaj
+                ${Object.entries(scoreCategories).map(([name, { score, max }]) => `
+                    <div style="text-align: center;">
+                        <div style="font-size: 24px; color: #333; margin-bottom: 15px; font-weight: 500;">
+                            ${name}
+                        </div>
+                        ${createArcProgress(score, max)}
                     </div>
-                    ${createArcProgress(subscores.language, 21)}
-                </div>
-
-                <!-- Social Score -->
-                <div style="text-align: center;">
-                    <div style="font-size: 24px; color: #333; margin-bottom: 15px; font-weight: 500;">
-                        Relaționare socială
-                    </div>
-                    ${createArcProgress(subscores.social, 117)}
-                </div>
-
-                <!-- Sensory-Motor Score -->
-                <div style="text-align: center;">
-                    <div style="font-size: 24px; color: #333; margin-bottom: 15px; font-weight: 500;">
-                        Senzorial-motor
-                    </div>
-                    ${createArcProgress(subscores.sensoryMotor, 60)}
-                </div>
-
-                <!-- Interests Score -->
-                <div style="text-align: center;">
-                    <div style="font-size: 24px; color: #333; margin-bottom: 15px; font-weight: 500;">
-                        Interese circumscrise
-                    </div>
-                    ${createArcProgress(subscores.interests, 42)}
-                </div>
+                `).join('')}
             </div>
-
+            
             <!-- Call to Action -->
-             <div style="${ctaStyle}">
+            <div style="${ctaStyle}">
                 Fă și tu un test!
             </div>
         </div>
@@ -3016,7 +3009,7 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
     return container;
 }
 
-//shareToFacebook function
+// shareToFacebook function
 async function shareToFacebook() {
     try {
         // Show loading state
@@ -3024,16 +3017,16 @@ async function shareToFacebook() {
         shareBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se pregătește imaginea...';
 
         // Get scores and interpretation
-        const subscores = calculateSubscores(questions);
-        const totalScore = subscores.language + subscores.social + subscores.sensoryMotor + subscores.interests;
-        const interpretation = getInterpretation(totalScore);
-
+        const { subscores, totalScore, diagnosticIndicators } = calculateSubscores(questions);
+        const formattedTotalScore = formatScore(totalScore);
+        const interpretation = getInterpretation(formattedTotalScore);
+        
         // Get color for total score
-        const totalScoreColor = totalScore < 65 ? '#4CAF50' :
-                               totalScore < 90 ? '#FFC107' : '#F44336';
+        const totalScoreColor = formattedTotalScore < 65 ? '#4CAF50' : 
+                               formattedTotalScore < 90 ? '#FFC107' : '#F44336';
 
         // Create sharing image container
-        const sharingContainer = createSharingImage(subscores, totalScore, interpretation, totalScoreColor);
+        const sharingContainer = createSharingImage(subscores, formattedTotalScore, interpretation, totalScoreColor);
 
         // Generate image
         const canvas = await html2canvas(sharingContainer, {
@@ -3050,14 +3043,19 @@ async function shareToFacebook() {
 
         // Convert canvas to blob
         const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
-
+        
         // Create FormData
         const formData = new FormData();
         const uniqueId = generateUniqueId();
         formData.append('image', blob, uniqueId + '.jpg');
         formData.append('id', uniqueId);
-        formData.append('score', totalScore);
-        formData.append('subscores', JSON.stringify(subscores));
+        formData.append('score', formattedTotalScore);
+        formData.append('subscores', JSON.stringify({
+            language: formatScore(subscores.language),
+            socialRelatedness: formatScore(subscores.socialRelatedness),
+            sensoryMotor: formatScore(subscores.sensoryMotor),
+            circumscribedInterests: formatScore(subscores.circumscribedInterests)
+        }));
         formData.append('interpretation', interpretation);
 
         // Upload and share
@@ -3071,7 +3069,7 @@ async function shareToFacebook() {
         }
 
         const data = await response.json();
-
+        
         // Open Facebook share dialog
         const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.shareUrl)}`;
         window.open(
