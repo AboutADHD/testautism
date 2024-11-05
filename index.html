@@ -100,6 +100,10 @@
 <noscript>Vă rugăm să vă asigurați că Javascript este activat pentru scopuri de <a href="https://userway.org">accesibilitate a site-ului web.</a></noscript>
 
 <style type="text/css">
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
@@ -1378,12 +1382,12 @@ body {
         padding: 1.2rem;
         margin-bottom: 1.2rem;
     }
-    
+
     .form-check-input {
         width: 28px;
         height: 28px;
     }
-    
+
     .form-check-label {
         font-size: 1.2rem;
     }
@@ -1394,13 +1398,13 @@ body {
     .question {
         border: 3px solid #000;
     }
-    
+
     .question-text {
         color: #000;
         background: #fff;
         border: 2px solid #000;
     }
-    
+
     .form-check {
         border: 2px solid #000;
     }
@@ -1477,17 +1481,128 @@ body {
     .help-button {
         border: 1px solid currentColor;
     }
-    
+
     .help-button[aria-expanded="true"] {
         background: #000;
         color: #fff;
     }
-    
+
     .help-content .alert {
         border: 2px solid #000;
         background: #fff;
         color: #000;
     }
+}
+
+.progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: white;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    padding: 1rem;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+    pointer-events: none;
+}
+
+.progress-container.visible {
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Needed to prevent content jump */
+.test-actual-container {
+    position: relative;
+    scroll-margin-top: 120px; /* Adjust based on your progress bar height */
+}
+
+.progress-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: #f0f0f0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2196F3, #64B5F6);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.progress-message {
+    text-align: center;
+    margin-top: 0.5rem;
+    color: #333;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    animation: messagePopIn 0.5s ease;
+}
+
+.progress-message.updating {
+    animation: messageUpdate 0.3s ease;
+}
+
+@keyframes messagePopIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes messageUpdate {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.question {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.question.current {
+    border-left-color: #2196F3;
+    background-color: #f8f9fa;
+}
+
+.question.completed::after {
+    content: '✓';
+    color: #4CAF50;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+}
+
+#raadsrForm {
+    padding-top: 120px;
 }
 </style>
 
@@ -2484,15 +2599,15 @@ const questions = [
 // RAADS-R Categories according to the paper page 1083
 const RAADS_R_CATEGORIES = {
     // Social Relatedness - 39 questions
-    socialRelatedness: [1, 6, 8, 11, 14, 17, 18, 25, 37, 38, 3, 5, 12, 28, 39, 
-                       44, 45, 76, 79, 80, 20, 21, 22, 23, 26, 31, 43, 47, 48, 
+    socialRelatedness: [1, 6, 8, 11, 14, 17, 18, 25, 37, 38, 3, 5, 12, 28, 39,
+                       44, 45, 76, 79, 80, 20, 21, 22, 23, 26, 31, 43, 47, 48,
                        53, 54, 55, 60, 61, 64, 68, 69, 72, 77],
 
     // Language - 7 questions
     language: [2, 7, 27, 35, 58, 66, 15],
 
     // Sensory Motor - 20 questions
-    sensoryMotor: [10, 19, 4, 33, 34, 36, 46, 71, 16, 29, 42, 49, 51, 57, 59, 
+    sensoryMotor: [10, 19, 4, 33, 34, 36, 46, 71, 16, 29, 42, 49, 51, 57, 59,
                    62, 65, 67, 73, 74],
 
     // Circumscribed Interests - 14 questions
@@ -2527,7 +2642,7 @@ const MAX_SCORES = {
 function findDuplicateQuestionCounts() {
     const questionCounts = {};
     const duplicates = [];
-    
+
     // Count occurrences of each question across categories
     Object.entries(RAADS_R_CATEGORIES).forEach(([category, questions]) => {
         questions.forEach(questionId => {
@@ -2537,7 +2652,7 @@ function findDuplicateQuestionCounts() {
             questionCounts[questionId].push(category);
         });
     });
-    
+
     // Check for questions appearing in multiple categories
     Object.entries(questionCounts).forEach(([questionId, categories]) => {
         if (categories.length > 1) {
@@ -2548,7 +2663,7 @@ function findDuplicateQuestionCounts() {
             });
         }
     });
-    
+
     // Check for missing questions (1-80)
     const allQuestions = Object.values(RAADS_R_CATEGORIES).flat();
     const missingQuestions = [];
@@ -2557,7 +2672,7 @@ function findDuplicateQuestionCounts() {
             missingQuestions.push(i);
         }
     }
-    
+
     return {
         duplicates,
         missingQuestions,
@@ -2594,14 +2709,14 @@ function calculateSubscores() {
             if (selected) {
                 let score = parseInt(selected.value);
                 const isInverse = INVERSE_SCORING_QUESTIONS.includes(id);
-                
+
                 // Apply inverse scoring if needed
                 if (isInverse) {
                     score = 3 - score;
                 }
-                
+
                 subscores[category] += score;
-                
+
                 // Log scoring details
                 scoringLog.push({
                     questionId: id,
@@ -2646,7 +2761,7 @@ function calculateSubscores() {
         scoringLog,
         validation: {
             categoryAssignments: categoryValidation,
-            scoresValid: totalScore <= MAX_SCORES.total && 
+            scoresValid: totalScore <= MAX_SCORES.total &&
                         Object.entries(subscores).every(([cat, score]) => score <= MAX_SCORES[cat])
         }
     };
@@ -2718,7 +2833,7 @@ questions.forEach((question, index) => {
     // Create fieldset for radio buttons
     const fieldset = document.createElement('fieldset');
     fieldset.classList.add('options');
-    
+
     // Add legend for screen readers
     const legend = document.createElement('legend');
     legend.classList.add('sr-only');
@@ -2726,23 +2841,23 @@ questions.forEach((question, index) => {
     fieldset.appendChild(legend);
 
     const options = [
-        { 
-            label: "Adevărat acum și când eram mic(ă)", 
+        {
+            label: "Adevărat acum și când eram mic(ă)",
             value: "3",
             description: "Selectați dacă afirmația este adevărată atât în prezent cât și în trecut"
         },
-        { 
-            label: "Adevărat doar acum", 
+        {
+            label: "Adevărat doar acum",
             value: "2",
             description: "Selectați dacă afirmația este adevărată doar în prezent"
         },
-        { 
-            label: "Adevărat doar când aveam sub 16 ani", 
+        {
+            label: "Adevărat doar când aveam sub 16 ani",
             value: "1",
             description: "Selectați dacă afirmația era adevărată doar în copilărie"
         },
-        { 
-            label: "Niciodată adevărat", 
+        {
+            label: "Niciodată adevărat",
             value: "0",
             description: "Selectați dacă afirmația nu a fost niciodată adevărată"
         }
@@ -2778,7 +2893,7 @@ questions.forEach((question, index) => {
     });
 
     questionDiv.appendChild(fieldset);
-    
+
     // Add help button
     const helpButton = document.createElement('button');
     helpButton.type = 'button';
@@ -2864,7 +2979,7 @@ function getScoreDetails(score, threshold, maxScore) {
 // Add validation function to catch scoring issues
 function validateScore(score, subscores) {
     let issues = [];
-    
+
     // Check for exceeding maximum scores
     Object.entries(MAX_SCORES).forEach(([category, maxScore]) => {
         const currentScore = category === 'total' ? score : subscores[category];
@@ -2890,50 +3005,338 @@ function getInterpretation(score) {
     return 'Scor foarte ridicat, specific persoanelor autiste.';
 }
 
-// Add this progress tracker at the top of the form
-const progressTracker = document.createElement('div');
+// Progress tracking function
+function initProgressTracking() {
+    // Create and insert progress bar
+    const progressHtml = `
+        <div class="progress-container">
+            <div class="progress-stats">
+                <span class="questions-completed">0 din ${questions.length} întrebări</span>
+                <span class="time-estimate">Timp rămas: 30 minute</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-message">Hai să începem! Primul pas este cel mai important.</div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('afterbegin', progressHtml);
 
-progressTracker.classList.add('progress-tracker', 'sticky-top', 'bg-white', 'py-3', 'mb-4');
-progressTracker.setAttribute('role', 'status');
-progressTracker.setAttribute('aria-live', 'polite');
-progressTracker.innerHTML = `
-    <div class="d-flex align-items-center justify-content-between mb-2">
-        <span class="progress-text">0 din ${questions.length} întrebări completate</span>
-        <span class="remaining-text">${questions.length} rămase</span>
-    </div>
-    <div class="progress" style="height: 8px;">
-        <div class="progress-bar" role="progressbar" style="width: 0%" 
-             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-`;
-form.insertBefore(progressTracker, form.firstChild);
+    // Cache DOM elements
+    const progressFill = document.querySelector('.progress-fill');
+    const questionsCompleted = document.querySelector('.questions-completed');
+    const timeEstimate = document.querySelector('.time-estimate');
+    const progressMessage = document.querySelector('.progress-message');
 
-// Function to update progress
-function updateProgress() {
-    const totalQuestions = questions.length;
-    const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
-    const percentage = (answeredQuestions / totalQuestions) * 100;
-    
-    const progressBar = document.querySelector('.progress-bar');
-    const progressText = document.querySelector('.progress-text');
-    const remainingText = document.querySelector('.remaining-text');
-    
-    progressBar.style.width = `${percentage}%`;
-    progressBar.setAttribute('aria-valuenow', percentage);
-    progressText.textContent = `${answeredQuestions} din ${totalQuestions} întrebări completate`;
-    remainingText.textContent = `${totalQuestions - answeredQuestions} rămase`;
+    // Scroll monitoring for .test-actual-container
+    const testContainer = document.querySelector('.test-actual-container');
+    const progressContainer = document.querySelector('.progress-container');
+
+    // Helper function to check if we're within the test section
+    function isInTestSection() {
+        if (!testContainer) return false;
+        
+        const testRect = testContainer.getBoundingClientRect();
+        const testStart = testContainer.offsetTop;
+        const testEnd = testStart + testContainer.offsetHeight;
+        const currentScroll = window.scrollY;
+        
+        // Consider the section "active" when:
+        // 1. We've scrolled past its start (accounting for progress bar height)
+        // 2. We haven't scrolled past its end
+        return currentScroll >= testStart && currentScroll <= testEnd;
+    }
+
+    // Simplified scroll handler - no direction checking
+    function handleScroll() {
+        if (isInTestSection()) {
+            progressContainer.classList.add('visible');
+        } else {
+            progressContainer.classList.remove('visible');
+        }
+    }
+
+    // Helper function to check if we're within the test section
+    function isInTestSection() {
+        if (!testContainer) return false;
+        
+        const testRect = testContainer.getBoundingClientRect();
+        const testStart = testContainer.offsetTop;
+        const testEnd = testStart + testContainer.offsetHeight;
+        const currentScroll = window.scrollY;
+        
+        // Consider the section "active" when:
+        // 1. We've scrolled past its start (accounting for progress bar height)
+        // 2. We haven't scrolled past its end
+        return currentScroll >= testStart && currentScroll <= testEnd;
+    }
+
+    // Simplified scroll handler - no direction checking
+    function handleScroll() {
+        if (isInTestSection()) {
+            progressContainer.classList.add('visible');
+        } else {
+            progressContainer.classList.remove('visible');
+        }
+    }
+
+    // Monitor scroll position
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Initial check
+    handleScroll();
+
+    // Handle window resize
+    window.addEventListener('resize', handleScroll, { passive: true });
+
+    let lastScrollTop = 0;
+
+    function isElementInViewport(el) {
+        const rect = el.getBoundingClientRect();
+        return (
+            rect.top <= 0 &&
+            rect.bottom >= 0
+        );
+    }
+
+    // Monitor scroll position
+    // window.addEventListener('scroll', () => {
+    //     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+    //     // Check if test container is in viewport
+    //     if (testContainer) {
+    //         const testRect = testContainer.getBoundingClientRect();
+    //         const isTestVisible = testRect.top < window.innerHeight && testRect.bottom > 0;
+            
+    //         if (isTestVisible) {
+    //             // Show progress bar when scrolling up or at top of test section
+    //             if (scrollTop < lastScrollTop || scrollTop <= testContainer.offsetTop) {
+    //                 progressContainer.classList.add('visible');
+    //             } else {
+    //                 // Hide when scrolling down
+    //                 progressContainer.classList.remove('visible');
+    //             }
+    //         } else {
+    //             // Hide when test section is not visible
+    //             progressContainer.classList.remove('visible');
+    //         }
+    //     }
+        
+    //     lastScrollTop = scrollTop;
+    // });
+
+    function getProgressMessage(percentage, answered) {
+        if (percentage === 0) {
+            return '🚀 Hai să începem! Primul pas este cel mai important! 💫';
+        }
+        
+        if (percentage <= 10) {
+            return '🌟 Minunat început! Pas cu pas, vei reuși! 💪';
+        }
+        
+        if (percentage <= 20) {
+            return '🎯 Ai prins ritmul! Continui excelent! ⭐';
+        }
+        
+        if (percentage <= 30) {
+            return `🌈 Super progres! Ai completat deja ${answered} întrebări! 🎉`;
+        }
+        
+        if (percentage <= 40) {
+            return '💫 Merge strună! Ești pe drumul cel bun! 🎈';
+        }
+        
+        if (percentage <= 50) {
+            return '🎊 WOW! Ai ajuns la jumătate! Ești fantastic(ă)! 🌟';
+        }
+        
+        if (percentage <= 60) {
+            return '⚡ Impresionant! Mai puțin de jumătate rămas! 🔥';
+        }
+        
+        if (percentage <= 70) {
+            return '🎯 Extraordinar! Continui să strălucești! ✨';
+        }
+        
+        if (percentage <= 80) {
+            return '🚀 Ești pe ultima sută de metri! Aproape acolo! 💫';
+        }
+        
+        if (percentage <= 90) {
+            return '🌟 Fantastic! Mai ai foarte puțin! Ești aproape gata! 🎉';
+        }
+        
+        if (percentage < 100) {
+            return '✨ Ultima porțiune! Câteva întrebări și ai terminat! 🎯';
+        }
+        
+        // 100%
+        return `
+            🎉 FELICITĂRI! 🎉
+            <br/>
+            <span style="font-size: 0.9em">Ai completat tot testul! Ești minunat(ă)! 🌟</span>
+            <br/>
+            <span style="font-size: 0.85em; color: #666">Apasă pe "Calculează Scorul" pentru rezultate! 🎯</span>
+        `;
+    }
+
+    // Update progress function
+    function updateProgress() {
+        const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+        const total = questions.length;
+        const percentage = (answered / total) * 100;
+
+        // Update progress bar
+        progressFill.style.width = percentage + '%';
+        
+        // Update stats
+        questionsCompleted.textContent = `${answered} din ${total} întrebări`;
+        
+        // Update message with animation
+        progressMessage.classList.add('updating');
+        progressMessage.innerHTML = getProgressMessage(percentage, answered);
+        
+        // Remove animation class after it completes
+        setTimeout(() => {
+            progressMessage.classList.remove('updating');
+        }, 300);
+        
+        // Update time estimate
+        const remainingQuestions = total - answered;
+        const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.375), 1);
+        timeEstimate.textContent = `Timp rămas: ${estimatedMinutes} minute`;
+    }
+
+    // Enhanced radio button change handler
+    form.addEventListener('change', (e) => {
+        if (e.target.type === 'radio') {
+            const currentQuestion = e.target.closest('.question');
+            currentQuestion.classList.add('completed');
+            
+            updateProgress();
+
+            // Find and scroll to next unanswered question
+            const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
+                .find(q => !q.querySelector('input[type="radio"]:checked'));
+
+            if (nextUnanswered) {
+                const offset = document.querySelector('.progress-container').offsetHeight + 20;
+                const targetPosition = nextUnanswered.getBoundingClientRect().top + window.pageYOffset - offset;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+
+                // Update current question highlighting
+                document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                nextUnanswered.classList.add('current');
+            }
+        }
+    });
+
+    // Initialize progress
+    updateProgress();
+
+    return {
+        update: handleScroll,  // Expose update function for external calls
+        destroy: () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', handleScroll);
+        }
+    };
 }
+
+function scrollToQuestion(questionElement) {
+    const progressContainer = document.querySelector('.progress-container');
+    const progressHeight = progressContainer.classList.contains('visible') ? 
+                          progressContainer.offsetHeight : 0;
+    
+    const targetPosition = questionElement.getBoundingClientRect().top + 
+                          window.pageYOffset - 
+                          progressHeight - 20; // Additional padding
+    
+    window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+    });
+}
+
+// Enhanced radio button change handler
+function initQuestionHandlers() {
+    form.addEventListener('change', (e) => {
+        if (e.target.type === 'radio') {
+            const currentQuestion = e.target.closest('.question');
+            currentQuestion.classList.add('completed');
+            
+            updateProgress();
+
+            // Find next unanswered question
+            const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
+                .find(q => !q.querySelector('input[type="radio"]:checked'));
+
+            if (nextUnanswered) {
+                scrollToQuestion(nextUnanswered);
+
+                // Update current question highlighting
+                document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                nextUnanswered.classList.add('current');
+            }
+        }
+    });
+}
+
+// Add intersection observer to monitor test section visibility
+function initTestSectionObserver() {
+    const progressContainer = document.querySelector('.progress-container');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Only show progress bar if we're at the top of the test section
+                if (window.scrollY <= entry.target.offsetTop) {
+                    progressContainer.classList.add('visible');
+                }
+            } else {
+                progressContainer.classList.remove('visible');
+            }
+        });
+    }, {
+        threshold: 0,
+        rootMargin: '-50px 0px 0px 0px'  // Adjust based on your needs
+    });
+
+    const testContainer = document.querySelector('.test-actual-container');
+    if (testContainer) {
+        observer.observe(testContainer);
+    }
+}
+
+// Initialize everything
+function initProgressTracker() {
+    initProgressTracking();
+    initQuestionHandlers();
+    initTestSectionObserver();
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProgressTracking);
+} else {
+    initProgressTracker();
+}
+
 
 // Submit button click handler
 submitBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    
+
     // Clear previous error states
     errorDiv.style.display = 'none';
     errorBelowDiv.style.display = 'none';
     errorDiv.textContent = '';
     errorBelowDiv.textContent = '';
-    
+
     // Remove previous highlights and alerts
     document.querySelectorAll('.highlight-unanswered').forEach(el => {
         el.classList.remove('highlight-unanswered');
@@ -2949,14 +3352,14 @@ submitBtn.addEventListener('click', (e) => {
     questions.forEach(question => {
         const questionDiv = document.querySelector(`[data-question-number="${question.id}"]`);
         const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
-        
+
         if (!selected) {
             unanswered.push(question.id);
-            
+
             // Add accessibility attributes
             questionDiv.classList.add('highlight-unanswered');
             questionDiv.setAttribute('aria-invalid', 'true');
-            
+
             // Add visual and screen reader alert
             const alert = document.createElement('div');
             alert.classList.add('validation-alert', 'alert', 'alert-warning', 'mt-2');
@@ -2966,7 +3369,7 @@ submitBtn.addEventListener('click', (e) => {
                 Această întrebare necesită un răspuns
             `;
             questionDiv.appendChild(alert);
-            
+
             // Store first unanswered question for scrolling
             if (!firstUnanswered) firstUnanswered = questionDiv;
         }
@@ -2979,18 +3382,18 @@ submitBtn.addEventListener('click', (e) => {
                 <i class="fas fa-exclamation-circle text-danger me-2"></i>
                 <div>
                     <p class="mb-1">Te rugăm să răspunzi la toate întrebările înainte de a continua.</p>
-                    <p class="mb-0">Întrebări fără răspuns: ${unanswered.map(id => 
+                    <p class="mb-0">Întrebări fără răspuns: ${unanswered.map(id =>
                         `<a href="#" class="alert-link" data-question="${id}">${id}</a>`
                     ).join(', ')}</p>
                 </div>
             </div>
         `;
-        
+
         errorDiv.innerHTML = errorMessage;
         errorBelowDiv.innerHTML = errorMessage;
         errorDiv.style.display = 'block';
         errorBelowDiv.style.display = 'block';
-        
+
         // Add click handlers for question links
         [errorDiv, errorBelowDiv].forEach(div => {
             div.querySelectorAll('[data-question]').forEach(link => {
@@ -3008,7 +3411,7 @@ submitBtn.addEventListener('click', (e) => {
         if (firstUnanswered) {
             firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
             firstUnanswered.querySelector('input[type="radio"]').focus();
-            
+
             // Announce to screen readers
             const announcement = document.createElement('div');
             announcement.setAttribute('role', 'status');
@@ -3131,7 +3534,7 @@ exportBtn.addEventListener('click', () => {
 
     // Calculate scores - use the proper structure from calculateSubscores
     const { subscores, totalScore, diagnosticIndicators } = calculateSubscores(questions);
-    
+
     // Format all scores to ensure we have valid numbers
     const formattedScores = {
         language: formatScore(subscores.language),
@@ -3139,7 +3542,7 @@ exportBtn.addEventListener('click', () => {
         sensoryMotor: formatScore(subscores.sensoryMotor),
         circumscribedInterests: formatScore(subscores.circumscribedInterests)
     };
-    
+
     const formattedTotalScore = formatScore(totalScore);
     const interpretation = getInterpretation(formattedTotalScore);
 
@@ -3156,24 +3559,24 @@ exportBtn.addEventListener('click', () => {
 
     // Define score categories with their properties
     const scoreCategories = {
-        'Limbaj': { 
-            score: formattedScores.language, 
-            threshold: RAADS_R_THRESHOLDS.language, 
+        'Limbaj': {
+            score: formattedScores.language,
+            threshold: RAADS_R_THRESHOLDS.language,
             max: MAX_SCORES.language
         },
-        'Relaționare socială': { 
-            score: formattedScores.socialRelatedness, 
-            threshold: RAADS_R_THRESHOLDS.socialRelatedness, 
+        'Relaționare socială': {
+            score: formattedScores.socialRelatedness,
+            threshold: RAADS_R_THRESHOLDS.socialRelatedness,
             max: MAX_SCORES.socialRelatedness
         },
-        'Senzorial-motor': { 
-            score: formattedScores.sensoryMotor, 
-            threshold: RAADS_R_THRESHOLDS.sensoryMotor, 
+        'Senzorial-motor': {
+            score: formattedScores.sensoryMotor,
+            threshold: RAADS_R_THRESHOLDS.sensoryMotor,
             max: MAX_SCORES.sensoryMotor
         },
-        'Interese circumscrise': { 
-            score: formattedScores.circumscribedInterests, 
-            threshold: RAADS_R_THRESHOLDS.circumscribedInterests, 
+        'Interese circumscrise': {
+            score: formattedScores.circumscribedInterests,
+            threshold: RAADS_R_THRESHOLDS.circumscribedInterests,
             max: MAX_SCORES.circumscribedInterests
         }
     };
@@ -3187,13 +3590,13 @@ exportBtn.addEventListener('click', () => {
         </div>
 
         <h3 style="font-size: 18px; margin-bottom: 20px;">Scoruri pe categorii:</h3>
-        
+
         <!-- Visual score components styled for PDF -->
         ${Object.entries(scoreCategories).map(([category, scores]) => {
             const percentage = Math.min(Math.max((scores.score / scores.max) * 100, 0), 100);
-            const color = scores.score < scores.threshold ? '#4CAF50' : 
+            const color = scores.score < scores.threshold ? '#4CAF50' :
                          scores.score < scores.threshold * 1.5 ? '#FFC107' : '#F44336';
-            
+
             return `
                 <div style="margin-bottom: 25px;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
@@ -3212,7 +3615,7 @@ exportBtn.addEventListener('click', () => {
                 </div>
             `;
         }).join('')}
-        
+
         <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa;">
             <strong>Legendă:</strong><br>
             <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
@@ -3315,14 +3718,14 @@ const restartTest = function() {
     document.querySelectorAll('.highlight-unanswered').forEach(el => {
         el.classList.remove('highlight-unanswered');
     });
-    
+
     // Hide the modal
     restartWarningModal.hide();
-    
+
     // Smooth scroll to disclaimer section
     const disclaimerSection = document.getElementById('first-disclaimer');
     disclaimerSection.scrollIntoView({
-        behavior: 'smooth', 
+        behavior: 'smooth',
         block: 'start'
     });
 };
@@ -3336,45 +3739,6 @@ restartBtn.addEventListener('click', (e) => {
 
 // Click handler for the confirm button in the modal
 confirmRestartBtn.addEventListener('click', restartTest);
-
-// Event listener to remove highlighting when an answer is selected - Enhanced radio button change handler
-document.addEventListener('change', (e) => {
-    if (e.target.type === 'radio') {
-        const questionDiv = e.target.closest('.question');
-        
-        // Remove error state
-        questionDiv.classList.remove('highlight-unanswered');
-        questionDiv.removeAttribute('aria-invalid');
-        const alert = questionDiv.querySelector('.validation-alert');
-        if (alert) alert.remove();
-        
-        // Update progress
-        updateProgress();
-        
-        // Find next unanswered question
-        const nextUnanswered = Array.from(document.querySelectorAll('.question'))
-            .find(q => !q.querySelector('input[type="radio"]:checked'));
-            
-        if (nextUnanswered) {
-            // Smooth scroll to next unanswered after a short delay
-            setTimeout(() => {
-                nextUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                // Focus first radio button of next question
-                nextUnanswered.querySelector('input[type="radio"]').focus();
-            }, 300);
-        }
-        
-        // Announce progress to screen readers
-        const announcement = document.createElement('div');
-        announcement.setAttribute('role', 'status');
-        announcement.setAttribute('aria-live', 'polite');
-        announcement.classList.add('sr-only');
-        const answered = document.querySelectorAll('input[type="radio"]:checked').length;
-        announcement.textContent = `Întrebarea ${questionDiv.dataset.questionNumber} completată. ${answered} din ${questions.length} întrebări completate.`;
-        document.body.appendChild(announcement);
-        setTimeout(() => announcement.remove(), 3000);
-    }
-});
 
 // Function to generate a random identifier
 function generateUniqueId() {
@@ -3390,7 +3754,7 @@ async function shareToFacebook() {
 
         // Calculate scores using the proper RAADS-R scoring system
         const results = calculateSubscores(questions);
-        
+
         // Format scores
         const formattedResults = {
             subscores: {
@@ -3404,9 +3768,9 @@ async function shareToFacebook() {
 
         // Get interpretation based on total score
         const interpretation = getInterpretation(formattedResults.totalScore);
-        
+
         // Get color for total score
-        const totalScoreColor = formattedResults.totalScore < 65 ? '#4CAF50' : 
+        const totalScoreColor = formattedResults.totalScore < 65 ? '#4CAF50' :
                                formattedResults.totalScore < 90 ? '#FFC107' : '#F44336';
 
         // Create a visible container for html2canvas
@@ -3459,7 +3823,7 @@ async function shareToFacebook() {
                         Rezultate Test RAADS-R
                     </h1>
                 </div>
-                
+
                 <!-- Total Score -->
                 <div style="text-align: center; margin-bottom: 30px;">
                     <div style="font-size: 120px; font-weight: bold; color: ${totalScoreColor}; line-height: 1.2; margin: 20px 0;">
@@ -3472,14 +3836,14 @@ async function shareToFacebook() {
                         ${interpretation}
                     </div>
                 </div>
-                
+
                 <!-- Score Categories -->
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; padding: 0 40px;">
                     ${scoreCategories.map(category => {
                         const percentage = Math.min(Math.max((category.score / category.max) * 100, 0), 100);
-                        const color = category.score < category.threshold ? '#4CAF50' : 
+                        const color = category.score < category.threshold ? '#4CAF50' :
                                     category.score < category.threshold * 1.5 ? '#FFC107' : '#F44336';
-                        
+
                         return `
                             <div style="text-align: center;">
                                 <div style="font-size: 24px; color: #333; margin-bottom: 15px; font-weight: 500;">
@@ -3500,7 +3864,7 @@ async function shareToFacebook() {
                         `;
                     }).join('')}
                 </div>
-                
+
                 <!-- CTA -->
                 <div style="text-align: center; margin-top: 40px; font-size: 42px; font-weight: bold; color: ${totalScoreColor}; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(45deg, ${totalScoreColor}22, ${totalScoreColor}11); padding: 20px; border-radius: 12px;">
                     Fă și tu un test!
@@ -3526,7 +3890,7 @@ async function shareToFacebook() {
 
         // Convert canvas to blob
         const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
-        
+
         // Create FormData
         const formData = new FormData();
         const uniqueId = generateUniqueId();
@@ -3547,7 +3911,7 @@ async function shareToFacebook() {
         }
 
         const data = await response.json();
-        
+
         // Open Facebook share dialog
         const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.shareUrl)}`;
         window.open(
@@ -3620,25 +3984,25 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
         const score = category.score;
         const max = category.max;
         const threshold = category.threshold;
-        
+
         const percentage = Math.min(Math.max((score / max) * 100, 0), 100);
-        const color = score < threshold ? '#4CAF50' : 
+        const color = score < threshold ? '#4CAF50' :
                      score < threshold * 1.5 ? '#FFC107' : '#F44336';
-        
+
         return `
             <div style="position: relative; width: 100px; height: 100px; margin: 0 auto;">
                 <svg width="100" height="100" viewBox="0 0 100 100">
                     <!-- Background arc -->
-                    <path d="M50 10 A40 40 0 0 1 90 50" fill="none" 
+                    <path d="M50 10 A40 40 0 0 1 90 50" fill="none"
                         stroke="#e9ecef" stroke-width="6" stroke-linecap="round"/>
                     <!-- Progress arc -->
                     <path d="M50 10 A40 40 0 ${percentage > 50 ? '1' : '0'} 1 ${
                         50 + 40 * Math.cos((percentage * 3.6 - 90) * Math.PI / 180)} ${
                         50 + 40 * Math.sin((percentage * 3.6 - 90) * Math.PI / 180)
-                    }" fill="none" 
+                    }" fill="none"
                         stroke="${color}" stroke-width="6" stroke-linecap="round"/>
                     <!-- Score text -->
-                    <text x="50" y="55" text-anchor="middle" 
+                    <text x="50" y="55" text-anchor="middle"
                         font-size="20" font-weight="bold" fill="#333">
                         ${score}/${max}
                     </text>
@@ -3657,7 +4021,7 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
                     letter-spacing: -0.5px;
                 ">Rezultate Test RAADS-R</h1>
             </div>
-            
+
             <!-- Total Score Section -->
             <div style="text-align: center; margin-bottom: 30px;">
                 <div style="
@@ -3684,7 +4048,7 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
                     text-align: center;
                 ">${interpretation}</div>
             </div>
-            
+
             <!-- Subscores Grid -->
             <div style="
                 display: grid;
@@ -3701,7 +4065,7 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
                     </div>
                 `).join('')}
             </div>
-            
+
             <!-- Call to Action -->
             <div style="
                 text-align: center;
@@ -3769,18 +4133,18 @@ document.addEventListener('click', (e) => {
         const button = e.target.closest('.help-button');
         const helpContent = button.nextElementSibling;
         const isExpanded = button.getAttribute('aria-expanded') === 'true';
-        
+
         // Toggle the help content
         button.setAttribute('aria-expanded', !isExpanded);
         helpContent.hidden = isExpanded;
-        
+
         // Add animation class
         if (!isExpanded) {
             helpContent.classList.add('help-content-show');
         } else {
             helpContent.classList.remove('help-content-show');
         }
-        
+
         // Announce to screen readers
         const announcement = document.createElement('div');
         announcement.setAttribute('role', 'status');
