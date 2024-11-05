@@ -1506,11 +1506,13 @@ body {
     transform: translateY(-100%);
     transition: transform 0.3s ease;
     pointer-events: none;
+    visibility: hidden;
 }
 
 .progress-container.visible {
     transform: translateY(0);
     pointer-events: auto;
+    visibility: visible;
 }
 
 /* Needed to prevent content jump */
@@ -1599,10 +1601,6 @@ body {
     position: absolute;
     right: 1rem;
     top: 1rem;
-}
-
-#raadsrForm {
-    padding-top: 120px;
 }
 </style>
 
@@ -2818,13 +2816,13 @@ questions.forEach((question, index) => {
     const questionLabel = document.createElement('div');
     questionLabel.id = `question-${question.id}-label`;
     questionLabel.classList.add('question-text');
-    questionLabel.textContent = `${question.id}. ${question.text}`;
+    questionLabel.innerHTML = `${question.id}. ${question.text}`;
 
     // Add inverse scoring indicator for screen readers
     if (INVERSE_SCORING_QUESTIONS.includes(question.id)) {
         const inverseNote = document.createElement('span');
         inverseNote.classList.add('sr-only');
-        inverseNote.textContent = ' (Întrebare cu scorare inversă)';
+        inverseNote.innerHTML = ' (Întrebare cu scorare inversă)';
         questionLabel.appendChild(inverseNote);
     }
 
@@ -2837,7 +2835,7 @@ questions.forEach((question, index) => {
     // Add legend for screen readers
     const legend = document.createElement('legend');
     legend.classList.add('sr-only');
-    legend.textContent = `Opțiuni pentru întrebarea ${question.id}`;
+    legend.innerHTML = `Opțiuni pentru întrebarea ${question.id}`;
     fieldset.appendChild(legend);
 
     const options = [
@@ -2878,13 +2876,13 @@ questions.forEach((question, index) => {
 
         const span = document.createElement('span');
         span.classList.add('form-check-label');
-        span.textContent = option.label;
+        span.innerHTML = option.label;
 
         // Add description for screen readers
         const description = document.createElement('span');
         description.id = `q${question.id}-opt${optionIndex}-desc`;
         description.classList.add('sr-only');
-        description.textContent = option.description;
+        description.innerHTML = option.description;
 
         label.appendChild(input);
         label.appendChild(span);
@@ -3005,14 +3003,69 @@ function getInterpretation(score) {
     return 'Scor foarte ridicat, specific persoanelor autiste.';
 }
 
+const getProgressMessage = function(percentage, answered) {
+    if (percentage === 0) {
+        return '🚀 Hai să începem! Primul pas este cel mai important! 💫';
+    }
+    
+    if (percentage <= 10) {
+        return '🌟 Minunat început! Pas cu pas, vei reuși! 💪';
+    }
+    
+    if (percentage <= 20) {
+        return '🎯 Ai prins ritmul! Continui excelent! ⭐';
+    }
+    
+    if (percentage <= 30) {
+        return `🌈 Super progres! Ai completat deja ${answered} întrebări! 🎉`;
+    }
+    
+    if (percentage <= 40) {
+        return '💫 Merge strună! Ești pe drumul cel bun! 🎈';
+    }
+    
+    if (percentage <= 50) {
+        return '🎊 WOW! Ai ajuns la jumătate! Ești fantastic(ă)! 🌟';
+    }
+    
+    if (percentage <= 60) {
+        return '⚡ Impresionant! Mai puțin de jumătate rămas! 🔥';
+    }
+    
+    if (percentage <= 70) {
+        return '🎯 Extraordinar! Continui să strălucești! ✨';
+    }
+    
+    if (percentage <= 80) {
+        return '🚀 Ești pe ultima sută de metri! Aproape acolo! 💫';
+    }
+    
+    if (percentage <= 90) {
+        return '🌟 Fantastic! Mai ai foarte puțin! Ești aproape gata! 🎉';
+    }
+    
+    if (percentage < 100) {
+        return '✨ Ultima porțiune! Câteva întrebări și ai terminat! 🎯';
+    }
+    
+    // 100%
+    return `
+        🎉 FELICITĂRI! 🎉
+        <br/>
+        <span style="font-size: 0.9em">Ai completat tot testul! Ești minunat(ă)! 🌟</span>
+        <br/>
+        <span style="font-size: 0.85em; color: #666">Apasă pe "Calculează Scorul" pentru rezultate! 🎯</span>
+    `;
+};
+
 // Progress tracking function
 function initProgressTracking() {
     // Create and insert progress bar
     const progressHtml = `
         <div class="progress-container">
             <div class="progress-stats">
-                <span class="questions-completed">0 din ${questions.length} întrebări</span>
-                <span class="time-estimate">Timp rămas: 30 minute</span>
+                <span class="questions-completed"><b>0</b> din <b>${questions.length}</b> întrebări</span>
+                <span class="time-estimate">Timp rămas estimat: <b>30 minute</b></span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill"></div>
@@ -3125,61 +3178,6 @@ function initProgressTracking() {
     //     lastScrollTop = scrollTop;
     // });
 
-    function getProgressMessage(percentage, answered) {
-        if (percentage === 0) {
-            return '🚀 Hai să începem! Primul pas este cel mai important! 💫';
-        }
-        
-        if (percentage <= 10) {
-            return '🌟 Minunat început! Pas cu pas, vei reuși! 💪';
-        }
-        
-        if (percentage <= 20) {
-            return '🎯 Ai prins ritmul! Continui excelent! ⭐';
-        }
-        
-        if (percentage <= 30) {
-            return `🌈 Super progres! Ai completat deja ${answered} întrebări! 🎉`;
-        }
-        
-        if (percentage <= 40) {
-            return '💫 Merge strună! Ești pe drumul cel bun! 🎈';
-        }
-        
-        if (percentage <= 50) {
-            return '🎊 WOW! Ai ajuns la jumătate! Ești fantastic(ă)! 🌟';
-        }
-        
-        if (percentage <= 60) {
-            return '⚡ Impresionant! Mai puțin de jumătate rămas! 🔥';
-        }
-        
-        if (percentage <= 70) {
-            return '🎯 Extraordinar! Continui să strălucești! ✨';
-        }
-        
-        if (percentage <= 80) {
-            return '🚀 Ești pe ultima sută de metri! Aproape acolo! 💫';
-        }
-        
-        if (percentage <= 90) {
-            return '🌟 Fantastic! Mai ai foarte puțin! Ești aproape gata! 🎉';
-        }
-        
-        if (percentage < 100) {
-            return '✨ Ultima porțiune! Câteva întrebări și ai terminat! 🎯';
-        }
-        
-        // 100%
-        return `
-            🎉 FELICITĂRI! 🎉
-            <br/>
-            <span style="font-size: 0.9em">Ai completat tot testul! Ești minunat(ă)! 🌟</span>
-            <br/>
-            <span style="font-size: 0.85em; color: #666">Apasă pe "Calculează Scorul" pentru rezultate! 🎯</span>
-        `;
-    }
-
     // Update progress function
     function updateProgress() {
         const answered = document.querySelectorAll('input[type="radio"]:checked').length;
@@ -3190,7 +3188,7 @@ function initProgressTracking() {
         progressFill.style.width = percentage + '%';
         
         // Update stats
-        questionsCompleted.textContent = `${answered} din ${total} întrebări`;
+        questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
         
         // Update message with animation
         progressMessage.classList.add('updating');
@@ -3204,7 +3202,7 @@ function initProgressTracking() {
         // Update time estimate
         const remainingQuestions = total - answered;
         const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.375), 1);
-        timeEstimate.textContent = `Timp rămas: ${estimatedMinutes} minute`;
+        timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
     }
 
     // Enhanced radio button change handler
@@ -3262,30 +3260,6 @@ function scrollToQuestion(questionElement) {
     });
 }
 
-// Enhanced radio button change handler
-function initQuestionHandlers() {
-    form.addEventListener('change', (e) => {
-        if (e.target.type === 'radio') {
-            const currentQuestion = e.target.closest('.question');
-            currentQuestion.classList.add('completed');
-            
-            updateProgress();
-
-            // Find next unanswered question
-            const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
-                .find(q => !q.querySelector('input[type="radio"]:checked'));
-
-            if (nextUnanswered) {
-                scrollToQuestion(nextUnanswered);
-
-                // Update current question highlighting
-                document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
-                nextUnanswered.classList.add('current');
-            }
-        }
-    });
-}
-
 // Add intersection observer to monitor test section visibility
 function initTestSectionObserver() {
     const progressContainer = document.querySelector('.progress-container');
@@ -3315,7 +3289,6 @@ function initTestSectionObserver() {
 // Initialize everything
 function initProgressTracker() {
     initProgressTracking();
-    initQuestionHandlers();
     initTestSectionObserver();
 }
 
@@ -3331,106 +3304,58 @@ if (document.readyState === 'loading') {
 submitBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
-    // Clear previous error states
+    // Reset error states
     errorDiv.style.display = 'none';
     errorBelowDiv.style.display = 'none';
-    errorDiv.textContent = '';
-    errorBelowDiv.textContent = '';
-
-    // Remove previous highlights and alerts
+    errorDiv.innerHTML = '';
+    errorBelowDiv.innerHTML = '';
+    
+    // Clear previous highlights
     document.querySelectorAll('.highlight-unanswered').forEach(el => {
         el.classList.remove('highlight-unanswered');
-        el.removeAttribute('aria-invalid');
-        const alert = el.querySelector('.validation-alert');
-        if (alert) alert.remove();
     });
 
+    // Find unanswered questions
     let unanswered = [];
-    let firstUnanswered = null;
-
-    // Validate answers
     questions.forEach(question => {
-        const questionDiv = document.querySelector(`[data-question-number="${question.id}"]`);
         const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
-
         if (!selected) {
             unanswered.push(question.id);
-
-            // Add accessibility attributes
+            const questionDiv = document.querySelector(`input[name="question_${question.id}"]`)
+                .closest('.question');
             questionDiv.classList.add('highlight-unanswered');
-            questionDiv.setAttribute('aria-invalid', 'true');
-
-            // Add visual and screen reader alert
-            const alert = document.createElement('div');
-            alert.classList.add('validation-alert', 'alert', 'alert-warning', 'mt-2');
-            alert.setAttribute('role', 'alert');
-            alert.innerHTML = `
-                <i class="fas fa-exclamation-triangle me-2"></i>
-                Această întrebare necesită un răspuns
-            `;
-            questionDiv.appendChild(alert);
-
-            // Store first unanswered question for scrolling
-            if (!firstUnanswered) firstUnanswered = questionDiv;
         }
     });
 
+    // Handle unanswered questions
     if (unanswered.length > 0) {
-        // Create accessible error message
-        const errorMessage = `
-            <div role="alert" class="d-flex align-items-center">
-                <i class="fas fa-exclamation-circle text-danger me-2"></i>
-                <div>
-                    <p class="mb-1">Te rugăm să răspunzi la toate întrebările înainte de a continua.</p>
-                    <p class="mb-0">Întrebări fără răspuns: ${unanswered.map(id =>
-                        `<a href="#" class="alert-link" data-question="${id}">${id}</a>`
-                    ).join(', ')}</p>
-                </div>
-            </div>
-        `;
-
+        const errorMessage = `Te rog să răspunzi la toate întrebările. Întrebările fără răspuns: ${unanswered.join(', ')}`;
         errorDiv.innerHTML = errorMessage;
         errorBelowDiv.innerHTML = errorMessage;
         errorDiv.style.display = 'block';
         errorBelowDiv.style.display = 'block';
+        resultDiv.style.display = 'none';
 
-        // Add click handlers for question links
-        [errorDiv, errorBelowDiv].forEach(div => {
-            div.querySelectorAll('[data-question]').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const questionId = e.target.dataset.question;
-                    const questionDiv = document.querySelector(`[data-question-number="${questionId}"]`);
-                    questionDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    questionDiv.querySelector('input[type="radio"]').focus();
-                });
-            });
-        });
-
-        // Scroll to first unanswered question
+        // Find and scroll to first unanswered question
+        const firstUnanswered = document.querySelector('.highlight-unanswered');
         if (firstUnanswered) {
-            firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            firstUnanswered.querySelector('input[type="radio"]').focus();
-
-            // Announce to screen readers
-            const announcement = document.createElement('div');
-            announcement.setAttribute('role', 'status');
-            announcement.setAttribute('aria-live', 'polite');
-            announcement.classList.add('sr-only');
-            announcement.textContent = `${unanswered.length} întrebări necesită răspuns. Prima întrebare fără răspuns este întrebarea ${unanswered[0]}.`;
-            document.body.appendChild(announcement);
-            setTimeout(() => announcement.remove(), 3000);
+            const progressContainer = document.querySelector('.progress-container');
+            const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
+            
+            window.scrollTo({
+                top: firstUnanswered.getBoundingClientRect().top + window.pageYOffset - offset,
+                behavior: 'smooth'
+            });
         }
-
         return;
     }
 
-    // Calculate scores using the new RAADS-R scoring system
+    // Calculate scores
     const results = calculateSubscores(questions);
     const { subscores, totalScore, diagnosticIndicators } = results;
     const interpretation = getInterpretation(totalScore);
 
-    // Create enhanced results HTML with visual components
+    // Create enhanced results HTML
     resultDiv.innerHTML = `
         <div class="card mb-4 shadow-sm">
             <div class="card-header bg-white py-3">
@@ -3450,10 +3375,10 @@ submitBtn.addEventListener('click', (e) => {
                 <h4 class="mb-4 fw-bold">Scoruri pe categorii</h4>
 
                 <!-- Visual score components -->
-                ${createScoreVisual('Limbaj', subscores.language, RAADS_R_THRESHOLDS.language, MAX_SCORES.language)}
-                ${createScoreVisual('Relaționare socială', subscores.socialRelatedness, RAADS_R_THRESHOLDS.socialRelatedness, MAX_SCORES.socialRelatedness)}
-                ${createScoreVisual('Senzorial-motor', subscores.sensoryMotor, RAADS_R_THRESHOLDS.sensoryMotor, MAX_SCORES.sensoryMotor)}
-                ${createScoreVisual('Interese circumscrise', subscores.circumscribedInterests, RAADS_R_THRESHOLDS.circumscribedInterests, MAX_SCORES.circumscribedInterests)}
+                ${createScoreVisual('Limbaj', subscores.language, RAADS_R_THRESHOLDS.language, 21)}
+                ${createScoreVisual('Relaționare socială', subscores.socialRelatedness, RAADS_R_THRESHOLDS.socialRelatedness, 117)}
+                ${createScoreVisual('Senzorial-motor', subscores.sensoryMotor, RAADS_R_THRESHOLDS.sensoryMotor, 60)}
+                ${createScoreVisual('Interese circumscrise', subscores.circumscribedInterests, RAADS_R_THRESHOLDS.circumscribedInterests, 42)}
 
                 <!-- Category Interpretations -->
                 <div class="mt-4 pt-3 border-top">
@@ -3492,12 +3417,30 @@ submitBtn.addEventListener('click', (e) => {
         </div>
     `;
 
-    // Show results and update button states
+    // Update UI state
     resultDiv.style.display = 'block';
     submitBtn.style.display = 'none';
     exportBtn.style.display = 'block';
     restartBtn.style.display = 'block';
     shareBtn.style.display = 'block';
+
+    // Hide progress bar
+    const progressContainer = document.querySelector('.progress-container');
+    if (progressContainer) {
+        // First remove 'visible' class with transition
+        progressContainer.classList.remove('visible');
+        
+        // After transition, force hide
+        setTimeout(() => {
+            progressContainer.style.display = 'none';
+        }, 300); // Match this with your CSS transition time
+    }
+
+    // Update the padding of test container to prevent layout jump
+    const testContainer = document.querySelector('.test-actual-container');
+    if (testContainer) {
+        testContainer.style.paddingTop = '20px'; // Reset to default padding
+    }
 
     // Disable all radio inputs
     document.querySelectorAll('input[type="radio"]').forEach(radio => {
@@ -3505,7 +3448,19 @@ submitBtn.addEventListener('click', (e) => {
     });
 
     // Scroll to results
-    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+        const resultElement = document.getElementById('result');
+        if (resultElement) {
+            const headerOffset = 20;
+            const elementPosition = resultElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    }, 100);
 });
 
 startBtn.addEventListener('click', (e) => {
@@ -3635,12 +3590,12 @@ exportBtn.addEventListener('click', () => {
 
             const questionText = document.createElement('p');
             questionText.style.cssText = 'margin-bottom: 5px; font-weight: bold; color: black;';
-            questionText.textContent = `${question.id}. ${question.text}`;
+            questionText.innerHTML = `${question.id}. ${question.text}`;
             questionDiv.appendChild(questionText);
 
             const answerText = document.createElement('p');
             answerText.style.cssText = 'margin-left: 15px; color: black;';
-            answerText.textContent = `Răspuns: ${selected.closest('label').textContent.trim()}`;
+            answerText.innerHTML = `Răspuns: ${selected.closest('label').innerHTML.trim()}`;
             questionDiv.appendChild(answerText);
 
             content.appendChild(questionDiv);
@@ -3650,7 +3605,7 @@ exportBtn.addEventListener('click', () => {
     // Add date of test
     const dateDiv = document.createElement('div');
     dateDiv.style.cssText = 'margin-top: 20px; text-align: right; color: #666;';
-    dateDiv.textContent = `Data testului: ${new Date().toLocaleDateString('ro-RO')}`;
+    dateDiv.innerHTML = `Data testului: ${new Date().toLocaleDateString('ro-RO')}`;
     content.appendChild(dateDiv);
 
     // Add the content to the container
@@ -3699,17 +3654,41 @@ const confirmRestartBtn = document.getElementById('confirmRestartBtn');
 
 // Update the restartTest function to hide the share button
 const restartTest = function() {
+    // Reset progress container visibility
+    const progressContainer = document.querySelector('.progress-container');
+
+    if (progressContainer) {
+        progressContainer.style.display = ''; // Remove inline display: none
+        
+        // Brief timeout to allow display to take effect before adding visible class
+        setTimeout(() => {
+            progressContainer.classList.add('visible');
+        }, 10);
+    }
+
+    // Reset test container padding
+    const testContainer = document.querySelector('.test-actual-container');
+    if (testContainer) {
+        testContainer.style.paddingTop = '120px'; // Reset to original padding
+    }
+
     // Enable all radio inputs and uncheck them
     document.querySelectorAll('input[type="radio"]').forEach(radio => {
         radio.disabled = false;
         radio.checked = false;
     });
 
+    // Remove completion classes from questions
+    document.querySelectorAll('.question').forEach(question => {
+        question.classList.remove('completed');
+        question.classList.remove('current');
+    });
+
     // Hide results and action buttons
     resultDiv.style.display = 'none';
     exportBtn.style.display = 'none';
     restartBtn.style.display = 'none';
-    shareBtn.style.display = 'none'; // Hide share button
+    shareBtn.style.display = 'none';
 
     // Show submit button
     submitBtn.style.display = 'block';
@@ -3718,17 +3697,95 @@ const restartTest = function() {
     document.querySelectorAll('.highlight-unanswered').forEach(el => {
         el.classList.remove('highlight-unanswered');
     });
-
+    
     // Hide the modal
     restartWarningModal.hide();
 
-    // Smooth scroll to disclaimer section
-    const disclaimerSection = document.getElementById('first-disclaimer');
-    disclaimerSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-    });
+    // Reset progress if exists
+    const progressFill = document.querySelector('.progress-fill');
+    const questionsCompleted = document.querySelector('.questions-completed');
+    const progressMessage = document.querySelector('.progress-message');
+    if (progressFill) progressFill.style.width = '0%';
+    if (questionsCompleted) questionsCompleted.innerHTML = `<b>0</b> din <b>${questions.length}</b> întrebări`;
+    if (progressMessage) progressMessage.innerHTML = getProgressMessage(0, 0);
+    
+    // Find first question
+    const firstQuestion = document.querySelector('.question');
+    if (firstQuestion) {
+        // Add current class to first question
+        firstQuestion.classList.add('current');
+        
+        // Scroll to first question with offset for progress bar
+        const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
+        
+        setTimeout(() => {
+            const targetPosition = firstQuestion.getBoundingClientRect().top + 
+                                 window.pageYOffset - 
+                                 offset;
+            
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+
+            initProgressTracker();
+        }, 100); // Small delay to ensure DOM updates are complete
+    }
 };
+
+// Update event listeners for the restart button and confirm button
+restartBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    restartWarningModal.show();
+});
+
+confirmRestartBtn.addEventListener('click', restartTest);
+
+// Re-attach change event listeners for radio buttons
+function reInitializeRadioListeners() {
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const currentQuestion = e.target.closest('.question');
+            currentQuestion.classList.add('completed');
+            
+            // Find next unanswered question
+            const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
+                .find(q => !q.querySelector('input[type="radio"]:checked'));
+
+            if (nextUnanswered) {
+                // Remove current class from all questions
+                document.querySelectorAll('.question').forEach(q => {
+                    q.classList.remove('current');
+                });
+
+                // Add current class to next question
+                nextUnanswered.classList.add('current');
+
+                // Calculate scroll position
+                const progressContainer = document.querySelector('.progress-container');
+                const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
+                
+                const targetPosition = nextUnanswered.getBoundingClientRect().top + 
+                                     window.pageYOffset - 
+                                     offset;
+                
+                // Smooth scroll to next question
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+
+            // Update progress if it exists
+            if (typeof updateProgress === 'function') {
+                updateProgress();
+            }
+        });
+    });
+}
+
+// Call this when initializing the form and after restart
+reInitializeRadioListeners();
 
 // Restart button functionality
 restartBtn.addEventListener('click', (e) => {
@@ -4150,7 +4207,7 @@ document.addEventListener('click', (e) => {
         announcement.setAttribute('role', 'status');
         announcement.setAttribute('aria-live', 'polite');
         announcement.classList.add('sr-only');
-        announcement.textContent = `Ajutor pentru întrebare ${isExpanded ? 'închis' : 'deschis'}`;
+        announcement.innerHTML = `Ajutor pentru întrebare ${isExpanded ? 'închis' : 'deschis'}`;
         document.body.appendChild(announcement);
         setTimeout(() => announcement.remove(), 1000);
     }
