@@ -2629,6 +2629,11 @@ startBtn.addEventListener('click', (e) => {
     });
 });
 
+// First add this helper function at the global scope
+function formatScore(score) {
+    return typeof score === 'number' && !isNaN(score) ? score : 0;
+}
+
 exportBtn.addEventListener('click', () => {
     // Create a temporary container
     const container = document.createElement('div');
@@ -2639,7 +2644,17 @@ exportBtn.addEventListener('click', () => {
 
     // Calculate scores - use the proper structure from calculateSubscores
     const { subscores, totalScore, diagnosticIndicators } = calculateSubscores(questions);
-    const interpretation = getInterpretation(totalScore);
+    
+    // Format all scores to ensure we have valid numbers
+    const formattedScores = {
+        language: formatScore(subscores.language),
+        socialRelatedness: formatScore(subscores.socialRelatedness),
+        sensoryMotor: formatScore(subscores.sensoryMotor),
+        circumscribedInterests: formatScore(subscores.circumscribedInterests)
+    };
+    
+    const formattedTotalScore = formatScore(totalScore);
+    const interpretation = getInterpretation(formattedTotalScore);
 
     // Create stylized content for PDF
     const content = document.createElement('div');
@@ -2652,27 +2667,46 @@ exportBtn.addEventListener('click', () => {
         background: white;
     `;
 
-    // Recreate the visual elements for PDF
+    // Define score categories with their properties
+    const scoreCategories = {
+        'Limbaj': { 
+            score: formattedScores.language, 
+            threshold: RAADS_R_THRESHOLDS.language, 
+            max: 21 
+        },
+        'Relaționare socială': { 
+            score: formattedScores.socialRelatedness, 
+            threshold: RAADS_R_THRESHOLDS.socialRelatedness, 
+            max: 117 
+        },
+        'Senzorial-motor': { 
+            score: formattedScores.sensoryMotor, 
+            threshold: RAADS_R_THRESHOLDS.sensoryMotor, 
+            max: 60 
+        },
+        'Interese circumscrise': { 
+            score: formattedScores.circumscribedInterests, 
+            threshold: RAADS_R_THRESHOLDS.circumscribedInterests, 
+            max: 42 
+        }
+    };
+
+    // Create the content HTML
     content.innerHTML = `
         <h1 style="font-size: 24px; text-align: center; margin-bottom: 20px;">Rezultate Test RAADS-R</h1>
         <div style="text-align: center; padding: 20px; background-color: #f8f9fa; margin-bottom: 30px;">
-            <h2 style="font-size: 20px; margin-bottom: 10px;">Scor Total: ${totalScore}</h2>
+            <h2 style="font-size: 20px; margin-bottom: 10px;">Scor Total: ${formattedTotalScore}</h2>
             <p style="color: #666;">${interpretation}</p>
         </div>
 
         <h3 style="font-size: 18px; margin-bottom: 20px;">Scoruri pe categorii:</h3>
-
+        
         <!-- Visual score components styled for PDF -->
-        ${Object.entries({
-            'Limbaj': { score: subscores.language, threshold: RAADS_R_THRESHOLDS.language, max: 21 },
-            'Relaționare socială': { score: subscores.socialRelatedness, threshold: RAADS_R_THRESHOLDS.socialRelatedness, max: 117 },
-            'Senzorial-motor': { score: subscores.sensoryMotor, threshold: RAADS_R_THRESHOLDS.sensoryMotor, max: 60 },
-            'Interese circumscrise': { score: subscores.circumscribedInterests, threshold: RAADS_R_THRESHOLDS.circumscribedInterests, max: 42 }
-        }).map(([category, scores]) => {
-            const percentage = (scores.score / scores.max) * 100;
-            const color = scores.score < scores.threshold ? '#4CAF50' :
+        ${Object.entries(scoreCategories).map(([category, scores]) => {
+            const percentage = Math.min(Math.max((scores.score / scores.max) * 100, 0), 100);
+            const color = scores.score < scores.threshold ? '#4CAF50' : 
                          scores.score < scores.threshold * 1.5 ? '#FFC107' : '#F44336';
-
+            
             return `
                 <div style="margin-bottom: 25px;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
@@ -2691,7 +2725,7 @@ exportBtn.addEventListener('click', () => {
                 </div>
             `;
         }).join('')}
-
+        
         <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa;">
             <strong>Legendă:</strong><br>
             <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
@@ -2722,6 +2756,12 @@ exportBtn.addEventListener('click', () => {
             content.appendChild(questionDiv);
         }
     });
+
+    // Add date of test
+    const dateDiv = document.createElement('div');
+    dateDiv.style.cssText = 'margin-top: 20px; text-align: right; color: #666;';
+    dateDiv.textContent = `Data testului: ${new Date().toLocaleDateString('ro-RO')}`;
+    content.appendChild(dateDiv);
 
     // Add the content to the container
     container.appendChild(content);
