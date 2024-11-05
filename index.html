@@ -2863,25 +2863,143 @@ function generateUniqueId() {
     return 'raads_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 }
 
-// Create a function to generate the sharing image layout
+// First, let's update the shareToFacebook function with better debugging and score handling
+async function shareToFacebook() {
+    try {
+        // Show loading state
+        shareBtn.disabled = true;
+        shareBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se pregătește imaginea...';
+
+        // Calculate scores using the proper RAADS-R scoring system
+        const results = calculateSubscores(questions);
+        console.log('Raw results:', results);
+
+        // Format scores
+        const formattedResults = {
+            subscores: {
+                language: Math.round(results.subscores.language) || 0,
+                socialRelatedness: Math.round(results.subscores.socialRelatedness) || 0,
+                sensoryMotor: Math.round(results.subscores.sensoryMotor) || 0,
+                circumscribedInterests: Math.round(results.subscores.circumscribedInterests) || 0
+            },
+            totalScore: Math.round(results.totalScore) || 0
+        };
+
+        console.log('Formatted results:', formattedResults);
+
+        // Get interpretation based on total score
+        const interpretation = getInterpretation(formattedResults.totalScore);
+        
+        // Get color for total score
+        const totalScoreColor = formattedResults.totalScore < 65 ? '#4CAF50' : 
+                               formattedResults.totalScore < 90 ? '#FFC107' : '#F44336';
+
+        console.log('About to create sharing container with:', {
+            subscores: formattedResults.subscores,
+            totalScore: formattedResults.totalScore,
+            interpretation,
+            totalScoreColor
+        });
+
+        // Create sharing image container
+        const sharingContainer = createSharingImage(
+            formattedResults.subscores,
+            formattedResults.totalScore,
+            interpretation,
+            totalScoreColor
+        );
+
+        // Generate image
+        const canvas = await html2canvas(sharingContainer, {
+            width: 1200,
+            height: 630,
+            scale: 1,
+            useCORS: true,
+            logging: true,
+            backgroundColor: '#ffffff'
+        });
+
+        // Remove temporary container
+        document.body.removeChild(sharingContainer);
+
+        // Convert canvas to blob
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
+        
+        // Create FormData with formatted scores
+        const formData = new FormData();
+        const uniqueId = generateUniqueId();
+        formData.append('image', blob, uniqueId + '.jpg');
+        formData.append('id', uniqueId);
+        formData.append('score', formattedResults.totalScore.toString());
+        formData.append('subscores', JSON.stringify(formattedResults.subscores));
+        formData.append('interpretation', interpretation);
+
+        // Upload and share
+        const response = await fetch('/save-result-image.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Upload failed');
+        }
+
+        const data = await response.json();
+        console.log('Server response:', data);
+        
+        // Open Facebook share dialog
+        const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.shareUrl)}`;
+        window.open(
+            fbShareUrl,
+            'facebook-share-dialog',
+            'width=626,height=436,top=' + (window.innerHeight - 436) / 2 + ',left=' + (window.innerWidth - 626) / 2
+        );
+
+    } catch (error) {
+        console.error('Error sharing:', error);
+        alert('A apărut o eroare la distribuirea rezultatelor. Vă rugăm să încercați din nou.');
+    } finally {
+        shareBtn.disabled = false;
+        shareBtn.innerHTML = '<i class="fab fa-facebook me-2"></i>Distribuie pe Facebook';
+    }
+}
+
+// Update the createSharingImage function
 function createSharingImage(subscores, totalScore, interpretation, totalScoreColor) {
-    // Format all scores
-    const formattedScores = {
-        language: formatScore(subscores.language),
-        socialRelatedness: formatScore(subscores.socialRelatedness),
-        sensoryMotor: formatScore(subscores.sensoryMotor),
-        circumscribedInterests: formatScore(subscores.circumscribedInterests)
-    };
-    
-    const formattedTotalScore = formatScore(totalScore);
+    console.log('Creating sharing image with:', {
+        subscores,
+        totalScore,
+        interpretation,
+        totalScoreColor
+    });
 
     // Define score categories with their maximums
-    const scoreCategories = {
-        'Limbaj': { score: formattedScores.language, max: 21 },
-        'Relaționare socială': { score: formattedScores.socialRelatedness, max: 117 },
-        'Senzorial-motor': { score: formattedScores.sensoryMotor, max: 60 },
-        'Interese circumscrise': { score: formattedScores.circumscribedInterests, max: 42 }
-    };
+    const scoreCategories = [
+        {
+            name: 'Limbaj',
+            score: Math.round(subscores.language),
+            max: 21,
+            threshold: RAADS_R_THRESHOLDS.language
+        },
+        {
+            name: 'Relaționare socială',
+            score: Math.round(subscores.socialRelatedness),
+            max: 117,
+            threshold: RAADS_R_THRESHOLDS.socialRelatedness
+        },
+        {
+            name: 'Senzorial-motor',
+            score: Math.round(subscores.sensoryMotor),
+            max: 60,
+            threshold: RAADS_R_THRESHOLDS.sensoryMotor
+        },
+        {
+            name: 'Interese circumscrise',
+            score: Math.round(subscores.circumscribedInterests),
+            max: 42,
+            threshold: RAADS_R_THRESHOLDS.circumscribedInterests
+        }
+    ];
 
     const container = document.createElement('div');
     container.style.cssText = `
@@ -2896,39 +3014,15 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
         overflow: hidden;
     `;
 
-    // Update the interpretation text styling
-    const interpretationStyle = `
-        font-size: 32px;
-        color: #333;
-        max-width: 90%;
-        margin: 0 auto 30px;
-        line-height: 1.4;
-        word-spacing: 4px;
-        letter-spacing: 0.2px;
-        white-space: normal;
-        text-align: center;
-    `;
-    
-    // Update the CTA styling
-    const ctaStyle = `
-        text-align: center;
-        margin-top: 10px;
-        font-size: 42px;
-        font-weight: bold;
-        color: ${totalScoreColor};
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        background: linear-gradient(45deg, ${totalScoreColor}22, ${totalScoreColor}11);
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    `;
-
     // Helper function to create arc progress indicator
-    function createArcProgress(score, max) {
+    function createArcProgress(category) {
+        const score = category.score;
+        const max = category.max;
+        const threshold = category.threshold;
+        
         const percentage = Math.min(Math.max((score / max) * 100, 0), 100);
-        const color = score < max * 0.3 ? '#4CAF50' : 
-                     score < max * 0.6 ? '#FFC107' : '#F44336';
+        const color = score < threshold ? '#4CAF50' : 
+                     score < threshold * 1.5 ? '#FFC107' : '#F44336';
         
         return `
             <div style="position: relative; width: 100px; height: 100px; margin: 0 auto;">
@@ -2971,15 +3065,23 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
                     color: ${totalScoreColor};
                     line-height: 1.2;
                     margin: 20px 0;
-                ">${formattedTotalScore}</div>
+                ">${Math.round(totalScore)}</div>
                 <div style="
                     font-size: 28px;
                     color: #666;
                     margin-bottom: 20px;
                 ">Scor Total</div>
-                <div style="${interpretationStyle}">
-                    ${interpretation}
-                </div>
+                <div style="
+                    font-size: 32px;
+                    color: #333;
+                    max-width: 90%;
+                    margin: 0 auto 30px;
+                    line-height: 1.4;
+                    word-spacing: 4px;
+                    letter-spacing: 0.2px;
+                    white-space: normal;
+                    text-align: center;
+                ">${interpretation}</div>
             </div>
             
             <!-- Subscores Grid -->
@@ -2989,102 +3091,36 @@ function createSharingImage(subscores, totalScore, interpretation, totalScoreCol
                 gap: 30px;
                 padding: 0 40px;
             ">
-                ${Object.entries(scoreCategories).map(([name, { score, max }]) => `
+                ${scoreCategories.map(category => `
                     <div style="text-align: center;">
                         <div style="font-size: 24px; color: #333; margin-bottom: 15px; font-weight: 500;">
-                            ${name}
+                            ${category.name}
                         </div>
-                        ${createArcProgress(score, max)}
+                        ${createArcProgress(category)}
                     </div>
                 `).join('')}
             </div>
             
             <!-- Call to Action -->
-            <div style="${ctaStyle}">
+            <div style="
+                text-align: center;
+                margin-top: 10px;
+                font-size: 42px;
+                font-weight: bold;
+                color: ${totalScoreColor};
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                background: linear-gradient(45deg, ${totalScoreColor}22, ${totalScoreColor}11);
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            ">
                 Fă și tu un test!
             </div>
         </div>
     `;
 
     return container;
-}
-
-// shareToFacebook function
-async function shareToFacebook() {
-    try {
-        // Show loading state
-        shareBtn.disabled = true;
-        shareBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se pregătește imaginea...';
-
-        // Get scores and interpretation
-        const { subscores, totalScore, diagnosticIndicators } = calculateSubscores(questions);
-        const formattedTotalScore = formatScore(totalScore);
-        const interpretation = getInterpretation(formattedTotalScore);
-        
-        // Get color for total score
-        const totalScoreColor = formattedTotalScore < 65 ? '#4CAF50' : 
-                               formattedTotalScore < 90 ? '#FFC107' : '#F44336';
-
-        // Create sharing image container
-        const sharingContainer = createSharingImage(subscores, formattedTotalScore, interpretation, totalScoreColor);
-
-        // Generate image
-        const canvas = await html2canvas(sharingContainer, {
-            width: 1200,
-            height: 630,
-            scale: 1,
-            useCORS: true,
-            logging: false,
-            backgroundColor: '#ffffff'
-        });
-
-        // Remove temporary container
-        document.body.removeChild(sharingContainer);
-
-        // Convert canvas to blob
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
-        
-        // Create FormData
-        const formData = new FormData();
-        const uniqueId = generateUniqueId();
-        formData.append('image', blob, uniqueId + '.jpg');
-        formData.append('id', uniqueId);
-        formData.append('score', formattedTotalScore);
-        formData.append('subscores', JSON.stringify({
-            language: formatScore(subscores.language),
-            socialRelatedness: formatScore(subscores.socialRelatedness),
-            sensoryMotor: formatScore(subscores.sensoryMotor),
-            circumscribedInterests: formatScore(subscores.circumscribedInterests)
-        }));
-        formData.append('interpretation', interpretation);
-
-        // Upload and share
-        const response = await fetch('/save-result-image.php', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) {
-            throw new Error('Upload failed');
-        }
-
-        const data = await response.json();
-        
-        // Open Facebook share dialog
-        const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.shareUrl)}`;
-        window.open(
-            fbShareUrl,
-            'facebook-share-dialog',
-            'width=626,height=436,top=' + (window.innerHeight - 436) / 2 + ',left=' + (window.innerWidth - 626) / 2
-        );
-
-    } catch (error) {
-        console.error('Error sharing:', error);
-        alert('A apărut o eroare la distribuirea rezultatelor. Vă rugăm să încercați din nou.');
-    } finally {
-        shareBtn.disabled = false;
-        shareBtn.innerHTML = '<i class="fab fa-facebook me-2"></i>Distribuie pe Facebook';
-    }
 }
 
 // Click handler for share button
