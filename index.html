@@ -1610,19 +1610,25 @@ body {
 
             <div id="errorBelow" class="alert alert-danger" style="display: none;"></div>
 
-            <button type="button" id="submitBtn" class="btn btn-primary btn-lg w-100 mb-4">Calculează Scorul</button>
+            <button type="button" id="submitBtn" class="btn btn-primary btn-lg w-100 mb-4 action-btn calculate-btn">
+                <i class="fas fa-calculator"></i>
+                Calculează Scorul
+            </button>
 
             <div id="result" class="alert alert-success" style="display:none;"></div>
             
-            <button type="button" id="shareBtn" class="btn btn-primary btn-lg w-100 mb-4" style="display:none; background-color: #1877f2;">
-                <i class="fab fa-facebook me-2"></i>Distribuie pe Facebook
+            <button type="button" id="shareBtn" class="btn btn-primary btn-lg w-100 mb-4 action-btn share-btn" style="display:none; background-color: #1877f2;">
+                <i class="fab fa-facebook me-2"></i>
+                Distribuie pe Facebook
             </button>
             
-            <button type="button" id="exportBtn" class="btn btn-success btn-lg w-100 mb-4" style="display:none">
+            <button type="button" id="exportBtn" class="btn btn-success btn-lg w-100 mb-4 action-btn export-btn" style="display:none">
+                <i class="fas fa-file-pdf"></i>
                 Exportă ca PDF
             </button>
             
-            <button type="button" id="restartBtn" class="btn btn-secondary btn-lg w-100 mb-4" style="display:none">
+            <button type="button" id="restartBtn" class="btn btn-secondary btn-lg w-100 mb-4 action-btn restart-btn" style="display:none">
+                <i class="fas fa-redo-alt"></i>
                 Începe un nou test
             </button>
         </div>
@@ -3049,31 +3055,6 @@ async function shareToFacebook() {
 
 // Click handler for share button
 shareBtn.addEventListener('click', shareToFacebook);
-
-// Update button HTML
-submitBtn.className = 'action-btn calculate-btn';
-submitBtn.innerHTML = `
-    <i class="fas fa-calculator"></i>
-    Calculează Scorul
-`;
-
-exportBtn.className = 'action-btn export-btn';
-exportBtn.innerHTML = `
-    <i class="fas fa-file-pdf"></i>
-    Exportă ca PDF
-`;
-
-restartBtn.className = 'action-btn restart-btn';
-restartBtn.innerHTML = `
-    <i class="fas fa-redo-alt"></i>
-    Începe un nou test
-`;
-
-shareBtn.className = 'action-btn share-btn';
-shareBtn.innerHTML = `
-    <i class="fab fa-facebook"></i>
-    Distribuie pe Facebook
-`;
 </script>
 </body>
 </html>
