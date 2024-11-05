@@ -2835,7 +2835,7 @@ questions.forEach((question, index) => {
     // Add legend for screen readers
     const legend = document.createElement('legend');
     legend.classList.add('sr-only');
-    legend.innerHTML = `Opțiuni pentru întrebarea ${question.id}`;
+    legend.innerHTML = `Opțiuni pentru <b>întrebarea ${question.id}</b>`;
     fieldset.appendChild(legend);
 
     const options = [
@@ -3021,7 +3021,7 @@ const getProgressMessage = function(percentage, answered) {
     }
     
     if (percentage <= 40) {
-        return '💫 Merge strună! Ești pe drumul cel bun! 🎈';
+        return '💫 Te descurci extraordinar! Ești pe drumul cel bun! 🎈';
     }
     
     if (percentage <= 50) {
@@ -3054,7 +3054,7 @@ const getProgressMessage = function(percentage, answered) {
         <br/>
         <span style="font-size: 0.9em">Ai completat tot testul! Ești minunat(ă)! 🌟</span>
         <br/>
-        <span style="font-size: 0.85em; color: #666">Apasă pe "Calculează Scorul" pentru rezultate! 🎯</span>
+        <span style="font-size: 0.85em; color: #666">Apasă pe butonul albastru <b>CALCULEAZĂ SCORUL</b> pentru rezultate! 🎯</span>
     `;
 };
 
