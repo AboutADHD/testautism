@@ -3479,176 +3479,370 @@ function formatScore(score) {
     return typeof score === 'number' && !isNaN(score) ? score : 0;
 }
 
-exportBtn.addEventListener('click', () => {
-    // Create a temporary container
-    const container = document.createElement('div');
-    container.style.visibility = 'hidden';
-    container.style.position = 'absolute';
-    container.style.left = '-9999px';
-    document.body.appendChild(container);
+// exportBtn.addEventListener('click', () => {
+//     // Create a temporary container
+//     const container = document.createElement('div');
+//     container.style.visibility = 'hidden';
+//     container.style.position = 'absolute';
+//     container.style.left = '-9999px';
+//     document.body.appendChild(container);
 
-    // Calculate scores - use the proper structure from calculateSubscores
-    const { subscores, totalScore, diagnosticIndicators } = calculateSubscores(questions);
+//     // Calculate scores - use the proper structure from calculateSubscores
+//     const { subscores, totalScore, diagnosticIndicators } = calculateSubscores(questions);
 
-    // Format all scores to ensure we have valid numbers
-    const formattedScores = {
-        language: formatScore(subscores.language),
-        socialRelatedness: formatScore(subscores.socialRelatedness),
-        sensoryMotor: formatScore(subscores.sensoryMotor),
-        circumscribedInterests: formatScore(subscores.circumscribedInterests)
-    };
+//     // Format all scores to ensure we have valid numbers
+//     const formattedScores = {
+//         language: formatScore(subscores.language),
+//         socialRelatedness: formatScore(subscores.socialRelatedness),
+//         sensoryMotor: formatScore(subscores.sensoryMotor),
+//         circumscribedInterests: formatScore(subscores.circumscribedInterests)
+//     };
 
-    const formattedTotalScore = formatScore(totalScore);
-    const interpretation = getInterpretation(formattedTotalScore);
+//     const formattedTotalScore = formatScore(totalScore);
+//     const interpretation = getInterpretation(formattedTotalScore);
 
-    // Create stylized content for PDF
-    const content = document.createElement('div');
-    content.style.cssText = `
-        font-family: Arial, sans-serif;
-        color: black;
-        font-size: 12px;
-        line-height: 1.4;
-        padding: 20px;
-        background: white;
-    `;
+//     // Create stylized content for PDF
+//     const content = document.createElement('div');
+//     content.style.cssText = `
+//         font-family: Arial, sans-serif;
+//         color: black;
+//         font-size: 12px;
+//         line-height: 1.4;
+//         padding: 20px;
+//         background: white;
+//     `;
 
-    // Define score categories with their properties
-    const scoreCategories = {
-        'Limbaj': {
-            score: formattedScores.language,
-            threshold: RAADS_R_THRESHOLDS.language,
-            max: MAX_SCORES.language
-        },
-        'Relaționare socială': {
-            score: formattedScores.socialRelatedness,
-            threshold: RAADS_R_THRESHOLDS.socialRelatedness,
-            max: MAX_SCORES.socialRelatedness
-        },
-        'Senzorial-motor': {
-            score: formattedScores.sensoryMotor,
-            threshold: RAADS_R_THRESHOLDS.sensoryMotor,
-            max: MAX_SCORES.sensoryMotor
-        },
-        'Interese circumscrise': {
-            score: formattedScores.circumscribedInterests,
-            threshold: RAADS_R_THRESHOLDS.circumscribedInterests,
-            max: MAX_SCORES.circumscribedInterests
-        }
-    };
+//     // Define score categories with their properties
+//     const scoreCategories = {
+//         'Limbaj': {
+//             score: formattedScores.language,
+//             threshold: RAADS_R_THRESHOLDS.language,
+//             max: MAX_SCORES.language
+//         },
+//         'Relaționare socială': {
+//             score: formattedScores.socialRelatedness,
+//             threshold: RAADS_R_THRESHOLDS.socialRelatedness,
+//             max: MAX_SCORES.socialRelatedness
+//         },
+//         'Senzorial-motor': {
+//             score: formattedScores.sensoryMotor,
+//             threshold: RAADS_R_THRESHOLDS.sensoryMotor,
+//             max: MAX_SCORES.sensoryMotor
+//         },
+//         'Interese circumscrise': {
+//             score: formattedScores.circumscribedInterests,
+//             threshold: RAADS_R_THRESHOLDS.circumscribedInterests,
+//             max: MAX_SCORES.circumscribedInterests
+//         }
+//     };
 
-    // Create the content HTML
-    content.innerHTML = `
-        <h1 style="font-size: 24px; text-align: center; margin-bottom: 20px;">Rezultate Test RAADS-R</h1>
-        <div style="text-align: center; padding: 20px; background-color: #f8f9fa; margin-bottom: 30px;">
-            <h2 style="font-size: 20px; margin-bottom: 10px;">Scor Total: ${formattedTotalScore}</h2>
-            <p style="color: #666;">${interpretation}</p>
-        </div>
+//     // Create the content HTML
+//     content.innerHTML = `
+//         <h1 style="font-size: 24px; text-align: center; margin-bottom: 20px;">Rezultate Test RAADS-R</h1>
+//         <div style="text-align: center; padding: 20px; background-color: #f8f9fa; margin-bottom: 30px;">
+//             <h2 style="font-size: 20px; margin-bottom: 10px;">Scor Total: ${formattedTotalScore}</h2>
+//             <p style="color: #666;">${interpretation}</p>
+//         </div>
 
-        <h3 style="font-size: 18px; margin-bottom: 20px;">Scoruri pe categorii:</h3>
+//         <h3 style="font-size: 18px; margin-bottom: 20px;">Scoruri pe categorii:</h3>
 
-        <!-- Visual score components styled for PDF -->
-        ${Object.entries(scoreCategories).map(([category, scores]) => {
-            const percentage = Math.min(Math.max((scores.score / scores.max) * 100, 0), 100);
-            const color = scores.score < scores.threshold ? '#4CAF50' :
-                         scores.score < scores.threshold * 1.5 ? '#FFC107' : '#F44336';
+//         <!-- Visual score components styled for PDF -->
+//         ${Object.entries(scoreCategories).map(([category, scores]) => {
+//             const percentage = Math.min(Math.max((scores.score / scores.max) * 100, 0), 100);
+//             const color = scores.score < scores.threshold ? '#4CAF50' :
+//                          scores.score < scores.threshold * 1.5 ? '#FFC107' : '#F44336';
 
-            return `
-                <div style="margin-bottom: 25px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                        <strong>${category}</strong>
-                        <span>${scores.score} / ${scores.max}</span>
-                    </div>
-                    <div style="width: 100%; height: 20px; background-color: #e9ecef; position: relative;">
-                        <div style="width: ${percentage}%; height: 100%; background-color: ${color};"></div>
-                        <div style="position: absolute; left: ${(scores.threshold/scores.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-top: 5px; color: #666;">
-                        <small>0</small>
-                        <small>Prag: ${scores.threshold}</small>
-                        <small>${scores.max}</small>
-                    </div>
+//             return `
+//                 <div style="margin-bottom: 25px;">
+//                     <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+//                         <strong>${category}</strong>
+//                         <span>${scores.score} / ${scores.max}</span>
+//                     </div>
+//                     <div style="width: 100%; height: 20px; background-color: #e9ecef; position: relative;">
+//                         <div style="width: ${percentage}%; height: 100%; background-color: ${color};"></div>
+//                         <div style="position: absolute; left: ${(scores.threshold/scores.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
+//                     </div>
+//                     <div style="display: flex; justify-content: space-between; margin-top: 5px; color: #666;">
+//                         <small>0</small>
+//                         <small>Prag: ${scores.threshold}</small>
+//                         <small>${scores.max}</small>
+//                     </div>
+//                 </div>
+//             `;
+//         }).join('')}
+
+//         <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa;">
+//             <strong>Legendă:</strong><br>
+//             <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
+//             <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
+//             <span style="color: #F44336;">■</span> Peste prag
+//         </div>
+//         <br/><br/>
+//         <h3 style="font-size: 14px; font-weight: bold; margin-bottom: 15px;">Răspunsuri:</h3>
+//     `;
+
+//     // Add questions and answers
+//     questions.forEach(question => {
+//         const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
+//         if (selected) {
+//             const questionDiv = document.createElement('div');
+//             questionDiv.style.cssText = 'margin-bottom: 15px; color: black;';
+
+//             const questionText = document.createElement('p');
+//             questionText.style.cssText = 'margin-bottom: 5px; font-weight: bold; color: black;';
+//             questionText.innerHTML = `${question.id}. ${question.text}`;
+//             questionDiv.appendChild(questionText);
+
+//             const answerText = document.createElement('p');
+//             answerText.style.cssText = 'margin-left: 15px; color: black;';
+//             answerText.innerHTML = `Răspuns: ${selected.closest('label').innerHTML.trim()}`;
+//             questionDiv.appendChild(answerText);
+
+//             content.appendChild(questionDiv);
+//         }
+//     });
+
+//     // Add date of test
+//     const dateDiv = document.createElement('div');
+//     dateDiv.style.cssText = 'margin-top: 20px; text-align: right; color: #666;';
+//     dateDiv.innerHTML = `Data testului: ${new Date().toLocaleDateString('ro-RO')}`;
+//     content.appendChild(dateDiv);
+
+//     // Add the content to the container
+//     container.appendChild(content);
+
+//     // Configure html2pdf options
+//     const opt = {
+//         margin: [0.5, 0.5, 0.5, 0.5],
+//         filename: 'rezultate_test_raads_r.pdf',
+//         image: { type: 'jpeg', quality: 1 },
+//         html2canvas: {
+//             scale: 2,
+//             useCORS: true,
+//             logging: false,
+//             letterRendering: false,
+//             allowTaint: true,
+//             backgroundColor: '#ffffff'
+//         },
+//         jsPDF: {
+//             unit: 'in',
+//             format: 'a4',
+//             orientation: 'portrait',
+//             putOnlyUsedFonts: true
+//         },
+//         pagebreak: { avoid: ['p', 'h1', 'h2', 'h3'] }
+//     };
+
+//     // Generate PDF
+//     html2pdf()
+//         .set(opt)
+//         .from(content)
+//         .save()
+//         .then(() => {
+//             // Clean up
+//             document.body.removeChild(container);
+//         })
+//         .catch(error => {
+//             console.error('PDF generation failed:', error);
+//             document.body.removeChild(container);
+//         });
+// });
+exportBtn.addEventListener('click', async () => {
+    exportBtn.disabled = true;
+    exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se generează PDF-ul...';
+
+    try {
+        const results = calculateSubscores(questions);
+        const { subscores, totalScore } = results;
+
+        // Create container with A4 dimensions
+        const container = document.createElement('div');
+        container.style.cssText = `
+            width: 595px; /* A4 width in points */
+            background: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 40px;
+            z-index: -9999;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            color: black;
+            box-sizing: border-box;
+        `;
+        document.body.appendChild(container);
+
+        const getScoreColor = (score, threshold) => {
+            if (score < threshold) return '#4CAF50';
+            if (score < threshold * 1.5) return '#FFC107';
+            return '#F44336';
+        };
+
+        // Clean answer text function
+        const cleanAnswerText = (text) => {
+            // Remove the explanatory text in parentheses
+            return text.split('(')[0].trim();
+        };
+
+        const contentHtml = `
+            <div style="background: white; color: black; max-width: 515px;">
+                <h1 style="font-size: 16px; text-align: center; margin-bottom: 12px; color: black;">
+                    Rezultate Test RAADS-R
+                </h1>
+
+                <div style="text-align: center; background-color: #f8f9fa; padding: 8px; margin: 12px 0; border-radius: 4px;">
+                    <span style="color: #666; font-size: 10px;">Rezultate generate de</span><br>
+                    <a href="https://www.testautism.ro" style="color: #2196F3; font-size: 12px; font-weight: bold;">
+                        www.testautism.ro
+                    </a>
                 </div>
-            `;
-        }).join('')}
 
-        <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa;">
-            <strong>Legendă:</strong><br>
-            <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
-            <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
-            <span style="color: #F44336;">■</span> Peste prag
-        </div>
-        <br/><br/>
-        <h3 style="font-size: 14px; font-weight: bold; margin-bottom: 15px;">Răspunsuri:</h3>
-    `;
+                <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin: 12px 0; border-radius: 4px;">
+                    <p style="color: #856404; margin: 0; font-size: 10px; line-height: 1.4;">
+                        <strong>IMPORTANT:</strong> Acest test este destinat <strong>EXCLUSIV</strong> în scop informativ și
+                        <strong>NU</strong> trebuie utilizat ca un instrument de diagnostic. Pentru evaluări profesionale, 
+                        vă recomandăm să vizitați <a href="https://www.doctoradhd.com" style="color: #856404; font-weight: bold;">www.doctoradhd.com</a>
+                    </p>
+                </div>
 
-    // Add questions and answers
-    questions.forEach(question => {
-        const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
-        if (selected) {
-            const questionDiv = document.createElement('div');
-            questionDiv.style.cssText = 'margin-bottom: 15px; color: black;';
+                <div style="text-align: center; background-color: #f8f9fa; padding: 12px; margin: 12px 0; border-radius: 4px;">
+                    <h2 style="font-size: 14px; margin-bottom: 8px; color: black;">Scor Total: ${totalScore}</h2>
+                    <p style="color: #666; font-size: 11px; line-height: 1.4;">${getInterpretation(totalScore)}</p>
+                </div>
 
-            const questionText = document.createElement('p');
-            questionText.style.cssText = 'margin-bottom: 5px; font-weight: bold; color: black;';
-            questionText.innerHTML = `${question.id}. ${question.text}`;
-            questionDiv.appendChild(questionText);
+                <h3 style="font-size: 13px; margin: 12px 0; color: black;">Scoruri pe categorii:</h3>
+                
+                <div style="margin-bottom: 20px;">
+                    ${Object.entries({
+                        'Limbaj': { score: subscores.language, threshold: RAADS_R_THRESHOLDS.language, max: MAX_SCORES.language },
+                        'Relaționare socială': { score: subscores.socialRelatedness, threshold: RAADS_R_THRESHOLDS.socialRelatedness, max: MAX_SCORES.socialRelatedness },
+                        'Senzorial-motor': { score: subscores.sensoryMotor, threshold: RAADS_R_THRESHOLDS.sensoryMotor, max: MAX_SCORES.sensoryMotor },
+                        'Interese circumscrise': { score: subscores.circumscribedInterests, threshold: RAADS_R_THRESHOLDS.circumscribedInterests, max: MAX_SCORES.circumscribedInterests }
+                    }).map(([category, data]) => {
+                        const percentage = (data.score / data.max) * 100;
+                        const color = getScoreColor(data.score, data.threshold);
+                        return `
+                            <div style="margin-bottom: 16px; background: white;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <strong style="color: black; font-size: 11px;">${category}</strong>
+                                    <span style="color: black; font-size: 11px;">${data.score} / ${data.max}</span>
+                                </div>
+                                <div style="position: relative; height: 16px; background-color: #e9ecef; border-radius: 3px; overflow: hidden;">
+                                    <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${percentage}%; background-color: ${color};"></div>
+                                    <div style="position: absolute; left: ${(data.threshold/data.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-top: 2px; font-size: 9px; color: #666;">
+                                    <span>0</span>
+                                    <span>Prag: ${data.threshold}</span>
+                                    <span>${data.max}</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
 
-            const answerText = document.createElement('p');
-            answerText.style.cssText = 'margin-left: 15px; color: black;';
-            answerText.innerHTML = `Răspuns: ${selected.closest('label').innerHTML.trim()}`;
-            questionDiv.appendChild(answerText);
+                <div style="margin: 16px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                    <strong style="color: black; font-size: 11px;">Legendă:</strong><br>
+                    <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
+                    <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
+                    <span style="color: #F44336;">■</span> Peste prag
+                </div>
 
-            content.appendChild(questionDiv);
-        }
-    });
+                <div style="margin-top: 16px; text-align: right; color: #666; font-size: 9px;">
+                    Data testului: ${new Date().toLocaleDateString('ro-RO')}
+                </div>
+            </div>
+        `;
 
-    // Add date of test
-    const dateDiv = document.createElement('div');
-    dateDiv.style.cssText = 'margin-top: 20px; text-align: right; color: #666;';
-    dateDiv.innerHTML = `Data testului: ${new Date().toLocaleDateString('ro-RO')}`;
-    content.appendChild(dateDiv);
+        // Set container content
+        container.innerHTML = contentHtml;
 
-    // Add the content to the container
-    container.appendChild(content);
+        var questionIndex = 0;
+        // Add questions and answers
+        questions.forEach(question => {
+            const pageBreak = (questionIndex + 1) % 9 === 0 ? 'page-break-after: always;' : '';
 
-    // Configure html2pdf options
-    const opt = {
-        margin: [0.5, 0.5, 0.5, 0.5],
-        filename: 'rezultate_test_raads_r.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: {
-            scale: 2,
-            useCORS: true,
-            logging: false,
-            letterRendering: false,
-            allowTaint: true,
-            backgroundColor: '#ffffff'
-        },
-        jsPDF: {
-            unit: 'in',
-            format: 'a4',
-            orientation: 'portrait',
-            putOnlyUsedFonts: true
-        },
-        pagebreak: { avoid: ['p', 'h1', 'h2', 'h3'] }
-    };
+            const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
+            if (selected) {
+                const questionDiv = document.createElement('div');
+                questionDiv.style.cssText = 'margin-bottom: 30px; color: black; ${pageBreak}';
 
-    // Generate PDF
-    html2pdf()
-        .set(opt)
-        .from(content)
-        .save()
-        .then(() => {
-            // Clean up
-            document.body.removeChild(container);
-        })
-        .catch(error => {
-            console.error('PDF generation failed:', error);
-            document.body.removeChild(container);
+                const questionText = document.createElement('p');
+                questionText.style.cssText = 'margin-bottom: 5px; font-weight: bold; color: black;';
+                questionText.innerHTML = `${question.id}. ${question.text}`;
+                questionDiv.appendChild(questionText);
+
+                const answerText = document.createElement('p');
+                answerText.style.cssText = 'margin-left: 15px; margin-bottom: 20px; color: black;';
+                answerText.innerHTML = `Răspuns: ${selected.closest('label').querySelector('.form-check-label').innerHTML.trim()}`;
+                questionDiv.appendChild(answerText);
+
+                container.appendChild(questionDiv);
+            }
+
+            questionIndex++;
         });
+
+
+        // Wait for content to be rendered
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // PDF generation options
+        const opt = {
+            margin: [25, 20, 25, 20], // [top, right, bottom, left]
+            filename: 'rezultate_test_raads_r.pdf',
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#FFFFFF',
+                width: 595,
+                height: container.offsetHeight
+            },
+            jsPDF: {
+                unit: 'pt',
+                format: 'a4',
+                orientation: 'portrait',
+                putOnlyUsedFonts: true,
+                compress: true
+            }
+        };
+
+        // Generate PDF
+        const pdf = await html2pdf().set(opt).from(container).outputPdf('blob');
+        const blobUrl = URL.createObjectURL(pdf);
+
+        // Create download link
+        const downloadLink = document.createElement('a');
+        downloadLink.href = blobUrl;
+        downloadLink.download = 'rezultate_test_raads_r.pdf';
+        document.body.appendChild(downloadLink);
+
+        // Handle Facebook in-app browser
+        if (navigator.userAgent.match(/(FBAN|FBAV)/i)) {
+            window.open(blobUrl, '_blank');
+        } else {
+            downloadLink.click();
+        }
+
+        // Cleanup
+        setTimeout(() => {
+            URL.revokeObjectURL(blobUrl);
+            downloadLink.remove();
+            container.remove();
+        }, 1000);
+
+    } catch (error) {
+        console.error('PDF generation failed:', error);
+        alert(`A apărut o eroare la generarea PDF-ului: ${error.message}\nTe rugăm să încerci din nou.`);
+    } finally {
+        exportBtn.disabled = false;
+        exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Exportă ca PDF';
+    }
 });
 
-// Then replace the restart button event listener with this code:
+// Restart button event listener
 const restartWarningModal = new bootstrap.Modal(document.getElementById('restartWarningModal'));
 const confirmRestartBtn = document.getElementById('confirmRestartBtn');
 
