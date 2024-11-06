@@ -3477,60 +3477,61 @@ submitBtn.addEventListener('click', (e) => {
 // Email button click handler
 emailBtn.addEventListener('click', function() {
     emailModal.show();
-});
+    
+    // Send email handler
+    document.getElementById('sendEmailBtn').addEventListener('click', async function() {
+        const emailForm = document.getElementById('emailForm');
+        const recipientEmail = document.getElementById('recipientEmail').value;
+        const gdprConsent = document.getElementById('gdprConsent').checked;
+        const sendEmailBtn = this;
 
-// Send email handler
-document.getElementById('sendEmailBtn').addEventListener('click', async function() {
-    const emailForm = document.getElementById('emailForm');
-    const recipientEmail = document.getElementById('recipientEmail').value;
-    const gdprConsent = document.getElementById('gdprConsent').checked;
-    const sendEmailBtn = this;
-
-    if (!gdprConsent) {
-        return;
-    }
-
-    try {
-        // Show loading state
-        sendEmailBtn.disabled = true;
-        sendEmailBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Se trimite...';
-
-        // Generate PDF blob
-        const results = calculateSubscores(questions);
-        const pdf = await generatePDFBlob(); // We'll implement this function
-
-        // Create FormData with PDF and email
-        const formData = new FormData();
-        formData.append('email', recipientEmail);
-        formData.append('pdf', pdf, 'rezultate_test_raads_r.pdf');
-        formData.append('score', results.totalScore.toString());
-        formData.append('interpretation', getInterpretation(results.totalScore));
-
-        // Send to backend
-        const response = await fetch('/send-results-email.php', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) {
-            throw new Error('Eroare la trimiterea email-ului');
+        if (!gdprConsent) {
+            return;
         }
 
-        const result = await response.json();
+        try {
+            // Show loading state
+            sendEmailBtn.disabled = true;
+            sendEmailBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Se trimite...';
 
-        // Show success message
-        emailModal.hide();
-        alert('Email-ul a fost trimis cu succes!');
+            // Generate PDF blob
+            const results = calculateSubscores(questions);
+            const pdf = await generatePDFBlob(); // We'll implement this function
 
-    } catch (error) {
-        console.error('Error sending email:', error);
-        alert('A apărut o eroare la trimiterea email-ului. Te rugăm să încerci din nou.');
-    } finally {
-        // Reset button state
-        sendEmailBtn.disabled = false;
-        sendEmailBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Trimite';
-    }
+            // Create FormData with PDF and email
+            const formData = new FormData();
+            formData.append('email', recipientEmail);
+            formData.append('pdf', pdf, 'rezultate_test_raads_r.pdf');
+            formData.append('score', results.totalScore.toString());
+            formData.append('interpretation', getInterpretation(results.totalScore));
+
+            // Send to backend
+            const response = await fetch('/send-results-email.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Eroare la trimiterea email-ului');
+            }
+
+            const result = await response.json();
+
+            // Show success message
+            emailModal.hide();
+            alert('Email-ul a fost trimis cu succes!');
+
+        } catch (error) {
+            console.error('Error sending email:', error);
+            alert('A apărut o eroare la trimiterea email-ului. Te rugăm să încerci din nou.');
+        } finally {
+            // Reset button state
+            sendEmailBtn.disabled = false;
+            sendEmailBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Trimite';
+        }
+    });
 });
+
 
 startBtn.addEventListener('click', (e) => {
     e.preventDefault();
