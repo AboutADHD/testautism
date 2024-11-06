@@ -3007,47 +3007,47 @@ const getProgressMessage = function(percentage, answered) {
     if (percentage === 0) {
         return '🚀 Hai să începem! Primul pas este cel mai important! 💫';
     }
-    
+
     if (percentage <= 10) {
         return '🌟 Minunat început! Pas cu pas, vei reuși! 💪';
     }
-    
+
     if (percentage <= 20) {
         return '🎯 Ai prins ritmul! Continui excelent! ⭐';
     }
-    
+
     if (percentage <= 30) {
         return `🌈 Super progres! Ai completat deja ${answered} întrebări! 🎉`;
     }
-    
+
     if (percentage <= 40) {
         return '💫 Te descurci extraordinar! Ești pe drumul cel bun! 🎈';
     }
-    
+
     if (percentage <= 50) {
         return '🎊 WOW! Ai ajuns la jumătate! Ești fantastic(ă)! 🌟';
     }
-    
+
     if (percentage <= 60) {
         return '⚡ Impresionant! Mai puțin de jumătate rămas! 🔥';
     }
-    
+
     if (percentage <= 70) {
         return '🎯 Extraordinar! Continui să strălucești! ✨';
     }
-    
+
     if (percentage <= 80) {
         return '🚀 Ești pe ultima sută de metri! Aproape acolo! 💫';
     }
-    
+
     if (percentage <= 90) {
         return '🌟 Fantastic! Mai ai foarte puțin! Ești aproape gata! 🎉';
     }
-    
+
     if (percentage < 100) {
         return '✨ Ultima porțiune! Câteva întrebări și ai terminat! 🎯';
     }
-    
+
     // 100%
     return `
         🎉 FELICITĂRI! 🎉
@@ -3088,12 +3088,12 @@ function initProgressTracking() {
     // Helper function to check if we're within the test section
     function isInTestSection() {
         if (!testContainer) return false;
-        
+
         const testRect = testContainer.getBoundingClientRect();
         const testStart = testContainer.offsetTop;
         const testEnd = testStart + testContainer.offsetHeight;
         const currentScroll = window.scrollY;
-        
+
         // Consider the section "active" when:
         // 1. We've scrolled past its start (accounting for progress bar height)
         // 2. We haven't scrolled past its end
@@ -3112,12 +3112,12 @@ function initProgressTracking() {
     // Helper function to check if we're within the test section
     function isInTestSection() {
         if (!testContainer) return false;
-        
+
         const testRect = testContainer.getBoundingClientRect();
         const testStart = testContainer.offsetTop;
         const testEnd = testStart + testContainer.offsetHeight;
         const currentScroll = window.scrollY;
-        
+
         // Consider the section "active" when:
         // 1. We've scrolled past its start (accounting for progress bar height)
         // 2. We haven't scrolled past its end
@@ -3155,12 +3155,12 @@ function initProgressTracking() {
     // Monitor scroll position
     // window.addEventListener('scroll', () => {
     //     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
+
     //     // Check if test container is in viewport
     //     if (testContainer) {
     //         const testRect = testContainer.getBoundingClientRect();
     //         const isTestVisible = testRect.top < window.innerHeight && testRect.bottom > 0;
-            
+
     //         if (isTestVisible) {
     //             // Show progress bar when scrolling up or at top of test section
     //             if (scrollTop < lastScrollTop || scrollTop <= testContainer.offsetTop) {
@@ -3174,7 +3174,7 @@ function initProgressTracking() {
     //             progressContainer.classList.remove('visible');
     //         }
     //     }
-        
+
     //     lastScrollTop = scrollTop;
     // });
 
@@ -3186,19 +3186,19 @@ function initProgressTracking() {
 
         // Update progress bar
         progressFill.style.width = percentage + '%';
-        
+
         // Update stats
         questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
-        
+
         // Update message with animation
         progressMessage.classList.add('updating');
         progressMessage.innerHTML = getProgressMessage(percentage, answered);
-        
+
         // Remove animation class after it completes
         setTimeout(() => {
             progressMessage.classList.remove('updating');
         }, 300);
-        
+
         // Update time estimate
         const remainingQuestions = total - answered;
         const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.375), 1);
@@ -3210,7 +3210,7 @@ function initProgressTracking() {
         if (e.target.type === 'radio') {
             const currentQuestion = e.target.closest('.question');
             currentQuestion.classList.add('completed');
-            
+
             updateProgress();
 
             // Find and scroll to next unanswered question
@@ -3220,7 +3220,7 @@ function initProgressTracking() {
             if (nextUnanswered) {
                 const offset = document.querySelector('.progress-container').offsetHeight + 20;
                 const targetPosition = nextUnanswered.getBoundingClientRect().top + window.pageYOffset - offset;
-                
+
                 window.scrollTo({
                     top: targetPosition,
                     behavior: 'smooth'
@@ -3247,13 +3247,13 @@ function initProgressTracking() {
 
 function scrollToQuestion(questionElement) {
     const progressContainer = document.querySelector('.progress-container');
-    const progressHeight = progressContainer.classList.contains('visible') ? 
+    const progressHeight = progressContainer.classList.contains('visible') ?
                           progressContainer.offsetHeight : 0;
-    
-    const targetPosition = questionElement.getBoundingClientRect().top + 
-                          window.pageYOffset - 
+
+    const targetPosition = questionElement.getBoundingClientRect().top +
+                          window.pageYOffset -
                           progressHeight - 20; // Additional padding
-    
+
     window.scrollTo({
         top: targetPosition,
         behavior: 'smooth'
@@ -3263,7 +3263,7 @@ function scrollToQuestion(questionElement) {
 // Add intersection observer to monitor test section visibility
 function initTestSectionObserver() {
     const progressContainer = document.querySelector('.progress-container');
-    
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -3299,6 +3299,15 @@ if (document.readyState === 'loading') {
     initProgressTracker();
 }
 
+// Add email button next to the export button
+const emailBtn = document.createElement('button');
+emailBtn.id = 'emailBtn';
+emailBtn.className = 'btn btn-primary btn-lg w-100 mb-4 action-btn';
+emailBtn.style.display = 'none';
+emailBtn.innerHTML = '<i class="fas fa-envelope"></i> Trimite pe Email';
+
+// Insert email button after export button
+exportBtn.parentNode.insertBefore(emailBtn, exportBtn.nextSibling);
 
 // Submit button click handler
 submitBtn.addEventListener('click', (e) => {
@@ -3309,7 +3318,7 @@ submitBtn.addEventListener('click', (e) => {
     errorBelowDiv.style.display = 'none';
     errorDiv.innerHTML = '';
     errorBelowDiv.innerHTML = '';
-    
+
     // Clear previous highlights
     document.querySelectorAll('.highlight-unanswered').forEach(el => {
         el.classList.remove('highlight-unanswered');
@@ -3341,7 +3350,7 @@ submitBtn.addEventListener('click', (e) => {
         if (firstUnanswered) {
             const progressContainer = document.querySelector('.progress-container');
             const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
-            
+
             window.scrollTo({
                 top: firstUnanswered.getBoundingClientRect().top + window.pageYOffset - offset,
                 behavior: 'smooth'
@@ -3429,7 +3438,7 @@ submitBtn.addEventListener('click', (e) => {
     if (progressContainer) {
         // First remove 'visible' class with transition
         progressContainer.classList.remove('visible');
-        
+
         // After transition, force hide
         setTimeout(() => {
             progressContainer.style.display = 'none';
@@ -3447,6 +3456,8 @@ submitBtn.addEventListener('click', (e) => {
         radio.disabled = true;
     });
 
+    emailBtn.style.display = 'block';
+
     // Scroll to results
     setTimeout(() => {
         const resultElement = document.getElementById('result');
@@ -3461,6 +3472,64 @@ submitBtn.addEventListener('click', (e) => {
             });
         }
     }, 100);
+});
+
+// Email button click handler
+emailBtn.addEventListener('click', function() {
+    emailModal.show();
+});
+
+// Send email handler
+document.getElementById('emailBtn').addEventListener('click', async function() {
+    const emailForm = document.getElementById('emailForm');
+    const recipientEmail = document.getElementById('recipientEmail').value;
+    const gdprConsent = document.getElementById('gdprConsent').checked;
+    const emailBtn = this;
+
+    if (!gdprConsent) {
+        return;
+    }
+
+    try {
+        // Show loading state
+        emailBtn.disabled = true;
+        emailBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Se trimite...';
+
+        // Generate PDF blob
+        const results = calculateSubscores(questions);
+        const pdf = await generatePDFBlob(); // We'll implement this function
+
+        // Create FormData with PDF and email
+        const formData = new FormData();
+        formData.append('email', recipientEmail);
+        formData.append('pdf', pdf, 'rezultate_test_raads_r.pdf');
+        formData.append('score', results.totalScore.toString());
+        formData.append('interpretation', getInterpretation(results.totalScore));
+
+        // Send to backend
+        const response = await fetch('/send-results-email.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Eroare la trimiterea email-ului');
+        }
+
+        const result = await response.json();
+
+        // Show success message
+        emailModal.hide();
+        alert('Email-ul a fost trimis cu succes!');
+
+    } catch (error) {
+        console.error('Error sending email:', error);
+        alert('A apărut o eroare la trimiterea email-ului. Te rugăm să încerci din nou.');
+    } finally {
+        // Reset button state
+        emailBtn.disabled = false;
+        emailBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Trimite';
+    }
 });
 
 startBtn.addEventListener('click', (e) => {
@@ -3647,170 +3716,179 @@ function formatScore(score) {
 //             document.body.removeChild(container);
 //         });
 // });
+
+async function generatePDFBlob() {
+
+    const results = calculateSubscores(questions);
+    const { subscores, totalScore } = results;
+
+    // Create container with A4 dimensions
+    const container = document.createElement('div');
+    container.style.cssText = `
+        width: 595px; /* A4 width in points */
+        background: white;
+        position: fixed;
+        left: 0;
+        top: 0;
+        padding: 40px;
+        z-index: -9999;
+        font-family: Arial, sans-serif;
+        font-size: 11px;
+        color: black;
+        box-sizing: border-box;
+    `;
+    document.body.appendChild(container);
+
+    const getScoreColor = (score, threshold) => {
+        if (score < threshold) return '#4CAF50';
+        if (score < threshold * 1.5) return '#FFC107';
+        return '#F44336';
+    };
+
+    // Clean answer text function
+    const cleanAnswerText = (text) => {
+        // Remove the explanatory text in parentheses
+        return text.split('(')[0].trim();
+    };
+
+    const contentHtml = `
+        <div style="background: white; color: black; max-width: 515px;">
+            <h1 style="font-size: 16px; text-align: center; margin-bottom: 12px; color: black;">
+                Rezultate Test RAADS-R
+            </h1>
+
+            <div style="text-align: center; background-color: #f8f9fa; padding: 8px; margin: 12px 0; border-radius: 4px;">
+                <span style="color: #666; font-size: 10px;">Rezultate generate de</span><br>
+                <a href="https://www.testautism.ro" style="color: #2196F3; font-size: 12px; font-weight: bold;">
+                    www.testautism.ro
+                </a>
+            </div>
+
+            <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin: 12px 0; border-radius: 4px;">
+                <p style="color: #856404; margin: 0; font-size: 10px; line-height: 1.4;">
+                    <strong>IMPORTANT:</strong> Acest test este destinat <strong>EXCLUSIV</strong> în scop informativ și
+                    <strong>NU</strong> trebuie utilizat ca un instrument de diagnostic. Pentru evaluări profesionale,
+                    vă recomandăm să vizitați <a href="https://www.doctoradhd.com" style="color: #856404; font-weight: bold;">www.doctoradhd.com</a>
+                </p>
+            </div>
+
+            <div style="text-align: center; background-color: #f8f9fa; padding: 12px; margin: 12px 0; border-radius: 4px;">
+                <h2 style="font-size: 14px; margin-bottom: 8px; color: black;">Scor Total: ${totalScore}</h2>
+                <p style="color: #666; font-size: 11px; line-height: 1.4;">${getInterpretation(totalScore)}</p>
+            </div>
+
+            <h3 style="font-size: 13px; margin: 12px 0; color: black;">Scoruri pe categorii:</h3>
+
+            <div style="margin-bottom: 20px;">
+                ${Object.entries({
+                    'Limbaj': { score: subscores.language, threshold: RAADS_R_THRESHOLDS.language, max: MAX_SCORES.language },
+                    'Relaționare socială': { score: subscores.socialRelatedness, threshold: RAADS_R_THRESHOLDS.socialRelatedness, max: MAX_SCORES.socialRelatedness },
+                    'Senzorial-motor': { score: subscores.sensoryMotor, threshold: RAADS_R_THRESHOLDS.sensoryMotor, max: MAX_SCORES.sensoryMotor },
+                    'Interese circumscrise': { score: subscores.circumscribedInterests, threshold: RAADS_R_THRESHOLDS.circumscribedInterests, max: MAX_SCORES.circumscribedInterests }
+                }).map(([category, data]) => {
+                    const percentage = (data.score / data.max) * 100;
+                    const color = getScoreColor(data.score, data.threshold);
+                    return `
+                        <div style="margin-bottom: 16px; background: white;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <strong style="color: black; font-size: 11px;">${category}</strong>
+                                <span style="color: black; font-size: 11px;">${data.score} / ${data.max}</span>
+                            </div>
+                            <div style="position: relative; height: 16px; background-color: #e9ecef; border-radius: 3px; overflow: hidden;">
+                                <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${percentage}%; background-color: ${color};"></div>
+                                <div style="position: absolute; left: ${(data.threshold/data.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 2px; font-size: 9px; color: #666;">
+                                <span>0</span>
+                                <span>Prag: ${data.threshold}</span>
+                                <span>${data.max}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+
+            <div style="margin: 16px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                <strong style="color: black; font-size: 11px;">Legendă:</strong><br>
+                <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
+                <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
+                <span style="color: #F44336;">■</span> Peste prag
+            </div>
+
+            <div style="margin-top: 16px; text-align: right; color: #666; font-size: 9px;">
+                Data testului: ${new Date().toLocaleDateString('ro-RO')}
+            </div>
+        </div>
+    `;
+
+    // Set container content
+    container.innerHTML = contentHtml;
+
+    var questionIndex = 0;
+    // Add questions and answers
+    questions.forEach(question => {
+        const pageBreak = (questionIndex + 1) % 9 === 0 ? 'page-break-after: always;' : '';
+
+        const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
+        if (selected) {
+            const questionDiv = document.createElement('div');
+            questionDiv.style.cssText = 'margin-bottom: 30px; color: black; ${pageBreak}';
+
+            const questionText = document.createElement('p');
+            questionText.style.cssText = 'margin-bottom: 5px; font-weight: bold; color: black;';
+            questionText.innerHTML = `${question.id}. ${question.text}`;
+            questionDiv.appendChild(questionText);
+
+            const answerText = document.createElement('p');
+            answerText.style.cssText = 'margin-left: 15px; margin-bottom: 20px; color: black;';
+            answerText.innerHTML = `Răspuns: ${selected.closest('label').querySelector('.form-check-label').innerHTML.trim()}`;
+            questionDiv.appendChild(answerText);
+
+            container.appendChild(questionDiv);
+        }
+
+        questionIndex++;
+    });
+
+
+    // Wait for content to be rendered
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    // PDF generation options
+    const opt = {
+        margin: [25, 20, 25, 20], // [top, right, bottom, left]
+        filename: 'rezultate_test_raads_r.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#FFFFFF',
+            width: 595,
+            height: container.offsetHeight
+        },
+        jsPDF: {
+            unit: 'pt',
+            format: 'a4',
+            orientation: 'portrait',
+            putOnlyUsedFonts: true,
+            compress: true
+        },
+        pagebreak: {
+            mode: ['avoid-all', 'css', 'legacy']
+        }
+    };
+
+    return await html2pdf().set(opt).from(container).outputPdf('blob');
+}
+
 exportBtn.addEventListener('click', async () => {
     exportBtn.disabled = true;
     exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se generează PDF-ul...';
 
     try {
-        const results = calculateSubscores(questions);
-        const { subscores, totalScore } = results;
-
-        // Create container with A4 dimensions
-        const container = document.createElement('div');
-        container.style.cssText = `
-            width: 595px; /* A4 width in points */
-            background: white;
-            position: fixed;
-            left: 0;
-            top: 0;
-            padding: 40px;
-            z-index: -9999;
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-            color: black;
-            box-sizing: border-box;
-        `;
-        document.body.appendChild(container);
-
-        const getScoreColor = (score, threshold) => {
-            if (score < threshold) return '#4CAF50';
-            if (score < threshold * 1.5) return '#FFC107';
-            return '#F44336';
-        };
-
-        // Clean answer text function
-        const cleanAnswerText = (text) => {
-            // Remove the explanatory text in parentheses
-            return text.split('(')[0].trim();
-        };
-
-        const contentHtml = `
-            <div style="background: white; color: black; max-width: 515px;">
-                <h1 style="font-size: 16px; text-align: center; margin-bottom: 12px; color: black;">
-                    Rezultate Test RAADS-R
-                </h1>
-
-                <div style="text-align: center; background-color: #f8f9fa; padding: 8px; margin: 12px 0; border-radius: 4px;">
-                    <span style="color: #666; font-size: 10px;">Rezultate generate de</span><br>
-                    <a href="https://www.testautism.ro" style="color: #2196F3; font-size: 12px; font-weight: bold;">
-                        www.testautism.ro
-                    </a>
-                </div>
-
-                <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin: 12px 0; border-radius: 4px;">
-                    <p style="color: #856404; margin: 0; font-size: 10px; line-height: 1.4;">
-                        <strong>IMPORTANT:</strong> Acest test este destinat <strong>EXCLUSIV</strong> în scop informativ și
-                        <strong>NU</strong> trebuie utilizat ca un instrument de diagnostic. Pentru evaluări profesionale, 
-                        vă recomandăm să vizitați <a href="https://www.doctoradhd.com" style="color: #856404; font-weight: bold;">www.doctoradhd.com</a>
-                    </p>
-                </div>
-
-                <div style="text-align: center; background-color: #f8f9fa; padding: 12px; margin: 12px 0; border-radius: 4px;">
-                    <h2 style="font-size: 14px; margin-bottom: 8px; color: black;">Scor Total: ${totalScore}</h2>
-                    <p style="color: #666; font-size: 11px; line-height: 1.4;">${getInterpretation(totalScore)}</p>
-                </div>
-
-                <h3 style="font-size: 13px; margin: 12px 0; color: black;">Scoruri pe categorii:</h3>
-                
-                <div style="margin-bottom: 20px;">
-                    ${Object.entries({
-                        'Limbaj': { score: subscores.language, threshold: RAADS_R_THRESHOLDS.language, max: MAX_SCORES.language },
-                        'Relaționare socială': { score: subscores.socialRelatedness, threshold: RAADS_R_THRESHOLDS.socialRelatedness, max: MAX_SCORES.socialRelatedness },
-                        'Senzorial-motor': { score: subscores.sensoryMotor, threshold: RAADS_R_THRESHOLDS.sensoryMotor, max: MAX_SCORES.sensoryMotor },
-                        'Interese circumscrise': { score: subscores.circumscribedInterests, threshold: RAADS_R_THRESHOLDS.circumscribedInterests, max: MAX_SCORES.circumscribedInterests }
-                    }).map(([category, data]) => {
-                        const percentage = (data.score / data.max) * 100;
-                        const color = getScoreColor(data.score, data.threshold);
-                        return `
-                            <div style="margin-bottom: 16px; background: white;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                    <strong style="color: black; font-size: 11px;">${category}</strong>
-                                    <span style="color: black; font-size: 11px;">${data.score} / ${data.max}</span>
-                                </div>
-                                <div style="position: relative; height: 16px; background-color: #e9ecef; border-radius: 3px; overflow: hidden;">
-                                    <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${percentage}%; background-color: ${color};"></div>
-                                    <div style="position: absolute; left: ${(data.threshold/data.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; margin-top: 2px; font-size: 9px; color: #666;">
-                                    <span>0</span>
-                                    <span>Prag: ${data.threshold}</span>
-                                    <span>${data.max}</span>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-
-                <div style="margin: 16px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
-                    <strong style="color: black; font-size: 11px;">Legendă:</strong><br>
-                    <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
-                    <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
-                    <span style="color: #F44336;">■</span> Peste prag
-                </div>
-
-                <div style="margin-top: 16px; text-align: right; color: #666; font-size: 9px;">
-                    Data testului: ${new Date().toLocaleDateString('ro-RO')}
-                </div>
-            </div>
-        `;
-
-        // Set container content
-        container.innerHTML = contentHtml;
-
-        var questionIndex = 0;
-        // Add questions and answers
-        questions.forEach(question => {
-            const pageBreak = (questionIndex + 1) % 9 === 0 ? 'page-break-after: always;' : '';
-
-            const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
-            if (selected) {
-                const questionDiv = document.createElement('div');
-                questionDiv.style.cssText = 'margin-bottom: 30px; color: black; ${pageBreak}';
-
-                const questionText = document.createElement('p');
-                questionText.style.cssText = 'margin-bottom: 5px; font-weight: bold; color: black;';
-                questionText.innerHTML = `${question.id}. ${question.text}`;
-                questionDiv.appendChild(questionText);
-
-                const answerText = document.createElement('p');
-                answerText.style.cssText = 'margin-left: 15px; margin-bottom: 20px; color: black;';
-                answerText.innerHTML = `Răspuns: ${selected.closest('label').querySelector('.form-check-label').innerHTML.trim()}`;
-                questionDiv.appendChild(answerText);
-
-                container.appendChild(questionDiv);
-            }
-
-            questionIndex++;
-        });
-
-
-        // Wait for content to be rendered
-        await new Promise(resolve => setTimeout(resolve, 300));
-
-        // PDF generation options
-        const opt = {
-            margin: [25, 20, 25, 20], // [top, right, bottom, left]
-            filename: 'rezultate_test_raads_r.pdf',
-            image: { type: 'jpeg', quality: 1 },
-            html2canvas: {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                backgroundColor: '#FFFFFF',
-                width: 595,
-                height: container.offsetHeight
-            },
-            jsPDF: {
-                unit: 'pt',
-                format: 'a4',
-                orientation: 'portrait',
-                putOnlyUsedFonts: true,
-                compress: true
-            }
-        };
-
         // Generate PDF
-        const pdf = await html2pdf().set(opt).from(container).outputPdf('blob');
+        const pdf = await generatePDFBlob();
         const blobUrl = URL.createObjectURL(pdf);
 
         // Create download link
@@ -3842,6 +3920,48 @@ exportBtn.addEventListener('click', async () => {
     }
 });
 
+// Create modal for email input
+const modalHtml = `
+<div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailModalLabel">Trimite rezultatele pe email</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="emailForm">
+                    <div class="mb-3">
+                        <label for="recipientEmail" class="form-label">Adresa de email</label>
+                        <input type="email" class="form-control" id="recipientEmail" required
+                               placeholder="exemplu@gmail.com">
+                        <div class="form-text">Rezultatele vor fi trimise la această adresă.</div>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="gdprConsent" required>
+                        <label class="form-check-label" for="gdprConsent">
+                            Sunt de acord cu prelucrarea datelor mele personale în scopul trimiterii rezultatelor pe email.
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anulează</button>
+                <button type="button" class="btn btn-primary" id="sendEmailBtn">
+                    <i class="fas fa-paper-plane"></i> Trimite
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+`;
+
+// Add modal to body
+document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+// Initialize modal
+const emailModal = new bootstrap.Modal(document.getElementById('emailModal'));
+
 // Restart button event listener
 const restartWarningModal = new bootstrap.Modal(document.getElementById('restartWarningModal'));
 const confirmRestartBtn = document.getElementById('confirmRestartBtn');
@@ -3853,7 +3973,7 @@ const restartTest = function() {
 
     if (progressContainer) {
         progressContainer.style.display = ''; // Remove inline display: none
-        
+
         // Brief timeout to allow display to take effect before adding visible class
         setTimeout(() => {
             progressContainer.classList.add('visible');
@@ -3891,7 +4011,7 @@ const restartTest = function() {
     document.querySelectorAll('.highlight-unanswered').forEach(el => {
         el.classList.remove('highlight-unanswered');
     });
-    
+
     // Hide the modal
     restartWarningModal.hide();
 
@@ -3902,21 +4022,21 @@ const restartTest = function() {
     if (progressFill) progressFill.style.width = '0%';
     if (questionsCompleted) questionsCompleted.innerHTML = `<b>0</b> din <b>${questions.length}</b> întrebări`;
     if (progressMessage) progressMessage.innerHTML = getProgressMessage(0, 0);
-    
+
     // Find first question
     const firstQuestion = document.querySelector('.question');
     if (firstQuestion) {
         // Add current class to first question
         firstQuestion.classList.add('current');
-        
+
         // Scroll to first question with offset for progress bar
         const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
-        
+
         setTimeout(() => {
-            const targetPosition = firstQuestion.getBoundingClientRect().top + 
-                                 window.pageYOffset - 
+            const targetPosition = firstQuestion.getBoundingClientRect().top +
+                                 window.pageYOffset -
                                  offset;
-            
+
             window.scrollTo({
                 top: targetPosition,
                 behavior: 'smooth'
@@ -3941,7 +4061,7 @@ function reInitializeRadioListeners() {
         radio.addEventListener('change', (e) => {
             const currentQuestion = e.target.closest('.question');
             currentQuestion.classList.add('completed');
-            
+
             // Find next unanswered question
             const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
                 .find(q => !q.querySelector('input[type="radio"]:checked'));
@@ -3958,11 +4078,11 @@ function reInitializeRadioListeners() {
                 // Calculate scroll position
                 const progressContainer = document.querySelector('.progress-container');
                 const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
-                
-                const targetPosition = nextUnanswered.getBoundingClientRect().top + 
-                                     window.pageYOffset - 
+
+                const targetPosition = nextUnanswered.getBoundingClientRect().top +
+                                     window.pageYOffset -
                                      offset;
-                
+
                 // Smooth scroll to next question
                 window.scrollTo({
                     top: targetPosition,
