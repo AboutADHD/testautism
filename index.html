@@ -3477,59 +3477,143 @@ submitBtn.addEventListener('click', (e) => {
 // Email button click handler
 emailBtn.addEventListener('click', function() {
     emailModal.show();
-    
-    // Send email handler
-    document.getElementById('sendEmailBtn').addEventListener('click', async function() {
-        const emailForm = document.getElementById('emailForm');
-        const recipientEmail = document.getElementById('recipientEmail').value;
-        const gdprConsent = document.getElementById('gdprConsent').checked;
-        const sendEmailBtn = this;
 
-        if (!gdprConsent) {
-            return;
-        }
+// Send email handler
+document.getElementById('sendEmailBtn').addEventListener('click', async function() {
+    const emailForm = document.getElementById('emailForm');
+    const recipientEmail = document.getElementById('recipientEmail').value;
+    const gdprConsent = document.getElementById('gdprConsent').checked;
+    const sendEmailBtn = this;
+
+    // Validate form
+    if (!emailForm.checkValidity() || !gdprConsent) {
+        emailForm.reportValidity();
+        return;
+    }
+
+    try {
+        // Show loading state
+        sendEmailBtn.disabled = true;
+        sendEmailBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Se trimite...';
+
+        // Create temporary container for PDF generation
+        const container = document.createElement('div');
+        container.style.cssText = `
+            width: 595px;
+            background: white;
+            position: fixed;
+            left: -9999px;
+            top: 0;
+            padding: 40px;
+            z-index: -9999;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            color: black;
+            box-sizing: border-box;
+        `;
+        document.body.appendChild(container);
 
         try {
-            // Show loading state
-            sendEmailBtn.disabled = true;
-            sendEmailBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Se trimite...';
-
-            // Generate PDF blob
+            // Calculate scores
             const results = calculateSubscores(questions);
-            const pdf = await generatePDFBlob(); // We'll implement this function
+            const { totalScore } = results;
+            const interpretation = getInterpretation(totalScore);
 
-            // Create FormData with PDF and email
-            const formData = new FormData();
-            formData.append('email', recipientEmail);
-            formData.append('pdf', pdf, 'rezultate_test_raads_r.pdf');
-            formData.append('score', results.totalScore.toString());
-            formData.append('interpretation', getInterpretation(results.totalScore));
+            // Generate PDF options
+            const opt = {
+                margin: [30, 20, 30, 20],
+                filename: 'rezultate_test_raads_r.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#FFFFFF',
+                    width: 595
+                },
+                jsPDF: {
+                    unit: 'pt',
+                    format: 'a4',
+                    orientation: 'portrait',
+                    putOnlyUsedFonts: true,
+                    compress: true
+                },
+                pagebreak: { 
+                    mode: ['avoid-all', 'css', 'legacy']
+                }
+            };
 
-            // Send to backend
+            // Generate PDF and get as blob
+            const pdfBlob = await html2pdf().set(opt).from(container).outputPdf('blob');
+
+            // Convert blob to base64
+            const base64Data = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Failed to read PDF file'));
+                reader.readAsDataURL(pdfBlob);
+            });
+
+            // Prepare data for sending
+            const requestData = {
+                email: recipientEmail,
+                score: totalScore,
+                interpretation: interpretation,
+                pdfData: base64Data
+            };
+
+            console.log('Sending email request with data:', {
+                email: requestData.email,
+                score: requestData.score,
+                interpretation: requestData.interpretation,
+                pdfDataLength: requestData.pdfData.length
+            });
+
+            // Send request to backend
             const response = await fetch('/send-results-email.php', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
             });
 
             if (!response.ok) {
-                throw new Error('Eroare la trimiterea email-ului');
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to send email');
             }
 
             const result = await response.json();
+            
+            if (result.success) {
+                // Show success message
+                emailModal.hide();
+                alert('Email-ul a fost trimis cu succes!');
+            } else {
+                throw new Error(result.error || 'Failed to send email');
+            }
 
-            // Show success message
-            emailModal.hide();
-            alert('Email-ul a fost trimis cu succes!');
-
-        } catch (error) {
-            console.error('Error sending email:', error);
-            alert('A apărut o eroare la trimiterea email-ului. Te rugăm să încerci din nou.');
         } finally {
-            // Reset button state
-            sendEmailBtn.disabled = false;
-            sendEmailBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Trimite';
+            // Clean up temporary container
+            if (container && container.parentNode) {
+                container.parentNode.removeChild(container);
+            }
         }
-    });
+
+    } catch (error) {
+        console.error('Error sending email:', error);
+        alert('A apărut o eroare la trimiterea email-ului: ' + error.message);
+    } finally {
+        // Reset button state
+        sendEmailBtn.disabled = false;
+        sendEmailBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Trimite';
+    }
+});
+
+
+
+
+
 });
 
 
