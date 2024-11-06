@@ -3480,11 +3480,11 @@ emailBtn.addEventListener('click', function() {
 });
 
 // Send email handler
-document.getElementById('emailBtn').addEventListener('click', async function() {
+document.getElementById('sendEmailBtn').addEventListener('click', async function() {
     const emailForm = document.getElementById('emailForm');
     const recipientEmail = document.getElementById('recipientEmail').value;
     const gdprConsent = document.getElementById('gdprConsent').checked;
-    const emailBtn = this;
+    const sendEmailBtn = this;
 
     if (!gdprConsent) {
         return;
@@ -3492,8 +3492,8 @@ document.getElementById('emailBtn').addEventListener('click', async function() {
 
     try {
         // Show loading state
-        emailBtn.disabled = true;
-        emailBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Se trimite...';
+        sendEmailBtn.disabled = true;
+        sendEmailBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Se trimite...';
 
         // Generate PDF blob
         const results = calculateSubscores(questions);
@@ -3527,8 +3527,8 @@ document.getElementById('emailBtn').addEventListener('click', async function() {
         alert('A apărut o eroare la trimiterea email-ului. Te rugăm să încerci din nou.');
     } finally {
         // Reset button state
-        emailBtn.disabled = false;
-        emailBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Trimite';
+        sendEmailBtn.disabled = false;
+        sendEmailBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Trimite';
     }
 });
 
