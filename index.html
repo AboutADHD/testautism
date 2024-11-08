@@ -1602,11 +1602,150 @@ body {
     right: 1rem;
     top: 1rem;
 }
+
+/* QUICK NAV */
+
+.quick-nav-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-top: 2px solid #ddd;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.quick-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0;
+    padding: 10px 0;
+    list-style: none;
+}
+
+.quick-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.quick-nav-item i {
+    font-size: 1.2rem;
+    margin-bottom: 3px;
+}
+
+.quick-nav-item:hover {
+    color: #2196F3; /* Highlight color */
+    transform: translateY(-2px);
+}
+
+.quick-nav-item.active {
+    color: #2196F3;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .quick-nav-item span {
+        display: none; /* Show icons only on mobile */
+    }
+}
+
+/* License */
+
+.license-section {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    margin-top: 2rem;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.license-heading {
+    font-size: 1.5rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+.license-text {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.6;
+}
+
+.license-requirements {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+.license-requirements li {
+    padding: 0.5rem 0;
+}
+
+.license-requirements strong {
+    color: #007bff;
+}
+
+.license-requirements a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.license-disclaimer {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 1rem;
+}
 </style>
 
 </head>
 <body>
 <div class="container">
+    <div id="quick-nav" class="quick-nav-container">
+        <ul class="quick-nav">
+            <li>
+                <a href="#section-intro" class="quick-nav-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Despre test</span>
+                </a>
+            </li>
+            <li>
+                <a href="#section-instructions" class="quick-nav-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Componența testului</span>
+                </a>
+            </li>
+            <li>
+                <a href="#section-quiz" class="quick-nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Testul RAADS-R</span>
+                </a>
+            </li>
+            <li>
+                <a href="#section-results" class="quick-nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Rezultate</span>
+                </a>
+            </li>
+            <li>
+                <a href="#section-support" class="quick-nav-item">
+                    <i class="fas fa-headset"></i>
+                    <span>Suport</span>
+                </a>
+            </li>
+        </ul>
+    </div>
     <div class="initial-section justify-content-center">
         <h1 class="text-center mt-4 mb-3" style="font-size: 1.5rem; font-weight: bold;">Test autism adulți - RAADS-R (Ritvo Autism Asperger Diagnostic Scale - Revised)</h1>
         <p>
@@ -1736,8 +1875,22 @@ body {
             </div>
         </div>
     </div>
-
-    <div class="test-details-container">
+    <div class="license-section">
+        <h3 class="license-heading">Licență și Utilizare RAADS-R</h3>
+        <p class="license-text">
+            RAADS-R (Scala Ritvo Autism Asperger Diagnostic – Revizuită) este un instrument de screening pentru trăsăturile autiste la adulți, licențiat sub Creative Commons
+            <strong>Attribution-NonCommercial</strong>. Acest test este oferit doar în scopuri necomerciale, iar pentru utilizarea sa sunt necesare următoarele:
+        </p>
+        <ul class="license-requirements">
+            <li><strong>Atribuire autori originali:</strong> Riva Ariella Ritvo, Ph.D. and Edward Ritvo, M.D. et al.</li>
+            <li><strong>Utilizare necomercială:</strong> Testul este destinat exclusiv utilizării necomerciale.</li>
+            <li><strong>Licențiere:</strong> Consultați licența completă la <a href="https://creativecommons.org/licenses/by-nc/3.0/" target="_blank">aici</a>.</li>
+        </ul>
+        <p class="license-disclaimer">
+            Toate testele sunt confidențiale și acest site nu colectează informații personale.
+        </p>
+    </div>
+    <div class="test-details-container" id="section-intro">
         <!-- General Characteristics -->
         <div class="info-section">
             <div class="section-header">
@@ -1873,157 +2026,6 @@ body {
             </div>
         </div>
     </div>
-
-    <div class="test-actual-container">
-        <!-- Disclaimer -->
-        <div id="first-disclaimer" class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
-            <h4 class="alert-heading">Disclaimer</h4>
-            <p>
-                Acest test este destinat <b>EXCLUSIV</b> în scop informativ și <b>NU</b> trebuie utilizat ca un instrument de diagnostic. Deși testul a fost adaptat pentru a răspunde nevoilor persoanelor autiste, el <b>NU</b> înlocuiește o evaluare profesională efectuată de un profesionist calificat în domeniul sănătății mintale sau un profesionist medical calificat.</p>
-
-            <p>Pentru evaluări profesionale, vă recomandăm să vizitați <a href="https://www.doctoradhd.com/" target="_blank">doctoradhd.com</a>.</p>
-            <p>
-                Vă încurajăm să folosiți rezultatele în mod <strong>responsabil</strong> și să căutați <b>suport profesional calificat, de specialitate</b> dacă aveți nevoie de o evaluare detaliată.
-            </p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <!-- Disclaimer end -->
-        <h2 class="text-center mb-4"><b>Ritvo pentru Autism / Asperger Revizuită</b></h2>
-        <div class="card mb-4">
-            <div class="card-body">
-                <p class="card-text">Acest test constă în 80 de afirmații pentru a asista în screening-ul autismului la adulți. Selectează răspunsul care se potrivește cel mai bine cu tine.</p>
-            </div>
-        </div>
-
-        <div id="test">
-            <form id="raadsrForm" class="mb-4">
-                <div id="error" class="alert alert-danger" style="display: none;"></div>
-                <!-- Questions will be injected here -->
-            </form>
-
-            <div class="modal fade" id="restartWarningModal" tabindex="-1" aria-labelledby="restartWarningModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="restartWarningModalLabel">Confirmare restart test</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p class="text-danger mb-3">
-                                <strong>Atenție!</strong> Sunteți pe cale să începeți un test nou.
-                            </p>
-                            <p>
-                                Toate răspunsurile și scorul actual vor fi șterse. Vă recomandăm să exportați mai întâi rezultatele ca PDF
-                                dacă doriți să le păstrați.
-                            </p>
-                            <p class="mb-0">
-                                Doriți să continuați?
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anulează</button>
-                            <button type="button" class="btn btn-danger" id="confirmRestartBtn">Da, începe un test nou</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="errorBelow" class="alert alert-danger" style="display: none;"></div>
-
-            <button type="button" id="submitBtn" class="btn btn-primary btn-lg w-100 mb-4 action-btn calculate-btn">
-                <i class="fas fa-calculator"></i>
-                Calculează Scorul
-            </button>
-
-            <div id="result" class="alert alert-success" style="display:none;"></div>
-
-            <button type="button" id="shareBtn" class="btn btn-primary btn-lg w-100 mb-4 action-btn share-btn" style="display:none; background-color: #1877f2;">
-                <i class="fab fa-facebook me-2"></i>
-                Distribuie pe Facebook
-            </button>
-
-            <button type="button" id="exportBtn" class="btn btn-success btn-lg w-100 mb-4 action-btn export-btn" style="display:none">
-                <i class="fas fa-file-pdf"></i>
-                Exportă ca PDF
-            </button>
-
-            <button type="button" id="restartBtn" class="btn btn-secondary btn-lg w-100 mb-4 action-btn restart-btn" style="display:none">
-                <i class="fas fa-redo-alt"></i>
-                Începe un nou test
-            </button>
-        </div>
-
-    </div>
-    <div class="scores-interpretation-section my-5">
-        <div class="container">
-            <!-- Main Title Section -->
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-4">Ce înseamnă scorul meu?</h2>
-                <p class="lead">
-                    Toate scorurile de <span class="badge bg-primary">65</span> sau mai mari indică trăsături autiste.
-                    Cu cât scorul este mai mare, cu atât aveți mai multe trăsături autiste.
-                </p>
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle me-2"></i>
-                    Rețineți că niciun test nu este concludent și că nu toate persoanele autiste obțin neapărat scoruri peste pragul definit la fiecare test. Acest test este destinat <b>EXCLUSIV</b> în scop informativ și <b>NU</b> trebuie utilizat ca un instrument de diagnostic. Deși testul a fost adaptat pentru a răspunde nevoilor persoanelor autiste, el <b>NU</b> înlocuiește o evaluare profesională efectuată de un profesionist calificat în domeniul sănătății mintale sau un profesionist medical calificat. Pentru evaluări profesionale, vă recomandăm să vizitați <a href="https://www.doctoradhd.com/" target="_blank">doctoradhd.com</a>.
-                </div>
-            </div>
-
-            <!-- Validity Section -->
-            <div class="row g-4">
-                <div class="col-12">
-                    <h3 class="fw-bold mb-1">Validitate RAADS-R</h3>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body text-center">
-                            <div class="display-4 text-primary mb-3">97% *</div>
-                            <h5 class="card-title">Sensibilitate</h5>
-                            <p class="card-text">Capacitatea testului de a identifica rezultate pozitive</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body text-center">
-                            <div class="display-4 text-success mb-3">100% *</div>
-                            <h5 class="card-title">Specificitate</h5>
-                            <p class="card-text">Capacitatea testului de a identifica rezultate negative</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body text-center">
-                            <div class="display-4 text-warning mb-3">96% *</div>
-                            <h5 class="card-title">Validitate concurentă</h5>
-                            <p class="card-text">Validitatea comparată cu ADOS Module 4, SRS</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body text-center">
-                            <div class="display-4 text-info mb-3">0.987 *</div>
-                            <h5 class="card-title">Fiabilitate test-retest</h5>
-                            <p class="card-text">Concordanța între rezultatele măsurătorilor succesive</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <b>* Date preluate din cadrul:</b>
-                    <div class="citation-box">
-                        <i class="fas fa-book text-muted me-2"></i>
-                        <strong>Lucrare / studiu seminal:</strong>
-                        <em>Ritvo, R. A., et al. (2011). The Ritvo Autism Asperger Diagnostic Scale - Revised (RAADS-R): a scale to assist the diagnosis of autism spectrum disorder in adults: an international validation study.</em>
-                        <a href="https://doi.org/10.1007/s10803-010-1133-5" target="_blank" class="doi-link">
-                            <i class="fas fa-external-link-alt"></i> Link DOI către studiul original
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="validity-section">
         <div class="container">
             <div class="validity-card">
@@ -2068,7 +2070,7 @@ body {
             </div>
         </div>
     </div>
-    <div class="interpretation-section">
+    <div class="interpretation-section" id="section-instructions">
         <div class="container">
             <div class="row">
                 <!-- Language Card -->
@@ -2176,6 +2178,156 @@ body {
                                 </li>
                             </ul>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="test-actual-container" id="section-quiz">
+        <!-- Disclaimer -->
+        <div id="first-disclaimer" class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+            <h4 class="alert-heading">Disclaimer</h4>
+            <p>
+                Acest test este destinat <b>EXCLUSIV</b> în scop informativ și <b>NU</b> trebuie utilizat ca un instrument de diagnostic. Deși testul a fost adaptat pentru a răspunde nevoilor persoanelor autiste, el <b>NU</b> înlocuiește o evaluare profesională efectuată de un profesionist calificat în domeniul sănătății mintale sau un profesionist medical calificat.</p>
+
+            <p>Pentru evaluări profesionale, vă recomandăm să vizitați <a href="https://www.doctoradhd.com/" target="_blank">doctoradhd.com</a>.</p>
+            <p>
+                Vă încurajăm să folosiți rezultatele în mod <strong>responsabil</strong> și să căutați <b>suport profesional calificat, de specialitate</b> dacă aveți nevoie de o evaluare detaliată.
+            </p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <!-- Disclaimer end -->
+        <h2 class="text-center mb-4"><b>Ritvo pentru Autism / Asperger Revizuită</b></h2>
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="card-text">Acest test constă în 80 de afirmații pentru a asista în screening-ul autismului la adulți. Selectează răspunsul care se potrivește cel mai bine cu tine.</p>
+            </div>
+        </div>
+
+        <div id="test">
+            <form id="raadsrForm" class="mb-4">
+                <div id="error" class="alert alert-danger" style="display: none;"></div>
+                <!-- Questions will be injected here -->
+            </form>
+
+            <div class="modal fade" id="restartWarningModal" tabindex="-1" aria-labelledby="restartWarningModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="restartWarningModalLabel">Confirmare restart test</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-danger mb-3">
+                                <strong>Atenție!</strong> Sunteți pe cale să începeți un test nou.
+                            </p>
+                            <p>
+                                Toate răspunsurile și scorul actual vor fi șterse. Vă recomandăm să exportați mai întâi rezultatele ca PDF
+                                dacă doriți să le păstrați.
+                            </p>
+                            <p class="mb-0">
+                                Doriți să continuați?
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anulează</button>
+                            <button type="button" class="btn btn-danger" id="confirmRestartBtn">Da, începe un test nou</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="errorBelow" class="alert alert-danger" style="display: none;"></div>
+
+            <button type="button" id="submitBtn" class="btn btn-primary btn-lg w-100 mb-4 action-btn calculate-btn">
+                <i class="fas fa-calculator"></i>
+                Calculează Scorul
+            </button>
+
+            <div id="result" class="alert alert-success" style="display:none;"></div>
+
+            <button type="button" id="shareBtn" class="btn btn-primary btn-lg w-100 mb-4 action-btn share-btn" style="display:none; background-color: #1877f2;">
+                <i class="fab fa-facebook me-2"></i>
+                Distribuie pe Facebook
+            </button>
+
+            <button type="button" id="exportBtn" class="btn btn-success btn-lg w-100 mb-4 action-btn export-btn" style="display:none">
+                <i class="fas fa-file-pdf"></i>
+                Exportă ca PDF
+            </button>
+
+            <button type="button" id="restartBtn" class="btn btn-secondary btn-lg w-100 mb-4 action-btn restart-btn" style="display:none">
+                <i class="fas fa-redo-alt"></i>
+                Începe un nou test
+            </button>
+        </div>
+
+    </div>
+    <div class="scores-interpretation-section my-5" id="section-results">
+        <div class="container">
+            <!-- Main Title Section -->
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-4">Ce înseamnă scorul meu?</h2>
+                <p class="lead">
+                    Toate scorurile de <span class="badge bg-primary">65</span> sau mai mari indică trăsături autiste.
+                    Cu cât scorul este mai mare, cu atât aveți mai multe trăsături autiste.
+                </p>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Rețineți că niciun test nu este concludent și că nu toate persoanele autiste obțin neapărat scoruri peste pragul definit la fiecare test. Acest test este destinat <b>EXCLUSIV</b> în scop informativ și <b>NU</b> trebuie utilizat ca un instrument de diagnostic. Deși testul a fost adaptat pentru a răspunde nevoilor persoanelor autiste, el <b>NU</b> înlocuiește o evaluare profesională efectuată de un profesionist calificat în domeniul sănătății mintale sau un profesionist medical calificat. Pentru evaluări profesionale, vă recomandăm să vizitați <a href="https://www.doctoradhd.com/" target="_blank">doctoradhd.com</a>.
+                </div>
+            </div>
+
+            <!-- Validity Section -->
+            <div class="row g-4">
+                <div class="col-12">
+                    <h3 class="fw-bold mb-1">Validitate RAADS-R</h3>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-primary mb-3">97% *</div>
+                            <h5 class="card-title">Sensibilitate</h5>
+                            <p class="card-text">Capacitatea testului de a identifica rezultate pozitive</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-success mb-3">100% *</div>
+                            <h5 class="card-title">Specificitate</h5>
+                            <p class="card-text">Capacitatea testului de a identifica rezultate negative</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-warning mb-3">96% *</div>
+                            <h5 class="card-title">Validitate concurentă</h5>
+                            <p class="card-text">Validitatea comparată cu ADOS Module 4, SRS</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-info mb-3">0.987 *</div>
+                            <h5 class="card-title">Fiabilitate test-retest</h5>
+                            <p class="card-text">Concordanța între rezultatele măsurătorilor succesive</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <b>* Date preluate din cadrul:</b>
+                    <div class="citation-box">
+                        <i class="fas fa-book text-muted me-2"></i>
+                        <strong>Lucrare / studiu seminal:</strong>
+                        <em>Ritvo, R. A., et al. (2011). The Ritvo Autism Asperger Diagnostic Scale - Revised (RAADS-R): a scale to assist the diagnosis of autism spectrum disorder in adults: an international validation study.</em>
+                        <a href="https://doi.org/10.1007/s10803-010-1133-5" target="_blank" class="doi-link">
+                            <i class="fas fa-external-link-alt"></i> Link DOI către studiul original
+                        </a>
                     </div>
                 </div>
             </div>
@@ -2394,7 +2546,7 @@ body {
             </div>
         </div>
     </div>
-    <div class="services-section">
+    <div class="services-section" id="section-support">
         <div class="services-container">
             <!-- Header Section -->
             <div class="services-header">
@@ -4611,6 +4763,44 @@ document.addEventListener('click', (e) => {
         setTimeout(() => announcement.remove(), 1000);
     }
 });
+
+// Function to highlight the QuickNav item of the section currently in view
+function highlightInViewSection() {
+    const navItems = document.querySelectorAll('.quick-nav-item');
+    const sections = [
+        { id: 'section-intro', navItem: document.querySelector('a[href="#section-intro"]') },
+        { id: 'section-instructions', navItem: document.querySelector('a[href="#section-instructions"]') },
+        { id: 'section-quiz', navItem: document.querySelector('a[href="#section-quiz"]') },
+        { id: 'section-results', navItem: document.querySelector('a[href="#section-results"]') },
+        { id: 'section-support', navItem: document.querySelector('a[href="#section-support"]') }
+    ];
+
+    // Detects the section currently in view and updates the active QuickNav item
+    window.addEventListener('scroll', () => {
+        let currentSection = '';
+
+        sections.forEach(section => {
+            const sectionElement = document.getElementById(section.id);
+            const sectionTop = sectionElement.offsetTop;
+            const sectionBottom = sectionTop + sectionElement.offsetHeight;
+
+            // Check if the section is in the middle of the viewport
+            if (window.scrollY + window.innerHeight / 2 >= sectionTop && window.scrollY + window.innerHeight / 2 < sectionBottom) {
+                currentSection = section.id;
+            }
+        });
+
+        // Remove active class from all QuickNav items and set it on the one in view
+        navItems.forEach(navItem => navItem.classList.remove('active'));
+        if (currentSection) {
+            const activeNavItem = document.querySelector(`a[href="#${currentSection}"]`);
+            activeNavItem.classList.add('active');
+        }
+    });
+}
+
+// Initialize the highlight functionality when the document is loaded
+document.addEventListener('DOMContentLoaded', highlightInViewSection);
 </script>
 </body>
 </html>
