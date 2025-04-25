@@ -1,86 +1,86 @@
 const questions = [
     // 80 de întrebări ca obiecte cu text și flag pentru inversare
     // Indexarea începe de la 1 pentru claritate
-    { id: 1, text: "Exprim grijă și empatie, deși nu întotdeauna într-un mod tipic.", inverse: true },
-    { id: 2, text: "Repet adesea fraze din filme sau emisiuni TV în conversații pentru că mă ajută să mă exprim.", inverse: false },
-    { id: 3, text: "Uneori nu-mi dau seama că vorbele sau acțiunile mele pot părea grosolane pentru ceilalți.", inverse: false },
-    { id: 4, text: "Am dificultăți în a-mi regla volumul vocii, vorbind uneori prea tare sau prea încet.", inverse: false },
-    { id: 5, text: "În situații sociale, de multe ori mă simt nesigur(ă) în legătură cu cum să mă comport.", inverse: false },
-    { id: 6, text: "Pot să îmi imaginez perspectivele altora, deși poate necesită efort suplimentar pentru a înțelege sentimentele lor.", inverse: false },
-    { id: 7, text: "Limbajul figurativ (ex. „ești mărul ochilor mei") este dificil de înțeles pentru mine.", inverse: false },
-    { id: 8, text: "Mă simt cel mai confortabil vorbind cu oameni care împărtășesc aceleași interese ca mine.", inverse: true },
-    { id: 9, text: "Mă concentrez pe detalii mici înainte de a vedea imaginea de ansamblu.", inverse: false },
-    { id: 10, text: "Textura mâncării în gură este mai importantă pentru mine decât gustul ei.", inverse: false },
-    { id: 11, text: "Îmi lipsesc prietenii apropiați sau familia când suntem despărțiți pentru mult timp, deși nu arăt mereu acest lucru.", inverse: true },
-    { id: 12, text: "Uneori spun lucruri direct fără intenția de a deranja pe cineva.", inverse: true },
-    { id: 13, text: "Prefer să vorbesc despre subiecte specifice care mă interesează profund.", inverse: false },
-    { id: 14, text: "Prefer deseori să petrec timp singur(ă), chiar și în locuri unde alții se așteaptă să socializez.", inverse: false },
-    { id: 15, text: "Îmi este dificil să-mi imaginez cum ar fi să fiu altcineva sau să văd lucrurile din perspectiva lor.", inverse: false },
-    { id: 16, text: "Oamenii mi-au spus că sunt stângaci(ă) sau neîndemânatic(ă).", inverse: false },
-    { id: 17, text: "Am fost descris(ă) ca fiind diferit(ă) sau neconvențional(ă).", inverse: true },
-    { id: 18, text: "Recunosc când cineva apropiat are nevoie de consolare, deși poate că nu știu întotdeauna cum să reacționez.", inverse: true },
-    { id: 19, text: "Sunt foarte sensibil(ă) la cum simt hainele pe pielea mea.", inverse: false },
-    { id: 20, text: "Uneori copiez comportamentele altora pentru a mă integra sau pentru a părea mai „normal(ă)".", inverse: false },
-    { id: 21, text: "A vorbi cu mai multe persoane în același timp poate fi copleșitor sau intimidant pentru mine.", inverse: false },
-    { id: 22, text: "Simt deseori presiunea de a mă comporta așa cum se așteaptă ceilalți, chiar dacă nu este natural pentru mine.", inverse: false },
-    { id: 23, text: "Întâlnirile cu oameni noi pot fi dificile sau stresante pentru mine.", inverse: false },
-    { id: 24, text: "Mă simt confuz(ă) sau frustrat(ă) când oamenii mă întrerup atunci când sunt concentrat(ă) pe un subiect care mă pasionează.", inverse: false },
-    { id: 25, text: "Îmi este greu să înțeleg emoțiile altor persoane în timpul conversațiilor.", inverse: false },
-    { id: 26, text: "A lua parte la conversații de grup poate fi o provocare pentru mine.", inverse: false },
-    { id: 27, text: "Am tendința de a lua lucrurile literal, ceea ce poate face să pierd subtilitățile unei conversații.", inverse: false },
-    { id: 28, text: "Îmi este dificil să recunosc când cineva simte emoții precum jenă sau invidie.", inverse: false },
-    { id: 29, text: "Anumite texturi care nu deranjează pe alții pot fi foarte inconfortabile pentru mine.", inverse: false },
-    { id: 30, text: "Mă supăr când rutina mea este schimbată neașteptat.", inverse: false },
-    { id: 31, text: "Nu am simțit niciodată nevoia de a fi într-o relație „intimă" așa cum o numesc alții.", inverse: false },
-    { id: 32, text: "Îmi este greu să încep sau să opresc o conversație până nu simt că mi-am terminat gândurile.", inverse: false },
-    { id: 33, text: "Vorbesc cu un ritm și ton de voce considerat tipic de cei din jurul meu.", inverse: true },
-    { id: 34, text: "Același sunet, culoare sau textură mă poate afecta diferit la momente diferite.", inverse: false },
-    { id: 35, text: "Unele expresii, cum ar fi „te am sub piele," mă fac să mă simt inconfortabil sau sunt greu de înțeles.", inverse: false },
-    { id: 36, text: "Anumite sunete, cum ar fi zgomotele înalte sau anumite cuvinte, pot fi dureroase fizic de auzit.", inverse: false },
-    { id: 37, text: "Încerc să fiu înțelegător/înțelegătoare atunci când alții își împărtășesc sentimentele sau problemele personale cu mine.", inverse: true },
-    { id: 38, text: "Nu mă conectez ușor emoțional cu personajele din filme sau povești.", inverse: true },
-    { id: 39, text: "Îmi este dificil să recunosc când cineva flirtează cu mine sau îmi arată interes romantic.", inverse: true },
-    { id: 40, text: "Pot vizualiza în mintea mea în detaliu lucrurile care mă interesează.", inverse: false },
-    { id: 41, text: "Îmi place să păstrez liste sau colecții de fapte specifice, chiar dacă nu au o utilizare practică.", inverse: false },
-    { id: 42, text: "Când sunt copleșit(ă) de stimuli senzoriali, am nevoie să mă izolez pentru a mă liniști.", inverse: false },
-    { id: 43, text: "Îmi place să discut lucruri importante sau să procesez lucrurile împreună cu prietenii.", inverse: true },
-    { id: 44, text: "Îmi este greu să îmi dau seama dacă cineva este interesat sau plictisit în timp ce vorbesc.", inverse: false },
-    { id: 45, text: "Îmi este dificil să citesc limbajul corporal sau expresiile faciale ale altor persoane.", inverse: false },
-    { id: 46, text: "Experiențele senzoriale precum atingerea sau temperatura pot să mă afecteze diferit în momente diferite.", inverse: false },
-    { id: 47, text: "Mă simt confortabil și încrezător(ă) în situațiile de întâlniri sau sociale cu alții.", inverse: true },
-    { id: 48, text: "Când oamenii îmi împărtășesc problemele lor personale, încerc să ofer sprijin cât pot de bine.", inverse: true },
-    { id: 49, text: "Mi s-a spus că vocea mea este neobișnuită într-un fel (ex. monotonă, înaltă, copilăroasă).", inverse: false },
-    { id: 50, text: "Uneori un anumit subiect sau gând rămâne blocat în mintea mea și simt nevoia să vorbesc despre el chiar dacă ceilalți nu sunt interesați.", inverse: false },
-    { id: 51, text: "Fac deseori mișcări repetitive cu mâinile sau cu obiecte (ex. fluturare, învârtire, sau mișcarea obiectelor în fața ochilor mei).", inverse: false },
-    { id: 52, text: "Nu găsesc majoritatea lucrurilor care îi interesează pe ceilalți foarte captivante.", inverse: false },
-    { id: 53, text: "Sunt considerat(ă) o persoană compasională, deși pot arăta acest lucru în moduri diferite.", inverse: true },
-    { id: 54, text: "Interacționez cu ceilalți urmând reguli sociale specifice pe care le-am învățat pentru a mă integra.", inverse: true },
-    { id: 55, text: "Îmi este foarte dificil să lucrez și să funcționez în grupuri.", inverse: false },
-    { id: 56, text: "Când cineva schimbă subiectul în timp ce vorbesc, mă simt derutat(ă) și confuz(ă).", inverse: false },
-    { id: 57, text: "Uneori trebuie să îmi acopăr urechile pentru a bloca zgomotele copleșitoare (ex. vocile puternice, aspiratorul).", inverse: false },
-    { id: 58, text: "Sunt capabil(ă) să port conversații lejere, deși poate necesită un efort suplimentar.", inverse: false },
-    { id: 59, text: "Uneori lucruri care ar trebui să fie dureroase, cum ar fi rănile, nu par să provoace atâta durere.", inverse: false },
-    { id: 60, text: "Când vorbesc cu cineva, îmi este adesea greu să îmi dau seama când este rândul meu să vorbesc sau să ascult.", inverse: false },
-    { id: 61, text: "Sunt deseori văzut(ă) ca un „lup singuratic" de către cei care mă cunosc cel mai bine.", inverse: false },
-    { id: 62, text: "Vorbesc de obicei cu un ton de voce pe care ceilalți îl consideră tipic.", inverse: true },
-    { id: 63, text: "Prefer ca lucrurile să rămână la fel zi după zi și chiar și schimbările mici mă pot deranja.", inverse: false },
-    { id: 64, text: "Găsesc că este dificil și confuz să îmi fac prieteni și să socializez.", inverse: false },
-    { id: 65, text: "Mă liniștește să fac mișcări repetitive, cum ar fi învârtirea sau balansarea, când sunt stresat(ă).", inverse: false },
-    { id: 66, text: "Expresii precum „își poartă inima pe mânecă" nu au sens pentru mine.", inverse: false },
-    { id: 67, text: "Luminile puternice, mirosurile intense sau zgomotele puternice mă pot face să mă simt anxios/anxioasă sau copleșit(ă).", inverse: false },
-    { id: 68, text: "Îmi dau seama când cineva spune un lucru, dar vrea să însemne altceva.", inverse: true },
-    { id: 69, text: "Îmi place să petrec timp singur(ă) cât de mult pot.", inverse: false },
-    { id: 70, text: "Îmi organizez gândurile într-un mod unic, cum ar fi să le stivuiesc în memoria mea pentru a le găsi mai târziu.", inverse: false },
-    { id: 71, text: "Uneori același sunet poate părea foarte tare sau foarte încet, chiar dacă știu că nu s-a schimbat.", inverse: false },
-    { id: 72, text: "Îmi place să petrec timp mâncând și vorbind cu familia și prietenii mei.", inverse: false },
-    { id: 73, text: "Nu suport anumite senzații (ex. mirosuri, texturi, sunete) care nu par să deranjeze pe ceilalți.", inverse: false },
-    { id: 74, text: "Nu îmi place să fiu îmbrățișat(ă) sau atins(ă) decât dacă am fost de acord cu asta.", inverse: false },
-    { id: 75, text: "Când merg undeva, trebuie să urmez un traseu familiar, altfel mă pot confunda și supăra.", inverse: false },
-    { id: 76, text: "Îmi este greu să înțeleg ce așteaptă oamenii de la mine în situațiile sociale.", inverse: false },
-    { id: 77, text: "Îmi place să am prieteni apropiați, deși poate că nu știu întotdeauna cum să întrețin prieteniile.", inverse: false },
-    { id: 78, text: "Oamenii îmi spun deseori că dau prea multe detalii atunci când explic ceva.", inverse: true },
-    { id: 79, text: "Mi se spune adesea că pun întrebări stânjenitoare sau incomode.", inverse: false },
-    { id: 80, text: "Am tendința să arăt greșelile altora, chiar dacă nu este necesar.", inverse: false }
+    { id: 1, text: 'Exprim grijă și empatie, deși nu întotdeauna într-un mod tipic.', inverse: true },
+    { id: 2, text: 'Repet adesea fraze din filme sau emisiuni TV în conversații pentru că mă ajută să mă exprim.', inverse: false },
+    { id: 3, text: 'Uneori nu-mi dau seama că vorbele sau acțiunile mele pot părea grosolane pentru ceilalți.', inverse: false },
+    { id: 4, text: 'Am dificultăți în a-mi regla volumul vocii, vorbind uneori prea tare sau prea încet.', inverse: false },
+    { id: 5, text: 'În situații sociale, de multe ori mă simt nesigur(ă) în legătură cu cum să mă comport.', inverse: false },
+    { id: 6, text: 'Pot să îmi imaginez perspectivele altora, deși poate necesită efort suplimentar pentru a înțelege sentimentele lor.', inverse: false },
+    { id: 7, text: 'Limbajul figurativ (ex. „ești mărul ochilor mei") este dificil de înțeles pentru mine.', inverse: false },
+    { id: 8, text: 'Mă simt cel mai confortabil vorbind cu oameni care împărtășesc aceleași interese ca mine.', inverse: true },
+    { id: 9, text: 'Mă concentrez pe detalii mici înainte de a vedea imaginea de ansamblu.', inverse: false },
+    { id: 10, text: 'Textura mâncării în gură este mai importantă pentru mine decât gustul ei.', inverse: false },
+    { id: 11, text: 'Îmi lipsesc prietenii apropiați sau familia când suntem despărțiți pentru mult timp, deși nu arăt mereu acest lucru.', inverse: true },
+    { id: 12, text: 'Uneori spun lucruri direct fără intenția de a deranja pe cineva.', inverse: true },
+    { id: 13, text: 'Prefer să vorbesc despre subiecte specifice care mă interesează profund.', inverse: false },
+    { id: 14, text: 'Prefer deseori să petrec timp singur(ă), chiar și în locuri unde alții se așteaptă să socializez.', inverse: false },
+    { id: 15, text: 'Îmi este dificil să-mi imaginez cum ar fi să fiu altcineva sau să văd lucrurile din perspectiva lor.', inverse: false },
+    { id: 16, text: 'Oamenii mi-au spus că sunt stângaci(ă) sau neîndemânatic(ă).', inverse: false },
+    { id: 17, text: 'Am fost descris(ă) ca fiind diferit(ă) sau neconvențional(ă).', inverse: true },
+    { id: 18, text: 'Recunosc când cineva apropiat are nevoie de consolare, deși poate că nu știu întotdeauna cum să reacționez.', inverse: true },
+    { id: 19, text: 'Sunt foarte sensibil(ă) la cum simt hainele pe pielea mea.', inverse: false },
+    { id: 20, text: 'Uneori copiez comportamentele altora pentru a mă integra sau pentru a părea mai „normal(ă)".', inverse: false },
+    { id: 21, text: 'A vorbi cu mai multe persoane în același timp poate fi copleșitor sau intimidant pentru mine.', inverse: false },
+    { id: 22, text: 'Simt deseori presiunea de a mă comporta așa cum se așteaptă ceilalți, chiar dacă nu este natural pentru mine.', inverse: false },
+    { id: 23, text: 'Întâlnirile cu oameni noi pot fi dificile sau stresante pentru mine.', inverse: false },
+    { id: 24, text: 'Mă simt confuz(ă) sau frustrat(ă) când oamenii mă întrerup atunci când sunt concentrat(ă) pe un subiect care mă pasionează.', inverse: false },
+    { id: 25, text: 'Îmi este greu să înțeleg emoțiile altor persoane în timpul conversațiilor.', inverse: false },
+    { id: 26, text: 'A lua parte la conversații de grup poate fi o provocare pentru mine.', inverse: false },
+    { id: 27, text: 'Am tendința de a lua lucrurile literal, ceea ce poate face să pierd subtilitățile unei conversații.', inverse: false },
+    { id: 28, text: 'Îmi este dificil să recunosc când cineva simte emoții precum jenă sau invidie.', inverse: false },
+    { id: 29, text: 'Anumite texturi care nu deranjează pe alții pot fi foarte inconfortabile pentru mine.', inverse: false },
+    { id: 30, text: 'Mă supăr când rutina mea este schimbată neașteptat.', inverse: false },
+    { id: 31, text: 'Nu am simțit niciodată nevoia de a fi într-o relație „intimă" așa cum o numesc alții.', inverse: false },
+    { id: 32, text: 'Îmi este greu să încep sau să opresc o conversație până nu simt că mi-am terminat gândurile.', inverse: false },
+    { id: 33, text: 'Vorbesc cu un ritm și ton de voce considerat tipic de cei din jurul meu.', inverse: true },
+    { id: 34, text: 'Același sunet, culoare sau textură mă poate afecta diferit la momente diferite.', inverse: false },
+    { id: 35, text: 'Unele expresii, cum ar fi „te am sub piele," mă fac să mă simt inconfortabil sau sunt greu de înțeles.', inverse: false },
+    { id: 36, text: 'Anumite sunete, cum ar fi zgomotele înalte sau anumite cuvinte, pot fi dureroase fizic de auzit.', inverse: false },
+    { id: 37, text: 'Încerc să fiu înțelegător/înțelegătoare atunci când alții își împărtășesc sentimentele sau problemele personale cu mine.', inverse: true },
+    { id: 38, text: 'Nu mă conectez ușor emoțional cu personajele din filme sau povești.', inverse: true },
+    { id: 39, text: 'Îmi este dificil să recunosc când cineva flirtează cu mine sau îmi arată interes romantic.', inverse: true },
+    { id: 40, text: 'Pot vizualiza în mintea mea în detaliu lucrurile care mă interesează.', inverse: false },
+    { id: 41, text: 'Îmi place să păstrez liste sau colecții de fapte specifice, chiar dacă nu au o utilizare practică.', inverse: false },
+    { id: 42, text: 'Când sunt copleșit(ă) de stimuli senzoriali, am nevoie să mă izolez pentru a mă liniști.', inverse: false },
+    { id: 43, text: 'Îmi place să discut lucruri importante sau să procesez lucrurile împreună cu prietenii.', inverse: true },
+    { id: 44, text: 'Îmi este greu să îmi dau seama dacă cineva este interesat sau plictisit în timp ce vorbesc.', inverse: false },
+    { id: 45, text: 'Îmi este dificil să citesc limbajul corporal sau expresiile faciale ale altor persoane.', inverse: false },
+    { id: 46, text: 'Experiențele senzoriale precum atingerea sau temperatura pot să mă afecteze diferit în momente diferite.', inverse: false },
+    { id: 47, text: 'Mă simt confortabil și încrezător(ă) în situațiile de întâlniri sau sociale cu alții.', inverse: true },
+    { id: 48, text: 'Când oamenii îmi împărtășesc problemele lor personale, încerc să ofer sprijin cât pot de bine.', inverse: true },
+    { id: 49, text: 'Mi s-a spus că vocea mea este neobișnuită într-un fel (ex. monotonă, înaltă, copilăroasă).', inverse: false },
+    { id: 50, text: 'Uneori un anumit subiect sau gând rămâne blocat în mintea mea și simt nevoia să vorbesc despre el chiar dacă ceilalți nu sunt interesați.', inverse: false },
+    { id: 51, text: 'Fac deseori mișcări repetitive cu mâinile sau cu obiecte (ex. fluturare, învârtire, sau mișcarea obiectelor în fața ochilor mei).', inverse: false },
+    { id: 52, text: 'Nu găsesc majoritatea lucrurilor care îi interesează pe ceilalți foarte captivante.', inverse: false },
+    { id: 53, text: 'Sunt considerat(ă) o persoană compasională, deși pot arăta acest lucru în moduri diferite.', inverse: true },
+    { id: 54, text: 'Interacționez cu ceilalți urmând reguli sociale specifice pe care le-am învățat pentru a mă integra.', inverse: true },
+    { id: 55, text: 'Îmi este foarte dificil să lucrez și să funcționez în grupuri.', inverse: false },
+    { id: 56, text: 'Când cineva schimbă subiectul în timp ce vorbesc, mă simt derutat(ă) și confuz(ă).', inverse: false },
+    { id: 57, text: 'Uneori trebuie să îmi acopăr urechile pentru a bloca zgomotele copleșitoare (ex. vocile puternice, aspiratorul).', inverse: false },
+    { id: 58, text: 'Sunt capabil(ă) să port conversații lejere, deși poate necesită un efort suplimentar.', inverse: false },
+    { id: 59, text: 'Uneori lucruri care ar trebui să fie dureroase, cum ar fi rănile, nu par să provoace atâta durere.', inverse: false },
+    { id: 60, text: 'Când vorbesc cu cineva, îmi este adesea greu să îmi dau seama când este rândul meu să vorbesc sau să ascult.', inverse: false },
+    { id: 61, text: 'Sunt deseori văzut(ă) ca un „lup singuratic" de către cei care mă cunosc cel mai bine.', inverse: false },
+    { id: 62, text: 'Vorbesc de obicei cu un ton de voce pe care ceilalți îl consideră tipic.', inverse: true },
+    { id: 63, text: 'Prefer ca lucrurile să rămână la fel zi după zi și chiar și schimbările mici mă pot deranja.', inverse: false },
+    { id: 64, text: 'Găsesc că este dificil și confuz să îmi fac prieteni și să socializez.', inverse: false },
+    { id: 65, text: 'Mă liniștește să fac mișcări repetitive, cum ar fi învârtirea sau balansarea, când sunt stresat(ă).', inverse: false },
+    { id: 66, text: 'Expresii precum „își poartă inima pe mânecă" nu au sens pentru mine.', inverse: false },
+    { id: 67, text: 'Luminile puternice, mirosurile intense sau zgomotele puternice mă pot face să mă simt anxios/anxioasă sau copleșit(ă).', inverse: false },
+    { id: 68, text: 'Îmi dau seama când cineva spune un lucru, dar vrea să însemne altceva.', inverse: true },
+    { id: 69, text: 'Îmi place să petrec timp singur(ă) cât de mult pot.', inverse: false },
+    { id: 70, text: 'Îmi organizez gândurile într-un mod unic, cum ar fi să le stivuiesc în memoria mea pentru a le găsi mai târziu.', inverse: false },
+    { id: 71, text: 'Uneori același sunet poate părea foarte tare sau foarte încet, chiar dacă știu că nu s-a schimbat.', inverse: false },
+    { id: 72, text: 'Îmi place să petrec timp mâncând și vorbind cu familia și prietenii mei.', inverse: false },
+    { id: 73, text: 'Nu suport anumite senzații (ex. mirosuri, texturi, sunete) care nu par să deranjeze pe ceilalți.', inverse: false },
+    { id: 74, text: 'Nu îmi place să fiu îmbrățișat(ă) sau atins(ă) decât dacă am fost de acord cu asta.', inverse: false },
+    { id: 75, text: 'Când merg undeva, trebuie să urmez un traseu familiar, altfel mă pot confunda și supăra.', inverse: false },
+    { id: 76, text: 'Îmi este greu să înțeleg ce așteaptă oamenii de la mine în situațiile sociale.', inverse: false },
+    { id: 77, text: 'Îmi place să am prieteni apropiați, deși poate că nu știu întotdeauna cum să întrețin prieteniile.', inverse: false },
+    { id: 78, text: 'Oamenii îmi spun deseori că dau prea multe detalii atunci când explic ceva.', inverse: true },
+    { id: 79, text: 'Mi se spune adesea că pun întrebări stânjenitoare sau incomode.', inverse: false },
+    { id: 80, text: 'Am tendința să arăt greșelile altora, chiar dacă nu este necesar.', inverse: false }
 ];
 
 // RAADS-R Categories according to the paper page 1083
@@ -656,6 +656,9 @@ function initProgressTracking() {
         if (e.target.type === 'radio') {
             const currentQuestion = e.target.closest('.question');
             currentQuestion.classList.add('completed');
+
+            // remove highlighting
+            currentQuestion.classList.remove('highlight-unanswered');
 
             updateProgress();
 
@@ -1326,39 +1329,401 @@ async function generatePDFBlob() {
     }
 }
 
-// Export button click handler with better error handling
-if (exportBtn) {
+function generateFinalPDF() {
+    // Implementare completă pentru generarea PDF-ului cu suport garantat pentru caractere românești
+    try {
+        // Obține rezultatele
+        const results = calculateSubscores();
+        const { subscores, totalScore } = results;
+
+        // Creează documentul PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        // Constante pentru layout
+        const pageWidth = 210;
+        const leftMargin = 20;
+        const rightMargin = 20;
+        const contentWidth = pageWidth - leftMargin - rightMargin;
+        const pageHeight = 297;
+
+        // Variabile de stare
+        let y = 15;
+        let pageCount = 1;
+
+        // Culori pentru scoruri
+        const colors = {
+            green: [76, 175, 80],
+            yellow: [255, 193, 7],
+            red: [244, 67, 54],
+            blue: [33, 150, 243],
+            lightGrey: [238, 238, 238]
+        };
+
+        // Funcție pentru a crea o nouă pagină
+        const addNewPage = () => {
+            doc.addPage();
+            pageCount++;
+            y = 20;
+
+            // Adaugă header pagină
+            doc.setFontSize(10);
+            doc.text(`Rezultate Test RAADS-R - Pagina ${pageCount}`, pageWidth / 2, 10, { align: 'center' });
+        };
+
+        // Funcție pentru a verifica dacă este nevoie de o pagină nouă
+        const checkNewPage = (requiredHeight) => {
+            if (y + requiredHeight > pageHeight - 20) {
+                addNewPage();
+                return true;
+            }
+            return false;
+        };
+
+        // Funcție pentru desenare text sigură, caracter cu caracter
+        const drawSafeText = (text, x, y, options = {}) => {
+            const {
+                fontSize = 11,
+                fontStyle = 'normal',
+                color = [0, 0, 0],
+                align = 'left',
+                maxWidth = contentWidth
+            } = options;
+
+            // Setează font și culoare
+            doc.setFontSize(fontSize);
+            doc.setFont('helvetica', fontStyle);
+            doc.setTextColor(...color);
+
+            // Divide textul în cuvinte pentru control maxim
+            const words = text.split(/\s+/);
+            let lines = [];
+            let currentLine = '';
+
+            // Împarte textul manual pe linii
+            for (const word of words) {
+                const testLine = currentLine ? `${currentLine} ${word}` : word;
+                // Folosim o aproximare pentru lățimea liniei (factor de corecție pentru diacritice)
+                const testWidth = (doc.getStringUnitWidth(testLine) * 0.9 * fontSize) / doc.internal.scaleFactor;
+
+                if (testWidth <= maxWidth) {
+                    currentLine = testLine;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+
+            // Adaugă ultima linie dacă există
+            if (currentLine) {
+                lines.push(currentLine);
+            }
+
+            // Calculează poziția de start în funcție de aliniere
+            let xPos = x;
+            if (align === 'center') {
+                xPos = pageWidth / 2;
+            } else if (align === 'right') {
+                xPos = x + maxWidth;
+            }
+
+            // Desenează fiecare linie de text, caracter cu caracter pentru control maxim
+            let yPos = y;
+            for (const line of lines) {
+                // Pentru aliniere corespunzătoare
+                if (align === 'center') {
+                    doc.text(line, xPos, yPos, { align: 'center' });
+                } else if (align === 'right') {
+                    doc.text(line, xPos, yPos, { align: 'right' });
+                } else {
+                    // Pentru text aliniat la stânga, desenăm manual
+                    doc.text(line, xPos, yPos);
+                }
+                yPos += fontSize * 0.4; // Spațiere între linii
+            }
+
+            // Returnează noua poziție Y
+            return y + (lines.length * fontSize * 0.4);
+        };
+
+        // Funcție pentru a desena o bară de progres
+        const drawProgressBar = (x, y, width, height, percentage, thresholdPercentage, color) => {
+            // Desenează fundal
+            doc.setFillColor(...colors.lightGrey);
+            doc.roundedRect(x, y, width, height, 1, 1, 'F');
+
+            // Desenează bara de progres
+            if (percentage > 0) {
+                doc.setFillColor(...color);
+                const fillWidth = Math.min(width * percentage / 100, width);
+                doc.roundedRect(x, y, fillWidth, height, 1, 1, 'F');
+            }
+
+            // Desenează marcajul de prag
+            doc.setFillColor(0, 0, 0);
+            doc.rect(x + (width * thresholdPercentage / 100), y - 1, 0.7, height + 2, 'F');
+
+            return y + height;
+        };
+
+        // Funcție helper pentru culoarea scorului
+        const getScoreColor = (score, threshold) => {
+            if (score < threshold) return colors.green;
+            if (score < threshold * 1.5) return colors.yellow;
+            return colors.red;
+        };
+
+        // === PRIMA PAGINĂ - HEADER ȘI REZULTATE ===
+
+        // Adaugă titlu principal
+        doc.setFontSize(18);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Rezultate Test RAADS-R', pageWidth / 2, y, { align: 'center' });
+
+        // Adaugă sursa
+        y += 10;
+        doc.setFontSize(10);
+        doc.text('Rezultate generate de www.testautism.ro', pageWidth / 2, y, { align: 'center' });
+
+        // Adaugă disclaimer
+        y += 10;
+        doc.setFontSize(9);
+        doc.setTextColor(221, 44, 0);
+        const disclaimerLines = [
+            'IMPORTANT: Acest test este destinat EXCLUSIV în scop informativ și NU trebuie utilizat',
+            'ca un instrument de diagnostic. Pentru evaluări profesionale, vă recomandăm să vizitați',
+            'www.doctoradhd.com'
+        ];
+
+        disclaimerLines.forEach(line => {
+            doc.text(line, pageWidth / 2, y, { align: 'center' });
+            y += 5;
+        });
+
+        // Resetează culoarea textului
+        doc.setTextColor(0, 0, 0);
+
+        // Adaugă scor total
+        y += 5;
+        doc.setFontSize(16);
+        doc.text(`Scor Total: ${totalScore}`, pageWidth / 2, y, { align: 'center' });
+
+        // Adaugă interpretare
+        y += 8;
+        doc.setFontSize(12);
+        const interpretation = getInterpretation(totalScore);
+        doc.text(`Interpretare: ${interpretation}`, pageWidth / 2, y, { align: 'center' });
+
+        // Adaugă titlu secțiune scoruri
+        y += 15;
+        doc.setFontSize(14);
+        doc.text('Scoruri pe categorii:', leftMargin, y);
+
+        // Adaugă scorurile pe categorii
+        y += 8;
+        const categories = [
+            { name: 'Limbaj', score: subscores.language, threshold: RAADS_R_THRESHOLDS.language, max: MAX_SCORES.language },
+            { name: 'Relaționare socială', score: subscores.socialRelatedness, threshold: RAADS_R_THRESHOLDS.socialRelatedness, max: MAX_SCORES.socialRelatedness },
+            { name: 'Senzorial-motor', score: subscores.sensoryMotor, threshold: RAADS_R_THRESHOLDS.sensoryMotor, max: MAX_SCORES.sensoryMotor },
+            { name: 'Interese circumscrise', score: subscores.circumscribedInterests, threshold: RAADS_R_THRESHOLDS.circumscribedInterests, max: MAX_SCORES.circumscribedInterests }
+        ];
+
+        categories.forEach(category => {
+            doc.setFontSize(12);
+            doc.text(`${category.name}: ${category.score} / ${category.max} (Prag: ${category.threshold})`, leftMargin + 5, y);
+            y += 6;
+
+            // Calculează procentaje și culoare
+            const percentage = (category.score / category.max) * 100;
+            const thresholdPercentage = (category.threshold / category.max) * 100;
+            const color = getScoreColor(category.score, category.threshold);
+
+            // Desenează bară progres
+            y = drawProgressBar(leftMargin + 5, y, contentWidth - 10, 5, percentage, thresholdPercentage, color) + 2;
+            y += 5;
+        });
+
+        // Adaugă legendă
+        y += 5;
+        doc.setFontSize(10);
+
+        // Desenează pătrate colorate pentru legendă
+        doc.setFillColor(...colors.green);
+        doc.rect(leftMargin + 5, y, 4, 4, 'F');
+        doc.text('Sub prag', leftMargin + 12, y + 3);
+
+        doc.setFillColor(...colors.yellow);
+        doc.rect(leftMargin + 45, y, 4, 4, 'F');
+        doc.text('Aproape de prag', leftMargin + 52, y + 3);
+
+        doc.setFillColor(...colors.red);
+        doc.rect(leftMargin + 110, y, 4, 4, 'F');
+        doc.text('Peste prag', leftMargin + 117, y + 3);
+
+        // === SECȚIUNEA CU RĂSPUNSURI LA ÎNTREBĂRI ===
+
+        // Adăugă titlul secțiunii
+        y += 15;
+        checkNewPage(10);
+
+        doc.setFontSize(14);
+        doc.text('Răspunsuri la întrebări:', leftMargin, y);
+        y += 10;
+
+        // Pregătește lista de întrebări și răspunsuri
+        const questionAnswers = [];
+
+        for (const question of questions) {
+            const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
+            if (selected) {
+                questionAnswers.push({
+                    id: question.id,
+                    text: question.text,
+                    answer: selected.closest('label').querySelector('.form-check-label').textContent.trim()
+                });
+            }
+        }
+
+        // Adaugă întrebările și răspunsurile cu aliniere strictă și control la nivel de caracter
+        for (const qa of questionAnswers) {
+            // Verifică dacă este nevoie de pagină nouă (estimare conservativă)
+            if (checkNewPage(25)) {
+                y = 20; // Reset y după adăugarea paginii noi
+            }
+
+            // Transformă în text plain, fără simboluri speciale
+            const questionText = `${qa.id}. ${qa.text.replace(/[^\x00-\x7F]/g, c => {
+                // Înlocuiește explicit toate caracterele non-ASCII cu echivalentul lor ASCII
+                return c === 'ă' ? 'a' :
+                       c === 'â' ? 'a' :
+                       c === 'î' ? 'i' :
+                       c === 'ș' ? 's' :
+                       c === 'ț' ? 't' :
+                       c === 'Ă' ? 'A' :
+                       c === 'Â' ? 'A' :
+                       c === 'Î' ? 'I' :
+                       c === 'Ș' ? 'S' :
+                       c === 'Ț' ? 'T' : c;
+            })}`;
+
+            // Adaugă întrebarea (bold)
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(11);
+
+            // Împarte manual textul întrebării în linii de max 80 de caractere
+            const questionLines = [];
+            for (let i = 0; i < questionText.length; i += 80) {
+                questionLines.push(questionText.substr(i, 80));
+            }
+
+            // Desenează fiecare linie a întrebării
+            for (const line of questionLines) {
+                doc.text(line, leftMargin, y);
+                y += 5;
+            }
+
+            // Adaugă răspunsul (normal + indentare)
+            const answerText = `Răspuns: ${qa.answer.replace(/[^\x00-\x7F]/g, c => {
+                // Aceeași înlocuire pentru diacritice
+                return c === 'ă' ? 'a' :
+                       c === 'â' ? 'a' :
+                       c === 'î' ? 'i' :
+                       c === 'ș' ? 's' :
+                       c === 'ț' ? 't' :
+                       c === 'Ă' ? 'A' :
+                       c === 'Â' ? 'A' :
+                       c === 'Î' ? 'I' :
+                       c === 'Ș' ? 'S' :
+                       c === 'Ț' ? 'T' : c;
+            })}`;
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+
+            // Împarte manual textul răspunsului în linii de max 75 de caractere (pentru indentare)
+            const answerLines = [];
+            for (let i = 0; i < answerText.length; i += 75) {
+                answerLines.push(answerText.substr(i, 75));
+            }
+
+            // Desenează fiecare linie a răspunsului
+            for (const line of answerLines) {
+                doc.text(line, leftMargin + 5, y);
+                y += 5;
+            }
+
+            // Adaugă spațiu după fiecare răspuns
+            y += 3;
+        }
+
+        // Adaugă data testului pe ultima pagină
+        doc.setFontSize(9);
+        doc.text(`Data testului: ${new Date().toLocaleDateString('ro-RO')}`, leftMargin, pageHeight - 15);
+
+        return doc.output('blob');
+    } catch (error) {
+        console.error('Eroare la generarea PDF-ului:', error);
+        throw error;
+    }
+}
+
+if(exportBtn) {
     exportBtn.addEventListener('click', async () => {
         exportBtn.disabled = true;
         exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se generează PDF-ul...';
 
         try {
-            // Generate PDF
-            const pdf = await generatePDFBlob();
-            const blobUrl = URL.createObjectURL(pdf);
+            // Stochează rezultatele
+            storeTestResults();
 
-            // Create download link
+            // Încearcă să genereze PDF-ul cu noua metodă
+            let pdfBlob;
+
+            try {
+                // Folosește noua metodă optimizată pentru română
+                pdfBlob = await generateFinalPDF();
+            } catch (e) {
+                console.error("Eroare la generarea PDF-ului optimizat:", e);
+
+                // Încearcă metoda anterioară îmbunătățită
+                try {
+                    pdfBlob = await generateImprovedPDF();
+                } catch (e2) {
+                    console.error("Eroare la generarea PDF-ului îmbunătățit:", e2);
+
+                    // Încearcă metoda originală ca ultimă soluție
+                    pdfBlob = await generatePDFBlob();
+                }
+            }
+
+            const blobUrl = URL.createObjectURL(pdfBlob);
+
+            // Creează link-ul de descărcare
             const downloadLink = document.createElement('a');
             downloadLink.href = blobUrl;
             downloadLink.download = 'rezultate_test_raads_r.pdf';
             document.body.appendChild(downloadLink);
 
-            // Handle Facebook in-app browser
+            // Tratează special browser-ul Facebook
             if (navigator.userAgent.match(/(FBAN|FBAV)/i)) {
                 window.open(blobUrl, '_blank');
             } else {
                 downloadLink.click();
             }
 
-            // Cleanup
+            // Curățare
             setTimeout(() => {
                 URL.revokeObjectURL(blobUrl);
                 downloadLink.remove();
             }, 1000);
 
         } catch (error) {
-            console.error('PDF generation failed:', error);
-            alert(`A apărut o eroare la generarea PDF-ului: ${error.message}\nTe rugăm să încerci din nou.`);
+            console.error('Generarea PDF-ului a eșuat:', error);
+            alert(`A apărut o eroare la generarea PDF-ului: ${error.message}\nVă rugăm să încercați din nou.`);
         } finally {
             exportBtn.disabled = false;
             exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Exportă ca PDF';
@@ -1481,6 +1846,9 @@ function reInitializeRadioListeners() {
         if (e.target.type === 'radio') {
             const currentQuestion = e.target.closest('.question');
             if (!currentQuestion) return;
+
+            // Remove highlighting
+            currentQuestion.classList.remove('highlight-unanswered');
 
             currentQuestion.classList.add('completed');
 
@@ -1869,9 +2237,441 @@ function highlightInViewSection() {
     };
 }
 
+// function storeTestResults() {
+//     try {
+//         const results = calculateSubscores();
+//         const answers = {};
+
+//         questions.forEach(question => {
+//             const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
+//             if (selected) {
+//                 answers[question.id] = {
+//                     value: selected.value,
+//                     text: question.text,
+//                     answer: selected.closest('label').querySelector('.form-check-label').textContent.trim()
+//                 };
+//             }
+//         });
+
+//         localStorage.setItem('raads_results', JSON.stringify({
+//             timestamp: new Date().toISOString(),
+//             results: results,
+//             answers: answers
+//         }));
+//     } catch (error) {
+//         console.error('Error storing results:', error);
+//     }
+// }
+
+// DOM-independent PDF generation function
+function generatePDFWithoutDOM() {
+    try {
+        // Get or calculate results
+        let storedData;
+        try {
+            storedData = JSON.parse(localStorage.getItem('raads_results') || '{}');
+        } catch (e) {
+            storedData = {};
+        }
+
+        // If no stored data or it's outdated, calculate fresh
+        const results = storedData.results || calculateSubscores();
+        const { subscores, totalScore } = results;
+        const answers = storedData.answers || {};
+
+        // Create PDF document
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        let y = 20;
+
+        // Helper function for colors
+        const getScoreColor = (score, threshold) => {
+            if (score < threshold) return [76, 175, 80]; // Green
+            if (score < threshold * 1.5) return [255, 193, 7]; // Yellow
+            return [244, 67, 54]; // Red
+        };
+
+        // Add header
+        doc.setFontSize(16);
+        doc.text('Rezultate Test RAADS-R', 105, y, { align: 'center' });
+        y += 15;
+
+        // Add website info
+        doc.setFontSize(10);
+        doc.text('Rezultate generate de www.testautism.ro', 105, y, { align: 'center' });
+        y += 15;
+
+        // Add disclaimer
+        doc.setFontSize(8);
+        doc.setTextColor(255, 0, 0);
+        doc.text('IMPORTANT: Acest test este destinat EXCLUSIV în scop informativ și NU trebuie utilizat ca un instrument de diagnostic.', 105, y, { align: 'center', maxWidth: 180 });
+        doc.setTextColor(0, 0, 0);
+        y += 15;
+
+        // Add total score
+        doc.setFontSize(14);
+        doc.text(`Scor Total: ${totalScore}`, 105, y, { align: 'center' });
+        y += 10;
+
+        // Add interpretation
+        doc.setFontSize(12);
+        doc.text(`Interpretare: ${getInterpretation(totalScore)}`, 105, y, { align: 'center', maxWidth: 150 });
+        y += 20;
+
+        // Add category scores
+        doc.setFontSize(14);
+        doc.text('Scoruri pe categorii:', 20, y);
+        y += 10;
+
+        const categories = [
+            { name: 'Limbaj', score: subscores.language, threshold: RAADS_R_THRESHOLDS.language, max: MAX_SCORES.language },
+            { name: 'Relaționare socială', score: subscores.socialRelatedness, threshold: RAADS_R_THRESHOLDS.socialRelatedness, max: MAX_SCORES.socialRelatedness },
+            { name: 'Senzorial-motor', score: subscores.sensoryMotor, threshold: RAADS_R_THRESHOLDS.sensoryMotor, max: MAX_SCORES.sensoryMotor },
+            { name: 'Interese circumscrise', score: subscores.circumscribedInterests, threshold: RAADS_R_THRESHOLDS.circumscribedInterests, max: MAX_SCORES.circumscribedInterests }
+        ];
+
+        categories.forEach(category => {
+            doc.setFontSize(12);
+            doc.text(`${category.name}: ${category.score} / ${category.max} (Prag: ${category.threshold})`, 25, y);
+            y += 8;
+
+            // Draw a progress bar
+            doc.setDrawColor(220, 220, 220);
+            doc.setFillColor(220, 220, 220);
+            doc.roundedRect(25, y, 150, 5, 1, 1, 'F');
+
+            // Calculate percentage and color
+            const percentage = Math.min(category.score / category.max, 1) * 150;
+            const color = getScoreColor(category.score, category.threshold);
+
+            doc.setDrawColor(color[0], color[1], color[2]);
+            doc.setFillColor(color[0], color[1], color[2]);
+            if (percentage > 0) {
+                doc.roundedRect(25, y, percentage, 5, 1, 1, 'F');
+            }
+
+            // Draw threshold marker
+            const thresholdPosition = (category.threshold / category.max) * 150;
+            doc.setDrawColor(0, 0, 0);
+            doc.setFillColor(0, 0, 0);
+            doc.rect(25 + thresholdPosition, y - 1, 1, 7, 'F');
+
+            y += 10;
+        });
+
+        y += 10;
+
+        // Add questions and answers
+        if (Object.keys(answers).length > 0) {
+            doc.setFontSize(14);
+            doc.text('Răspunsuri la întrebări:', 20, y);
+            y += 10;
+
+            let pageCount = 1;
+
+            Object.entries(answers).forEach(([id, answer]) => {
+                // Check if we need a new page
+                if (y > 270) {
+                    doc.addPage();
+                    y = 20;
+                    pageCount++;
+
+                    // Add page header
+                    doc.setFontSize(10);
+                    doc.text(`Rezultate Test RAADS-R - Pagina ${pageCount}`, 105, 10, { align: 'center' });
+                }
+
+                doc.setFontSize(10);
+                doc.text(`${id}. ${answer.text}`, 20, y, { maxWidth: 170 });
+                y += 8;
+
+                doc.setFontSize(9);
+                doc.text(`Răspuns: ${answer.answer}`, 25, y);
+                y += 12;
+            });
+        }
+
+        // Add date at the bottom of the last page
+        doc.setFontSize(8);
+        doc.text(`Data testului: ${new Date().toLocaleDateString('ro-RO')}`, 20, 280);
+
+        return doc.output('blob');
+    } catch (error) {
+        console.error('Error generating PDF with jsPDF:', error);
+        throw error;
+    }
+}
+
+// Funcție îmbunătățită pentru generarea PDF-ului cu suport pentru diacritice și formatare mai bună
+function generateImprovedPDF() {
+    try {
+        // Obține rezultatele din calcul sau din localStorage
+        let storedData;
+        try {
+            storedData = JSON.parse(localStorage.getItem('raads_results') || '{}');
+        } catch (e) {
+            storedData = {};
+        }
+
+        // Dacă nu există date stocate sau sunt învechite, calculează din nou
+        const results = storedData.results || calculateSubscores();
+        const { subscores, totalScore } = results;
+        const answers = storedData.answers || {};
+
+        // Creează documentul PDF cu font încorporat pentru suport diacritice
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4',
+            putOnlyUsedFonts: true,
+            compress: true
+        });
+
+        // Setează fontul implicit cu suport pentru diacritice românești
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(12);
+
+        // Culori pentru scoruri
+        const colors = {
+            green: [76, 175, 80],
+            yellow: [255, 193, 7],
+            red: [244, 67, 54],
+            blue: [33, 150, 243],
+            lightGrey: [238, 238, 238]
+        };
+
+        // Funcție helper pentru culoarea scorului
+        const getScoreColor = (score, threshold) => {
+            if (score < threshold) return colors.green;
+            if (score < threshold * 1.5) return colors.yellow;
+            return colors.red;
+        };
+
+        // Funcție pentru text cu wrapping și aliniere
+        const addWrappedText = (text, x, y, maxWidth, lineHeight, align = 'left') => {
+            if (!text) return y; // Dacă nu există text, întoarce poziția Y neschimbată
+
+            const textLines = doc.splitTextToSize(text, maxWidth);
+
+            if (align === 'center') {
+                textLines.forEach(line => {
+                    doc.text(line, x, y, { align: 'center' });
+                    y += lineHeight;
+                });
+            } else if (align === 'right') {
+                textLines.forEach(line => {
+                    doc.text(line, x, y, { align: 'right' });
+                    y += lineHeight;
+                });
+            } else {
+                textLines.forEach(line => {
+                    doc.text(line, x, y);
+                    y += lineHeight;
+                });
+            }
+
+            return y; // Returnează noua poziție Y după adăugarea textului
+        };
+
+        // Funcție pentru desenarea unei bare de progres cu indicator de prag
+        const drawProgressBar = (x, y, width, height, percentage, thresholdPercentage, color) => {
+            // Desenează fundal
+            doc.setFillColor(...colors.lightGrey);
+            doc.roundedRect(x, y, width, height, 1, 1, 'F');
+
+            // Desenează bara de progres
+            if (percentage > 0) {
+                doc.setFillColor(...color);
+                doc.roundedRect(x, y, width * percentage / 100, height, 1, 1, 'F');
+            }
+
+            // Desenează marcajul de prag
+            doc.setFillColor(0, 0, 0);
+            doc.rect(x + (width * thresholdPercentage / 100), y - 1, 0.5, height + 2, 'F');
+
+            return y + height;
+        };
+
+        // Adaugă header
+        let y = 15;
+        doc.setFontSize(18);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Rezultate Test RAADS-R', 105, y, { align: 'center' });
+
+        // Adaugă sursa
+        y += 10;
+        doc.setFontSize(10);
+        doc.text('Rezultate generate de www.testautism.ro', 105, y, { align: 'center' });
+
+        // Adaugă disclaimer
+        y += 8;
+        doc.setFontSize(9);
+        doc.setTextColor(221, 44, 0);
+        const disclaimer = 'IMPORTANT: Acest test este destinat EXCLUSIV în scop informativ și NU trebuie utilizat ca un instrument de diagnostic. Pentru evaluări profesionale, vă recomandăm să vizitați www.doctoradhd.com';
+        y = addWrappedText(disclaimer, 20, y, 170, 5, 'center');
+
+        // Resetează culoarea textului
+        doc.setTextColor(0, 0, 0);
+
+        // Adaugă scor total
+        y += 8;
+        doc.setFontSize(16);
+        doc.text(`Scor Total: ${totalScore}`, 105, y, { align: 'center' });
+
+        // Adaugă interpretare
+        y += 7;
+        doc.setFontSize(12);
+        const interpretation = getInterpretation(totalScore);
+        y = addWrappedText(`Interpretare: ${interpretation}`, 20, y, 170, 5, 'center');
+
+        // Titlu secțiune scoruri
+        y += 8;
+        doc.setFontSize(14);
+        doc.text('Scoruri pe categorii:', 20, y);
+
+        // Adaugă scorurile pe categorii
+        y += 8;
+        const categories = [
+            { name: 'Limbaj', score: subscores.language, threshold: RAADS_R_THRESHOLDS.language, max: MAX_SCORES.language },
+            { name: 'Relaționare socială', score: subscores.socialRelatedness, threshold: RAADS_R_THRESHOLDS.socialRelatedness, max: MAX_SCORES.socialRelatedness },
+            { name: 'Senzorial-motor', score: subscores.sensoryMotor, threshold: RAADS_R_THRESHOLDS.sensoryMotor, max: MAX_SCORES.sensoryMotor },
+            { name: 'Interese circumscrise', score: subscores.circumscribedInterests, threshold: RAADS_R_THRESHOLDS.circumscribedInterests, max: MAX_SCORES.circumscribedInterests }
+        ];
+
+        categories.forEach(category => {
+            doc.setFontSize(12);
+            doc.text(`${category.name}: ${category.score} / ${category.max} (Prag: ${category.threshold})`, 25, y);
+            y += 5;
+
+            // Calculează procentaje și culoare
+            const percentage = (category.score / category.max) * 100;
+            const thresholdPercentage = (category.threshold / category.max) * 100;
+            const color = getScoreColor(category.score, category.threshold);
+
+            // Desenează bară progres
+            y = drawProgressBar(25, y, 150, 4, percentage, thresholdPercentage, color) + 2;
+            y += 5;
+        });
+
+        // Adaugă legendă
+        y += 5;
+        doc.setFillColor(...colors.green);
+        doc.rect(25, y, 4, 4, 'F');
+        doc.text('Sub prag', 32, y + 3);
+
+        doc.setFillColor(...colors.yellow);
+        doc.rect(65, y, 4, 4, 'F');
+        doc.text('Aproape de prag', 72, y + 3);
+
+        doc.setFillColor(...colors.red);
+        doc.rect(120, y, 4, 4, 'F');
+        doc.text('Peste prag', 127, y + 3);
+
+        // Adăugă răspunsurile la întrebări
+        y += 12;
+        doc.setFontSize(14);
+        doc.text('Răspunsuri la întrebări:', 20, y);
+        y += 8;
+
+        let pageCount = 1;
+
+        // Pregătește lista de întrebări și răspunsuri
+        const questionAnswers = [];
+        questions.forEach(question => {
+            const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
+            if (selected) {
+                questionAnswers.push({
+                    id: question.id,
+                    text: question.text,
+                    answer: selected.closest('label').querySelector('.form-check-label').textContent.trim()
+                });
+            }
+        });
+
+        // Adaugă răspunsurile
+        questionAnswers.forEach((qa, index) => {
+            // Verifică dacă avem nevoie de pagină nouă
+            if (y > 270) {
+                doc.addPage();
+                pageCount++;
+                y = 20;
+
+                // Adaugă header pagină
+                doc.setFontSize(10);
+                doc.text(`Rezultate Test RAADS-R - Pagina ${pageCount}`, 105, 10, { align: 'center' });
+            }
+
+            // Adaugă întrebarea
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "bold");
+            const questionText = `${qa.id}. ${qa.text}`;
+            y = addWrappedText(questionText, 20, y, 170, 5);
+
+            // Adaugă răspunsul
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            const answerText = `Răspuns: ${qa.answer}`;
+            y = addWrappedText(answerText, 25, y, 165, 5);
+
+            y += 3; // Spațiu după fiecare răspuns
+        });
+
+        // Adaugă data testului pe ultima pagină
+        doc.setFontSize(9);
+        doc.text(`Data testului: ${new Date().toLocaleDateString('ro-RO')}`, 20, 280);
+
+        return doc.output('blob');
+    } catch (error) {
+        console.error('Eroare la generarea PDF-ului cu jsPDF:', error);
+        throw error;
+    }
+}
+
+// Actualizează funcția de stocare a rezultatelor
+function storeTestResults() {
+    try {
+        const results = calculateSubscores();
+        const answers = {};
+
+        questions.forEach(question => {
+            const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
+            if (selected) {
+                answers[question.id] = {
+                    value: selected.value,
+                    text: question.text,
+                    answer: selected.closest('label').querySelector('.form-check-label').textContent.trim()
+                };
+            }
+        });
+
+        localStorage.setItem('raads_results', JSON.stringify({
+            timestamp: new Date().toISOString(),
+            results: results,
+            answers: answers
+        }));
+
+        return true;
+    } catch (error) {
+        console.error('Eroare la stocarea rezultatelor:', error);
+        return false;
+    }
+}
+
 // Initialize the highlight functionality when the document is loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', highlightInViewSection);
 } else {
     highlightInViewSection();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('change', function(e) {
+        if (e.target.type === 'radio') {
+            const currentQuestion = e.target.closest('.question');
+            if (currentQuestion) {
+                currentQuestion.classList.remove('highlight-unanswered');
+            }
+        }
+    });
+});
