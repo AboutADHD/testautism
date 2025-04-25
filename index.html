@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Test Autism Adulți: Ritvo Autism Asperger Diagnostic Scale - Revised (RAADS-R)</title>
+<title>Test Autism Adulți Online | Scalele RAADS-R și CAT-Q (Autoevaluare Autism)</title>
 
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -17,7 +17,7 @@
 <!-- HTML2CANVAS (for Facebook sharing) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<meta name="description" content="Test autoevaluare și autodiagnosticare autism (Tulburare de Spectru Autist - TSA) adulți. RAADS-R oferă evaluare precisă a trăsăturilor autiste" />
+<meta name="description" content="Test de autoevaluare GRATUIT și ANONIM a autismului la adulți (TSA). Cu scalele RAADS-R și CAT-Q poți afla INSTANT dacă scorul tău indică necesitatea unei evaluări clinice profesionale!" />
 <link rel="icon" href="https://www.suntautist.ro/content/images/size/w256h256/2022/01/suntautist-logo-mini.png" type="image/png">
 
 <link rel="canonical" href="https://www.testautism.ro">
@@ -1707,6 +1707,52 @@ body {
     color: #666;
     margin-top: 1rem;
 }
+
+/* Mobile improvements */
+@media (max-width: 768px) {
+    /* Larger touch targets for better mobile accessibility */
+    .form-check {
+        padding: 1.2rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .form-check-input {
+        width: 28px;
+        height: 28px;
+    }
+
+    /* Improve readability on small screens */
+    .question-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Visual separation between sections */
+    .section-divider {
+        height: 8px;
+        background: linear-gradient(to right, #f8f9fa, #e3f2fd, #f8f9fa);
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    /* Sticky section headers for better navigation */
+    .sticky-section-header {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 10;
+        padding: 10px 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+}
+
+/* Improved visibility for active elements */
+.form-check:active,
+.form-check:focus-within {
+    background-color: #e3f2fd;
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+}
 </style>
 
 </head>
@@ -1746,10 +1792,12 @@ body {
             </li>
         </ul>
     </div>
+    <div class="section-divider d-md-none"></div>
     <div class="initial-section justify-content-center">
         <h1 class="text-center mt-4 mb-3" style="font-size: 1.5rem; font-weight: bold;">Test autism adulți - RAADS-R (Ritvo Autism Asperger Diagnostic Scale - Revised)</h1>
+        <h2 class="text-center mb-3" style="font-size: 1.3rem; color: #1976D2;">Autismul la adulți – simptome, diagnostic și autoevaluare</h2>
         <p>
-            Această versiune revizuită (RAADS-R) a <strong>Scalei Ritvo Autism Asperger Diagnostic Scale (RAADS)</strong> este un <strong>instrument orientativ, dar extrem de precis</strong> pentru screening-ul <strong>trăsăturilor autiste la adulți</strong>. Întrebările au fost restructurate pe baza feedback-ului <b>comunității autiste</b> și al unor profesioniști precum <strong>Dr. Natalie Engelbrecht</strong>. Testul constă în <strong>80 de afirmații</strong> pentru screening-ul autismului la adulții care pot <b>„scăpa de sub radarul diagnostic”</b>, din cauza unei prezentări <strong>aparent subclinice.</strong>
+            Acest <strong>test de autism pentru adulți</strong> (disponibil online, în limba română) te ajută să identifici <strong>simptomele autismului la adulți</strong> și oferă un prim pas spre <strong>diagnosticul TSA</strong>. Această versiune revizuită (RAADS-R) a <strong>Scalei Ritvo Autism Asperger Diagnostic Scale (RAADS)</strong> este un <strong>instrument orientativ, dar extrem de precis</strong> pentru screening-ul <strong>trăsăturilor autiste la adulți</strong>. Întrebările au fost restructurate pe baza feedback-ului <b>comunității autiste</b> și al unor profesioniști precum <strong>Dr. Natalie Engelbrecht</strong>. Testul constă în <strong>80 de afirmații</strong> pentru screening-ul autismului la adulții care pot <b>„scăpa de sub radarul diagnostic”</b>, din cauza unei prezentări <strong>aparent subclinice.</strong>
         </p>
         <div class="cta-button-wrapper">
             <div class="cta-emphasis">
@@ -1804,7 +1852,8 @@ body {
         </div>
         <hr>
     </div>
-        <!--RAADS-R explanations-->
+    <!--RAADS-R explanations-->
+    <div class="section-divider d-md-none"></div>
     <div class="features-container">
         <div class="row g-4">
             <!-- Privacy Feature -->
@@ -1875,6 +1924,7 @@ body {
             </div>
         </div>
     </div>
+    <div class="section-divider d-md-none"></div>
     <div class="license-section">
         <h3 class="license-heading">Licență și Utilizare RAADS-R</h3>
         <p class="license-text">
@@ -1890,12 +1940,13 @@ body {
             Toate testele sunt confidențiale și acest site nu colectează informații personale.
         </p>
     </div>
+    <div class="section-divider d-md-none"></div>
     <div class="test-details-container" id="section-intro">
         <!-- General Characteristics -->
         <div class="info-section">
             <div class="section-header">
                 <i class="fas fa-info-circle text-primary me-2"></i>
-                <h3>Caracteristici generale</h3>
+                <h2 class="h3 mb-0">Caracteristici generale ale testului RAADS-R</h2>
             </div>
 
             <div class="version-cards">
@@ -1979,7 +2030,7 @@ body {
         <div class="info-card">
             <div class="card-header">
                 <i class="fas fa-users text-success me-2"></i>
-                <h3>Cui îi este destinat testul?</h3>
+                <h2 class="h3 mb-0">Cui îi este destinat testul?</h2>
             </div>
             <ul class="target-list">
                 <li>
@@ -1997,7 +2048,7 @@ body {
         <div class="info-card">
             <div class="card-header">
                 <i class="fas fa-globe text-info me-2"></i>
-                <h3>Versiuni, disponibilitate și traduceri</h3>
+                <h2 class="h3 mb-0">Care este istoricul testului (versiuni, disponibilitate și traduceri)?</h2>
             </div>
             <div class="availability-content">
                 <p>RAADS-R a fost tradus în limba suedeză și în majoritatea limbilor prin intermediul translatorilor. Totuși, testele RAADS-R online <b><i>NU</i></b> par să abunde.</p>
@@ -2009,7 +2060,7 @@ body {
         <div class="info-card">
             <div class="card-header">
                 <i class="fas fa-tasks text-warning me-2"></i>
-                <h3>Desfășurarea testului</h3>
+                <h2 class="h3 mb-0">Cum se desfășoară testul?</h2>
             </div>
             <div class="process-content">
                 <p>RAADS-R este un instrument de <strong>auto-raportare</strong>, conceput pentru a fi completat de către dumneavoastră. Un <strong>profesionist medical / clinician calificat</strong> poate oferi asistență în interpretarea itemilor dacă aveți dificultăți.</p>
@@ -2026,6 +2077,7 @@ body {
             </div>
         </div>
     </div>
+    <div class="section-divider d-md-none"></div>
     <div class="validity-section">
         <div class="container">
             <div class="validity-card">
@@ -2070,6 +2122,7 @@ body {
             </div>
         </div>
     </div>
+    <div class="section-divider d-md-none"></div>
     <div class="interpretation-section" id="section-instructions">
         <div class="container">
             <div class="row">
@@ -2183,6 +2236,7 @@ body {
             </div>
         </div>
     </div>
+    <div class="section-divider d-md-none"></div>
     <div class="test-actual-container" id="section-quiz">
         <!-- Disclaimer -->
         <div id="first-disclaimer" class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
@@ -2261,8 +2315,8 @@ body {
                 Începe un nou test
             </button>
         </div>
-
     </div>
+    <div class="section-divider d-md-none"></div>
     <div class="scores-interpretation-section my-5" id="section-results">
         <div class="container">
             <!-- Main Title Section -->
@@ -2333,6 +2387,7 @@ body {
             </div>
         </div>
     </div>
+    <div class="section-divider d-md-none"></div>
     <div class="scores-section">
         <!-- Score Significance Table -->
         <div class="score-card">
@@ -2432,6 +2487,7 @@ body {
             </div>
         </div>
     </div>
+    <div class="section-divider d-md-none"></div>
     <div class="scoring-system">
         <div class="scoring-container">
             <!-- Regular Scoring -->
@@ -2546,6 +2602,7 @@ body {
             </div>
         </div>
     </div>
+    <div class="section-divider d-md-none"></div>
     <div class="services-section" id="section-support">
         <div class="services-container">
             <!-- Header Section -->
@@ -3690,7 +3747,7 @@ document.getElementById('sendEmailBtn').addEventListener('click', async function
                     putOnlyUsedFonts: true,
                     compress: true
                 },
-                pagebreak: { 
+                pagebreak: {
                     mode: ['avoid-all', 'css', 'legacy']
                 }
             };
@@ -3736,7 +3793,7 @@ document.getElementById('sendEmailBtn').addEventListener('click', async function
             }
 
             const result = await response.json();
-            
+
             if (result.success) {
                 // Show success message
                 emailModal.hide();
