@@ -6,8 +6,8 @@ const questions = [
     { id: 3, text: "Uneori nu-mi dau seama că vorbele sau acțiunile mele pot părea grosolane pentru ceilalți.", inverse: false },
     { id: 4, text: "Am dificultăți în a-mi regla volumul vocii, vorbind uneori prea tare sau prea încet.", inverse: false },
     { id: 5, text: "În situații sociale, de multe ori mă simt nesigur(ă) în legătură cu cum să mă comport.", inverse: false },
-    { id: 6, text: "Pot să îmi imaginez perspectivele altora, deși poate necesita efort suplimentar pentru a înțelege sentimentele lor.", inverse: false },
-    { id: 7, text: "Limbajul figurativ (ex. „ești mărul ochilor mei”) este dificil de înțeles pentru mine.", inverse: false },
+    { id: 6, text: "Pot să îmi imaginez perspectivele altora, deși poate necesită efort suplimentar pentru a înțelege sentimentele lor.", inverse: false },
+    { id: 7, text: "Limbajul figurativ (ex. „ești mărul ochilor mei") este dificil de înțeles pentru mine.", inverse: false },
     { id: 8, text: "Mă simt cel mai confortabil vorbind cu oameni care împărtășesc aceleași interese ca mine.", inverse: true },
     { id: 9, text: "Mă concentrez pe detalii mici înainte de a vedea imaginea de ansamblu.", inverse: false },
     { id: 10, text: "Textura mâncării în gură este mai importantă pentru mine decât gustul ei.", inverse: false },
@@ -20,7 +20,7 @@ const questions = [
     { id: 17, text: "Am fost descris(ă) ca fiind diferit(ă) sau neconvențional(ă).", inverse: true },
     { id: 18, text: "Recunosc când cineva apropiat are nevoie de consolare, deși poate că nu știu întotdeauna cum să reacționez.", inverse: true },
     { id: 19, text: "Sunt foarte sensibil(ă) la cum simt hainele pe pielea mea.", inverse: false },
-    { id: 20, text: "Uneori copiez comportamentele altora pentru a mă integra sau pentru a părea mai „normal(ă)”.", inverse: false },
+    { id: 20, text: "Uneori copiez comportamentele altora pentru a mă integra sau pentru a părea mai „normal(ă)".", inverse: false },
     { id: 21, text: "A vorbi cu mai multe persoane în același timp poate fi copleșitor sau intimidant pentru mine.", inverse: false },
     { id: 22, text: "Simt deseori presiunea de a mă comporta așa cum se așteaptă ceilalți, chiar dacă nu este natural pentru mine.", inverse: false },
     { id: 23, text: "Întâlnirile cu oameni noi pot fi dificile sau stresante pentru mine.", inverse: false },
@@ -31,11 +31,11 @@ const questions = [
     { id: 28, text: "Îmi este dificil să recunosc când cineva simte emoții precum jenă sau invidie.", inverse: false },
     { id: 29, text: "Anumite texturi care nu deranjează pe alții pot fi foarte inconfortabile pentru mine.", inverse: false },
     { id: 30, text: "Mă supăr când rutina mea este schimbată neașteptat.", inverse: false },
-    { id: 31, text: "Nu am simțit niciodată nevoia de a fi într-o relație „intimă” așa cum o numesc alții.", inverse: false },
+    { id: 31, text: "Nu am simțit niciodată nevoia de a fi într-o relație „intimă" așa cum o numesc alții.", inverse: false },
     { id: 32, text: "Îmi este greu să încep sau să opresc o conversație până nu simt că mi-am terminat gândurile.", inverse: false },
     { id: 33, text: "Vorbesc cu un ritm și ton de voce considerat tipic de cei din jurul meu.", inverse: true },
     { id: 34, text: "Același sunet, culoare sau textură mă poate afecta diferit la momente diferite.", inverse: false },
-    { id: 35, text: "Unele expresii, cum ar fi „te am sub piele,” mă fac să mă simt inconfortabil sau sunt greu de înțeles.", inverse: false },
+    { id: 35, text: "Unele expresii, cum ar fi „te am sub piele," mă fac să mă simt inconfortabil sau sunt greu de înțeles.", inverse: false },
     { id: 36, text: "Anumite sunete, cum ar fi zgomotele înalte sau anumite cuvinte, pot fi dureroase fizic de auzit.", inverse: false },
     { id: 37, text: "Încerc să fiu înțelegător/înțelegătoare atunci când alții își împărtășesc sentimentele sau problemele personale cu mine.", inverse: true },
     { id: 38, text: "Nu mă conectez ușor emoțional cu personajele din filme sau povești.", inverse: true },
@@ -58,15 +58,15 @@ const questions = [
     { id: 55, text: "Îmi este foarte dificil să lucrez și să funcționez în grupuri.", inverse: false },
     { id: 56, text: "Când cineva schimbă subiectul în timp ce vorbesc, mă simt derutat(ă) și confuz(ă).", inverse: false },
     { id: 57, text: "Uneori trebuie să îmi acopăr urechile pentru a bloca zgomotele copleșitoare (ex. vocile puternice, aspiratorul).", inverse: false },
-    { id: 58, text: "Sunt capabil(ă) să port conversații lejere, deși poate necesita un efort suplimentar.", inverse: false },
+    { id: 58, text: "Sunt capabil(ă) să port conversații lejere, deși poate necesită un efort suplimentar.", inverse: false },
     { id: 59, text: "Uneori lucruri care ar trebui să fie dureroase, cum ar fi rănile, nu par să provoace atâta durere.", inverse: false },
     { id: 60, text: "Când vorbesc cu cineva, îmi este adesea greu să îmi dau seama când este rândul meu să vorbesc sau să ascult.", inverse: false },
-    { id: 61, text: "Sunt deseori văzut(ă) ca un „lup singuratic” de către cei care mă cunosc cel mai bine.", inverse: false },
+    { id: 61, text: "Sunt deseori văzut(ă) ca un „lup singuratic" de către cei care mă cunosc cel mai bine.", inverse: false },
     { id: 62, text: "Vorbesc de obicei cu un ton de voce pe care ceilalți îl consideră tipic.", inverse: true },
     { id: 63, text: "Prefer ca lucrurile să rămână la fel zi după zi și chiar și schimbările mici mă pot deranja.", inverse: false },
     { id: 64, text: "Găsesc că este dificil și confuz să îmi fac prieteni și să socializez.", inverse: false },
     { id: 65, text: "Mă liniștește să fac mișcări repetitive, cum ar fi învârtirea sau balansarea, când sunt stresat(ă).", inverse: false },
-    { id: 66, text: "Expresii precum „își poartă inima pe mânecă” nu au sens pentru mine.", inverse: false },
+    { id: 66, text: "Expresii precum „își poartă inima pe mânecă" nu au sens pentru mine.", inverse: false },
     { id: 67, text: "Luminile puternice, mirosurile intense sau zgomotele puternice mă pot face să mă simt anxios/anxioasă sau copleșit(ă).", inverse: false },
     { id: 68, text: "Îmi dau seama când cineva spune un lucru, dar vrea să însemne altceva.", inverse: true },
     { id: 69, text: "Îmi place să petrec timp singur(ă) cât de mult pot.", inverse: false },
@@ -293,6 +293,9 @@ const startBtn = document.getElementById('start-test');
 // Share button
 const shareBtn = document.getElementById('shareBtn');
 
+// Result announcer for screen readers
+const resultAnnouncer = document.getElementById('result-announcer');
+
 // Form generation with Bootstrap classes with enhanced accessibility
 questions.forEach((question, index) => {
     const questionDiv = document.createElement('div');
@@ -324,7 +327,7 @@ questions.forEach((question, index) => {
     // Add legend for screen readers
     const legend = document.createElement('legend');
     legend.classList.add('sr-only');
-    legend.innerHTML = `Opțiuni pentru <b>întrebarea ${question.id}</b>`;
+    legend.innerHTML = `Opțiuni pentru întrebarea ${question.id}`;
     fieldset.appendChild(legend);
 
     const options = [
@@ -492,6 +495,13 @@ function getInterpretation(score) {
     return 'Scor foarte ridicat, specific persoanelor autiste.';
 }
 
+// Function to announce results to screen readers
+function announceResult(totalScore, interpretation) {
+    if (!resultAnnouncer) return;
+
+    resultAnnouncer.textContent = `Rezultat test: Scor total ${totalScore}. ${interpretation}`;
+}
+
 const getProgressMessage = function(percentage, answered) {
     if (percentage === 0) {
         return '🚀 Hai să începem! Primul pas este cel mai important! 💫';
@@ -547,7 +557,7 @@ const getProgressMessage = function(percentage, answered) {
     `;
 };
 
-// Progress tracking function
+// Progress tracking function with optimized scroll handling (debounced)
 function initProgressTracking() {
     // Create and insert progress bar
     const progressHtml = `
@@ -569,10 +579,8 @@ function initProgressTracking() {
     const questionsCompleted = document.querySelector('.questions-completed');
     const timeEstimate = document.querySelector('.time-estimate');
     const progressMessage = document.querySelector('.progress-message');
-
-    // Scroll monitoring for .test-actual-container
-    const testContainer = document.querySelector('.test-actual-container');
     const progressContainer = document.querySelector('.progress-container');
+    const testContainer = document.querySelector('.test-actual-container');
 
     // Helper function to check if we're within the test section
     function isInTestSection() {
@@ -589,83 +597,32 @@ function initProgressTracking() {
         return currentScroll >= testStart && currentScroll <= testEnd;
     }
 
-    // Simplified scroll handler - no direction checking
+    // Debounced scroll handler for better performance
+    let scrollTimeout;
     function handleScroll() {
-        if (isInTestSection()) {
-            progressContainer.classList.add('visible');
-        } else {
-            progressContainer.classList.remove('visible');
-        }
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+
+        scrollTimeout = setTimeout(() => {
+            if (isInTestSection()) {
+                progressContainer.classList.add('visible');
+            } else {
+                progressContainer.classList.remove('visible');
+            }
+        }, 100);
     }
 
-    // Helper function to check if we're within the test section
-    function isInTestSection() {
-        if (!testContainer) return false;
-
-        const testRect = testContainer.getBoundingClientRect();
-        const testStart = testContainer.offsetTop;
-        const testEnd = testStart + testContainer.offsetHeight;
-        const currentScroll = window.scrollY;
-
-        // Consider the section "active" when:
-        // 1. We've scrolled past its start (accounting for progress bar height)
-        // 2. We haven't scrolled past its end
-        return currentScroll >= testStart && currentScroll <= testEnd;
-    }
-
-    // Simplified scroll handler - no direction checking
-    function handleScroll() {
-        if (isInTestSection()) {
-            progressContainer.classList.add('visible');
-        } else {
-            progressContainer.classList.remove('visible');
-        }
-    }
-
-    // Monitor scroll position
+    // Monitor scroll position with passive listener for performance
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     // Initial check
     handleScroll();
 
-    // Handle window resize
-    window.addEventListener('resize', handleScroll, { passive: true });
-
-    let lastScrollTop = 0;
-
-    function isElementInViewport(el) {
-        const rect = el.getBoundingClientRect();
-        return (
-            rect.top <= 0 &&
-            rect.bottom >= 0
-        );
-    }
-
-    // Monitor scroll position
-    // window.addEventListener('scroll', () => {
-    //     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    //     // Check if test container is in viewport
-    //     if (testContainer) {
-    //         const testRect = testContainer.getBoundingClientRect();
-    //         const isTestVisible = testRect.top < window.innerHeight && testRect.bottom > 0;
-
-    //         if (isTestVisible) {
-    //             // Show progress bar when scrolling up or at top of test section
-    //             if (scrollTop < lastScrollTop || scrollTop <= testContainer.offsetTop) {
-    //                 progressContainer.classList.add('visible');
-    //             } else {
-    //                 // Hide when scrolling down
-    //                 progressContainer.classList.remove('visible');
-    //             }
-    //         } else {
-    //             // Hide when test section is not visible
-    //             progressContainer.classList.remove('visible');
-    //         }
-    //     }
-
-    //     lastScrollTop = scrollTop;
-    // });
+    // Handle window resize with debouncing
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(handleScroll, 200);
+    }, { passive: true });
 
     // Update progress function
     function updateProgress() {
@@ -694,7 +651,7 @@ function initProgressTracking() {
         timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
     }
 
-    // Enhanced radio button change handler
+    // Enhanced radio button change handler with event delegation for better performance
     form.addEventListener('change', (e) => {
         if (e.target.type === 'radio') {
             const currentQuestion = e.target.closest('.question');
@@ -730,13 +687,16 @@ function initProgressTracking() {
         destroy: () => {
             window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('resize', handleScroll);
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+            if (resizeTimeout) clearTimeout(resizeTimeout);
         }
     };
 }
 
+// Scroll to question helper function
 function scrollToQuestion(questionElement) {
     const progressContainer = document.querySelector('.progress-container');
-    const progressHeight = progressContainer.classList.contains('visible') ?
+    const progressHeight = progressContainer && progressContainer.classList.contains('visible') ?
                           progressContainer.offsetHeight : 0;
 
     const targetPosition = questionElement.getBoundingClientRect().top +
@@ -749,9 +709,10 @@ function scrollToQuestion(questionElement) {
     });
 }
 
-// Add intersection observer to monitor test section visibility
+// Intersection Observer to monitor test section visibility
 function initTestSectionObserver() {
     const progressContainer = document.querySelector('.progress-container');
+    if (!progressContainer) return;
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -773,17 +734,26 @@ function initTestSectionObserver() {
     if (testContainer) {
         observer.observe(testContainer);
     }
+
+    return observer;
 }
 
 // Initialize everything
 function initProgressTracker() {
-    initProgressTracking();
-    initTestSectionObserver();
+    const progressTracker = initProgressTracking();
+    const sectionObserver = initTestSectionObserver();
+
+    return {
+        destroy: () => {
+            if (progressTracker && progressTracker.destroy) progressTracker.destroy();
+            if (sectionObserver && sectionObserver.disconnect) sectionObserver.disconnect();
+        }
+    };
 }
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initProgressTracking);
+    document.addEventListener('DOMContentLoaded', initProgressTracker);
 } else {
     initProgressTracker();
 }
@@ -796,7 +766,9 @@ emailBtn.style.display = 'none';
 emailBtn.innerHTML = '<i class="fas fa-envelope"></i> Trimite pe Email';
 
 // Insert email button after export button
-exportBtn.parentNode.insertBefore(emailBtn, exportBtn.nextSibling);
+if (exportBtn && exportBtn.parentNode) {
+    exportBtn.parentNode.insertBefore(emailBtn, exportBtn.nextSibling);
+}
 
 // Submit button click handler
 submitBtn.addEventListener('click', (e) => {
@@ -848,150 +820,346 @@ submitBtn.addEventListener('click', (e) => {
         return;
     }
 
-    // Calculate scores
-    const results = calculateSubscores(questions);
-    const { subscores, totalScore, diagnosticIndicators } = results;
-    const interpretation = getInterpretation(totalScore);
+    try {
+        // Calculate scores
+        const results = calculateSubscores();
+        const { subscores, totalScore, diagnosticIndicators } = results;
+        const interpretation = getInterpretation(totalScore);
 
-    // Create enhanced results HTML
-    resultDiv.innerHTML = `
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-white py-3">
-                <h2 class="card-title text-center mb-0 fw-bold">Rezultate Test RAADS-R</h2>
-            </div>
-            <div class="card-body p-4">
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="total-score-section text-center p-4 mb-4" style="background-color: #f8f9fa; border-radius: 8px;">
-                            <h3 class="h4 mb-3">Scor Total</h3>
-                            <div class="display-4 mb-2">${totalScore}</div>
-                            <p class="mb-0 text-muted">${interpretation}</p>
+        // Announce result to screen readers
+        announceResult(totalScore, interpretation);
+
+        // Create enhanced results HTML
+        resultDiv.innerHTML = `
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h2 class="card-title text-center mb-0 fw-bold">Rezultate Test RAADS-R</h2>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="total-score-section text-center p-4 mb-4" style="background-color: #f8f9fa; border-radius: 8px;">
+                                <h3 class="h4 mb-3">Scor Total</h3>
+                                <div class="display-4 mb-2">${totalScore}</div>
+                                <p class="mb-0 text-muted">${interpretation}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="mb-4 fw-bold">Scoruri pe categorii</h4>
+
+                    <!-- Visual score components -->
+                    ${createScoreVisual('Limbaj', subscores.language, RAADS_R_THRESHOLDS.language, 21)}
+                    ${createScoreVisual('Relaționare socială', subscores.socialRelatedness, RAADS_R_THRESHOLDS.socialRelatedness, 117)}
+                    ${createScoreVisual('Senzorial-motor', subscores.sensoryMotor, RAADS_R_THRESHOLDS.sensoryMotor, 60)}
+                    ${createScoreVisual('Interese circumscrise', subscores.circumscribedInterests, RAADS_R_THRESHOLDS.circumscribedInterests, 42)}
+
+                    <!-- Category Interpretations -->
+                    <div class="mt-4 pt-3 border-top">
+                        <div class="category-interpretations">
+                            <h5 class="mb-3">Interpretare pe categorii:</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">Limbaj: ${getCategoryInterpretation('language', subscores.language)}</li>
+                                <li class="mb-2">Relaționare socială: ${getCategoryInterpretation('socialRelatedness', subscores.socialRelatedness)}</li>
+                                <li class="mb-2">Senzorial-motor: ${getCategoryInterpretation('sensoryMotor', subscores.sensoryMotor)}</li>
+                                <li class="mb-2">Interese circumscrise: ${getCategoryInterpretation('circumscribedInterests', subscores.circumscribedInterests)}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="mt-4 pt-3 border-top">
+                        <div class="d-flex align-items-center mb-3">
+                            <div style="width: 12px; height: 12px; background-color: #4CAF50; border-radius: 50%; margin-right: 8px;"></div>
+                            <small class="text-muted">Sub prag</small>
+
+                            <div style="width: 12px; height: 12px; background-color: #FFC107; border-radius: 50%; margin: 0 8px 0 16px;"></div>
+                            <small class="text-muted">Aproape de prag</small>
+
+                            <div style="width: 12px; height: 12px; background-color: #F44336; border-radius: 50%; margin: 0 8px 0 16px;"></div>
+                            <small class="text-muted">Peste prag</small>
+                        </div>
+
+                        <div class="alert alert-info mb-0">
+                            <small>
+                                <i class="fas fa-info-circle me-2"></i>
+                                Liniile negre verticale indică pragurile pentru fiecare categorie.
+                            </small>
                         </div>
                     </div>
                 </div>
-
-                <h4 class="mb-4 fw-bold">Scoruri pe categorii</h4>
-
-                <!-- Visual score components -->
-                ${createScoreVisual('Limbaj', subscores.language, RAADS_R_THRESHOLDS.language, 21)}
-                ${createScoreVisual('Relaționare socială', subscores.socialRelatedness, RAADS_R_THRESHOLDS.socialRelatedness, 117)}
-                ${createScoreVisual('Senzorial-motor', subscores.sensoryMotor, RAADS_R_THRESHOLDS.sensoryMotor, 60)}
-                ${createScoreVisual('Interese circumscrise', subscores.circumscribedInterests, RAADS_R_THRESHOLDS.circumscribedInterests, 42)}
-
-                <!-- Category Interpretations -->
-                <div class="mt-4 pt-3 border-top">
-                    <div class="category-interpretations">
-                        <h5 class="mb-3">Interpretare pe categorii:</h5>
-                        <ul class="list-unstyled">
-                            <li class="mb-2">Limbaj: ${getCategoryInterpretation('language', subscores.language)}</li>
-                            <li class="mb-2">Relaționare socială: ${getCategoryInterpretation('socialRelatedness', subscores.socialRelatedness)}</li>
-                            <li class="mb-2">Senzorial-motor: ${getCategoryInterpretation('sensoryMotor', subscores.sensoryMotor)}</li>
-                            <li class="mb-2">Interese circumscrise: ${getCategoryInterpretation('circumscribedInterests', subscores.circumscribedInterests)}</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Legend -->
-                <div class="mt-4 pt-3 border-top">
-                    <div class="d-flex align-items-center mb-3">
-                        <div style="width: 12px; height: 12px; background-color: #4CAF50; border-radius: 50%; margin-right: 8px;"></div>
-                        <small class="text-muted">Sub prag</small>
-
-                        <div style="width: 12px; height: 12px; background-color: #FFC107; border-radius: 50%; margin: 0 8px 0 16px;"></div>
-                        <small class="text-muted">Aproape de prag</small>
-
-                        <div style="width: 12px; height: 12px; background-color: #F44336; border-radius: 50%; margin: 0 8px 0 16px;"></div>
-                        <small class="text-muted">Peste prag</small>
-                    </div>
-
-                    <div class="alert alert-info mb-0">
-                        <small>
-                            <i class="fas fa-info-circle me-2"></i>
-                            Liniile negre verticale indică pragurile pentru fiecare categorie.
-                        </small>
-                    </div>
-                </div>
             </div>
-        </div>
-    `;
+        `;
 
-    // Update UI state
-    resultDiv.style.display = 'block';
-    submitBtn.style.display = 'none';
-    exportBtn.style.display = 'block';
-    restartBtn.style.display = 'block';
-    shareBtn.style.display = 'block';
+        // Update UI state
+        resultDiv.style.display = 'block';
+        submitBtn.style.display = 'none';
+        exportBtn.style.display = 'block';
+        restartBtn.style.display = 'block';
+        shareBtn.style.display = 'block';
 
-    // Hide progress bar
-    const progressContainer = document.querySelector('.progress-container');
-    if (progressContainer) {
-        // First remove 'visible' class with transition
-        progressContainer.classList.remove('visible');
+        // Hide progress bar
+        const progressContainer = document.querySelector('.progress-container');
+        if (progressContainer) {
+            // First remove 'visible' class with transition
+            progressContainer.classList.remove('visible');
 
-        // After transition, force hide
-        setTimeout(() => {
-            progressContainer.style.display = 'none';
-        }, 300); // Match this with your CSS transition time
-    }
-
-    // Update the padding of test container to prevent layout jump
-    const testContainer = document.querySelector('.test-actual-container');
-    if (testContainer) {
-        testContainer.style.paddingTop = '20px'; // Reset to default padding
-    }
-
-    // Disable all radio inputs
-    document.querySelectorAll('input[type="radio"]').forEach(radio => {
-        radio.disabled = true;
-    });
-
-    emailBtn.style.display = 'block';
-
-    // Scroll to results
-    setTimeout(() => {
-        const resultElement = document.getElementById('result');
-        if (resultElement) {
-            const headerOffset = 20;
-            const elementPosition = resultElement.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
+            // After transition, force hide
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+            }, 300); // Match this with your CSS transition time
         }
-    }, 100);
+
+        // Update the padding of test container to prevent layout jump
+        const testContainer = document.querySelector('.test-actual-container');
+        if (testContainer) {
+            testContainer.style.paddingTop = '20px'; // Reset to default padding
+        }
+
+        // Disable all radio inputs
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.disabled = true;
+        });
+
+        emailBtn.style.display = 'block';
+
+        // Scroll to results
+        setTimeout(() => {
+            const resultElement = document.getElementById('result');
+            if (resultElement) {
+                const headerOffset = 20;
+                const elementPosition = resultElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }, 100);
+    } catch (error) {
+        console.error('Error calculating scores:', error);
+        errorDiv.innerHTML = `A apărut o eroare în timpul calculării scorului: ${error.message}`;
+        errorDiv.style.display = 'block';
+    }
 });
 
 // Email button click handler
 emailBtn.addEventListener('click', function() {
-    emailModal.show();
-
-// Send email handler
-document.getElementById('sendEmailBtn').addEventListener('click', async function() {
-    const emailForm = document.getElementById('emailForm');
-    const recipientEmail = document.getElementById('recipientEmail').value;
-    const gdprConsent = document.getElementById('gdprConsent').checked;
-    const sendEmailBtn = this;
-
-    // Validate form
-    if (!emailForm.checkValidity() || !gdprConsent) {
-        emailForm.reportValidity();
-        return;
+    // Create modal if it doesn't exist
+    if (!document.getElementById('emailModal')) {
+        const modalHtml = `
+        <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="emailModalLabel">Trimite rezultatele pe email</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="emailForm">
+                            <div class="mb-3">
+                                <label for="recipientEmail" class="form-label">Adresa de email</label>
+                                <input type="email" class="form-control" id="recipientEmail" required
+                                       placeholder="exemplu@gmail.com">
+                                <div class="form-text">Rezultatele vor fi trimise la această adresă.</div>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="gdprConsent" required>
+                                <label class="form-check-label" for="gdprConsent">
+                                    Sunt de acord cu prelucrarea datelor mele personale în scopul trimiterii rezultatelor pe email.
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anulează</button>
+                        <button type="button" class="btn btn-primary" id="sendEmailBtn">
+                            <i class="fas fa-paper-plane"></i> Trimite
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
     }
 
-    try {
-        // Show loading state
-        sendEmailBtn.disabled = true;
-        sendEmailBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Se trimite...';
+    // Initialize modal
+    const emailModal = new bootstrap.Modal(document.getElementById('emailModal'));
+    emailModal.show();
 
-        // Create temporary container for PDF generation
+    // Send email handler - attach once, not every time we click email button
+    if (!document.getElementById('sendEmailBtn').hasAttribute('data-handler-attached')) {
+        document.getElementById('sendEmailBtn').setAttribute('data-handler-attached', 'true');
+
+        document.getElementById('sendEmailBtn').addEventListener('click', async function() {
+            const emailForm = document.getElementById('emailForm');
+            const recipientEmail = document.getElementById('recipientEmail').value;
+            const gdprConsent = document.getElementById('gdprConsent').checked;
+            const sendEmailBtn = this;
+
+            // Validate form
+            if (!emailForm.checkValidity() || !gdprConsent) {
+                emailForm.reportValidity();
+                return;
+            }
+
+            try {
+                // Show loading state
+                sendEmailBtn.disabled = true;
+                sendEmailBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Se trimite...';
+
+                // Create temporary container for PDF generation
+                const container = document.createElement('div');
+                container.style.cssText = `
+                    width: 595px;
+                    background: white;
+                    position: fixed;
+                    left: -9999px;
+                    top: 0;
+                    padding: 40px;
+                    z-index: -9999;
+                    font-family: Arial, sans-serif;
+                    font-size: 11px;
+                    color: black;
+                    box-sizing: border-box;
+                `;
+                document.body.appendChild(container);
+
+                try {
+                    // Calculate scores
+                    const results = calculateSubscores();
+                    const { totalScore } = results;
+                    const interpretation = getInterpretation(totalScore);
+
+                    // Generate PDF options
+                    const opt = {
+                        margin: [30, 20, 30, 20],
+                        filename: 'rezultate_test_raads_r.pdf',
+                        image: { type: 'jpeg', quality: 1 },
+                        html2canvas: {
+                            scale: 2,
+                            useCORS: true,
+                            allowTaint: true,
+                            backgroundColor: '#FFFFFF',
+                            width: 595
+                        },
+                        jsPDF: {
+                            unit: 'pt',
+                            format: 'a4',
+                            orientation: 'portrait',
+                            putOnlyUsedFonts: true,
+                            compress: true
+                        },
+                        pagebreak: {
+                            mode: ['avoid-all', 'css', 'legacy']
+                        }
+                    };
+
+                    // Generate PDF and get as blob
+                    const pdfBlob = await html2pdf().set(opt).from(container).outputPdf('blob');
+
+                    // Convert blob to base64
+                    const base64Data = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = () => reject(new Error('Failed to read PDF file'));
+                        reader.readAsDataURL(pdfBlob);
+                    });
+
+                    // Prepare data for sending
+                    const requestData = {
+                        email: recipientEmail,
+                        score: totalScore,
+                        interpretation: interpretation,
+                        pdfData: base64Data
+                    };
+
+                    console.log('Sending email request with data:', {
+                        email: requestData.email,
+                        score: requestData.score,
+                        interpretation: requestData.interpretation,
+                        pdfDataLength: requestData.pdfData.length
+                    });
+
+                    // Send request to backend
+                    const response = await fetch('/send-results-email.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Failed to send email');
+                    }
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // Show success message
+                        emailModal.hide();
+                        alert('Email-ul a fost trimis cu succes!');
+                    } else {
+                        throw new Error(result.error || 'Failed to send email');
+                    }
+
+                } finally {
+                    // Clean up temporary container
+                    if (container && container.parentNode) {
+                        container.parentNode.removeChild(container);
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error sending email:', error);
+                alert('A apărut o eroare la trimiterea email-ului: ' + error.message);
+            } finally {
+                // Reset button state
+                sendEmailBtn.disabled = false;
+                sendEmailBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Trimite';
+            }
+        });
+    }
+});
+
+// Start test button click handler
+if (startBtn) {
+    startBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // Smooth scroll to disclaimer section
+        const disclaimerSection = document.getElementById('first-disclaimer');
+        if (disclaimerSection) {
+            disclaimerSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+}
+
+// Helper function to format scores
+function formatScore(score) {
+    return typeof score === 'number' && !isNaN(score) ? score : 0;
+}
+
+// Helper function to safely generate PDF Blob with better error handling
+async function generatePDFBlob() {
+    try {
+        const results = calculateSubscores();
+        const { subscores, totalScore } = results;
+
+        // Create container with A4 dimensions
         const container = document.createElement('div');
         container.style.cssText = `
-            width: 595px;
+            width: 595px; /* A4 width in points */
             background: white;
             position: fixed;
-            left: -9999px;
+            left: 0;
             top: 0;
             padding: 40px;
             z-index: -9999;
@@ -1002,547 +1170,205 @@ document.getElementById('sendEmailBtn').addEventListener('click', async function
         `;
         document.body.appendChild(container);
 
+        const getScoreColor = (score, threshold) => {
+            if (score < threshold) return '#4CAF50';
+            if (score < threshold * 1.5) return '#FFC107';
+            return '#F44336';
+        };
+
+        // Clean answer text function
+        const cleanAnswerText = (text) => {
+            // Remove the explanatory text in parentheses
+            return text.split('(')[0].trim();
+        };
+
+        const contentHtml = `
+            <div style="background: white; color: black; max-width: 515px;">
+                <h1 style="font-size: 16px; text-align: center; margin-bottom: 12px; color: black;">
+                    Rezultate Test RAADS-R
+                </h1>
+
+                <div style="text-align: center; background-color: #f8f9fa; padding: 8px; margin: 12px 0; border-radius: 4px;">
+                    <span style="color: #666; font-size: 10px;">Rezultate generate de</span><br>
+                    <a href="https://www.testautism.ro" style="color: #2196F3; font-size: 12px; font-weight: bold;">
+                        www.testautism.ro
+                    </a>
+                </div>
+
+                <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin: 12px 0; border-radius: 4px;">
+                    <p style="color: #856404; margin: 0; font-size: 10px; line-height: 1.4;">
+                        <strong>IMPORTANT:</strong> Acest test este destinat <strong>EXCLUSIV</strong> în scop informativ și
+                        <strong>NU</strong> trebuie utilizat ca un instrument de diagnostic. Pentru evaluări profesionale,
+                        vă recomandăm să vizitați <a href="https://www.doctoradhd.com" style="color: #856404; font-weight: bold;">www.doctoradhd.com</a>
+                    </p>
+                </div>
+
+                <div style="text-align: center; background-color: #f8f9fa; padding: 12px; margin: 12px 0; border-radius: 4px;">
+                    <h2 style="font-size: 14px; margin-bottom: 8px; color: black;">Scor Total: ${totalScore}</h2>
+                    <p style="color: #666; font-size: 11px; line-height: 1.4;">${getInterpretation(totalScore)}</p>
+                </div>
+
+                <h3 style="font-size: 13px; margin: 12px 0; color: black;">Scoruri pe categorii:</h3>
+
+                <div style="margin-bottom: 20px;">
+                    ${Object.entries({
+                        'Limbaj': { score: subscores.language, threshold: RAADS_R_THRESHOLDS.language, max: MAX_SCORES.language },
+                        'Relaționare socială': { score: subscores.socialRelatedness, threshold: RAADS_R_THRESHOLDS.socialRelatedness, max: MAX_SCORES.socialRelatedness },
+                        'Senzorial-motor': { score: subscores.sensoryMotor, threshold: RAADS_R_THRESHOLDS.sensoryMotor, max: MAX_SCORES.sensoryMotor },
+                        'Interese circumscrise': { score: subscores.circumscribedInterests, threshold: RAADS_R_THRESHOLDS.circumscribedInterests, max: MAX_SCORES.circumscribedInterests }
+                    }).map(([category, data]) => {
+                        const percentage = (data.score / data.max) * 100;
+                        const color = getScoreColor(data.score, data.threshold);
+                        return `
+                            <div style="margin-bottom: 16px; background: white;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <strong style="color: black; font-size: 11px;">${category}</strong>
+                                    <span style="color: black; font-size: 11px;">${data.score} / ${data.max}</span>
+                                </div>
+                                <div style="position: relative; height: 16px; background-color: #e9ecef; border-radius: 3px; overflow: hidden;">
+                                    <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${percentage}%; background-color: ${color};"></div>
+                                    <div style="position: absolute; left: ${(data.threshold/data.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-top: 2px; font-size: 9px; color: #666;">
+                                    <span>0</span>
+                                    <span>Prag: ${data.threshold}</span>
+                                    <span>${data.max}</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <div style="margin: 16px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                    <strong style="color: black; font-size: 11px;">Legendă:</strong><br>
+                    <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
+                    <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
+                    <span style="color: #F44336;">■</span> Peste prag
+                </div>
+
+                <div style="margin-top: 16px; text-align: right; color: #666; font-size: 9px;">
+                    Data testului: ${new Date().toLocaleDateString('ro-RO')}
+                </div>
+            </div>
+        `;
+
+        // Set container content
+        container.innerHTML = contentHtml;
+
+        var questionIndex = 0;
+        // Add questions and answers
+        questions.forEach(question => {
+            const pageBreak = (questionIndex + 1) % 9 === 0 ? 'page-break-after: always;' : '';
+
+            const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
+            if (selected) {
+                const questionDiv = document.createElement('div');
+                questionDiv.style.cssText = `margin-bottom: 30px; color: black; ${pageBreak}`;
+
+                const questionText = document.createElement('p');
+                questionText.style.cssText = 'margin-bottom: 5px; font-weight: bold; color: black;';
+                questionText.innerHTML = `${question.id}. ${question.text}`;
+                questionDiv.appendChild(questionText);
+
+                const answerText = document.createElement('p');
+                answerText.style.cssText = 'margin-left: 15px; margin-bottom: 20px; color: black;';
+                answerText.innerHTML = `Răspuns: ${selected.closest('label').querySelector('.form-check-label').innerHTML.trim()}`;
+                questionDiv.appendChild(answerText);
+
+                container.appendChild(questionDiv);
+            }
+
+            questionIndex++;
+        });
+
+        // Wait for content to be rendered
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // PDF generation options
+        const opt = {
+            margin: [25, 20, 25, 20], // [top, right, bottom, left]
+            filename: 'rezultate_test_raads_r.pdf',
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#FFFFFF',
+                width: 595,
+                height: container.offsetHeight
+            },
+            jsPDF: {
+                unit: 'pt',
+                format: 'a4',
+                orientation: 'portrait',
+                putOnlyUsedFonts: true,
+                compress: true
+            },
+            pagebreak: {
+                mode: ['avoid-all', 'css', 'legacy']
+            }
+        };
+
         try {
-            // Calculate scores
-            const results = calculateSubscores(questions);
-            const { totalScore } = results;
-            const interpretation = getInterpretation(totalScore);
-
-            // Generate PDF options
-            const opt = {
-                margin: [30, 20, 30, 20],
-                filename: 'rezultate_test_raads_r.pdf',
-                image: { type: 'jpeg', quality: 1 },
-                html2canvas: {
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: '#FFFFFF',
-                    width: 595
-                },
-                jsPDF: {
-                    unit: 'pt',
-                    format: 'a4',
-                    orientation: 'portrait',
-                    putOnlyUsedFonts: true,
-                    compress: true
-                },
-                pagebreak: {
-                    mode: ['avoid-all', 'css', 'legacy']
-                }
-            };
-
-            // Generate PDF and get as blob
             const pdfBlob = await html2pdf().set(opt).from(container).outputPdf('blob');
+            // Clean up
+            document.body.removeChild(container);
+            return pdfBlob;
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            // Clean up
+            document.body.removeChild(container);
+            throw error;
+        }
+    } catch (error) {
+        console.error('Error in generatePDFBlob:', error);
+        throw error;
+    }
+}
 
-            // Convert blob to base64
-            const base64Data = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = () => reject(new Error('Failed to read PDF file'));
-                reader.readAsDataURL(pdfBlob);
-            });
+// Export button click handler with better error handling
+if (exportBtn) {
+    exportBtn.addEventListener('click', async () => {
+        exportBtn.disabled = true;
+        exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se generează PDF-ul...';
 
-            // Prepare data for sending
-            const requestData = {
-                email: recipientEmail,
-                score: totalScore,
-                interpretation: interpretation,
-                pdfData: base64Data
-            };
+        try {
+            // Generate PDF
+            const pdf = await generatePDFBlob();
+            const blobUrl = URL.createObjectURL(pdf);
 
-            console.log('Sending email request with data:', {
-                email: requestData.email,
-                score: requestData.score,
-                interpretation: requestData.interpretation,
-                pdfDataLength: requestData.pdfData.length
-            });
+            // Create download link
+            const downloadLink = document.createElement('a');
+            downloadLink.href = blobUrl;
+            downloadLink.download = 'rezultate_test_raads_r.pdf';
+            document.body.appendChild(downloadLink);
 
-            // Send request to backend
-            const response = await fetch('/send-results-email.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to send email');
-            }
-
-            const result = await response.json();
-
-            if (result.success) {
-                // Show success message
-                emailModal.hide();
-                alert('Email-ul a fost trimis cu succes!');
+            // Handle Facebook in-app browser
+            if (navigator.userAgent.match(/(FBAN|FBAV)/i)) {
+                window.open(blobUrl, '_blank');
             } else {
-                throw new Error(result.error || 'Failed to send email');
+                downloadLink.click();
             }
 
+            // Cleanup
+            setTimeout(() => {
+                URL.revokeObjectURL(blobUrl);
+                downloadLink.remove();
+            }, 1000);
+
+        } catch (error) {
+            console.error('PDF generation failed:', error);
+            alert(`A apărut o eroare la generarea PDF-ului: ${error.message}\nTe rugăm să încerci din nou.`);
         } finally {
-            // Clean up temporary container
-            if (container && container.parentNode) {
-                container.parentNode.removeChild(container);
-            }
+            exportBtn.disabled = false;
+            exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Exportă ca PDF';
         }
-
-    } catch (error) {
-        console.error('Error sending email:', error);
-        alert('A apărut o eroare la trimiterea email-ului: ' + error.message);
-    } finally {
-        // Reset button state
-        sendEmailBtn.disabled = false;
-        sendEmailBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Trimite';
-    }
-});
-
-
-
-
-
-});
-
-
-startBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    // Smooth scroll to disclaimer section
-    const disclaimerSection = document.getElementById('first-disclaimer');
-    disclaimerSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
     });
-});
-
-// First add this helper function at the global scope
-function formatScore(score) {
-    return typeof score === 'number' && !isNaN(score) ? score : 0;
 }
 
-// exportBtn.addEventListener('click', () => {
-//     // Create a temporary container
-//     const container = document.createElement('div');
-//     container.style.visibility = 'hidden';
-//     container.style.position = 'absolute';
-//     container.style.left = '-9999px';
-//     document.body.appendChild(container);
-
-//     // Calculate scores - use the proper structure from calculateSubscores
-//     const { subscores, totalScore, diagnosticIndicators } = calculateSubscores(questions);
-
-//     // Format all scores to ensure we have valid numbers
-//     const formattedScores = {
-//         language: formatScore(subscores.language),
-//         socialRelatedness: formatScore(subscores.socialRelatedness),
-//         sensoryMotor: formatScore(subscores.sensoryMotor),
-//         circumscribedInterests: formatScore(subscores.circumscribedInterests)
-//     };
-
-//     const formattedTotalScore = formatScore(totalScore);
-//     const interpretation = getInterpretation(formattedTotalScore);
-
-//     // Create stylized content for PDF
-//     const content = document.createElement('div');
-//     content.style.cssText = `
-//         font-family: Arial, sans-serif;
-//         color: black;
-//         font-size: 12px;
-//         line-height: 1.4;
-//         padding: 20px;
-//         background: white;
-//     `;
-
-//     // Define score categories with their properties
-//     const scoreCategories = {
-//         'Limbaj': {
-//             score: formattedScores.language,
-//             threshold: RAADS_R_THRESHOLDS.language,
-//             max: MAX_SCORES.language
-//         },
-//         'Relaționare socială': {
-//             score: formattedScores.socialRelatedness,
-//             threshold: RAADS_R_THRESHOLDS.socialRelatedness,
-//             max: MAX_SCORES.socialRelatedness
-//         },
-//         'Senzorial-motor': {
-//             score: formattedScores.sensoryMotor,
-//             threshold: RAADS_R_THRESHOLDS.sensoryMotor,
-//             max: MAX_SCORES.sensoryMotor
-//         },
-//         'Interese circumscrise': {
-//             score: formattedScores.circumscribedInterests,
-//             threshold: RAADS_R_THRESHOLDS.circumscribedInterests,
-//             max: MAX_SCORES.circumscribedInterests
-//         }
-//     };
-
-//     // Create the content HTML
-//     content.innerHTML = `
-//         <h1 style="font-size: 24px; text-align: center; margin-bottom: 20px;">Rezultate Test RAADS-R</h1>
-//         <div style="text-align: center; padding: 20px; background-color: #f8f9fa; margin-bottom: 30px;">
-//             <h2 style="font-size: 20px; margin-bottom: 10px;">Scor Total: ${formattedTotalScore}</h2>
-//             <p style="color: #666;">${interpretation}</p>
-//         </div>
-
-//         <h3 style="font-size: 18px; margin-bottom: 20px;">Scoruri pe categorii:</h3>
-
-//         <!-- Visual score components styled for PDF -->
-//         ${Object.entries(scoreCategories).map(([category, scores]) => {
-//             const percentage = Math.min(Math.max((scores.score / scores.max) * 100, 0), 100);
-//             const color = scores.score < scores.threshold ? '#4CAF50' :
-//                          scores.score < scores.threshold * 1.5 ? '#FFC107' : '#F44336';
-
-//             return `
-//                 <div style="margin-bottom: 25px;">
-//                     <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-//                         <strong>${category}</strong>
-//                         <span>${scores.score} / ${scores.max}</span>
-//                     </div>
-//                     <div style="width: 100%; height: 20px; background-color: #e9ecef; position: relative;">
-//                         <div style="width: ${percentage}%; height: 100%; background-color: ${color};"></div>
-//                         <div style="position: absolute; left: ${(scores.threshold/scores.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
-//                     </div>
-//                     <div style="display: flex; justify-content: space-between; margin-top: 5px; color: #666;">
-//                         <small>0</small>
-//                         <small>Prag: ${scores.threshold}</small>
-//                         <small>${scores.max}</small>
-//                     </div>
-//                 </div>
-//             `;
-//         }).join('')}
-
-//         <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa;">
-//             <strong>Legendă:</strong><br>
-//             <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
-//             <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
-//             <span style="color: #F44336;">■</span> Peste prag
-//         </div>
-//         <br/><br/>
-//         <h3 style="font-size: 14px; font-weight: bold; margin-bottom: 15px;">Răspunsuri:</h3>
-//     `;
-
-//     // Add questions and answers
-//     questions.forEach(question => {
-//         const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
-//         if (selected) {
-//             const questionDiv = document.createElement('div');
-//             questionDiv.style.cssText = 'margin-bottom: 15px; color: black;';
-
-//             const questionText = document.createElement('p');
-//             questionText.style.cssText = 'margin-bottom: 5px; font-weight: bold; color: black;';
-//             questionText.innerHTML = `${question.id}. ${question.text}`;
-//             questionDiv.appendChild(questionText);
-
-//             const answerText = document.createElement('p');
-//             answerText.style.cssText = 'margin-left: 15px; color: black;';
-//             answerText.innerHTML = `Răspuns: ${selected.closest('label').innerHTML.trim()}`;
-//             questionDiv.appendChild(answerText);
-
-//             content.appendChild(questionDiv);
-//         }
-//     });
-
-//     // Add date of test
-//     const dateDiv = document.createElement('div');
-//     dateDiv.style.cssText = 'margin-top: 20px; text-align: right; color: #666;';
-//     dateDiv.innerHTML = `Data testului: ${new Date().toLocaleDateString('ro-RO')}`;
-//     content.appendChild(dateDiv);
-
-//     // Add the content to the container
-//     container.appendChild(content);
-
-//     // Configure html2pdf options
-//     const opt = {
-//         margin: [0.5, 0.5, 0.5, 0.5],
-//         filename: 'rezultate_test_raads_r.pdf',
-//         image: { type: 'jpeg', quality: 1 },
-//         html2canvas: {
-//             scale: 2,
-//             useCORS: true,
-//             logging: false,
-//             letterRendering: false,
-//             allowTaint: true,
-//             backgroundColor: '#ffffff'
-//         },
-//         jsPDF: {
-//             unit: 'in',
-//             format: 'a4',
-//             orientation: 'portrait',
-//             putOnlyUsedFonts: true
-//         },
-//         pagebreak: { avoid: ['p', 'h1', 'h2', 'h3'] }
-//     };
-
-//     // Generate PDF
-//     html2pdf()
-//         .set(opt)
-//         .from(content)
-//         .save()
-//         .then(() => {
-//             // Clean up
-//             document.body.removeChild(container);
-//         })
-//         .catch(error => {
-//             console.error('PDF generation failed:', error);
-//             document.body.removeChild(container);
-//         });
-// });
-
-async function generatePDFBlob() {
-
-    const results = calculateSubscores(questions);
-    const { subscores, totalScore } = results;
-
-    // Create container with A4 dimensions
-    const container = document.createElement('div');
-    container.style.cssText = `
-        width: 595px; /* A4 width in points */
-        background: white;
-        position: fixed;
-        left: 0;
-        top: 0;
-        padding: 40px;
-        z-index: -9999;
-        font-family: Arial, sans-serif;
-        font-size: 11px;
-        color: black;
-        box-sizing: border-box;
-    `;
-    document.body.appendChild(container);
-
-    const getScoreColor = (score, threshold) => {
-        if (score < threshold) return '#4CAF50';
-        if (score < threshold * 1.5) return '#FFC107';
-        return '#F44336';
-    };
-
-    // Clean answer text function
-    const cleanAnswerText = (text) => {
-        // Remove the explanatory text in parentheses
-        return text.split('(')[0].trim();
-    };
-
-    const contentHtml = `
-        <div style="background: white; color: black; max-width: 515px;">
-            <h1 style="font-size: 16px; text-align: center; margin-bottom: 12px; color: black;">
-                Rezultate Test RAADS-R
-            </h1>
-
-            <div style="text-align: center; background-color: #f8f9fa; padding: 8px; margin: 12px 0; border-radius: 4px;">
-                <span style="color: #666; font-size: 10px;">Rezultate generate de</span><br>
-                <a href="https://www.testautism.ro" style="color: #2196F3; font-size: 12px; font-weight: bold;">
-                    www.testautism.ro
-                </a>
-            </div>
-
-            <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin: 12px 0; border-radius: 4px;">
-                <p style="color: #856404; margin: 0; font-size: 10px; line-height: 1.4;">
-                    <strong>IMPORTANT:</strong> Acest test este destinat <strong>EXCLUSIV</strong> în scop informativ și
-                    <strong>NU</strong> trebuie utilizat ca un instrument de diagnostic. Pentru evaluări profesionale,
-                    vă recomandăm să vizitați <a href="https://www.doctoradhd.com" style="color: #856404; font-weight: bold;">www.doctoradhd.com</a>
-                </p>
-            </div>
-
-            <div style="text-align: center; background-color: #f8f9fa; padding: 12px; margin: 12px 0; border-radius: 4px;">
-                <h2 style="font-size: 14px; margin-bottom: 8px; color: black;">Scor Total: ${totalScore}</h2>
-                <p style="color: #666; font-size: 11px; line-height: 1.4;">${getInterpretation(totalScore)}</p>
-            </div>
-
-            <h3 style="font-size: 13px; margin: 12px 0; color: black;">Scoruri pe categorii:</h3>
-
-            <div style="margin-bottom: 20px;">
-                ${Object.entries({
-                    'Limbaj': { score: subscores.language, threshold: RAADS_R_THRESHOLDS.language, max: MAX_SCORES.language },
-                    'Relaționare socială': { score: subscores.socialRelatedness, threshold: RAADS_R_THRESHOLDS.socialRelatedness, max: MAX_SCORES.socialRelatedness },
-                    'Senzorial-motor': { score: subscores.sensoryMotor, threshold: RAADS_R_THRESHOLDS.sensoryMotor, max: MAX_SCORES.sensoryMotor },
-                    'Interese circumscrise': { score: subscores.circumscribedInterests, threshold: RAADS_R_THRESHOLDS.circumscribedInterests, max: MAX_SCORES.circumscribedInterests }
-                }).map(([category, data]) => {
-                    const percentage = (data.score / data.max) * 100;
-                    const color = getScoreColor(data.score, data.threshold);
-                    return `
-                        <div style="margin-bottom: 16px; background: white;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                <strong style="color: black; font-size: 11px;">${category}</strong>
-                                <span style="color: black; font-size: 11px;">${data.score} / ${data.max}</span>
-                            </div>
-                            <div style="position: relative; height: 16px; background-color: #e9ecef; border-radius: 3px; overflow: hidden;">
-                                <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${percentage}%; background-color: ${color};"></div>
-                                <div style="position: absolute; left: ${(data.threshold/data.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; margin-top: 2px; font-size: 9px; color: #666;">
-                                <span>0</span>
-                                <span>Prag: ${data.threshold}</span>
-                                <span>${data.max}</span>
-                            </div>
-                        </div>
-                    `;
-                }).join('')}
-            </div>
-
-            <div style="margin: 16px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
-                <strong style="color: black; font-size: 11px;">Legendă:</strong><br>
-                <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
-                <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
-                <span style="color: #F44336;">■</span> Peste prag
-            </div>
-
-            <div style="margin-top: 16px; text-align: right; color: #666; font-size: 9px;">
-                Data testului: ${new Date().toLocaleDateString('ro-RO')}
-            </div>
-        </div>
-    `;
-
-    // Set container content
-    container.innerHTML = contentHtml;
-
-    var questionIndex = 0;
-    // Add questions and answers
-    questions.forEach(question => {
-        const pageBreak = (questionIndex + 1) % 9 === 0 ? 'page-break-after: always;' : '';
-
-        const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
-        if (selected) {
-            const questionDiv = document.createElement('div');
-            questionDiv.style.cssText = 'margin-bottom: 30px; color: black; ${pageBreak}';
-
-            const questionText = document.createElement('p');
-            questionText.style.cssText = 'margin-bottom: 5px; font-weight: bold; color: black;';
-            questionText.innerHTML = `${question.id}. ${question.text}`;
-            questionDiv.appendChild(questionText);
-
-            const answerText = document.createElement('p');
-            answerText.style.cssText = 'margin-left: 15px; margin-bottom: 20px; color: black;';
-            answerText.innerHTML = `Răspuns: ${selected.closest('label').querySelector('.form-check-label').innerHTML.trim()}`;
-            questionDiv.appendChild(answerText);
-
-            container.appendChild(questionDiv);
-        }
-
-        questionIndex++;
-    });
-
-
-    // Wait for content to be rendered
-    await new Promise(resolve => setTimeout(resolve, 300));
-
-    // PDF generation options
-    const opt = {
-        margin: [25, 20, 25, 20], // [top, right, bottom, left]
-        filename: 'rezultate_test_raads_r.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: '#FFFFFF',
-            width: 595,
-            height: container.offsetHeight
-        },
-        jsPDF: {
-            unit: 'pt',
-            format: 'a4',
-            orientation: 'portrait',
-            putOnlyUsedFonts: true,
-            compress: true
-        },
-        pagebreak: {
-            mode: ['avoid-all', 'css', 'legacy']
-        }
-    };
-
-    return await html2pdf().set(opt).from(container).outputPdf('blob');
-}
-
-exportBtn.addEventListener('click', async () => {
-    exportBtn.disabled = true;
-    exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se generează PDF-ul...';
-
-    try {
-        // Generate PDF
-        const pdf = await generatePDFBlob();
-        const blobUrl = URL.createObjectURL(pdf);
-
-        // Create download link
-        const downloadLink = document.createElement('a');
-        downloadLink.href = blobUrl;
-        downloadLink.download = 'rezultate_test_raads_r.pdf';
-        document.body.appendChild(downloadLink);
-
-        // Handle Facebook in-app browser
-        if (navigator.userAgent.match(/(FBAN|FBAV)/i)) {
-            window.open(blobUrl, '_blank');
-        } else {
-            downloadLink.click();
-        }
-
-        // Cleanup
-        setTimeout(() => {
-            URL.revokeObjectURL(blobUrl);
-            downloadLink.remove();
-            container.remove();
-        }, 1000);
-
-    } catch (error) {
-        console.error('PDF generation failed:', error);
-        alert(`A apărut o eroare la generarea PDF-ului: ${error.message}\nTe rugăm să încerci din nou.`);
-    } finally {
-        exportBtn.disabled = false;
-        exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Exportă ca PDF';
-    }
-});
-
-// Create modal for email input
-const modalHtml = `
-<div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="emailModalLabel">Trimite rezultatele pe email</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="emailForm">
-                    <div class="mb-3">
-                        <label for="recipientEmail" class="form-label">Adresa de email</label>
-                        <input type="email" class="form-control" id="recipientEmail" required
-                               placeholder="exemplu@gmail.com">
-                        <div class="form-text">Rezultatele vor fi trimise la această adresă.</div>
-                    </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="gdprConsent" required>
-                        <label class="form-check-label" for="gdprConsent">
-                            Sunt de acord cu prelucrarea datelor mele personale în scopul trimiterii rezultatelor pe email.
-                        </label>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anulează</button>
-                <button type="button" class="btn btn-primary" id="sendEmailBtn">
-                    <i class="fas fa-paper-plane"></i> Trimite
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-`;
-
-// Add modal to body
-document.body.insertAdjacentHTML('beforeend', modalHtml);
-
-// Initialize modal
-const emailModal = new bootstrap.Modal(document.getElementById('emailModal'));
-
-// Restart button event listener
-const restartWarningModal = new bootstrap.Modal(document.getElementById('restartWarningModal'));
-const confirmRestartBtn = document.getElementById('confirmRestartBtn');
-
-// Update the restartTest function to hide the share button
+// Restart button functionality with better state management
 const restartTest = function() {
-    // Reset progress container visibility
+    // Reset progress container visibility with proper error checking
     const progressContainer = document.querySelector('.progress-container');
 
     if (progressContainer) {
@@ -1573,13 +1399,14 @@ const restartTest = function() {
     });
 
     // Hide results and action buttons
-    resultDiv.style.display = 'none';
-    exportBtn.style.display = 'none';
-    restartBtn.style.display = 'none';
-    shareBtn.style.display = 'none';
+    if (resultDiv) resultDiv.style.display = 'none';
+    if (exportBtn) exportBtn.style.display = 'none';
+    if (restartBtn) restartBtn.style.display = 'none';
+    if (shareBtn) shareBtn.style.display = 'none';
+    if (emailBtn) emailBtn.style.display = 'none';
 
     // Show submit button
-    submitBtn.style.display = 'block';
+    if (submitBtn) submitBtn.style.display = 'block';
 
     // Remove any highlighting
     document.querySelectorAll('.highlight-unanswered').forEach(el => {
@@ -1587,7 +1414,11 @@ const restartTest = function() {
     });
 
     // Hide the modal
-    restartWarningModal.hide();
+    const restartWarningModal = document.getElementById('restartWarningModal');
+    if (restartWarningModal) {
+        const bsModal = bootstrap.Modal.getInstance(restartWarningModal);
+        if (bsModal) bsModal.hide();
+    }
 
     // Reset progress if exists
     const progressFill = document.querySelector('.progress-fill');
@@ -1616,24 +1447,41 @@ const restartTest = function() {
                 behavior: 'smooth'
             });
 
+            // Re-initialize the progress tracker
             initProgressTracker();
         }, 100); // Small delay to ensure DOM updates are complete
     }
+
+    // Clear announcer for screen readers
+    if (resultAnnouncer) {
+        resultAnnouncer.textContent = "Test resetat. Poți începe din nou.";
+    }
 };
 
-// Update event listeners for the restart button and confirm button
-restartBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    restartWarningModal.show();
-});
+// Event listeners for restart button and confirmation
+if (restartBtn) {
+    restartBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const restartWarningModal = document.getElementById('restartWarningModal');
+        if (restartWarningModal) {
+            const bsModal = bootstrap.Modal.getOrCreateInstance(restartWarningModal);
+            bsModal.show();
+        }
+    });
+}
 
-confirmRestartBtn.addEventListener('click', restartTest);
+const confirmRestartBtn = document.getElementById('confirmRestartBtn');
+if (confirmRestartBtn) {
+    confirmRestartBtn.addEventListener('click', restartTest);
+}
 
-// Re-attach change event listeners for radio buttons
+// Re-attach change event listeners for radio buttons with event delegation
 function reInitializeRadioListeners() {
-    document.querySelectorAll('input[type="radio"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
+    document.addEventListener('change', (e) => {
+        if (e.target.type === 'radio') {
             const currentQuestion = e.target.closest('.question');
+            if (!currentQuestion) return;
+
             currentQuestion.classList.add('completed');
 
             // Find next unanswered question
@@ -1665,40 +1513,49 @@ function reInitializeRadioListeners() {
             }
 
             // Update progress if it exists
-            if (typeof updateProgress === 'function') {
-                updateProgress();
+            const progressContainer = document.querySelector('.progress-container');
+            if (progressContainer && progressContainer.classList.contains('visible')) {
+                const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+                const total = questions.length;
+                const percentage = (answered / total) * 100;
+
+                const progressFill = document.querySelector('.progress-fill');
+                const questionsCompleted = document.querySelector('.questions-completed');
+                const progressMessage = document.querySelector('.progress-message');
+
+                if (progressFill) progressFill.style.width = percentage + '%';
+                if (questionsCompleted) questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
+                if (progressMessage) {
+                    progressMessage.classList.add('updating');
+                    progressMessage.innerHTML = getProgressMessage(percentage, answered);
+                    setTimeout(() => {
+                        progressMessage.classList.remove('updating');
+                    }, 300);
+                }
             }
-        });
+        }
     });
 }
 
-// Call this when initializing the form and after restart
+// Call this when initializing the form
 reInitializeRadioListeners();
-
-// Restart button functionality
-restartBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    restartWarningModal.show();
-});
-
-// Click handler for the confirm button in the modal
-confirmRestartBtn.addEventListener('click', restartTest);
 
 // Function to generate a random identifier
 function generateUniqueId() {
     return 'raads_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 }
 
-// Update the shareToFacebook function
+// Enhanced Facebook sharing function with better error handling
 async function shareToFacebook() {
     try {
         // Show loading state
+        if (!shareBtn) return;
+
         shareBtn.disabled = true;
         shareBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se pregătește imaginea...';
 
         // Calculate scores using the proper RAADS-R scoring system
-        const results = calculateSubscores(questions);
+        const results = calculateSubscores();
 
         // Format scores
         const formattedResults = {
@@ -1852,7 +1709,7 @@ async function shareToFacebook() {
         });
 
         if (!response.ok) {
-            throw new Error('Upload failed');
+            throw new Error('Upload failed: ' + response.statusText);
         }
 
         const data = await response.json();
@@ -1869,179 +1726,30 @@ async function shareToFacebook() {
         console.error('Error sharing:', error);
         alert('A apărut o eroare la distribuirea rezultatelor. Vă rugăm să încercați din nou.');
     } finally {
-        shareBtn.disabled = false;
-        shareBtn.innerHTML = '<i class="fab fa-facebook me-2"></i>Distribuie pe Facebook';
-    }
-}
-
-// Update the createSharingImage function
-function createSharingImage(subscores, totalScore, interpretation, totalScoreColor) {
-    console.log('Creating sharing image with:', {
-        subscores,
-        totalScore,
-        interpretation,
-        totalScoreColor
-    });
-
-    // Define score categories with their maximums
-    const scoreCategories = [
-        {
-            name: 'Limbaj',
-            score: Math.round(subscores.language),
-            max: MAX_SCORES.language,
-            threshold: RAADS_R_THRESHOLDS.language
-        },
-        {
-            name: 'Relaționare socială',
-            score: Math.round(subscores.socialRelatedness),
-            max: MAX_SCORES.socialRelatedness,
-            threshold: RAADS_R_THRESHOLDS.socialRelatedness
-        },
-        {
-            name: 'Senzorial-motor',
-            score: Math.round(subscores.sensoryMotor),
-            max: MAX_SCORES.sensoryMotor,
-            threshold: RAADS_R_THRESHOLDS.sensoryMotor
-        },
-        {
-            name: 'Interese circumscrise',
-            score: Math.round(subscores.circumscribedInterests),
-            max: MAX_SCORES.circumscribedInterests,
-            threshold: RAADS_R_THRESHOLDS.circumscribedInterests
+        if (shareBtn) {
+            shareBtn.disabled = false;
+            shareBtn.innerHTML = '<i class="fab fa-facebook me-2"></i>Distribuie pe Facebook';
         }
-    ];
-
-    const container = document.createElement('div');
-    container.style.cssText = `
-        width: 1200px;
-        height: 630px;
-        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-        position: absolute;
-        left: -9999px;
-        top: -9999px;
-        font-family: Arial, sans-serif;
-        box-sizing: border-box;
-        overflow: hidden;
-    `;
-
-    // Helper function to create arc progress indicator
-    function createArcProgress(category) {
-        const score = category.score;
-        const max = category.max;
-        const threshold = category.threshold;
-
-        const percentage = Math.min(Math.max((score / max) * 100, 0), 100);
-        const color = score < threshold ? '#4CAF50' :
-                     score < threshold * 1.5 ? '#FFC107' : '#F44336';
-
-        return `
-            <div style="position: relative; width: 100px; height: 100px; margin: 0 auto;">
-                <svg width="100" height="100" viewBox="0 0 100 100">
-                    <!-- Background arc -->
-                    <path d="M50 10 A40 40 0 0 1 90 50" fill="none"
-                        stroke="#e9ecef" stroke-width="6" stroke-linecap="round"/>
-                    <!-- Progress arc -->
-                    <path d="M50 10 A40 40 0 ${percentage > 50 ? '1' : '0'} 1 ${
-                        50 + 40 * Math.cos((percentage * 3.6 - 90) * Math.PI / 180)} ${
-                        50 + 40 * Math.sin((percentage * 3.6 - 90) * Math.PI / 180)
-                    }" fill="none"
-                        stroke="${color}" stroke-width="6" stroke-linecap="round"/>
-                    <!-- Score text -->
-                    <text x="50" y="55" text-anchor="middle"
-                        font-size="20" font-weight="bold" fill="#333">
-                        ${score}/${max}
-                    </text>
-                </svg>
-            </div>
-        `;
     }
-
-    container.innerHTML = `
-        <div style="height: 100%; width: 100%; padding: 40px; box-sizing: border-box;">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h1 style="
-                    font-size: 42px;
-                    margin: 0;
-                    color: #333;
-                    letter-spacing: -0.5px;
-                ">Rezultate Test RAADS-R</h1>
-            </div>
-
-            <!-- Total Score Section -->
-            <div style="text-align: center; margin-bottom: 30px;">
-                <div style="
-                    font-size: 120px;
-                    font-weight: bold;
-                    color: ${totalScoreColor};
-                    line-height: 1.2;
-                    margin: 20px 0;
-                ">${Math.round(totalScore)}</div>
-                <div style="
-                    font-size: 28px;
-                    color: #666;
-                    margin-bottom: 20px;
-                ">Scor Total</div>
-                <div style="
-                    font-size: 32px;
-                    color: #333;
-                    max-width: 90%;
-                    margin: 0 auto 30px;
-                    line-height: 1.4;
-                    word-spacing: 4px;
-                    letter-spacing: 0.2px;
-                    white-space: normal;
-                    text-align: center;
-                ">${interpretation}</div>
-            </div>
-
-            <!-- Subscores Grid -->
-            <div style="
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 30px;
-                padding: 0 40px;
-            ">
-                ${scoreCategories.map(category => `
-                    <div style="text-align: center;">
-                        <div style="font-size: 24px; color: #333; margin-bottom: 15px; font-weight: 500;">
-                            ${category.name}
-                        </div>
-                        ${createArcProgress(category)}
-                    </div>
-                `).join('')}
-            </div>
-
-            <!-- Call to Action -->
-            <div style="
-                text-align: center;
-                margin-top: 10px;
-                font-size: 42px;
-                font-weight: bold;
-                color: ${totalScoreColor};
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                background: linear-gradient(45deg, ${totalScoreColor}22, ${totalScoreColor}11);
-                padding: 20px;
-                border-radius: 12px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            ">
-                Fă și tu un test!
-            </div>
-        </div>
-    `;
-
-    return container;
 }
 
 // Click handler for share button
-shareBtn.addEventListener('click', shareToFacebook);
+if (shareBtn) {
+    shareBtn.addEventListener('click', shareToFacebook);
+}
 
-
-// ACCESSIBILITY FEATURES
-
-// Add keyboard navigation
+// Keyboard navigation enhancement for accessibility
 document.addEventListener('keydown', (e) => {
     const activeElement = document.activeElement;
+
+    // Skip navigation when focus is in fields that need arrow keys
+    if (activeElement.tagName === 'TEXTAREA' ||
+        (activeElement.tagName === 'INPUT' &&
+        activeElement.type !== 'radio' &&
+        activeElement.type !== 'checkbox')) {
+        return;
+    }
+
     if (activeElement.type === 'radio') {
         const currentQuestion = activeElement.closest('.question');
         const radios = Array.from(currentQuestion.querySelectorAll('input[type="radio"]'));
@@ -2112,32 +1820,58 @@ function highlightInViewSection() {
         { id: 'section-support', navItem: document.querySelector('a[href="#section-support"]') }
     ];
 
-    // Detects the section currently in view and updates the active QuickNav item
-    window.addEventListener('scroll', () => {
-        let currentSection = '';
+    // Use a debounced scroll handler for better performance
+    let scrollTimeout;
+    function checkSectionVisibility() {
+        if (scrollTimeout) clearTimeout(scrollTimeout);
 
-        sections.forEach(section => {
-            const sectionElement = document.getElementById(section.id);
-            const sectionTop = sectionElement.offsetTop;
-            const sectionBottom = sectionTop + sectionElement.offsetHeight;
+        scrollTimeout = setTimeout(() => {
+            let currentSection = '';
 
-            // Check if the section is in the middle of the viewport
-            if (window.scrollY + window.innerHeight / 2 >= sectionTop && window.scrollY + window.innerHeight / 2 < sectionBottom) {
-                currentSection = section.id;
+            sections.forEach(section => {
+                const sectionElement = document.getElementById(section.id);
+                if (!sectionElement) return;
+
+                const sectionTop = sectionElement.offsetTop;
+                const sectionBottom = sectionTop + sectionElement.offsetHeight;
+
+                // Check if the section is in the middle of the viewport
+                if (window.scrollY + window.innerHeight / 2 >= sectionTop &&
+                    window.scrollY + window.innerHeight / 2 < sectionBottom) {
+                    currentSection = section.id;
+                }
+            });
+
+            // Remove active class from all QuickNav items
+            navItems.forEach(navItem => navItem.classList.remove('active'));
+
+            // Set active class on current section's nav item
+            if (currentSection) {
+                const activeNavItem = document.querySelector(`a[href="#${currentSection}"]`);
+                if (activeNavItem) {
+                    activeNavItem.classList.add('active');
+                }
             }
-        });
+        }, 100);
+    }
 
-        // Remove active class from all QuickNav items and set it on the one in view
-        navItems.forEach(navItem => navItem.classList.remove('active'));
-        if (currentSection) {
-            const activeNavItem = document.querySelector(`a[href="#${currentSection}"]`);
+    // Add scroll event listener with passive option for better performance
+    window.addEventListener('scroll', checkSectionVisibility, { passive: true });
 
-            if (activeNavItem) {
-                activeNavItem.classList.add('active');
-            }
+    // Initial check
+    checkSectionVisibility();
+
+    return {
+        destroy: () => {
+            window.removeEventListener('scroll', checkSectionVisibility);
+            if (scrollTimeout) clearTimeout(scrollTimeout);
         }
-    });
+    };
 }
 
 // Initialize the highlight functionality when the document is loaded
-document.addEventListener('DOMContentLoaded', highlightInViewSection);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', highlightInViewSection);
+} else {
+    highlightInViewSection();
+}
