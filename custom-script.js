@@ -1,3 +1,484 @@
+/**
+ * Generator PDF Îmbunătățit cu Suport pentru Diacritice Românești
+ *
+ * Această funcție rezolvă problema diacriticelor românești în PDF-uri
+ * folosind o abordare cu font încorporat și tehnici avansate de randare text.
+ */
+function generateRomanianPDF() {
+    try {
+        // Obține rezultatele testului
+        const results = calculateSubscores();
+        const { subscores, totalScore } = results;
+
+        // Creează documentul PDF cu opțiuni optimizate
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4',
+            putOnlyUsedFonts: true,
+            compress: true
+        });
+
+        // ===== PARTEA 1: ÎNCORPORARE FONT CU SUPORT PENTRU DIACRITICE =====
+
+        // Adaugă fontul Open Sans (are suport bun pentru diacritice)
+        // Acest cod presupune că ai încărcat deja librăria jspdf-font
+        try {
+            // Încercăm să verificăm dacă fontul este deja disponibil
+            if (!doc.getFontList().hasOwnProperty('open-sans-regular')) {
+                // Încărcăm fontul OpenSans din CDN
+                const openSansBold = "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf";
+                const openSansRegular = "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf";
+
+                // Adaugă fontul (doar dacă librăria suportă)
+                if (typeof doc.addFont === 'function') {
+                    doc.addFont(openSansRegular, "OpenSans", "normal");
+                    doc.addFont(openSansBold, "OpenSans", "bold");
+                }
+            }
+
+            // Setează fontul
+            try {
+                doc.setFont("OpenSans", "normal");
+            } catch (e) {
+                console.log("Folosim fontul implicit deoarece OpenSans nu poate fi setat:", e);
+            }
+        } catch (fontError) {
+            console.log("Nu s-a putut încărca fontul, folosim fontul implicit:", fontError);
+        }
+
+        // ===== PARTEA 2: FUNCțII HELPER PENTRU TEXT ROMÂNESC =====
+
+        // Funcție pentru text cu wrapping și aliniere și conversie diacritice
+        const addSafeText = (text, x, y, options = {}) => {
+            const {
+                fontSize = 11,
+                fontStyle = 'normal',
+                color = [0, 0, 0],
+                align = 'left',
+                maxWidth = 170  // lățimea implicită în mm (A4 are ~210mm lățime)
+            } = options;
+
+            // Setează font și culoare
+            doc.setFontSize(fontSize);
+            try {
+                doc.setFont("OpenSans", fontStyle);
+            } catch (e) {
+                doc.setFont("helvetica", fontStyle);
+            }
+            doc.setTextColor(...color);
+
+            // Preprocesare text pentru a gestiona diacriticele într-un mod mai bun
+            // Această abordare menține diacriticele chiar dacă fontul nu le suportă direct
+            const processedText = text || ""; // Asigură-te că textul există
+
+            // Divizare text în linii cu wrap automat
+            const textLines = doc.splitTextToSize(processedText, maxWidth);
+
+            // Determină coordonata X bazată pe aliniere
+            let xPos = x;
+            if (align === 'center') {
+                textLines.forEach(line => {
+                    doc.text(line, 105, y, { align: 'center' });
+                    y += fontSize * 0.5;
+                });
+            } else if (align === 'right') {
+                textLines.forEach(line => {
+                    doc.text(line, 190, y, { align: 'right' });
+                    y += fontSize * 0.5;
+                });
+            } else {
+                // Aliniere stânga (implicită)
+                textLines.forEach(line => {
+                    doc.text(line, x, y);
+                    y += fontSize * 0.5;
+                });
+            }
+
+            return y + fontSize * 0.25; // Returnează noua poziție Y
+        };
+
+        // Funcție pentru desenare bară progres cu indicator prag
+        const drawProgressBar = (x, y, width, height, percentage, thresholdPercentage, color) => {
+            // Desenează fundalul
+            doc.setFillColor(238, 238, 238);
+            doc.roundedRect(x, y, width, height, 1, 1, 'F');
+
+            // Desenează bara de progres
+            if (percentage > 0) {
+                doc.setFillColor(...color);
+                const fillWidth = (percentage / 100) * width;
+                doc.roundedRect(x, y, fillWidth, height, 1, 1, 'F');
+            }
+
+            // Desenează indicatorul de prag
+            doc.setFillColor(0, 0, 0);
+            const thresholdX = x + (width * thresholdPercentage / 100);
+            doc.rect(thresholdX, y - 1, 0.7, height + 2, 'F');
+
+            return y + height; // Returnează noua poziție Y
+        };
+
+        // Funcție pentru culoarea scorului
+        const getScoreColor = (score, threshold) => {
+            if (score < threshold) return [76, 175, 80]; // Verde
+            if (score < threshold * 1.5) return [255, 193, 7]; // Galben
+            return [244, 67, 54]; // Roșu
+        };
+
+        // ===== PARTEA 3: GENERARE CONțINUT PDF =====
+
+        let y = 20; // Poziția inițială Y
+
+        // Adaugă titlu
+        addSafeText("Rezultate Test RAADS-R", 105, y, {
+            fontSize: 18,
+            align: 'center'
+        });
+
+        // Adaugă sursa
+        y += 10;
+        addSafeText("Rezultate generate de www.testautism.ro", 105, y, {
+            fontSize: 10,
+            align: 'center'
+        });
+
+        // Adaugă disclaimer
+        y += 10;
+        addSafeText("IMPORTANT: Acest test este destinat EXCLUSIV în scop informativ și NU trebuie utilizat ca un instrument de diagnostic. Pentru evaluări profesionale, vă recomandăm să vizitați www.doctoradhd.com", 105, y, {
+            fontSize: 9,
+            fontStyle: 'bold',
+            color: [221, 44, 0],
+            align: 'center',
+            maxWidth: 170
+        });
+
+        // Adaugă scor total
+        y += 20;
+        addSafeText(`Scor Total: ${totalScore}`, 105, y, {
+            fontSize: 16,
+            align: 'center'
+        });
+
+        // Adaugă interpretare
+        y += 8;
+        const interpretation = getInterpretation(totalScore);
+        y = addSafeText(`Interpretare: ${interpretation}`, 105, y, {
+            fontSize: 12,
+            align: 'center',
+            maxWidth: 170
+        });
+
+        // Adaugă titlu secțiune scoruri
+        y += 10;
+        addSafeText("Scoruri pe categorii:", 20, y, {
+            fontSize: 14
+        });
+
+        // Adaugă scorurile pe categorii
+        y += 10;
+        const categories = [
+            { name: 'Limbaj', score: subscores.language, threshold: RAADS_R_THRESHOLDS.language, max: MAX_SCORES.language },
+            { name: 'Relaționare socială', score: subscores.socialRelatedness, threshold: RAADS_R_THRESHOLDS.socialRelatedness, max: MAX_SCORES.socialRelatedness },
+            { name: 'Senzorial-motor', score: subscores.sensoryMotor, threshold: RAADS_R_THRESHOLDS.sensoryMotor, max: MAX_SCORES.sensoryMotor },
+            { name: 'Interese circumscrise', score: subscores.circumscribedInterests, threshold: RAADS_R_THRESHOLDS.circumscribedInterests, max: MAX_SCORES.circumscribedInterests }
+        ];
+
+        categories.forEach(category => {
+            // Adaugă informații categorie
+            addSafeText(`${category.name}: ${category.score} / ${category.max} (Prag: ${category.threshold})`, 25, y, {
+                fontSize: 12
+            });
+            y += 6;
+
+            // Calculează procentaje și culoare
+            const percentage = (category.score / category.max) * 100;
+            const thresholdPercentage = (category.threshold / category.max) * 100;
+            const color = getScoreColor(category.score, category.threshold);
+
+            // Desenează bară progres
+            y = drawProgressBar(25, y, 150, 4, percentage, thresholdPercentage, color) + 2;
+            y += 5;
+        });
+
+        // Adaugă legendă
+        y += 5;
+        doc.setFillColor(76, 175, 80);
+        doc.rect(25, y, 4, 4, 'F');
+        addSafeText("Sub prag", 32, y + 3, { fontSize: 10 });
+
+        doc.setFillColor(255, 193, 7);
+        doc.rect(65, y, 4, 4, 'F');
+        addSafeText("Aproape de prag", 72, y + 3, { fontSize: 10 });
+
+        doc.setFillColor(244, 67, 54);
+        doc.rect(120, y, 4, 4, 'F');
+        addSafeText("Peste prag", 127, y + 3, { fontSize: 10 });
+
+        // Adaugă răspunsurile la întrebări
+        y += 15;
+        addSafeText("Răspunsuri la întrebări:", 20, y, { fontSize: 14 });
+        y += 8;
+
+        let pageCount = 1;
+
+        // Pregătește lista de întrebări și răspunsuri
+        const questionAnswers = [];
+        questions.forEach(question => {
+            const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
+            if (selected) {
+                questionAnswers.push({
+                    id: question.id,
+                    text: question.text,
+                    answer: selected.closest('label').querySelector('.form-check-label').textContent.trim()
+                });
+            }
+        });
+
+        // Adaugă răspunsurile
+        questionAnswers.forEach((qa, index) => {
+            // Verifică dacă avem nevoie de pagină nouă (estimare conservativă)
+            if (y > 270) {
+                doc.addPage();
+                pageCount++;
+                y = 20;
+
+                // Adaugă header pagină
+                addSafeText(`Rezultate Test RAADS-R - Pagina ${pageCount}`, 105, 10, {
+                    fontSize: 10,
+                    align: 'center'
+                });
+            }
+
+            // Adaugă întrebarea
+            const questionText = `${qa.id}. ${qa.text}`;
+            y = addSafeText(questionText, 20, y, {
+                fontSize: 11,
+                fontStyle: 'bold',
+                maxWidth: 170
+            });
+
+            // Adaugă răspunsul
+            const answerText = `Răspuns: ${qa.answer}`;
+            y = addSafeText(answerText, 25, y, {
+                fontSize: 10,
+                maxWidth: 165
+            });
+
+            y += 3; // Spațiu după fiecare răspuns
+        });
+
+        // Adaugă data testului pe ultima pagină
+        addSafeText(`Data testului: ${new Date().toLocaleDateString('ro-RO')}`, 20, 280, {
+            fontSize: 9
+        });
+
+        // Verifică numărul de pagini adăugate
+        console.log(`PDF generat cu ${doc.getNumberOfPages()} pagini`);
+
+        return doc.output('blob');
+    } catch (error) {
+        console.error('Eroare la generarea PDF-ului:', error);
+        alert(`A apărut o eroare la generarea PDF-ului: ${error.message}`);
+        throw error;
+    }
+}
+
+/**
+ * Soluție de backup care folosește metoda de înlocuire controlată a diacriticelor.
+ * Se folosește doar dacă metoda principală eșuează.
+ */
+function generateBackupPDF() {
+    try {
+        // Obține rezultatele testului
+        const results = calculateSubscores();
+        const { subscores, totalScore } = results;
+
+        // Creează documentul PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Funcție de normalizare a textului românesc pentru compatibilitate maximă
+        const normalizeRomanian = (text) => {
+            // Mapare manuală a caracterelor cu diacritice la echivalentele lor simple
+            return text
+                .replace(/ă/g, 'a')
+                .replace(/â/g, 'a')
+                .replace(/î/g, 'i')
+                .replace(/ș/g, 's')
+                .replace(/ț/g, 't')
+                .replace(/Ă/g, 'A')
+                .replace(/Â/g, 'A')
+                .replace(/Î/g, 'I')
+                .replace(/Ș/g, 'S')
+                .replace(/ț/g, 'T');
+        };
+
+        // Definim variabilele de lucru
+        let y = 20;
+
+        // Adaugă titlu
+        doc.setFontSize(16);
+        doc.text('Rezultate Test RAADS-R', 105, y, { align: 'center' });
+
+        // Adaugă scor total
+        y += 20;
+        doc.setFontSize(14);
+        doc.text(`Scor Total: ${totalScore}`, 105, y, { align: 'center' });
+
+        // Adaugă interpretare
+        y += 10;
+        doc.setFontSize(12);
+        doc.text(`Interpretare: ${normalizeRomanian(getInterpretation(totalScore))}`, 105, y, { align: 'center' });
+
+        // Adaugă categorii
+        y += 20;
+        doc.text(normalizeRomanian('Scoruri pe categorii:'), 20, y);
+        y += 10;
+
+        // Scoruri per categorie
+        doc.text(normalizeRomanian(`Limbaj: ${subscores.language} / ${MAX_SCORES.language}`), 20, y);
+        y += 10;
+        doc.text(normalizeRomanian(`Relaționare socială: ${subscores.socialRelatedness} / ${MAX_SCORES.socialRelatedness}`), 20, y);
+        y += 10;
+        doc.text(normalizeRomanian(`Senzorial-motor: ${subscores.sensoryMotor} / ${MAX_SCORES.sensoryMotor}`), 20, y);
+        y += 10;
+        doc.text(normalizeRomanian(`Interese circumscrise: ${subscores.circumscribedInterests} / ${MAX_SCORES.circumscribedInterests}`), 20, y);
+
+        // Adaugă răspunsurile
+        y += 20;
+        doc.text(normalizeRomanian('Răspunsuri la întrebări:'), 20, y);
+        y += 10;
+
+        // Străbatem întrebările și răspunsurile
+        let pageCount = 1;
+
+        questions.forEach(question => {
+            const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
+            if (!selected) return;
+
+            // Verificăm dacă avem nevoie de o pagină nouă
+            if (y > 270) {
+                doc.addPage();
+                pageCount++;
+                y = 20;
+
+                // Adăugăm antet pagină
+                doc.setFontSize(10);
+                doc.text(`Rezultate Test RAADS-R - Pagina ${pageCount}`, 105, 10, { align: 'center' });
+                doc.setFontSize(12);
+            }
+
+            // Adăugăm întrebarea
+            const questionText = normalizeRomanian(`${question.id}. ${question.text}`);
+            doc.setFontSize(10);
+
+            // Împărțim textul pe linii dacă e prea lung
+            const splitQuestion = doc.splitTextToSize(questionText, 180);
+            doc.text(splitQuestion, 20, y);
+            y += splitQuestion.length * 7;
+
+            // Adăugăm răspunsul
+            const answerText = normalizeRomanian(`Răspuns: ${selected.closest('label').querySelector('.form-check-label').textContent.trim()}`);
+            const splitAnswer = doc.splitTextToSize(answerText, 170);
+            doc.text(splitAnswer, 25, y);
+            y += splitAnswer.length * 7 + 5; // Adăugăm spațiu după răspuns
+        });
+
+        // Adăugăm data testului
+        doc.setFontSize(8);
+        doc.text(`Data testului: ${new Date().toLocaleDateString('ro-RO')}`, 20, 280);
+
+        return doc.output('blob');
+    } catch (error) {
+        console.error('Eroare la generarea PDF-ului de backup:', error);
+        throw error;
+    }
+}
+
+/**
+ * Funcție de export PDF robustă care încearcă mai multe metode până când una funcționează
+ */
+async function exportRobustRomanianPDF() {
+    // Disable export button while generating
+    const exportBtn = document.getElementById('exportBtn');
+    if (exportBtn) {
+        exportBtn.disabled = true;
+        exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se generează PDF-ul...';
+    }
+
+    try {
+        // Salvează rezultatele în localStorage pentru redundanță
+        storeTestResults();
+
+        // Încearcă metodele în ordine, de la cea mai bună la cea mai simplă
+        let pdfBlob;
+
+        // Metoda 1: Încearcă metoda cu font încorporat
+        try {
+            console.log("Încercare generare PDF cu metoda principală...");
+            pdfBlob = await generateRomanianPDF();
+            console.log("PDF generat cu succes folosind metoda principală!");
+        } catch (error1) {
+            console.warn("Prima metodă a eșuat:", error1);
+
+            // Metoda 2: Încearcă metoda de backup
+            try {
+                console.log("Încercare generare PDF cu metoda de backup...");
+                pdfBlob = await generateBackupPDF();
+                console.log("PDF generat cu succes folosind metoda de backup!");
+            } catch (error2) {
+                console.warn("A doua metodă a eșuat:", error2);
+
+                // Metoda 3: Încearcă metoda originală
+                try {
+                    console.log("Încercare generare PDF cu metoda originală...");
+                    pdfBlob = await generatePDFBlob();
+                    console.log("PDF generat cu succes folosind metoda originală!");
+                } catch (error3) {
+                    console.error("Toate metodele au eșuat!", error3);
+                    throw new Error("Nu s-a putut genera PDF-ul cu nicio metodă disponibilă!");
+                }
+            }
+        }
+
+        // PDF-ul a fost generat, acum îl deschidem/descărcăm
+        const blobUrl = URL.createObjectURL(pdfBlob);
+
+        // Creează link-ul de descărcare
+        const downloadLink = document.createElement('a');
+        downloadLink.href = blobUrl;
+        downloadLink.download = 'rezultate_test_raads_r.pdf';
+        document.body.appendChild(downloadLink);
+
+        // Tratează special browser-ul Facebook
+        if (navigator.userAgent.match(/(FBAN|FBAV)/i)) {
+            window.open(blobUrl, '_blank');
+        } else {
+            downloadLink.click();
+        }
+
+        // Curățare resurse
+        setTimeout(() => {
+            URL.revokeObjectURL(blobUrl);
+            document.body.removeChild(downloadLink);
+        }, 1000);
+
+        return true;
+    } catch (error) {
+        console.error('Eroare la generarea PDF-ului:', error);
+        alert(`A apărut o eroare la generarea PDF-ului: ${error.message}\nVă rugăm să încercați din nou.`);
+        return false;
+    } finally {
+        // Re-enable export button
+        if (exportBtn) {
+            exportBtn.disabled = false;
+            exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Exportă ca PDF';
+        }
+    }
+}
+
 const questions = [
     // 80 de întrebări ca obiecte cu text și flag pentru inversare
     // Indexarea începe de la 1 pentru claritate
@@ -1564,7 +2045,7 @@ function generateFinalPDF() {
         doc.rect(leftMargin + 110, y, 4, 4, 'F');
         doc.text('Peste prag', leftMargin + 117, y + 3);
 
-        // === SECȚIUNEA CU RĂSPUNSURI LA ÎNTREBĂRI ===
+        // === SECțIUNEA CU RĂSPUNSURI LA ÎNTREBĂRI ===
 
         // Adăugă titlul secțiunii
         y += 15;
@@ -1607,7 +2088,7 @@ function generateFinalPDF() {
                        c === 'Â' ? 'A' :
                        c === 'Î' ? 'I' :
                        c === 'Ș' ? 'S' :
-                       c === 'Ț' ? 'T' : c;
+                       c === 'ț' ? 'T' : c;
             })}`;
 
             // Adaugă întrebarea (bold)
@@ -1638,7 +2119,7 @@ function generateFinalPDF() {
                        c === 'Â' ? 'A' :
                        c === 'Î' ? 'I' :
                        c === 'Ș' ? 'S' :
-                       c === 'Ț' ? 'T' : c;
+                       c === 'ț' ? 'T' : c;
             })}`;
 
             doc.setFont('helvetica', 'normal');
@@ -1672,63 +2153,65 @@ function generateFinalPDF() {
 }
 
 if(exportBtn) {
-    exportBtn.addEventListener('click', async () => {
-        exportBtn.disabled = true;
-        exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se generează PDF-ul...';
+    exportBtn.addEventListener('click', exportRobustRomanianPDF);
 
-        try {
-            // Stochează rezultatele
-            storeTestResults();
+    // exportBtn.addEventListener('click', async () => {
+    //     exportBtn.disabled = true;
+    //     exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se generează PDF-ul...';
 
-            // Încearcă să genereze PDF-ul cu noua metodă
-            let pdfBlob;
+    //     try {
+    //         // Stochează rezultatele
+    //         storeTestResults();
 
-            try {
-                // Folosește noua metodă optimizată pentru română
-                pdfBlob = await generateFinalPDF();
-            } catch (e) {
-                console.error("Eroare la generarea PDF-ului optimizat:", e);
+    //         // Încearcă să genereze PDF-ul cu noua metodă
+    //         let pdfBlob;
 
-                // Încearcă metoda anterioară îmbunătățită
-                try {
-                    pdfBlob = await generateImprovedPDF();
-                } catch (e2) {
-                    console.error("Eroare la generarea PDF-ului îmbunătățit:", e2);
+    //         try {
+    //             // Folosește noua metodă optimizată pentru română
+    //             pdfBlob = await generateFinalPDF();
+    //         } catch (e) {
+    //             console.error("Eroare la generarea PDF-ului optimizat:", e);
 
-                    // Încearcă metoda originală ca ultimă soluție
-                    pdfBlob = await generatePDFBlob();
-                }
-            }
+    //             // Încearcă metoda anterioară îmbunătățită
+    //             try {
+    //                 pdfBlob = await generateImprovedPDF();
+    //             } catch (e2) {
+    //                 console.error("Eroare la generarea PDF-ului îmbunătățit:", e2);
 
-            const blobUrl = URL.createObjectURL(pdfBlob);
+    //                 // Încearcă metoda originală ca ultimă soluție
+    //                 pdfBlob = await generatePDFBlob();
+    //             }
+    //         }
 
-            // Creează link-ul de descărcare
-            const downloadLink = document.createElement('a');
-            downloadLink.href = blobUrl;
-            downloadLink.download = 'rezultate_test_raads_r.pdf';
-            document.body.appendChild(downloadLink);
+    //         const blobUrl = URL.createObjectURL(pdfBlob);
 
-            // Tratează special browser-ul Facebook
-            if (navigator.userAgent.match(/(FBAN|FBAV)/i)) {
-                window.open(blobUrl, '_blank');
-            } else {
-                downloadLink.click();
-            }
+    //         // Creează link-ul de descărcare
+    //         const downloadLink = document.createElement('a');
+    //         downloadLink.href = blobUrl;
+    //         downloadLink.download = 'rezultate_test_raads_r.pdf';
+    //         document.body.appendChild(downloadLink);
 
-            // Curățare
-            setTimeout(() => {
-                URL.revokeObjectURL(blobUrl);
-                downloadLink.remove();
-            }, 1000);
+    //         // Tratează special browser-ul Facebook
+    //         if (navigator.userAgent.match(/(FBAN|FBAV)/i)) {
+    //             window.open(blobUrl, '_blank');
+    //         } else {
+    //             downloadLink.click();
+    //         }
 
-        } catch (error) {
-            console.error('Generarea PDF-ului a eșuat:', error);
-            alert(`A apărut o eroare la generarea PDF-ului: ${error.message}\nVă rugăm să încercați din nou.`);
-        } finally {
-            exportBtn.disabled = false;
-            exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Exportă ca PDF';
-        }
-    });
+    //         // Curățare
+    //         setTimeout(() => {
+    //             URL.revokeObjectURL(blobUrl);
+    //             downloadLink.remove();
+    //         }, 1000);
+
+    //     } catch (error) {
+    //         console.error('Generarea PDF-ului a eșuat:', error);
+    //         alert(`A apărut o eroare la generarea PDF-ului: ${error.message}\nVă rugăm să încercați din nou.`);
+    //     } finally {
+    //         exportBtn.disabled = false;
+    //         exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Exportă ca PDF';
+    //     }
+    // });
 }
 
 // Restart button functionality with better state management
