@@ -9,7 +9,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- FontAwesome CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- HTML2PDF (for PDF export) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
@@ -1753,6 +1753,175 @@ body {
     transform: scale(1.02);
     transition: all 0.2s ease;
 }
+
+/* Enhanced FAQ Accordion Styling */
+.accordion-faq {
+    --faq-primary: #2196F3;
+    --faq-primary-light: #e3f2fd;
+    --faq-shadow: rgba(33, 150, 243, 0.1);
+}
+
+/* Accordion styling */
+.accordion-faq .accordion-item {
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+    border: none;
+    box-shadow: 0 2px 15px var(--faq-shadow);
+}
+
+.accordion-faq .accordion-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px var(--faq-shadow);
+}
+
+/* Accordion button styling */
+.accordion-faq .accordion-button {
+    padding: 1.25rem 1.5rem;
+    background: white;
+    box-shadow: none;
+    border: none;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.accordion-faq .accordion-button:not(.collapsed) {
+    color: var(--faq-primary);
+    background-color: var(--faq-primary-light);
+    box-shadow: none;
+}
+
+/* Custom arrow icon */
+.accordion-faq .accordion-button::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%232196F3' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    transition: all 0.3s ease;
+}
+
+.accordion-faq .accordion-button:not(.collapsed)::after {
+    transform: rotate(-180deg);
+}
+
+/* Accordion body styling */
+.accordion-faq .accordion-body {
+    padding: 1.5rem;
+    background: white;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    line-height: 1.7;
+    color: #444;
+}
+
+/* Animation for collapsing/expanding */
+.accordion-faq .accordion-collapse {
+    transition: all 0.35s ease;
+}
+
+/* Enhanced focus states for accessibility */
+.accordion-faq .accordion-button:focus {
+    box-shadow: 0 0 0 2px var(--faq-primary-light);
+    border-color: var(--faq-primary);
+    z-index: 3;
+}
+
+/* Question icon styling */
+.accordion-faq .accordion-button i {
+    color: var(--faq-primary);
+    font-size: 1.15rem;
+    transition: all 0.3s ease;
+}
+
+.accordion-faq .accordion-button:not(.collapsed) i {
+    transform: scale(1.2);
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .accordion-faq .accordion-button {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .accordion-faq .accordion-body {
+        padding: 1rem;
+    }
+
+    /* Increased touch target size on mobile */
+    .accordion-faq .accordion-button::after {
+        width: 20px;
+        height: 20px;
+        background-size: 20px;
+    }
+}
+
+/* Elegant hover effect */
+.accordion-faq .accordion-button:hover {
+    background-color: var(--faq-primary-light);
+}
+
+/* Subtle transition for content */
+.accordion-faq .accordion-body p {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+}
+
+.accordion-faq .show .accordion-body p {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered animation for multiple paragraphs */
+.accordion-faq .show .accordion-body p:nth-child(2) {
+    transition-delay: 0.1s;
+}
+
+/* Visually highlight the first FAQ item */
+.accordion-faq .accordion-item:first-child {
+    border-left: 4px solid var(--faq-primary);
+}
+
+/* Add subtle background pattern to accordion items */
+.accordion-faq .accordion-item {
+    background-image: linear-gradient(to bottom right, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.8) 100%);
+    background-size: 200% 200%;
+}
+
+/* Print styling to ensure FAQ content is visible when printed */
+@media print {
+    .accordion-faq .accordion-collapse {
+        display: block !important;
+    }
+
+    .accordion-faq .accordion-button::after {
+        display: none;
+    }
+
+    .accordion-faq .accordion-item {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 1.5rem;
+    }
+
+    .accordion-faq .accordion-body p {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Add subtle indicator for content presence */
+.accordion-faq .accordion-button .content-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(to right, var(--faq-primary), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.accordion-faq .accordion-button:hover .content-indicator,
+.accordion-faq .accordion-button:not(.collapsed) .content-indicator {
+    opacity: 1;
+}
 </style>
 
 </head>
@@ -1761,7 +1930,7 @@ body {
     <div id="quick-nav" class="quick-nav-container">
         <ul class="quick-nav">
             <li>
-                <a href="#section-intro" class="quick-nav-item">
+                <a href="#section-faq" class="quick-nav-item">
                     <i class="fas fa-info-circle"></i>
                     <span>Despre test</span>
                 </a>
@@ -1774,8 +1943,8 @@ body {
             </li>
             <li>
                 <a href="#section-quiz" class="quick-nav-item">
-                    <i class="fas fa-question-circle"></i>
-                    <span>Testul RAADS-R</span>
+                    <i class="fa-solid fa-circle-play"></i>
+                    <span>Testul RAADS-R - ÎNCEPE AICI!</span>
                 </a>
             </li>
             <li>
@@ -1794,11 +1963,15 @@ body {
     </div>
     <div class="section-divider d-md-none"></div>
     <div class="initial-section justify-content-center">
-        <h1 class="text-center mt-4 mb-3" style="font-size: 1.5rem; font-weight: bold;">Test autism adulți - RAADS-R (Ritvo Autism Asperger Diagnostic Scale - Revised)</h1>
+        <h1 class="text-center mt-4 mb-3" style="font-size: 1.5rem; font-weight: bold;">Test Autism Adulți Online cu Scalele RAADS-R (Ritvo Autism Asperger Diagnostic Scale - Revised) și CAT-Q (Camouflaging Autistic Traits Questionnaire) - Platformă pentru Autoevaluare Autism online!</h1>
         <h2 class="text-center mb-3" style="font-size: 1.3rem; color: #1976D2;">Autismul la adulți – simptome, diagnostic și autoevaluare</h2>
         <p>
-            Acest <strong>test de autism pentru adulți</strong> (disponibil online, în limba română) te ajută să identifici <strong>simptomele autismului la adulți</strong> și oferă un prim pas spre <strong>diagnosticul TSA</strong>. Această versiune revizuită (RAADS-R) a <strong>Scalei Ritvo Autism Asperger Diagnostic Scale (RAADS)</strong> este un <strong>instrument orientativ, dar extrem de precis</strong> pentru screening-ul <strong>trăsăturilor autiste la adulți</strong>. Întrebările au fost restructurate pe baza feedback-ului <b>comunității autiste</b> și al unor profesioniști precum <strong>Dr. Natalie Engelbrecht</strong>. Testul constă în <strong>80 de afirmații</strong> pentru screening-ul autismului la adulții care pot <b>„scăpa de sub radarul diagnostic”</b>, din cauza unei prezentări <strong>aparent subclinice.</strong>
+            Acest <strong>test de autism pentru adulți</strong> (disponibil online, în limba română) te ajută să identifici <strong>simptomele autismului la adulți</strong> și oferă un prim pas spre <strong>diagnosticul TSA</strong>.
         </p>
+        <p>
+            Versiunea revizuită (RAADS-R) a <strong>Scalei Ritvo Autism Asperger Diagnostic Scale (RAADS)</strong> este un <strong>instrument orientativ, dar extrem de precis</strong> pentru screening-ul <strong>trăsăturilor autiste la adulți</strong>. Întrebările au fost restructurate pe baza feedback-ului <b>comunității autiste</b> și al unor profesioniști precum <strong>Dr. Natalie Engelbrecht</strong>.
+        </p>
+        <p>Testul constă în <strong>80 de afirmații</strong> pentru screening-ul autismului la adulții care pot <b>„scăpa de sub radarul diagnostic”</b>, din cauza unei prezentări <strong>aparent subclinice.</strong></p>
         <div class="cta-button-wrapper">
             <div class="cta-emphasis">
                 <a id="start-test" href="#first-disclaimer" class="cta-button pulse">
@@ -1816,7 +1989,7 @@ body {
                         <a href="https://www.ovidiuplaton.com" target="_blank" class="d-block text-center">
                             <img src="https://www.ovidiuplaton.com/content/images/2024/07/ovidiu-platon---consilier-autism-adhd--audhd.png"
                                  class="img-fluid"
-                                 style="max-width: 275px;"
+                                 style="max-width: 300px; max-height: 100px;"
                                  alt="Ovidiu Platon - Consilier Parental si de Dezvoltare Personala - autism ADHD"/>
                         </a>
                     </div>
@@ -1824,7 +1997,7 @@ body {
                         <a href="https://www.suntautist.ro" target="_blank" class="d-block text-center">
                             <img src="https://www.doctoradhd.com/wp-content/uploads/2023/08/suntautist-logo-1024x385.png"
                                  class="img-fluid"
-                                 style="max-width: 275px; max-height: 82px;"
+                                 style="max-width: 300px; max-height: 100px;"
                                  alt="Asociatia Sunt Autist - Autismul explicat de autisti"/>
                         </a>
                     </div>
@@ -1832,7 +2005,7 @@ body {
                         <a href="https://www.despreadhd.ro" target="_blank" class="d-block text-center">
                             <img src="https://www.despreadhd.ro/content/images/2024/10/despreadhd-ro.jpg"
                                  class="img-fluid"
-                                 style="max-width: 275px; max-height: 82px;"
+                                 style="max-width: 300px; max-height: 100px;"
                                  alt="About ADHD România - Știință, diagnostic, tratament, suport"/>
                         </a>
                     </div>
@@ -1852,9 +2025,103 @@ body {
         </div>
         <hr>
     </div>
+    <div class="section-divider d-md-none"></div>
+    <!-- FAQ Section with Stylish SEO-Friendly Accordions -->
+    <div class="faq-section container my-5" id="section-faq">
+        <h2 class="text-center mb-4">Întrebări frecvente despre testul pentru autism la adulți RAADS-R</h2>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Stylish Accordion Container -->
+                <div class="accordion accordion-faq" id="faqAccordion">
+
+                    <!-- FAQ Item 1 -->
+                    <div class="accordion-item faq-item mb-3 border-0 shadow-sm rounded-3 overflow-hidden">
+                        <h3 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="fas fa-question-circle text-primary me-2"></i>
+                                <span class="fw-semibold">Este testul RAADS-R un diagnostic medical definitiv?</span>
+                            </button>
+                        </h3>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p><span style="color: red;">Nu.</span> Testul RAADS-R este <strong>exclusiv un instrument de screening orientativ</strong> și <span style="color: red;">NU constituie un diagnostic medical oficial</span>. Deși are o sensibilitate de 97% și specificitate de 100% conform studiului original, singura modalitate de a afla sigur dacă aveți Tulburare de Spectru Autist (TSA) este să obțineți un diagnostic de la un medic psihiatru sau psiholog clinician specializat în tulburări de neurodezvoltare.</p>
+                                <p>Rezultatele testului pot fi un punct de plecare valoros pentru o discuție cu un specialist, dar <span style="color: red;">NU înlocuiesc evaluarea clinică profesională completă</span>, care include, printre altele, documentarea <strong>istoricului dezvoltării</strong>, <strong>observația clinică</strong> și <strong>instrumente suplimentare de evaluare standardizate</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 2 -->
+                    <div class="accordion-item faq-item mb-3 border-0 shadow-sm rounded-3 overflow-hidden">
+                        <h3 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <i class="fas fa-question-circle text-primary me-2"></i>
+                                <span class="fw-semibold">Ce trebuie să fac dacă scorul testului indică autism?</span>
+                            </button>
+                        </h3>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>Dacă scorul tău depășește pragul de 65, indicând trăsături autiste semnificative, ar fi recomandat să consulți un specialist pentru o evaluare clinică detaliată. Poți salva rezultatul în format PDF folosind opțiunea "Exportă ca PDF" și să-l prezinți unui psihiatru sau psiholog clinician specializat în tulburări de neurodezvoltare.</p>
+                                <p>Un diagnostic formal poate oferi acces la servicii de suport, terapii specifice și poate ajuta la o mai bună înțelegere a propriilor experiențe. Pentru evaluări profesionale, poți vizita <a href="https://www.doctoradhd.com/" target="_blank">doctoradhd.com</a> sau să te adresezi grupurilor de suport menționate pe site pentru recomandări de specialiști.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 3 -->
+                    <div class="accordion-item faq-item mb-3 border-0 shadow-sm rounded-3 overflow-hidden">
+                        <h3 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <i class="fas fa-question-circle text-primary me-2"></i>
+                                <span class="fw-semibold">Cât durează și cum se desfășoară testul pentru autism la adulți RAADS-R?</span>
+                            </button>
+                        </h3>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>Testul RAADS-R constă în 80 de afirmații și durează în medie între 10 și 30 de minute pentru completare, în funcție de viteza individuală de reflecție. Este un instrument de <strong>auto-raportare</strong>, ceea ce înseamnă că este completat de către tine, evaluând propria experiență.</p>
+                                <p>Fiecare afirmație are patru opțiuni de răspuns: (1) Adevărat acum și când eram mic(ă), (2) Adevărat doar acum, (3) Adevărat doar când aveam sub 16 ani, sau (4) Niciodată adevărat. Nu există răspunsuri "corecte" sau "greșite" - scopul este să reflecți cât mai sincer asupra propriilor experiențe de viață.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 4 -->
+                    <div class="accordion-item faq-item mb-3 border-0 shadow-sm rounded-3 overflow-hidden">
+                        <h3 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                <i class="fas fa-question-circle text-primary me-2"></i>
+                                <span class="fw-semibold">Care sunt simptomele tipice ale autismului la adulți?</span>
+                            </button>
+                        </h3>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>Autismul la adulți se poate manifesta diferit față de prezentarea clasică la copii și poate include: dificultăți în interacțiunile sociale și comunicare (înțelegerea subtextului, a limbajului corporal, menținerea contactului vizual), interese focalizate și intense, nevoia de rutină și predictibilitate, sensibilități senzoriale (la sunete, lumini, texturi), și provocări în gestionarea schimbărilor neașteptate.</p>
+                                <p>Multe persoane autiste dezvoltă strategii de mascare a trăsăturilor autiste (camuflaj), ceea ce poate face diagnosticul mai dificil la adulți. Testul RAADS-R a fost special conceput pentru a identifica trăsăturile autiste la adulți care pot "scăpa de sub radarul diagnostic" din cauza acestor strategii de adaptare.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 5 -->
+                    <div class="accordion-item faq-item mb-3 border-0 shadow-sm rounded-3 overflow-hidden">
+                        <h3 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                <i class="fas fa-question-circle text-primary me-2"></i>
+                                <span class="fw-semibold">Cât de fiabil este testul RAADS-R comparativ cu alte teste?</span>
+                            </button>
+                        </h3>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>RAADS-R este unul dintre cele mai fiabile instrumente de screening pentru autism la adulți, cu o sensibilitate de 97% (identifică corect 97% dintre persoanele autiste) și o specificitate de 100% (identifică corect toate persoanele non-autiste) conform studiului de validare original. Aceste valori indică o precizie foarte ridicată în comparație cu alte instrumente de screening disponibile.</p>
+                                <p>Alte teste frecvent utilizate pentru screening-ul autismului la adulți includ AQ (Autism Quotient), cu o sensibilitate de aproximativ 80%, și RAADS-14, o versiune scurtă a acestui test cu 14 întrebări. RAADS-R oferă însă o evaluare mai comprehensivă, analizând patru domenii cheie: limbaj, relaționare socială, senzorial-motor și interese circumscrise.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--RAADS-R explanations-->
     <div class="section-divider d-md-none"></div>
     <div class="features-container">
+        <h2 class="text-center mb-4"><i class="fas fa-question-circle text-primary me-2"></i>Ce oferă platforma <strong>TestAutism.ro</strong> pentru <strong>Testare Autism Online la Adulți</strong>?</h2>
         <div class="row g-4">
             <!-- Privacy Feature -->
             <div class="col-12 col-md-4">
@@ -1926,7 +2193,7 @@ body {
     </div>
     <div class="section-divider d-md-none"></div>
     <div class="license-section">
-        <h3 class="license-heading">Licență și Utilizare RAADS-R</h3>
+        <h2 class="h3 mb-4"><strong>Licență și drepturi de utilizare</strong> a testului pentru autism la adulți RAADS-R</h2>
         <p class="license-text">
             RAADS-R (Scala Ritvo Autism Asperger Diagnostic – Revizuită) este un instrument de screening pentru trăsăturile autiste la adulți, licențiat sub Creative Commons
             <strong>Attribution-NonCommercial</strong>. Acest test este oferit doar în scopuri necomerciale, iar pentru utilizarea sa sunt necesare următoarele:
@@ -1945,8 +2212,8 @@ body {
         <!-- General Characteristics -->
         <div class="info-section">
             <div class="section-header">
-                <i class="fas fa-info-circle text-primary me-2"></i>
-                <h2 class="h3 mb-0">Caracteristici generale ale testului RAADS-R</h2>
+
+                <h2 class="h3 mb-0"><i class="fas fa-question-circle text-primary me-2"></i> Care sunt caracteristicile generale ale testului pentru autism la adulți RAADS-R?</h2>
             </div>
 
             <div class="version-cards">
@@ -1954,7 +2221,7 @@ body {
                 <div class="version-card">
                     <div class="version-title">
                         <i class="fas fa-star text-warning me-2"></i>
-                        RAADS-R (RAADS revizuit)
+                        Test autism RAADS-R (RAADS revizuit)
                     </div>
                     <ul class="feature-list">
                         <li>
@@ -1991,7 +2258,7 @@ body {
                 <div class="version-card">
                     <div class="version-title">
                         <i class="fas fa-history text-info me-2"></i>
-                        RAADS Original
+                        Test autism RAADS Original
                     </div>
                     <ul class="feature-list">
                         <li>
@@ -2030,7 +2297,7 @@ body {
         <div class="info-card">
             <div class="card-header">
                 <i class="fas fa-users text-success me-2"></i>
-                <h2 class="h3 mb-0">Cui îi este destinat testul?</h2>
+                <h2 class="h3 mb-0">Cui îi este destinat testul pentru autism la adulți RAADS-R?</h2>
             </div>
             <ul class="target-list">
                 <li>
@@ -2048,7 +2315,7 @@ body {
         <div class="info-card">
             <div class="card-header">
                 <i class="fas fa-globe text-info me-2"></i>
-                <h2 class="h3 mb-0">Care este istoricul testului (versiuni, disponibilitate și traduceri)?</h2>
+                <h2 class="h3 mb-0">Ce istoric de versiuni și traduceri are testul RAADS-R pentru autism la adulți?</h2>
             </div>
             <div class="availability-content">
                 <p>RAADS-R a fost tradus în limba suedeză și în majoritatea limbilor prin intermediul translatorilor. Totuși, testele RAADS-R online <b><i>NU</i></b> par să abunde.</p>
@@ -2060,13 +2327,13 @@ body {
         <div class="info-card">
             <div class="card-header">
                 <i class="fas fa-tasks text-warning me-2"></i>
-                <h2 class="h3 mb-0">Cum se desfășoară testul?</h2>
+                <h2 class="h3 mb-0">Cum se desfășoară testul pentru autism la adulți RAADS-R?</h2>
             </div>
             <div class="process-content">
                 <p>RAADS-R este un instrument de <strong>auto-raportare</strong>, conceput pentru a fi completat de către dumneavoastră. Un <strong>profesionist medical / clinician calificat</strong> poate oferi asistență în interpretarea itemilor dacă aveți dificultăți.</p>
 
                 <div class="answer-options">
-                    <h4><i class="fas fa-check-circle text-success me-2"></i>Opțiuni de răspuns:</h4>
+                    <h3><i class="fas fa-check-circle text-success me-2"></i>Opțiuni de răspuns:</h3>
                     <ol>
                         <li>Adevărat acum și când eram mic(ă)</li>
                         <li>Adevărat doar acum</li>
@@ -2076,44 +2343,41 @@ body {
                 </div>
             </div>
         </div>
-    </div>
-    <div class="section-divider d-md-none"></div>
-    <div class="validity-section">
-        <div class="container">
-            <div class="validity-card">
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <h2 class="mb-0"><i class="fas fa-check-circle text-success me-2"></i>Sensibilitate și specificitate</h2>
+
+        <!-- Test Validity -->
+        <div class="validity-card">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h2 class="h3 mb-0"><i class="fas fa-check-circle text-success me-2"></i>Care este sensibilitatea și specificitatea testului RAADS-R pentru autism la adulți?</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">RAADS-R este un instrument fiabil pentru a ajuta la diagnosticarea adulților autiști *.</p>
+
+                    <div class="key-findings">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Niciun neurotipic care a susținut testul nu a obținut un scor peste pragul autismului.
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Doar 3% din grupul de autiști nu au obținut un scor peste 65.
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Fiabilitatea test-retest a fost ridicată, în special pentru grupul de autiști *.
+                            </li>
+                        </ul>
                     </div>
-                    <div class="card-body">
-                        <p class="lead">RAADS-R este un instrument fiabil pentru a ajuta la diagnosticarea adulților autiști *.</p>
 
-                        <div class="key-findings">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <i class="fas fa-check text-success me-2"></i>
-                                    Niciun neurotipic care a susținut testul nu a obținut un scor peste pragul autismului.
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-check text-success me-2"></i>
-                                    Doar 3% din grupul de autiști nu au obținut un scor peste 65.
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-check text-success me-2"></i>
-                                    Fiabilitatea test-retest a fost ridicată, în special pentru grupul de autiști *.
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="sensitivity-explanation">
-                            <div class="card bg-light">
-                                <div class="card-body">
-                                    <p>O <b>sensibilitate</b> de <b>97%</b> înseamnă că 97% dintre persoanele autiste care au efectuat testul au atins scorul limită și au fost clasificate cu exactitate ca autiste. Altfel spus, reprezintă proporția de autiști care au fost clasificați corect ca autiști pe baza chestionarului.</p>
-                                    <p>În schimb, un <b>scor de specificitate</b> de 100% înseamnă că toate persoanele neurotipice care au participat la test s-au situat sub scorul limită și au fost clasificate cu exactitate ca neautiste.</p>
-                                    <div class="alert alert-success">
-                                        <i class="fas fa-chart-line me-2"></i>
-                                        <strong>Concluzie:</strong> Conform studiului seminal, testul RAADS-R are o probabilitate ridicată de a-i clasifica cu exactitate pe cei care participă la test ca autiști sau non-autiști.
-                                    </div>
+                    <div class="sensitivity-explanation">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <p>O <b>sensibilitate</b> de <b>97%</b> înseamnă că 97% dintre persoanele autiste care au efectuat testul au atins scorul limită și au fost clasificate cu exactitate ca autiste. Altfel spus, reprezintă proporția de autiști care au fost clasificați corect ca autiști pe baza chestionarului.</p>
+                                <p>În schimb, un <b>scor de specificitate</b> de 100% înseamnă că toate persoanele neurotipice care au participat la test s-au situat sub scorul limită și au fost clasificate cu exactitate ca neautiste.</p>
+                                <div class="alert alert-success">
+                                    <i class="fas fa-chart-line me-2"></i>
+                                    <strong>Concluzie:</strong> Conform studiului seminal, testul RAADS-R are o probabilitate ridicată de a-i clasifica cu exactitate pe cei care participă la test ca autiști sau non-autiști.
                                 </div>
                             </div>
                         </div>
@@ -2124,6 +2388,10 @@ body {
     </div>
     <div class="section-divider d-md-none"></div>
     <div class="interpretation-section" id="section-instructions">
+        <div class="card-header">
+            <i class="fas fa-globe text-info me-2"></i>
+            <h2 class="h3 mb-0">Care sunt ariile evaluate de testul RAADS-R pentru autism la adulți?</h2>
+        </div>
         <div class="container">
             <div class="row">
                 <!-- Language Card -->
@@ -2240,7 +2508,7 @@ body {
     <div class="test-actual-container" id="section-quiz">
         <!-- Disclaimer -->
         <div id="first-disclaimer" class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
-            <h4 class="alert-heading">Disclaimer</h4>
+            <h2 class="alert-heading h3 mb-3">Avertisment <strong>IMPORTANT</strong> și <strong>Disclaimer</strong> - <strong>Citește ÎNAINTE</strong> de a începe testul!</h2>
             <p>
                 Acest test este destinat <b>EXCLUSIV</b> în scop informativ și <b>NU</b> trebuie utilizat ca un instrument de diagnostic. Deși testul a fost adaptat pentru a răspunde nevoilor persoanelor autiste, el <b>NU</b> înlocuiește o evaluare profesională efectuată de un profesionist calificat în domeniul sănătății mintale sau un profesionist medical calificat.</p>
 
@@ -2251,7 +2519,7 @@ body {
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <!-- Disclaimer end -->
-        <h2 class="text-center mb-4"><b>Ritvo pentru Autism / Asperger Revizuită</b></h2>
+        <h2 class="text-center mb-4"><b>Testul Ritvo pentru Autism / Asperger la Adulți - Ediția Revizuită</b></h2>
         <div class="card mb-4">
             <div class="card-body">
                 <p class="card-text">Acest test constă în 80 de afirmații pentru a asista în screening-ul autismului la adulți. Selectează răspunsul care se potrivește cel mai bine cu tine.</p>
@@ -2598,85 +2866,6 @@ body {
                         <li>Mă simt cel mai confortabil vorbind despre subiecte care mă interesează profund.</li>
                         <li>Am fost descris(ă) ca fiind diferit(ă) sau neconvențional(ă).</li>
                     </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="section-divider d-md-none"></div>
-    <!-- FAQ Section with semantic structure and mobile-friendly design -->
-    <div class="faq-section container my-5" id="section-faq">
-        <h2 class="text-center mb-4"><i class="fas fa-question-circle text-primary me-2"></i>Întrebări frecvente despre testul RAADS-R</h2>
-
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <!-- FAQ Item 1 -->
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h3 class="card-title h5 mb-3 d-flex align-items-center">
-                            <i class="fas fa-question-circle text-primary me-2"></i>
-                            Este testul RAADS-R un diagnostic medical definitiv?
-                        </h3>
-                        <div class="card-text">
-                            <p>Nu, testul RAADS-R este <strong>exclusiv un instrument de screening orientativ</strong> și nu constituie un diagnostic medical oficial. Deși are o sensibilitate de 97% și specificitate de 100% conform studiului original, singura modalitate de a afla sigur dacă aveți Tulburare de Spectru Autist (TSA) este să obțineți un diagnostic de la un medic psihiatru sau psiholog clinician specializat în tulburări de neurodezvoltare.</p>
-                            <p>Rezultatele testului pot fi un punct de plecare valoros pentru o discuție cu un specialist, dar nu înlocuiesc evaluarea clinică profesională completă care include istoricul dezvoltării, observația clinică și alte instrumente de evaluare.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FAQ Item 2 -->
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h3 class="card-title h5 mb-3 d-flex align-items-center">
-                            <i class="fas fa-question-circle text-primary me-2"></i>
-                            Ce trebuie să fac dacă scorul testului indică autism?
-                        </h3>
-                        <div class="card-text">
-                            <p>Dacă scorul tău depășește pragul de 65, indicând trăsături autiste semnificative, ar fi recomandat să consulți un specialist pentru o evaluare clinică detaliată. Poți salva rezultatul în format PDF folosind opțiunea "Exportă ca PDF" și să-l prezinți unui psihiatru sau psiholog clinician specializat în tulburări de neurodezvoltare.</p>
-                            <p>Un diagnostic formal poate oferi acces la servicii de suport, terapii specifice și poate ajuta la o mai bună înțelegere a propriilor experiențe. Pentru evaluări profesionale, poți vizita <a href="https://www.doctoradhd.com/" target="_blank">doctoradhd.com</a> sau să te adresezi grupurilor de suport menționate pe site pentru recomandări de specialiști.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FAQ Item 3 -->
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h3 class="card-title h5 mb-3 d-flex align-items-center">
-                            <i class="fas fa-question-circle text-primary me-2"></i>
-                            Cât durează și cum se desfășoară testul?
-                        </h3>
-                        <div class="card-text">
-                            <p>Testul RAADS-R constă în 80 de afirmații și durează în medie între 10 și 30 de minute pentru completare, în funcție de viteza individuală de reflecție. Este un instrument de <strong>auto-raportare</strong>, ceea ce înseamnă că este completat de către tine, evaluând propria experiență.</p>
-                            <p>Fiecare afirmație are patru opțiuni de răspuns: (1) Adevărat acum și când eram mic(ă), (2) Adevărat doar acum, (3) Adevărat doar când aveam sub 16 ani, sau (4) Niciodată adevărat. Nu există răspunsuri "corecte" sau "greșite" - scopul este să reflecți cât mai sincer asupra propriilor experiențe de viață.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FAQ Item 4 -->
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h3 class="card-title h5 mb-3 d-flex align-items-center">
-                            <i class="fas fa-question-circle text-primary me-2"></i>
-                            Care sunt simptomele tipice ale autismului la adulți?
-                        </h3>
-                        <div class="card-text">
-                            <p>Autismul la adulți se poate manifesta diferit față de prezentarea clasică la copii și poate include: dificultăți în interacțiunile sociale și comunicare (înțelegerea subtextului, a limbajului corporal, menținerea contactului vizual), interese focalizate și intense, nevoia de rutină și predictibilitate, sensibilități senzoriale (la sunete, lumini, texturi), și provocări în gestionarea schimbărilor neașteptate.</p>
-                            <p>Multe persoane autiste dezvoltă strategii de mascare a trăsăturilor autiste (camuflaj), ceea ce poate face diagnosticul mai dificil la adulți. Testul RAADS-R a fost special conceput pentru a identifica trăsăturile autiste la adulți care pot "scăpa de sub radarul diagnostic" din cauza acestor strategii de adaptare.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FAQ Item 5 -->
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h3 class="card-title h5 mb-3 d-flex align-items-center">
-                            <i class="fas fa-question-circle text-primary me-2"></i>
-                            Cât de fiabil este testul RAADS-R comparativ cu alte teste?
-                        </h3>
-                        <div class="card-text">
-                            <p>RAADS-R este unul dintre cele mai fiabile instrumente de screening pentru autism la adulți, cu o sensibilitate de 97% (identifică corect 97% dintre persoanele autiste) și o specificitate de 100% (identifică corect toate persoanele non-autiste) conform studiului de validare original. Aceste valori indică o precizie foarte ridicată în comparație cu alte instrumente de screening disponibile.</p>
-                            <p>Alte teste frecvent utilizate pentru screening-ul autismului la adulți includ AQ (Autism Quotient), cu o sensibilitate de aproximativ 80%, și RAADS-14, o versiune scurtă a acestui test cu 14 întrebări. RAADS-R oferă însă o evaluare mai comprehensivă, analizând patru domenii cheie: limbaj, relaționare socială, senzorial-motor și interese circumscrise.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -4904,7 +5093,7 @@ document.addEventListener('click', (e) => {
 function highlightInViewSection() {
     const navItems = document.querySelectorAll('.quick-nav-item');
     const sections = [
-        { id: 'section-intro', navItem: document.querySelector('a[href="#section-intro"]') },
+        { id: 'section-faq', navItem: document.querySelector('a[href="#section-faq"]') },
         { id: 'section-instructions', navItem: document.querySelector('a[href="#section-instructions"]') },
         { id: 'section-quiz', navItem: document.querySelector('a[href="#section-quiz"]') },
         { id: 'section-results', navItem: document.querySelector('a[href="#section-results"]') },
@@ -4930,7 +5119,10 @@ function highlightInViewSection() {
         navItems.forEach(navItem => navItem.classList.remove('active'));
         if (currentSection) {
             const activeNavItem = document.querySelector(`a[href="#${currentSection}"]`);
-            activeNavItem.classList.add('active');
+
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
         }
     });
 }
