@@ -71,7 +71,7 @@ function generateRomanianPDF() {
 
             // Preprocesare text pentru a gestiona diacriticele într-un mod mai bun
             // Această abordare menține diacriticele chiar dacă fontul nu le suportă direct
-            const processedText = text ? text.replace(/ț/g, "t\u0327").replace(/Ț/g, "T\u0327") : ""; // Asigură-te că textul există
+            const processedText = text ? text.replace(/ț/g, "ţ").replace(/Ț/g, "Ţ") : ""; // Asigură-te că textul există
 
             // Divizare text în linii cu wrap automat
             const textLines = doc.splitTextToSize(processedText, maxWidth);
