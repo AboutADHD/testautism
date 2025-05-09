@@ -3074,3 +3074,41 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Enhanced Feature Cards Animation
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if FontAwesome is loaded correctly
+    if (typeof FontAwesome === 'undefined') {
+        // Fallback for FontAwesome in case it's not loaded properly
+        const linkElement = document.createElement('link');
+        linkElement.rel = 'stylesheet';
+        linkElement.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css';
+        linkElement.integrity = 'sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==';
+        linkElement.crossOrigin = 'anonymous';
+        linkElement.referrerPolicy = 'no-referrer';
+        document.head.appendChild(linkElement);
+    }
+
+    // Add subtle animations to the feature cards
+    const featureCards = document.querySelectorAll('.feature-card-hover');
+    featureCards.forEach(card => {
+        // Create a more dynamic hover effect
+        card.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left; // x position within the element
+            const y = e.clientY - rect.top;  // y position within the element
+
+            // Calculate rotation based on mouse position (subtle effect)
+            const rotateX = (y / rect.height - 0.5) * 5; // max 5deg rotation
+            const rotateY = (x / rect.width - 0.5) * -5;
+
+            // Apply the transformation (subtle 3D effect)
+            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.02)`;
+        });
+
+        // Reset the transformation when mouse leaves
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    });
+});

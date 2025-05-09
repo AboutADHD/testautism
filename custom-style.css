@@ -2284,3 +2284,569 @@ a:focus {
 .legend-red {
     background-color: #dc3545;
 }
+
+/* Enhanced Features Container Styling */
+#enhanced-features {
+    position: relative;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, rgba(248,249,250,0.95) 0%, rgba(240,242,245,0.95) 100%);
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 4rem 0;
+}
+
+.features-header {
+    margin-bottom: 2.5rem;
+}
+
+.features-background-element {
+    background: linear-gradient(90deg, rgba(33,150,243,0.05), rgba(156,39,176,0.05));
+    transform: rotate(-3deg);
+    top: -100px;
+    left: -100px;
+    right: -100px;
+    height: 300px;
+    z-index: 0;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #2196F3, #9C27B0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+.feature-card-hover {
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.feature-card-hover:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.feature-icon-container {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 2rem;
+}
+
+.feature-icon-background {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, rgba(33,150,243,0.1), rgba(156,39,176,0.1));
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    animation: morphing 15s infinite alternate ease-in-out;
+    z-index: 1;
+}
+
+.feature-icon {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease;
+}
+
+.feature-card-hover:hover .feature-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.feature-card-hover:hover .feature-icon-background {
+    animation-duration: 5s;
+}
+
+.feature-title {
+    position: relative;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.feature-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #2196F3, #9C27B0);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.feature-card-hover:hover .feature-title::after {
+    width: 80px;
+}
+
+.feature-text {
+    color: #444;
+    line-height: 1.7;
+}
+
+.feature-note {
+    display: block;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.03);
+    font-size: 0.9rem;
+    color: #666;
+    border-left: 3px solid rgba(33,150,243,0.5);
+    transition: all 0.3s ease;
+}
+
+.feature-card-hover:hover .feature-note {
+    background: rgba(33,150,243,0.05);
+    border-left-color: #2196F3;
+}
+
+.privacy-features {
+    text-align: left;
+}
+
+.privacy-item {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.privacy-item:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.privacy-item i {
+    margin-top: 0.2rem;
+    transition: transform 0.3s ease;
+}
+
+.feature-card-hover:hover .privacy-item:hover {
+    transform: translateX(5px);
+}
+
+.feature-card-hover:hover .privacy-item:hover i {
+    transform: scale(1.2);
+}
+
+.emoji-sparkle {
+    display: inline-block;
+    font-size: 1.2em;
+    animation: sparkle 1.5s infinite alternate ease-in-out;
+}
+
+.device-note, .security-note {
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.repo-link {
+    position: relative;
+    color: #2196F3;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.repo-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #2196F3, #9C27B0);
+    transition: width 0.3s ease;
+}
+
+.repo-link:hover {
+    color: #9C27B0;
+}
+
+.repo-link:hover::after {
+    width: 100%;
+}
+
+@keyframes sparkle {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.2) rotate(10deg);
+        opacity: 1;
+    }
+}
+
+/* Make sure Font Awesome icons display correctly */
+.fa-github {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400;
+}
+
+/* Enhanced Media Queries for Responsive Design */
+@media (max-width: 992px) {
+    #enhanced-features {
+        padding: 2rem 0;
+        margin: 3rem 0;
+    }
+
+    .feature-icon-container {
+        width: 90px;
+        height: 90px;
+        margin-bottom: 1.5rem;
+    }
+
+    .feature-icon-background {
+        width: 75px;
+        height: 75px;
+    }
+
+    .feature-title {
+        font-size: 1.3rem;
+        margin-bottom: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .feature-card-hover {
+        margin-bottom: 1.5rem;
+    }
+
+    .feature-title::after {
+        width: 40px;
+    }
+}
+
+/* Adding prefers-reduced-motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .feature-card-hover, .feature-icon, .feature-title::after,
+    .feature-card-hover:hover, .emoji-sparkle, .feature-icon-background {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+}
+
+/* High-contrast mode support */
+@media (prefers-contrast: more) {
+    .gradient-text {
+        background: none;
+        color: #000;
+        font-weight: bold;
+    }
+
+    .feature-title::after {
+        background: #000;
+    }
+
+    .feature-card-hover {
+        background: #fff;
+        border: 2px solid #000;
+    }
+
+    .feature-note {
+        background: #fff;
+        border: 1px solid #000;
+        border-left: 5px solid #000;
+        color: #000;
+    }
+
+    .repo-link, .repo-link:hover {
+        color: #0000EE;
+        text-decoration: underline;
+    }
+}
+
+/* Premium Features Container - Sophisticated Design System */
+.premium-features {
+    position: relative;
+    padding: 4rem 0;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    margin: 4rem 0;
+}
+
+/* Header styling with minimal accent line */
+.features-header {
+    position: relative;
+    padding-bottom: 1rem;
+    margin-bottom: 3rem;
+}
+
+.header-accent-line {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(90deg, #2196F3, #9C27B0);
+    border-radius: 3px;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #2196F3, #9C27B0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+    z-index: 1;
+    font-weight: 500;
+}
+
+/* Premium card design */
+.premium-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2.5rem 1.8rem 1.8rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+    overflow: hidden;
+}
+
+.premium-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Card accent tops instead of circles */
+.card-top-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    z-index: 1;
+}
+
+.privacy-accent {
+    background: linear-gradient(90deg, #2196F3, #64B5F6);
+}
+
+.facebook-accent {
+    background: linear-gradient(90deg, #1877F2, #4267B2);
+}
+
+.pdf-accent {
+    background: linear-gradient(90deg, #F44336, #FF7043);
+}
+
+/* Clean, minimalist icon treatment */
+.premium-icon-wrapper {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(245, 247, 250, 0.9), rgba(255, 255, 255, 0.9));
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.03),
+                inset 0 2px 5px rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+.premium-card:hover .premium-icon-wrapper {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.03),
+                inset 0 2px 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Typography refinements */
+.premium-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.premium-card:hover .premium-title {
+    color: #2196F3;
+}
+
+.premium-content {
+    color: #555;
+    line-height: 1.7;
+}
+
+/* Enhanced privacy items */
+.privacy-item {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.privacy-item:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.privacy-item i {
+    margin-top: 0.2rem;
+    transition: transform 0.3s ease;
+}
+
+.premium-card:hover .privacy-item:hover {
+    transform: translateX(5px);
+}
+
+.premium-card:hover .privacy-item:hover i {
+    transform: scale(1.2);
+}
+
+/* GitHub highlight enhancement */
+/* .github-feature {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+} */
+
+.github-button {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 8px;
+    padding: 6px 14px;
+    background: #24292e;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.github-button i {
+    margin-right: 6px;
+    font-size: 1.1rem;
+}
+
+.github-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+    background: #393E46;
+    color: white;
+}
+
+/* Feature notes refinements */
+.feature-note {
+    margin-top: 1.2rem;
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    background: rgba(245, 247, 250, 0.7);
+    font-size: 0.9rem;
+    color: #666;
+    border-left: 3px solid rgba(33, 150, 243, 0.4);
+    transition: all 0.3s ease;
+}
+
+.premium-card:hover .feature-note {
+    background: rgba(245, 247, 250, 0.9);
+    border-left-color: #2196F3;
+}
+
+.device-note, .security-note {
+    display: block;
+    margin-top: 0.5rem;
+}
+
+/* Animation for emoji */
+.emoji-sparkle {
+    display: inline-block;
+    font-size: 1.2em;
+    animation: gentle-pulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes gentle-pulse {
+    0% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 992px) {
+    .premium-features {
+        padding: 3rem 1rem;
+    }
+
+    .premium-card {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .premium-card {
+        margin-bottom: 2rem;
+    }
+
+    .github-button {
+        padding: 8px 16px;
+        font-size: 1rem;
+    }
+}
+
+/* Accessibility enhancements */
+@media (prefers-reduced-motion: reduce) {
+    .premium-card, .premium-icon-wrapper, .privacy-item,
+    .github-button, .emoji-sparkle {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+}
+
+@media (prefers-contrast: more) {
+    .gradient-text {
+        background: none;
+        color: #000;
+        font-weight: bold;
+    }
+
+    .premium-card {
+        border: 2px solid #000;
+    }
+
+    .github-button {
+        background: #000;
+        color: #fff;
+        border: 2px solid #000;
+    }
+}
