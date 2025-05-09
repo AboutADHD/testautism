@@ -304,7 +304,7 @@ function calculateScores() {
 
 // Results Display
 function displayResults({ totalScore, compensationScore, maskingScore, assimilationScore }) {
-    const resultDiv = document.getElementById('result');
+    const resultDiv = document.getElementById('section-results');
     const submitBtn = document.getElementById('submitBtn');
 
     if (!resultDiv || !submitBtn) return;
@@ -645,7 +645,7 @@ function restartTest() {
     }
 
     // Reset UI elements
-    const resultDiv = document.getElementById('result');
+    const resultDiv = document.getElementById('section-results');
     const submitBtn = document.getElementById('submitBtn');
     const errorDiv = document.getElementById('error');
     const errorBelowDiv = document.getElementById('errorBelow');
