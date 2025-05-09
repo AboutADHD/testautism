@@ -2165,3 +2165,122 @@ a:focus {
         font-size: 0.9rem;
     }
 }
+
+/* CAT-Q Result Styles */
+/* CAT-Q Result Styles */
+.score-section {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.score-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.score-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.score-value {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.75rem;
+}
+
+/* Progress bar container */
+.score-bar {
+    height: 12px;
+    background-color: #e9ecef;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+/* Progress bar fill */
+.score-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.5s ease;
+}
+
+/* Bootstrap color classes with improved colors */
+.bg-success {
+    background-color: #28a745 !important; /* Green */
+}
+
+.bg-warning {
+    background-color: #ffc107 !important; /* Yellow/Amber */
+}
+
+.bg-danger {
+    background-color: #dc3545 !important; /* Red */
+}
+
+/* Threshold marker */
+.threshold-marker {
+    position: absolute;
+    top: 0;
+    width: 3px; /* Slightly thicker for better visibility */
+    height: 100%;
+    background-color: #000;
+    z-index: 2;
+}
+
+.score-description {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Add a simple reveal animation that doesn't change width */
+@keyframes reveal {
+    from { opacity: 0; transform: scaleY(0.5); }
+    to { opacity: 1; transform: scaleY(1); }
+}
+
+.score-fill {
+    animation: reveal 0.5s ease-out forwards;
+}
+
+/* Add legend for color codes */
+.score-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1rem;
+    gap: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.legend-color {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.legend-green {
+    background-color: #28a745;
+}
+
+.legend-yellow {
+    background-color: #ffc107;
+}
+
+.legend-red {
+    background-color: #dc3545;
+}

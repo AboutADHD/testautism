@@ -363,6 +363,22 @@ function displayResults({ totalScore, compensationScore, maskingScore, assimilat
                     "assimilation"
                 )}
 
+                <!-- Color Legend -->
+                <div class="score-legend">
+                    <div class="legend-item">
+                        <div class="legend-color legend-green"></div>
+                        <span>Sub prag</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-yellow"></div>
+                        <span>Aproape de prag</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-red"></div>
+                        <span>Peste prag</span>
+                    </div>
+                </div>
+
                 <div class="action-buttons mt-4">
                     <button onclick="shareToFacebook()" class="btn btn-primary action-btn mb-3">
                         <i class="fab fa-facebook-f"></i> Distribuie pe Facebook
@@ -397,10 +413,21 @@ function displayResults({ totalScore, compensationScore, maskingScore, assimilat
     }
 }
 
+// Function to get appropriate color class based on score and threshold
+function getColorClass(score, threshold) {
+    if (score >= threshold) {
+        return 'danger';  // Red for scores at or above threshold
+    } else if (score >= threshold * 0.8) {
+        return 'warning'; // Yellow/Amber for scores close to threshold (80-99%)
+    } else {
+        return 'success'; // Green for scores well below threshold
+    }
+}
+
 // Create Score Section Helper
 function createScoreSection(title, score, maxScore, threshold, description, category) {
     const percentage = (score / maxScore) * 100;
-    const color = score >= threshold ? 'danger' : 'success';
+    const color = getColorClass(score, threshold);
 
     return `
         <div class="score-section" data-category="${category}">
@@ -417,189 +444,884 @@ function createScoreSection(title, score, maxScore, threshold, description, cate
     `;
 }
 
-// PDF Export Functionality
-async function exportToPDF() {
-    // Calculate scores directly
-    const results = calculateScores();
-    const { totalScore, compensationScore, maskingScore, assimilationScore } = results;
+/**
+ * Primary function to generate a PDF with optimal Romanian diacritics support
+ */
+async function generateRomanianPDF() {
+    try {
+        // Calculate scores
+        const scores = calculateScores();
+        const { totalScore, compensationScore, maskingScore, assimilationScore } = scores;
 
-    // Create container with A4 dimensions
-    const container = document.createElement('div');
-    container.style.cssText = `
-        width: 595px; /* A4 width in points */
-        background: white;
-        position: fixed;
-        left: 0;
-        top: 0;
-        padding: 40px;
-        z-index: -9999;
-        font-family: Arial, sans-serif;
-        font-size: 11px;
-        color: black;
-        box-sizing: border-box;
-    `;
-    document.body.appendChild(container);
-
-    const getScoreColor = (score, threshold) => {
-        if (score < threshold) return '#4CAF50';
-        if (score < threshold * 1.5) return '#FFC107';
-        return '#F44336';
-    };
-
-    const contentHtml = `
-        <div style="background: white; color: black; max-width: 515px;">
-            <h1 style="font-size: 16px; text-align: center; margin-bottom: 12px; color: black;">
-                Rezultate Test CAT-Q
-            </h1>
-
-            <div style="text-align: center; background-color: #f8f9fa; padding: 8px; margin: 12px 0; border-radius: 4px;">
-                <span style="color: #666; font-size: 10px;">Rezultate generate de</span><br>
-                <a href="https://www.testautism.ro" style="color: #2196F3; font-size: 12px; font-weight: bold;">
-                    www.testautism.ro
-                </a>
-            </div>
-
-            <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin: 12px 0; border-radius: 4px;">
-                <p style="color: #856404; margin: 0; font-size: 10px; line-height: 1.4;">
-                    <strong>IMPORTANT:</strong> Acest test este destinat <strong>EXCLUSIV</strong> în scop informativ și
-                    <strong>NU</strong> trebuie utilizat ca instrument de diagnostic. Pentru evaluări profesionale,
-                    vă recomandăm să vizitați <a href="https://www.doctoradhd.com" style="color: #856404; font-weight: bold;">www.doctoradhd.com</a>
-                </p>
-            </div>
-
-            <div style="text-align: center; background-color: #f8f9fa; padding: 12px; margin: 12px 0; border-radius: 4px;">
-                <h2 style="font-size: 14px; margin-bottom: 8px; color: black;">Scor Total: ${totalScore}</h2>
-                <p style="color: #666; font-size: 11px; line-height: 1.4;">${getInterpretation(totalScore)}</p>
-            </div>
-
-            <h3 style="font-size: 13px; margin: 12px 0; color: black;">Scoruri pe categorii:</h3>
-
-            <div style="margin-bottom: 20px;">
-                ${[
-                    {
-                        name: 'Compensare',
-                        score: compensationScore,
-                        max: 63,
-                        threshold: 31
-                    },
-                    {
-                        name: 'Mascare',
-                        score: maskingScore,
-                        max: 56,
-                        threshold: 28
-                    },
-                    {
-                        name: 'Asimilare',
-                        score: assimilationScore,
-                        max: 56,
-                        threshold: 28
-                    }
-                ].map(category => {
-                    const percentage = (category.score / category.max) * 100;
-                    const color = getScoreColor(category.score, category.threshold);
-                    return `
-                        <div style="margin-bottom: 16px; background: white;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                <strong style="color: black; font-size: 11px;">${category.name}</strong>
-                                <span style="color: black; font-size: 11px;">${category.score} / ${category.max}</span>
-                            </div>
-                            <div style="position: relative; height: 16px; background-color: #e9ecef; border-radius: 3px; overflow: hidden;">
-                                <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${percentage}%; background-color: ${color};"></div>
-                                <div style="position: absolute; left: ${(category.threshold/category.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; margin-top: 2px; font-size: 9px; color: #666;">
-                                <span>0</span>
-                                <span>Prag: ${category.threshold}</span>
-                                <span>${category.max}</span>
-                            </div>
-                        </div>
-                    `;
-                }).join('')}
-            </div>
-
-            <div style="margin: 16px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
-                <strong style="color: black; font-size: 11px;">Legendă:</strong><br>
-                <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
-                <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
-                <span style="color: #F44336;">■</span> Peste prag
-            </div>
-
-            <div style="margin-top: 16px; text-align: right; color: #666; font-size: 9px;">
-                Data testului: ${new Date().toLocaleDateString('ro-RO')}
-            </div>
-        </div>
-    `;
-
-    // Set container content
-    container.innerHTML = contentHtml;
-
-    // Add questions and answers
-    let questionIndex = 0;
-    questions.forEach((question, index) => {
-        const selected = document.querySelector(`input[name="q${index}"]:checked`);
-        if (selected) {
-            const questionDiv = document.createElement('div');
-            questionDiv.style.cssText = `margin-bottom: 30px; color: black;`;
-
-            if ((questionIndex + 1) % 9 === 0) {
-                questionDiv.style.pageBreakAfter = 'always';
-            }
-
-            questionDiv.innerHTML = `
-                <p style="margin-bottom: 5px; font-weight: bold; color: black;">
-                    ${index + 1}. ${question.text}
-                </p>
-                <p style="margin-left: 15px; margin-bottom: 20px; color: black;">
-                    Răspuns: ${selected.closest('.form-check').querySelector('.form-check-label').textContent.trim()}
-                </p>
-            `;
-
-            container.appendChild(questionDiv);
-            questionIndex++;
-        }
-    });
-
-    // PDF generation options
-    const opt = {
-        margin: [25, 20, 25, 20], // [top, right, bottom, left]
-        filename: 'rezultate_test_cat_q.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: '#FFFFFF',
-            width: 595,
-            height: container.offsetHeight
-        },
-        jsPDF: {
-            unit: 'pt',
-            format: 'a4',
+        // Create PDF document with optimal settings
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
             orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4',
             putOnlyUsedFonts: true,
             compress: true
-        },
-        pagebreak: {
-            mode: ['avoid-all', 'css', 'legacy']
-        }
-    };
+        });
 
+        // ===== PART 1: FONT EMBEDDING WITH DIACRITICS SUPPORT =====
+
+        // Try to add Open Sans font (good diacritics support)
+        try {
+            // Check if font is already available
+            if (!doc.getFontList().hasOwnProperty('open-sans-regular')) {
+                // Load OpenSans font from CDN
+                const openSansBold = "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf";
+                const openSansRegular = "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf";
+
+                // Add font if supported
+                if (typeof doc.addFont === 'function') {
+                    doc.addFont(openSansRegular, "OpenSans", "normal");
+                    doc.addFont(openSansBold, "OpenSans", "bold");
+                }
+            }
+
+            // Set font
+            try {
+                doc.setFont("OpenSans", "normal");
+            } catch (e) {
+                console.log("Using default font as OpenSans couldn't be set:", e);
+            }
+        } catch (fontError) {
+            console.log("Couldn't load font, using default:", fontError);
+        }
+
+        // ===== PART 2: HELPER FUNCTIONS FOR ROMANIAN TEXT =====
+
+        // Function for text with wrapping, alignment and diacritics conversion
+        const addSafeText = (text, x, y, options = {}) => {
+            const {
+                fontSize = 11,
+                fontStyle = 'normal',
+                color = [0, 0, 0],
+                align = 'left',
+                maxWidth = 170  // default width in mm (A4 is ~210mm wide)
+            } = options;
+
+            // Set font and color
+            doc.setFontSize(fontSize);
+            try {
+                doc.setFont("OpenSans", fontStyle);
+            } catch (e) {
+                doc.setFont("helvetica", fontStyle);
+            }
+            doc.setTextColor(...color);
+
+            // Preprocess text to handle diacritics better
+            // This approach maintains diacritics even if font doesn't directly support them
+            const processedText = text ? text.replace(/ț/g, "ţ").replace(/Ț/g, "Ţ") : ""; // Make sure text exists
+
+            // Split text into lines with automatic wrapping
+            const textLines = doc.splitTextToSize(processedText, maxWidth);
+
+            // Determine X coordinate based on alignment
+            let xPos = x;
+            if (align === 'center') {
+                textLines.forEach(line => {
+                    doc.text(line, 105, y, { align: 'center' });
+                    y += fontSize * 0.5;
+                });
+            } else if (align === 'right') {
+                textLines.forEach(line => {
+                    doc.text(line, 190, y, { align: 'right' });
+                    y += fontSize * 0.5;
+                });
+            } else {
+                // Left alignment (default)
+                textLines.forEach(line => {
+                    doc.text(line, x, y);
+                    y += fontSize * 0.5;
+                });
+            }
+
+            return y + fontSize * 0.25; // Return new Y position
+        };
+
+        // Function to draw progress bar with threshold indicator
+        const drawProgressBar = (x, y, width, height, percentage, thresholdPercentage, color) => {
+            // Draw background
+            doc.setFillColor(238, 238, 238);
+            doc.roundedRect(x, y, width, height, 1, 1, 'F');
+
+            // Draw progress bar
+            if (percentage > 0) {
+                doc.setFillColor(...color);
+                const fillWidth = (percentage / 100) * width;
+                doc.roundedRect(x, y, fillWidth, height, 1, 1, 'F');
+            }
+
+            // Draw threshold indicator
+            doc.setFillColor(0, 0, 0);
+            const thresholdX = x + (width * thresholdPercentage / 100);
+            doc.rect(thresholdX, y - 1, 0.7, height + 2, 'F');
+
+            return y + height; // Return new Y position
+        };
+
+        // Function for score color
+        function getScoreColor(score, threshold) {
+		    if (score >= threshold) {
+		        return [244, 67, 54]; // Red (danger)
+		    } else if (score >= threshold * 0.8) {
+		        return [255, 193, 7]; // Yellow/Amber (warning)
+		    } else {
+		        return [76, 175, 80]; // Green (success)
+		    }
+		}
+
+        // ===== PART 3: GENERATE PDF CONTENT =====
+
+        let y = 20; // Initial Y position
+
+        // Add title
+        addSafeText("Rezultate Test CAT-Q", 105, y, {
+            fontSize: 18,
+            align: 'center'
+        });
+
+        // Add source
+        y += 10;
+        addSafeText("Rezultate generate de www.testautism.ro", 105, y, {
+            fontSize: 10,
+            align: 'center'
+        });
+
+        // Add disclaimer
+        y += 10;
+        addSafeText("IMPORTANT: Acest test este destinat EXCLUSIV în scop informativ și NU trebuie utilizat ca un instrument de diagnostic. Pentru evaluări profesionale, vă recomandăm să vizitați www.doctoradhd.com", 105, y, {
+            fontSize: 9,
+            fontStyle: 'bold',
+            color: [221, 44, 0],
+            align: 'center',
+            maxWidth: 170
+        });
+
+        // Add total score
+        y += 20;
+        addSafeText(`Scor Total: ${totalScore}`, 105, y, {
+            fontSize: 16,
+            align: 'center'
+        });
+
+        // Add interpretation
+        y += 8;
+        const interpretation = getInterpretation(totalScore);
+        y = addSafeText(`Interpretare: ${interpretation}`, 105, y, {
+            fontSize: 12,
+            align: 'center',
+            maxWidth: 170
+        });
+
+        // Add category scores title
+        y += 10;
+        addSafeText("Scoruri pe categorii:", 20, y, {
+            fontSize: 14
+        });
+
+        // Add category scores
+        y += 10;
+        const categories = [
+            { name: 'Compensare', score: compensationScore, threshold: 31, max: 63 },
+            { name: 'Mascare', score: maskingScore, threshold: 28, max: 56 },
+            { name: 'Asimilare', score: assimilationScore, threshold: 28, max: 56 }
+        ];
+
+        categories.forEach(category => {
+		    // Add category information
+		    addSafeText(`${category.name}: ${category.score} / ${category.max} (Prag: ${category.threshold})`, 25, y, {
+		        fontSize: 12
+		    });
+		    y += 6;
+
+		    // Calculate percentages and color
+		    const percentage = (category.score / category.max) * 100;
+		    const thresholdPercentage = (category.threshold / category.max) * 100;
+		    const color = getScoreColor(category.score, category.threshold);
+
+		    // Draw progress bar
+		    y = drawProgressBar(25, y, 150, 4, percentage, thresholdPercentage, color) + 2;
+		    y += 5;
+		});
+
+        // Add legend
+        y += 5;
+        doc.setFillColor(76, 175, 80);
+        doc.rect(25, y, 4, 4, 'F');
+        addSafeText("Sub prag", 32, y + 3, { fontSize: 10 });
+
+        doc.setFillColor(255, 193, 7);
+        doc.rect(65, y, 4, 4, 'F');
+        addSafeText("Aproape de prag", 72, y + 3, { fontSize: 10 });
+
+        doc.setFillColor(244, 67, 54);
+        doc.rect(120, y, 4, 4, 'F');
+        addSafeText("Peste prag", 127, y + 3, { fontSize: 10 });
+
+        // Add questions and answers
+        y += 15;
+        addSafeText("Răspunsuri la întrebări:", 20, y, { fontSize: 14 });
+        y += 8;
+
+        let pageCount = 1;
+
+        // Prepare questions and answers list
+        const questionAnswers = [];
+        questions.forEach((question, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            if (selected) {
+                questionAnswers.push({
+                    id: index + 1,
+                    text: question.text,
+                    category: question.category,
+                    answer: selected.closest('.form-check').querySelector('.form-check-label').textContent.trim()
+                });
+            }
+        });
+
+        // Add answers
+        questionAnswers.forEach((qa, index) => {
+            // Check if we need a new page (conservative estimate)
+            if (y > 270) {
+                doc.addPage();
+                pageCount++;
+                y = 20;
+
+                // Add page header
+                addSafeText(`Rezultate Test CAT-Q - Pagina ${pageCount}`, 105, 10, {
+                    fontSize: 10,
+                    align: 'center'
+                });
+            }
+
+            // Add question
+            const questionText = `${qa.id}. ${qa.text}`;
+            y = addSafeText(questionText, 20, y, {
+                fontSize: 11,
+                fontStyle: 'bold',
+                maxWidth: 170
+            });
+
+            // Add category
+            const categoryText = `Categorie: ${qa.category}`;
+            y = addSafeText(categoryText, 25, y, {
+                fontSize: 10,
+                fontStyle: 'italic',
+                maxWidth: 165
+            });
+
+            // Add answer
+            const answerText = `Răspuns: ${qa.answer}`;
+            y = addSafeText(answerText, 25, y, {
+                fontSize: 10,
+                maxWidth: 165
+            });
+
+            y += 3; // Space after each answer
+        });
+
+        // Add test date on last page
+        addSafeText(`Data testului: ${new Date().toLocaleDateString('ro-RO')}`, 20, 280, {
+            fontSize: 9
+        });
+
+        // Check number of pages added
+        console.log(`PDF generated with ${doc.getNumberOfPages()} pages`);
+
+        return doc.output('blob');
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+        alert(`A apărut o eroare la generarea PDF-ului: ${error.message}`);
+        throw error;
+    }
+}
+
+/**
+ * Backup solution using controlled diacritics replacement.
+ * Used only if the main method fails.
+ */
+function generateBackupPDF() {
     try {
+        // Calculate scores
+        const scores = calculateScores();
+        const { totalScore, compensationScore, maskingScore, assimilationScore } = scores;
+
+        // Create PDF document
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Function to normalize Romanian text for maximum compatibility
+        const normalizeRomanian = (text) => {
+            // Manual mapping of diacritic characters to their simple equivalents
+            return text
+                .replace(/ă/g, 'a')
+                .replace(/â/g, 'a')
+                .replace(/î/g, 'i')
+                .replace(/ș/g, 's')
+                .replace(/ț/g, 't')
+                .replace(/Ă/g, 'A')
+                .replace(/Â/g, 'A')
+                .replace(/Î/g, 'I')
+                .replace(/Ș/g, 'S')
+                .replace(/Ț/g, 'T');
+        };
+
+        // Define working variables
+        let y = 20;
+
+        // Add title
+        doc.setFontSize(16);
+        doc.text('Rezultate Test CAT-Q', 105, y, { align: 'center' });
+
+        // Add total score
+        y += 20;
+        doc.setFontSize(14);
+        doc.text(`Scor Total: ${totalScore}`, 105, y, { align: 'center' });
+
+        // Add interpretation
+        y += 10;
+        doc.setFontSize(12);
+        doc.text(`Interpretare: ${normalizeRomanian(getInterpretation(totalScore))}`, 105, y, { align: 'center' });
+
+        // Add categories
+        y += 20;
+        doc.text(normalizeRomanian('Scoruri pe categorii:'), 20, y);
+        y += 10;
+
+        // Category scores
+        doc.text(normalizeRomanian(`Compensare: ${compensationScore} / 63`), 20, y);
+        y += 10;
+        doc.text(normalizeRomanian(`Mascare: ${maskingScore} / 56`), 20, y);
+        y += 10;
+        doc.text(normalizeRomanian(`Asimilare: ${assimilationScore} / 56`), 20, y);
+
+        // Add answers
+        y += 20;
+        doc.text(normalizeRomanian('Răspunsuri la întrebări:'), 20, y);
+        y += 10;
+
+        // Iterate through questions and answers
+        let pageCount = 1;
+
+        questions.forEach((question, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            if (!selected) return;
+
+            // Check if we need a new page
+            if (y > 270) {
+                doc.addPage();
+                pageCount++;
+                y = 20;
+
+                // Add page header
+                doc.setFontSize(10);
+                doc.text(`Rezultate Test CAT-Q - Pagina ${pageCount}`, 105, 10, { align: 'center' });
+                doc.setFontSize(12);
+            }
+
+            // Add question
+            const questionText = normalizeRomanian(`${index + 1}. ${question.text}`);
+            doc.setFontSize(10);
+
+            // Split text if too long
+            const splitQuestion = doc.splitTextToSize(questionText, 180);
+            doc.text(splitQuestion, 20, y);
+            y += splitQuestion.length * 7;
+
+            // Add category
+            const categoryText = normalizeRomanian(`Categorie: ${question.category}`);
+            const splitCategory = doc.splitTextToSize(categoryText, 170);
+            doc.text(splitCategory, 25, y);
+            y += splitCategory.length * 7;
+
+            // Add answer
+            const answerText = normalizeRomanian(`Răspuns: ${selected.closest('.form-check').querySelector('.form-check-label').textContent.trim()}`);
+            const splitAnswer = doc.splitTextToSize(answerText, 170);
+            doc.text(splitAnswer, 25, y);
+            y += splitAnswer.length * 7 + 5; // Add space after answer
+        });
+
+        // Add test date
+        doc.setFontSize(8);
+        doc.text(`Data testului: ${new Date().toLocaleDateString('ro-RO')}`, 20, 280);
+
+        return doc.output('blob');
+    } catch (error) {
+        console.error('Backup PDF generation error:', error);
+        throw error;
+    }
+}
+
+/**
+ * Basic PDF generation function using html2pdf
+ * This serves as a last resort if other methods fail
+ */
+async function generateBasicPDFBlob() {
+    try {
+        // Calculate scores
+        const scores = calculateScores();
+        const { totalScore, compensationScore, maskingScore, assimilationScore } = scores;
+
+        // Create container with A4 dimensions
+        const container = document.createElement('div');
+        container.style.cssText = `
+            width: 595px; /* A4 width in points */
+            background: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 40px;
+            z-index: -9999;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            color: black;
+            box-sizing: border-box;
+        `;
+        document.body.appendChild(container);
+
+        function getScoreColor(score, threshold) {
+		    if (score >= threshold) {
+		        return [244, 67, 54]; // Red (danger)
+		    } else if (score >= threshold * 0.8) {
+		        return [255, 193, 7]; // Yellow/Amber (warning)
+		    } else {
+		        return [76, 175, 80]; // Green (success)
+		    }
+		}
+
+        const contentHtml = `
+            <div style="background: white; color: black; max-width: 515px;">
+                <h1 style="font-size: 16px; text-align: center; margin-bottom: 12px; color: black;">
+                    Rezultate Test CAT-Q
+                </h1>
+
+                <div style="text-align: center; background-color: #f8f9fa; padding: 8px; margin: 12px 0; border-radius: 4px;">
+                    <span style="color: #666; font-size: 10px;">Rezultate generate de</span><br>
+                    <a href="https://www.testautism.ro" style="color: #2196F3; font-size: 12px; font-weight: bold;">
+                        www.testautism.ro
+                    </a>
+                </div>
+
+                <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin: 12px 0; border-radius: 4px;">
+                    <p style="color: #856404; margin: 0; font-size: 10px; line-height: 1.4;">
+                        <strong>IMPORTANT:</strong> Acest test este destinat <strong>EXCLUSIV</strong> în scop informativ și
+                        <strong>NU</strong> trebuie utilizat ca un instrument de diagnostic. Pentru evaluări profesionale,
+                        vă recomandăm să vizitați <a href="https://www.doctoradhd.com" style="color: #856404; font-weight: bold;">www.doctoradhd.com</a>
+                    </p>
+                </div>
+
+                <div style="text-align: center; background-color: #f8f9fa; padding: 12px; margin: 12px 0; border-radius: 4px;">
+                    <h2 style="font-size: 14px; margin-bottom: 8px; color: black;">Scor Total: ${totalScore}</h2>
+                    <p style="color: #666; font-size: 11px; line-height: 1.4;">${getInterpretation(totalScore)}</p>
+                </div>
+
+                <h3 style="font-size: 13px; margin: 12px 0; color: black;">Scoruri pe categorii:</h3>
+
+                <div style="margin-bottom: 20px;">
+                    ${[
+                        {
+                            name: 'Compensare',
+                            score: compensationScore,
+                            max: 63,
+                            threshold: 31
+                        },
+                        {
+                            name: 'Mascare',
+                            score: maskingScore,
+                            max: 56,
+                            threshold: 28
+                        },
+                        {
+                            name: 'Asimilare',
+                            score: assimilationScore,
+                            max: 56,
+                            threshold: 28
+                        }
+                    ].map(category => {
+                        const percentage = (category.score / category.max) * 100;
+                        const color = getScoreColor(category.score, category.threshold);
+                        return `
+                            <div style="margin-bottom: 16px; background: white;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <strong style="color: black; font-size: 11px;">${category.name}</strong>
+                                    <span style="color: black; font-size: 11px;">${category.score} / ${category.max}</span>
+                                </div>
+                                <div style="position: relative; height: 16px; background-color: #e9ecef; border-radius: 3px; overflow: hidden;">
+                                    <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${percentage}%; background-color: ${color};"></div>
+                                    <div style="position: absolute; left: ${(category.threshold/category.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-top: 2px; font-size: 9px; color: #666;">
+                                    <span>0</span>
+                                    <span>Prag: ${category.threshold}</span>
+                                    <span>${category.max}</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <div style="margin: 16px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                    <strong style="color: black; font-size: 11px;">Legendă:</strong><br>
+                    <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
+                    <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
+                    <span style="color: #F44336;">■</span> Peste prag
+                </div>
+
+                <div style="margin-top: 16px; text-align: right; color: #666; font-size: 9px;">
+                    Data testului: ${new Date().toLocaleDateString('ro-RO')}
+                </div>
+            </div>
+        `;
+
+        // Set container content
+        container.innerHTML = contentHtml;
+
+        // Add questions and answers
+        let questionIndex = 0;
+        questions.forEach((question, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            if (selected) {
+                const questionDiv = document.createElement('div');
+                questionDiv.style.cssText = `margin-bottom: 30px; color: black;`;
+
+                if ((questionIndex + 1) % 9 === 0) {
+                    questionDiv.style.pageBreakAfter = 'always';
+                }
+
+                const questionText = document.createElement('p');
+                questionText.style.cssText = 'margin-bottom: 5px; font-weight: bold; color: black;';
+                questionText.innerHTML = `${index + 1}. ${question.text}`;
+                questionDiv.appendChild(questionText);
+
+                const categoryText = document.createElement('p');
+                categoryText.style.cssText = 'margin-left: 15px; margin-bottom: 5px; font-style: italic; color: black;';
+                categoryText.innerHTML = `Categorie: ${question.category}`;
+                questionDiv.appendChild(categoryText);
+
+                const answerText = document.createElement('p');
+                answerText.style.cssText = 'margin-left: 15px; margin-bottom: 20px; color: black;';
+                answerText.innerHTML = `Răspuns: ${selected.closest('.form-check').querySelector('.form-check-label').innerHTML.trim()}`;
+                questionDiv.appendChild(answerText);
+
+                container.appendChild(questionDiv);
+                questionIndex++;
+            }
+        });
+
+        // PDF generation options
+        const opt = {
+            margin: [25, 20, 25, 20], // [top, right, bottom, left]
+            filename: 'rezultate_test_cat_q.pdf',
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#FFFFFF',
+                width: 595,
+                height: container.offsetHeight
+            },
+            jsPDF: {
+                unit: 'pt',
+                format: 'a4',
+                orientation: 'portrait',
+                putOnlyUsedFonts: true,
+                compress: true
+            },
+            pagebreak: {
+                mode: ['avoid-all', 'css', 'legacy']
+            }
+        };
+
         // Wait for content to render
         await new Promise(resolve => setTimeout(resolve, 300));
 
-        // Generate PDF
-        await html2pdf().set(opt).from(container).save();
-
-        console.log('PDF generated successfully');
+        try {
+            const pdfBlob = await html2pdf().set(opt).from(container).outputPdf('blob');
+            // Clean up
+            document.body.removeChild(container);
+            return pdfBlob;
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            // Clean up
+            document.body.removeChild(container);
+            throw error;
+        }
     } catch (error) {
-        console.error('Error generating PDF:', error);
-        alert('A apărut o eroare la generarea PDF-ului. Vă rugăm să încercați din nou.');
-    } finally {
-        // Clean up
-        document.body.removeChild(container);
+        console.error('Error in basic PDF blob generation:', error);
+        throw error;
     }
 }
+
+/**
+ * Robust PDF export function that tries multiple methods until one works
+ */
+async function exportRobustRomanianPDF() {
+    // Disable export button while generating
+    const exportBtn = document.querySelector('.btn-success');
+    if (exportBtn) {
+        exportBtn.disabled = true;
+        exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se generează PDF-ul...';
+    }
+
+    try {
+        // Try methods in order, from best to simplest
+        let pdfBlob;
+
+        // Method 1: Try the embedded font method
+        try {
+            console.log("Trying primary PDF generation method...");
+            pdfBlob = await generateRomanianPDF();
+            console.log("PDF successfully generated using the primary method!");
+        } catch (error1) {
+            console.warn("First method failed:", error1);
+
+            // Method 2: Try the backup method
+            try {
+                console.log("Trying backup PDF generation method...");
+                pdfBlob = await generateBackupPDF();
+                console.log("PDF successfully generated using the backup method!");
+            } catch (error2) {
+                console.warn("Second method failed:", error2);
+
+                // Method 3: Try the original method
+                try {
+                    console.log("Trying basic PDF generation method...");
+                    pdfBlob = await generateBasicPDFBlob();
+                    console.log("PDF successfully generated using the basic method!");
+                } catch (error3) {
+                    console.error("All methods failed!", error3);
+                    throw new Error("Could not generate PDF with any available method!");
+                }
+            }
+        }
+
+        // PDF was generated, now open/download it
+        const blobUrl = URL.createObjectURL(pdfBlob);
+
+        // Create download link
+        const downloadLink = document.createElement('a');
+        downloadLink.href = blobUrl;
+        downloadLink.download = 'rezultate_test_cat_q.pdf';
+        document.body.appendChild(downloadLink);
+
+        // Special handling for Facebook browser
+        if (navigator.userAgent.match(/(FBAN|FBAV)/i)) {
+            window.open(blobUrl, '_blank');
+        } else {
+            downloadLink.click();
+        }
+
+        // Clean up resources
+        setTimeout(() => {
+            URL.revokeObjectURL(blobUrl);
+            document.body.removeChild(downloadLink);
+        }, 1000);
+
+        return true;
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+        alert(`A apărut o eroare la generarea PDF-ului: ${error.message}\nVă rugăm să încercați din nou.`);
+        return false;
+    } finally {
+        // Re-enable export button
+        if (exportBtn) {
+            exportBtn.disabled = false;
+            exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Exportă ca PDF';
+        }
+    }
+}
+
+async function exportToPDF() {
+	return exportRobustRomanianPDF();
+}
+
+// PDF Export Functionality
+// async function exportToPDF() {
+//     // Calculate scores directly
+//     const results = calculateScores();
+//     const { totalScore, compensationScore, maskingScore, assimilationScore } = results;
+
+//     // Create container with A4 dimensions
+//     const container = document.createElement('div');
+//     container.style.cssText = `
+//         width: 595px; /* A4 width in points */
+//         background: white;
+//         position: fixed;
+//         left: 0;
+//         top: 0;
+//         padding: 40px;
+//         z-index: -9999;
+//         font-family: Arial, sans-serif;
+//         font-size: 11px;
+//         color: black;
+//         box-sizing: border-box;
+//     `;
+//     document.body.appendChild(container);
+
+//     const getScoreColor = (score, threshold) => {
+//         if (score < threshold) return '#4CAF50';
+//         if (score < threshold * 1.5) return '#FFC107';
+//         return '#F44336';
+//     };
+
+//     const contentHtml = `
+//         <div style="background: white; color: black; max-width: 515px;">
+//             <h1 style="font-size: 16px; text-align: center; margin-bottom: 12px; color: black;">
+//                 Rezultate Test CAT-Q
+//             </h1>
+
+//             <div style="text-align: center; background-color: #f8f9fa; padding: 8px; margin: 12px 0; border-radius: 4px;">
+//                 <span style="color: #666; font-size: 10px;">Rezultate generate de</span><br>
+//                 <a href="https://www.testautism.ro" style="color: #2196F3; font-size: 12px; font-weight: bold;">
+//                     www.testautism.ro
+//                 </a>
+//             </div>
+
+//             <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin: 12px 0; border-radius: 4px;">
+//                 <p style="color: #856404; margin: 0; font-size: 10px; line-height: 1.4;">
+//                     <strong>IMPORTANT:</strong> Acest test este destinat <strong>EXCLUSIV</strong> în scop informativ și
+//                     <strong>NU</strong> trebuie utilizat ca instrument de diagnostic. Pentru evaluări profesionale,
+//                     vă recomandăm să vizitați <a href="https://www.doctoradhd.com" style="color: #856404; font-weight: bold;">www.doctoradhd.com</a>
+//                 </p>
+//             </div>
+
+//             <div style="text-align: center; background-color: #f8f9fa; padding: 12px; margin: 12px 0; border-radius: 4px;">
+//                 <h2 style="font-size: 14px; margin-bottom: 8px; color: black;">Scor Total: ${totalScore}</h2>
+//                 <p style="color: #666; font-size: 11px; line-height: 1.4;">${getInterpretation(totalScore)}</p>
+//             </div>
+
+//             <h3 style="font-size: 13px; margin: 12px 0; color: black;">Scoruri pe categorii:</h3>
+
+//             <div style="margin-bottom: 20px;">
+//                 ${[
+//                     {
+//                         name: 'Compensare',
+//                         score: compensationScore,
+//                         max: 63,
+//                         threshold: 31
+//                     },
+//                     {
+//                         name: 'Mascare',
+//                         score: maskingScore,
+//                         max: 56,
+//                         threshold: 28
+//                     },
+//                     {
+//                         name: 'Asimilare',
+//                         score: assimilationScore,
+//                         max: 56,
+//                         threshold: 28
+//                     }
+//                 ].map(category => {
+//                     const percentage = (category.score / category.max) * 100;
+//                     const color = getScoreColor(category.score, category.threshold);
+//                     return `
+//                         <div style="margin-bottom: 16px; background: white;">
+//                             <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+//                                 <strong style="color: black; font-size: 11px;">${category.name}</strong>
+//                                 <span style="color: black; font-size: 11px;">${category.score} / ${category.max}</span>
+//                             </div>
+//                             <div style="position: relative; height: 16px; background-color: #e9ecef; border-radius: 3px; overflow: hidden;">
+//                                 <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${percentage}%; background-color: ${color};"></div>
+//                                 <div style="position: absolute; left: ${(category.threshold/category.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
+//                             </div>
+//                             <div style="display: flex; justify-content: space-between; margin-top: 2px; font-size: 9px; color: #666;">
+//                                 <span>0</span>
+//                                 <span>Prag: ${category.threshold}</span>
+//                                 <span>${category.max}</span>
+//                             </div>
+//                         </div>
+//                     `;
+//                 }).join('')}
+//             </div>
+
+//             <div style="margin: 16px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+//                 <strong style="color: black; font-size: 11px;">Legendă:</strong><br>
+//                 <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
+//                 <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
+//                 <span style="color: #F44336;">■</span> Peste prag
+//             </div>
+
+//             <div style="margin-top: 16px; text-align: right; color: #666; font-size: 9px;">
+//                 Data testului: ${new Date().toLocaleDateString('ro-RO')}
+//             </div>
+//         </div>
+//     `;
+
+//     // Set container content
+//     container.innerHTML = contentHtml;
+
+//     // Add questions and answers
+//     let questionIndex = 0;
+//     questions.forEach((question, index) => {
+//         const selected = document.querySelector(`input[name="q${index}"]:checked`);
+//         if (selected) {
+//             const questionDiv = document.createElement('div');
+//             questionDiv.style.cssText = `margin-bottom: 30px; color: black;`;
+
+//             if ((questionIndex + 1) % 9 === 0) {
+//                 questionDiv.style.pageBreakAfter = 'always';
+//             }
+
+//             questionDiv.innerHTML = `
+//                 <p style="margin-bottom: 5px; font-weight: bold; color: black;">
+//                     ${index + 1}. ${question.text}
+//                 </p>
+//                 <p style="margin-left: 15px; margin-bottom: 20px; color: black;">
+//                     Răspuns: ${selected.closest('.form-check').querySelector('.form-check-label').textContent.trim()}
+//                 </p>
+//             `;
+
+//             container.appendChild(questionDiv);
+//             questionIndex++;
+//         }
+//     });
+
+//     // PDF generation options
+//     const opt = {
+//         margin: [25, 20, 25, 20], // [top, right, bottom, left]
+//         filename: 'rezultate_test_cat_q.pdf',
+//         image: { type: 'jpeg', quality: 1 },
+//         html2canvas: {
+//             scale: 2,
+//             useCORS: true,
+//             allowTaint: true,
+//             backgroundColor: '#FFFFFF',
+//             width: 595,
+//             height: container.offsetHeight
+//         },
+//         jsPDF: {
+//             unit: 'pt',
+//             format: 'a4',
+//             orientation: 'portrait',
+//             putOnlyUsedFonts: true,
+//             compress: true
+//         },
+//         pagebreak: {
+//             mode: ['avoid-all', 'css', 'legacy']
+//         }
+//     };
+
+//     try {
+//         // Wait for content to render
+//         await new Promise(resolve => setTimeout(resolve, 300));
+
+//         // Generate PDF
+//         await html2pdf().set(opt).from(container).save();
+
+//         console.log('PDF generated successfully');
+//     } catch (error) {
+//         console.error('Error generating PDF:', error);
+//         alert('A apărut o eroare la generarea PDF-ului. Vă rugăm să încercați din nou.');
+//     } finally {
+//         // Clean up
+//         document.body.removeChild(container);
+//     }
+// }
 
 // Facebook Share Functionality
 function shareToFacebook() {
