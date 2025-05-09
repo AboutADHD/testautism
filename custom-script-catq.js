@@ -1139,190 +1139,6 @@ async function exportToPDF() {
 	return exportRobustRomanianPDF();
 }
 
-// PDF Export Functionality
-// async function exportToPDF() {
-//     // Calculate scores directly
-//     const results = calculateScores();
-//     const { totalScore, compensationScore, maskingScore, assimilationScore } = results;
-
-//     // Create container with A4 dimensions
-//     const container = document.createElement('div');
-//     container.style.cssText = `
-//         width: 595px; /* A4 width in points */
-//         background: white;
-//         position: fixed;
-//         left: 0;
-//         top: 0;
-//         padding: 40px;
-//         z-index: -9999;
-//         font-family: Arial, sans-serif;
-//         font-size: 11px;
-//         color: black;
-//         box-sizing: border-box;
-//     `;
-//     document.body.appendChild(container);
-
-//     const getScoreColor = (score, threshold) => {
-//         if (score < threshold) return '#4CAF50';
-//         if (score < threshold * 1.5) return '#FFC107';
-//         return '#F44336';
-//     };
-
-//     const contentHtml = `
-//         <div style="background: white; color: black; max-width: 515px;">
-//             <h1 style="font-size: 16px; text-align: center; margin-bottom: 12px; color: black;">
-//                 Rezultate Test CAT-Q
-//             </h1>
-
-//             <div style="text-align: center; background-color: #f8f9fa; padding: 8px; margin: 12px 0; border-radius: 4px;">
-//                 <span style="color: #666; font-size: 10px;">Rezultate generate de</span><br>
-//                 <a href="https://www.testautism.ro" style="color: #2196F3; font-size: 12px; font-weight: bold;">
-//                     www.testautism.ro
-//                 </a>
-//             </div>
-
-//             <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin: 12px 0; border-radius: 4px;">
-//                 <p style="color: #856404; margin: 0; font-size: 10px; line-height: 1.4;">
-//                     <strong>IMPORTANT:</strong> Acest test este destinat <strong>EXCLUSIV</strong> în scop informativ și
-//                     <strong>NU</strong> trebuie utilizat ca instrument de diagnostic. Pentru evaluări profesionale,
-//                     vă recomandăm să vizitați <a href="https://www.doctoradhd.com" style="color: #856404; font-weight: bold;">www.doctoradhd.com</a>
-//                 </p>
-//             </div>
-
-//             <div style="text-align: center; background-color: #f8f9fa; padding: 12px; margin: 12px 0; border-radius: 4px;">
-//                 <h2 style="font-size: 14px; margin-bottom: 8px; color: black;">Scor Total: ${totalScore}</h2>
-//                 <p style="color: #666; font-size: 11px; line-height: 1.4;">${getInterpretation(totalScore)}</p>
-//             </div>
-
-//             <h3 style="font-size: 13px; margin: 12px 0; color: black;">Scoruri pe categorii:</h3>
-
-//             <div style="margin-bottom: 20px;">
-//                 ${[
-//                     {
-//                         name: 'Compensare',
-//                         score: compensationScore,
-//                         max: 63,
-//                         threshold: 31
-//                     },
-//                     {
-//                         name: 'Mascare',
-//                         score: maskingScore,
-//                         max: 56,
-//                         threshold: 28
-//                     },
-//                     {
-//                         name: 'Asimilare',
-//                         score: assimilationScore,
-//                         max: 56,
-//                         threshold: 28
-//                     }
-//                 ].map(category => {
-//                     const percentage = (category.score / category.max) * 100;
-//                     const color = getScoreColor(category.score, category.threshold);
-//                     return `
-//                         <div style="margin-bottom: 16px; background: white;">
-//                             <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-//                                 <strong style="color: black; font-size: 11px;">${category.name}</strong>
-//                                 <span style="color: black; font-size: 11px;">${category.score} / ${category.max}</span>
-//                             </div>
-//                             <div style="position: relative; height: 16px; background-color: #e9ecef; border-radius: 3px; overflow: hidden;">
-//                                 <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${percentage}%; background-color: ${color};"></div>
-//                                 <div style="position: absolute; left: ${(category.threshold/category.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
-//                             </div>
-//                             <div style="display: flex; justify-content: space-between; margin-top: 2px; font-size: 9px; color: #666;">
-//                                 <span>0</span>
-//                                 <span>Prag: ${category.threshold}</span>
-//                                 <span>${category.max}</span>
-//                             </div>
-//                         </div>
-//                     `;
-//                 }).join('')}
-//             </div>
-
-//             <div style="margin: 16px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
-//                 <strong style="color: black; font-size: 11px;">Legendă:</strong><br>
-//                 <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
-//                 <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
-//                 <span style="color: #F44336;">■</span> Peste prag
-//             </div>
-
-//             <div style="margin-top: 16px; text-align: right; color: #666; font-size: 9px;">
-//                 Data testului: ${new Date().toLocaleDateString('ro-RO')}
-//             </div>
-//         </div>
-//     `;
-
-//     // Set container content
-//     container.innerHTML = contentHtml;
-
-//     // Add questions and answers
-//     let questionIndex = 0;
-//     questions.forEach((question, index) => {
-//         const selected = document.querySelector(`input[name="q${index}"]:checked`);
-//         if (selected) {
-//             const questionDiv = document.createElement('div');
-//             questionDiv.style.cssText = `margin-bottom: 30px; color: black;`;
-
-//             if ((questionIndex + 1) % 9 === 0) {
-//                 questionDiv.style.pageBreakAfter = 'always';
-//             }
-
-//             questionDiv.innerHTML = `
-//                 <p style="margin-bottom: 5px; font-weight: bold; color: black;">
-//                     ${index + 1}. ${question.text}
-//                 </p>
-//                 <p style="margin-left: 15px; margin-bottom: 20px; color: black;">
-//                     Răspuns: ${selected.closest('.form-check').querySelector('.form-check-label').textContent.trim()}
-//                 </p>
-//             `;
-
-//             container.appendChild(questionDiv);
-//             questionIndex++;
-//         }
-//     });
-
-//     // PDF generation options
-//     const opt = {
-//         margin: [25, 20, 25, 20], // [top, right, bottom, left]
-//         filename: 'rezultate_test_cat_q.pdf',
-//         image: { type: 'jpeg', quality: 1 },
-//         html2canvas: {
-//             scale: 2,
-//             useCORS: true,
-//             allowTaint: true,
-//             backgroundColor: '#FFFFFF',
-//             width: 595,
-//             height: container.offsetHeight
-//         },
-//         jsPDF: {
-//             unit: 'pt',
-//             format: 'a4',
-//             orientation: 'portrait',
-//             putOnlyUsedFonts: true,
-//             compress: true
-//         },
-//         pagebreak: {
-//             mode: ['avoid-all', 'css', 'legacy']
-//         }
-//     };
-
-//     try {
-//         // Wait for content to render
-//         await new Promise(resolve => setTimeout(resolve, 300));
-
-//         // Generate PDF
-//         await html2pdf().set(opt).from(container).save();
-
-//         console.log('PDF generated successfully');
-//     } catch (error) {
-//         console.error('Error generating PDF:', error);
-//         alert('A apărut o eroare la generarea PDF-ului. Vă rugăm să încercați din nou.');
-//     } finally {
-//         // Clean up
-//         document.body.removeChild(container);
-//     }
-// }
-
 // Facebook Share Functionality
 function shareToFacebook() {
     const scores = calculateScores();
@@ -1504,3 +1320,91 @@ document.getElementById('submitBtn').addEventListener('click', (e) => {
         radio.disabled = true;
     });
 });
+
+/**
+ * Navigation Highlighting System for CAT-Q page
+ * Tracks the current section in viewport and updates navigation accordingly
+ */
+
+// Navigation highlighting for CAT-Q page
+function updateQuickNav() {
+    // Get current scroll position
+    const scrollPosition = window.scrollY;
+
+    // Get all sections that can be navigated to
+    const sections = document.querySelectorAll('div[id^="section-"], #first-disclaimer');
+
+    // Remove active class from all navigation items
+    document.querySelectorAll('.quick-nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Find which section is currently in view
+    let currentSection = '';
+    sections.forEach(section => {
+        // Get section position and dimensions
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+
+        // Check if this section is in view (with 200px offset for better UX)
+        if (scrollPosition >= (sectionTop - 200) &&
+            scrollPosition < (sectionTop + sectionHeight - 200)) {
+
+            // Handle special case for the disclaimer which should highlight the quiz nav item
+            if (section.id === 'first-disclaimer') {
+                currentSection = '#section-quiz';
+            } else {
+                currentSection = '#' + section.id;
+            }
+        }
+    });
+
+    // If a section is in view, highlight its navigation item
+    if (currentSection) {
+        const activeNavItem = document.querySelector(`.quick-nav-item[href="${currentSection}"]`);
+        if (activeNavItem) {
+            activeNavItem.classList.add('active');
+        }
+    }
+}
+
+// Initialize navigation highlighting when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Initial update of navigation
+    updateQuickNav();
+
+    // Update navigation on scroll
+    window.addEventListener('scroll', updateQuickNav);
+
+    // Add click handler for smooth scrolling and immediate highlighting
+    document.querySelectorAll('.quick-nav-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Get the target section ID from the href attribute
+            const targetId = this.getAttribute('href');
+
+            // Only process if it's an anchor link to a section on this page
+            if (targetId.startsWith('#')) {
+                e.preventDefault();
+
+                // Get the target element
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    // Scroll to the target element
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+
+                    // Update navigation highlighting immediately for better UX
+                    document.querySelectorAll('.quick-nav-item').forEach(navItem => {
+                        navItem.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            }
+        });
+    });
+});
+
+// Additional check on full page load (including images)
+window.addEventListener('load', updateQuickNav);

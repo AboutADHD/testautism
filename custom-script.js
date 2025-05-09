@@ -2154,64 +2154,6 @@ function generateFinalPDF() {
 
 if(exportBtn) {
     exportBtn.addEventListener('click', exportRobustRomanianPDF);
-
-    // exportBtn.addEventListener('click', async () => {
-    //     exportBtn.disabled = true;
-    //     exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Se generează PDF-ul...';
-
-    //     try {
-    //         // Stochează rezultatele
-    //         storeTestResults();
-
-    //         // Încearcă să genereze PDF-ul cu noua metodă
-    //         let pdfBlob;
-
-    //         try {
-    //             // Folosește noua metodă optimizată pentru română
-    //             pdfBlob = await generateFinalPDF();
-    //         } catch (e) {
-    //             console.error("Eroare la generarea PDF-ului optimizat:", e);
-
-    //             // Încearcă metoda anterioară îmbunătățită
-    //             try {
-    //                 pdfBlob = await generateImprovedPDF();
-    //             } catch (e2) {
-    //                 console.error("Eroare la generarea PDF-ului îmbunătățit:", e2);
-
-    //                 // Încearcă metoda originală ca ultimă soluție
-    //                 pdfBlob = await generatePDFBlob();
-    //             }
-    //         }
-
-    //         const blobUrl = URL.createObjectURL(pdfBlob);
-
-    //         // Creează link-ul de descărcare
-    //         const downloadLink = document.createElement('a');
-    //         downloadLink.href = blobUrl;
-    //         downloadLink.download = 'rezultate_test_raads_r.pdf';
-    //         document.body.appendChild(downloadLink);
-
-    //         // Tratează special browser-ul Facebook
-    //         if (navigator.userAgent.match(/(FBAN|FBAV)/i)) {
-    //             window.open(blobUrl, '_blank');
-    //         } else {
-    //             downloadLink.click();
-    //         }
-
-    //         // Curățare
-    //         setTimeout(() => {
-    //             URL.revokeObjectURL(blobUrl);
-    //             downloadLink.remove();
-    //         }, 1000);
-
-    //     } catch (error) {
-    //         console.error('Generarea PDF-ului a eșuat:', error);
-    //         alert(`A apărut o eroare la generarea PDF-ului: ${error.message}\nVă rugăm să încercați din nou.`);
-    //     } finally {
-    //         exportBtn.disabled = false;
-    //         exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Exportă ca PDF';
-    //     }
-    // });
 }
 
 // Restart button functionality with better state management
@@ -2719,32 +2661,6 @@ function highlightInViewSection() {
         }
     };
 }
-
-// function storeTestResults() {
-//     try {
-//         const results = calculateSubscores();
-//         const answers = {};
-
-//         questions.forEach(question => {
-//             const selected = document.querySelector(`input[name="question_${question.id}"]:checked`);
-//             if (selected) {
-//                 answers[question.id] = {
-//                     value: selected.value,
-//                     text: question.text,
-//                     answer: selected.closest('label').querySelector('.form-check-label').textContent.trim()
-//                 };
-//             }
-//         });
-
-//         localStorage.setItem('raads_results', JSON.stringify({
-//             timestamp: new Date().toISOString(),
-//             results: results,
-//             answers: answers
-//         }));
-//     } catch (error) {
-//         console.error('Error storing results:', error);
-//     }
-// }
 
 // DOM-independent PDF generation function
 function generatePDFWithoutDOM() {
