@@ -1,6 +1,9 @@
 <?php
 // share-result.php
 
+// Add noindex header early
+header('X-Robots-Tag: noindex, nofollow');
+
 // Validate ID parameter
 $id = $_GET['id'] ?? '';
 if (!preg_match('/^raads_\d+_[a-z0-9]+$/', $id)) {
@@ -25,7 +28,10 @@ $pageUrl = 'https://www.testautism.ro/share-result.php?id=' . urlencode($id);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rezultate Test RAADS-R</title>
-    
+
+    <!-- Prevent indexing -->
+    <meta name="robots" content="noindex, nofollow">
+
     <!-- Facebook Open Graph tags -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Rezultatele mele la testul RAADS-R">
@@ -34,12 +40,12 @@ $pageUrl = 'https://www.testautism.ro/share-result.php?id=' . urlencode($id);
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="<?php echo htmlspecialchars($pageUrl); ?>">
-    
+
     <!-- Redirect to main page after a short delay -->
     <script>
         setTimeout(function() {
             window.location.href = '/';
-        }, 1000);
+        }, 2000); // Increased to 2 seconds for better UX
     </script>
 </head>
 <body>

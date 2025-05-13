@@ -1,3 +1,10 @@
 User-agent: *
-Disallow:
+Disallow: /results/
+Disallow: /save-result-image.php
+Disallow: /share-result.php
+Disallow: /api/
+
+# Allow other pages
+Allow: /
+
 Sitemap: https://www.testautism.ro/sitemap.xml
