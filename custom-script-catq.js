@@ -27,10 +27,45 @@ const questions = [
     { id: 25, text: 'În situațiile sociale, simt că mă prefac că sunt „normal(ă)".', category: "Asimilare" }
 ];
 
+// Cache form elements
 const form = document.getElementById('catqForm');
 const questionsContainer = document.getElementById('questions');
+const errorDiv = document.getElementById('error');
+const errorBelowDiv = document.getElementById('errorBelow');
+const submitBtn = document.getElementById('submitBtn');
 
-// Initialize form with questions
+// Helper Functions
+function getHelpText(category) {
+    const helpTexts = {
+        "Compensare": "Strategii folosite pentru a compensa activ dificultățile în situații sociale.",
+        "Mascare": "Strategii folosite pentru a ascunde caracteristicile autiste.",
+        "Asimilare": "Strategii folosite pentru a încerca să se potrivească cu ceilalți în situații sociale."
+    };
+    return helpTexts[category] || "";
+}
+
+function getInterpretation(score) {
+    if (score < 50) {
+        return 'Nivel scăzut de camuflare a trăsăturilor autiste.';
+    } else if (score < 100) {
+        return 'Nivel moderat de camuflare a trăsăturilor autiste.';
+    } else if (score < 150) {
+        return 'Nivel ridicat de camuflare a trăsăturilor autiste.';
+    } else {
+        return 'Nivel foarte ridicat de camuflare a trăsăturilor autiste.';
+    }
+}
+
+function getProgressMessage(percentage, answered) {
+    if (percentage === 0) return '🚀 Hai să începem! Primul pas este cel mai important! 💫';
+    if (percentage <= 25) return '🌟 Minunat început! Continuă tot așa! 💪';
+    if (percentage <= 50) return '🎯 La jumătatea drumului! Ești pe drumul cel bun! ⭐';
+    if (percentage <= 75) return '💫 Excelent progres! Mai puțin de un sfert rămas! 🎈';
+    if (percentage < 100) return '🎊 Aproape gata! Încă puțin! 🌟';
+    return '🎉 FELICITĂRI! Ai completat tot testul! 🎯 Clic pe butonul CALCULEAZĂ SCOR pentru a vedea rezultatele!';
+}
+
+// DOM Initialization - Create the form
 questions.forEach((question, index) => {
     const questionDiv = document.createElement('div');
     questionDiv.classList.add('question', 'mb-4');
@@ -157,37 +192,6 @@ questions.forEach((question, index) => {
     questionsContainer.appendChild(questionDiv);
 });
 
-// Helper Functions
-function getHelpText(category) {
-    const helpTexts = {
-        "Compensare": "Strategii folosite pentru a compensa activ dificultățile în situații sociale.",
-        "Mascare": "Strategii folosite pentru a ascunde caracteristicile autiste.",
-        "Asimilare": "Strategii folosite pentru a încerca să se potrivească cu ceilalți în situații sociale."
-    };
-    return helpTexts[category] || "";
-}
-
-function getInterpretation(score) {
-    if (score < 50) {
-        return 'Nivel scăzut de camuflare a trăsăturilor autiste.';
-    } else if (score < 100) {
-        return 'Nivel moderat de camuflare a trăsăturilor autiste.';
-    } else if (score < 150) {
-        return 'Nivel ridicat de camuflare a trăsăturilor autiste.';
-    } else {
-        return 'Nivel foarte ridicat de camuflare a trăsăturilor autiste.';
-    }
-}
-
-function getProgressMessage(percentage, answered) {
-    if (percentage === 0) return '🚀 Hai să începem! Primul pas este cel mai important! 💫';
-    if (percentage <= 25) return '🌟 Minunat început! Continuă tot așa! 💪';
-    if (percentage <= 50) return '🎯 La jumătatea drumului! Ești pe drumul cel bun! ⭐';
-    if (percentage <= 75) return '💫 Excelent progres! Mai puțin de un sfert rămas! 🎈';
-    if (percentage < 100) return '🎊 Aproape gata! Încă puțin! 🌟';
-    return '🎉 FELICITĂRI! Ai completat tot testul! 🎯 Clic pe butonul CALCULEAZĂ SCOR pentru a vedea rezultatele!';
-}
-
 // Progress Tracking
 const progressContainer = document.querySelector('.progress-container');
 const progressFill = document.querySelector('.progress-fill');
@@ -195,83 +199,24 @@ const questionsCompleted = document.querySelector('.questions-completed');
 const timeEstimate = document.querySelector('.time-estimate');
 const progressMessage = document.querySelector('.progress-message');
 
-// Monitor radio changes for progress updates
-document.addEventListener('change', (e) => {
-    if (e.target.type === 'radio') {
-        const currentQuestion = e.target.closest('.question');
-        if (currentQuestion) {
-            currentQuestion.classList.add('completed');
-            updateProgress();
-
-            currentQuestion.classList.remove('highlight-unanswered');
-
-            // Also clear any error messages when a question is answered
-            const errorDiv = document.getElementById('error');
-            const errorBelowDiv = document.getElementById('errorBelow');
-
-            if (errorDiv) {
-                errorDiv.style.display = 'none';
-                errorDiv.innerHTML = '';
-            }
-            if (errorBelowDiv) {
-                errorBelowDiv.style.display = 'none';
-                errorBelowDiv.innerHTML = '';
-            }
-
-            // Find next unanswered question
-            const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
-                .find(q => !q.querySelector('input[type="radio"]:checked'));
-
-            if (nextUnanswered) {
-                document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
-                nextUnanswered.classList.add('current');
-                scrollToQuestion(nextUnanswered);
-            }
-        }
-    }
-});
-
-// Monitor scroll for progress bar visibility
-window.addEventListener('scroll', () => {
-    const testContainer = document.getElementById('questions');
-    if (testContainer) {
-        const rect = testContainer.getBoundingClientRect();
-        const hasAnswers = document.querySelector('input[type="radio"]:checked') !== null;
-
-        if (rect.top <= 0 && rect.bottom >= 0 && hasAnswers) {
-            progressContainer.classList.add('visible');
-        } else {
-            progressContainer.classList.remove('visible');
-        }
-    }
-});
-
-// Initial progress update
-updateProgress();
-
+// Update progress function
 function updateProgress() {
-    const progressFill = document.querySelector('.progress-fill');
-    const questionsCompleted = document.querySelector('.questions-completed');
-    const timeEstimate = document.querySelector('.time-estimate');
-    const progressMessage = document.querySelector('.progress-message');
-
-    if (!progressFill || !questionsCompleted || !timeEstimate || !progressMessage) {
-        return;
-    }
-
     const answered = document.querySelectorAll('input[type="radio"]:checked').length;
     const total = questions.length;
     const percentage = (answered / total) * 100;
 
-    progressFill.style.width = `${percentage}%`;
-    questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
+    if (progressFill) progressFill.style.width = `${percentage}%`;
+    if (questionsCompleted) questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
 
     const remainingQuestions = total - answered;
     const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.4), 1);
-    timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
+    if (timeEstimate) timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
 
-    progressMessage.innerHTML = getProgressMessage(percentage, answered);
+    if (progressMessage) progressMessage.innerHTML = getProgressMessage(percentage, answered);
 }
+
+// Initial progress update
+updateProgress();
 
 // Score Calculation
 function calculateScores() {
@@ -305,8 +250,7 @@ function calculateScores() {
 // Results Display
 function displayResults({ totalScore, compensationScore, maskingScore, assimilationScore }) {
     const resultDiv = document.getElementById('section-results');
-    const submitBtn = document.getElementById('submitBtn');
-
+    
     if (!resultDiv || !submitBtn) return;
 
     const interpretation = getInterpretation(totalScore);
@@ -407,7 +351,6 @@ function displayResults({ totalScore, compensationScore, maskingScore, assimilat
     resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     // Hide progress bar
-    const progressContainer = document.querySelector('.progress-container');
     if (progressContainer) {
         progressContainer.classList.remove('visible');
     }
@@ -444,9 +387,7 @@ function createScoreSection(title, score, maxScore, threshold, description, cate
     `;
 }
 
-/**
- * Primary function to generate a PDF with optimal Romanian diacritics support
- */
+// Optimized PDF Generation with better error handling
 async function generateRomanianPDF() {
     try {
         // Calculate scores
@@ -462,8 +403,6 @@ async function generateRomanianPDF() {
             putOnlyUsedFonts: true,
             compress: true
         });
-
-        // ===== PART 1: FONT EMBEDDING WITH DIACRITICS SUPPORT =====
 
         // Try to add Open Sans font (good diacritics support)
         try {
@@ -490,16 +429,14 @@ async function generateRomanianPDF() {
             console.log("Couldn't load font, using default:", fontError);
         }
 
-        // ===== PART 2: HELPER FUNCTIONS FOR ROMANIAN TEXT =====
-
-        // Function for text with wrapping, alignment and diacritics conversion
+        // Helper function for text with proper Romanian diacritics support
         const addSafeText = (text, x, y, options = {}) => {
             const {
                 fontSize = 11,
                 fontStyle = 'normal',
                 color = [0, 0, 0],
                 align = 'left',
-                maxWidth = 170  // default width in mm (A4 is ~210mm wide)
+                maxWidth = 170
             } = options;
 
             // Set font and color
@@ -511,15 +448,13 @@ async function generateRomanianPDF() {
             }
             doc.setTextColor(...color);
 
-            // Preprocess text to handle diacritics better
-            // This approach maintains diacritics even if font doesn't directly support them
-            const processedText = text ? text.replace(/ț/g, "ţ").replace(/Ț/g, "Ţ") : ""; // Make sure text exists
+            // Preprocess text for better diacritics handling
+            const processedText = text ? text.replace(/ț/g, "ţ").replace(/Ț/g, "Ţ") : "";
 
             // Split text into lines with automatic wrapping
             const textLines = doc.splitTextToSize(processedText, maxWidth);
 
-            // Determine X coordinate based on alignment
-            let xPos = x;
+            // Determine X coordinate based on alignment and render
             if (align === 'center') {
                 textLines.forEach(line => {
                     doc.text(line, 105, y, { align: 'center' });
@@ -541,7 +476,7 @@ async function generateRomanianPDF() {
             return y + fontSize * 0.25; // Return new Y position
         };
 
-        // Function to draw progress bar with threshold indicator
+        // Helper function to draw progress bar with threshold indicator
         const drawProgressBar = (x, y, width, height, percentage, thresholdPercentage, color) => {
             // Draw background
             doc.setFillColor(238, 238, 238);
@@ -562,19 +497,18 @@ async function generateRomanianPDF() {
             return y + height; // Return new Y position
         };
 
-        // Function for score color
+        // Helper for score color
         function getScoreColor(score, threshold) {
-		    if (score >= threshold) {
-		        return [244, 67, 54]; // Red (danger)
-		    } else if (score >= threshold * 0.8) {
-		        return [255, 193, 7]; // Yellow/Amber (warning)
-		    } else {
-		        return [76, 175, 80]; // Green (success)
-		    }
-		}
+            if (score >= threshold) {
+                return [244, 67, 54]; // Red (danger)
+            } else if (score >= threshold * 0.8) {
+                return [255, 193, 7]; // Yellow/Amber (warning)
+            } else {
+                return [76, 175, 80]; // Green (success)
+            }
+        }
 
-        // ===== PART 3: GENERATE PDF CONTENT =====
-
+        // Generate PDF content
         let y = 20; // Initial Y position
 
         // Add title
@@ -631,21 +565,21 @@ async function generateRomanianPDF() {
         ];
 
         categories.forEach(category => {
-		    // Add category information
-		    addSafeText(`${category.name}: ${category.score} / ${category.max} (Prag: ${category.threshold})`, 25, y, {
-		        fontSize: 12
-		    });
-		    y += 6;
+            // Add category information
+            addSafeText(`${category.name}: ${category.score} / ${category.max} (Prag: ${category.threshold})`, 25, y, {
+                fontSize: 12
+            });
+            y += 6;
 
-		    // Calculate percentages and color
-		    const percentage = (category.score / category.max) * 100;
-		    const thresholdPercentage = (category.threshold / category.max) * 100;
-		    const color = getScoreColor(category.score, category.threshold);
+            // Calculate percentages and color
+            const percentage = (category.score / category.max) * 100;
+            const thresholdPercentage = (category.threshold / category.max) * 100;
+            const color = getScoreColor(category.score, category.threshold);
 
-		    // Draw progress bar
-		    y = drawProgressBar(25, y, 150, 4, percentage, thresholdPercentage, color) + 2;
-		    y += 5;
-		});
+            // Draw progress bar
+            y = drawProgressBar(25, y, 150, 4, percentage, thresholdPercentage, color) + 2;
+            y += 5;
+        });
 
         // Add legend
         y += 5;
@@ -728,21 +662,14 @@ async function generateRomanianPDF() {
             fontSize: 9
         });
 
-        // Check number of pages added
-        console.log(`PDF generated with ${doc.getNumberOfPages()} pages`);
-
         return doc.output('blob');
     } catch (error) {
         console.error('Error generating PDF:', error);
-        alert(`A apărut o eroare la generarea PDF-ului: ${error.message}`);
         throw error;
     }
 }
 
-/**
- * Backup solution using controlled diacritics replacement.
- * Used only if the main method fails.
- */
+// Simpler backup PDF generation method using normalized diacritics
 function generateBackupPDF() {
     try {
         // Calculate scores
@@ -755,7 +682,6 @@ function generateBackupPDF() {
 
         // Function to normalize Romanian text for maximum compatibility
         const normalizeRomanian = (text) => {
-            // Manual mapping of diacritic characters to their simple equivalents
             return text
                 .replace(/ă/g, 'a')
                 .replace(/â/g, 'a')
@@ -855,211 +781,8 @@ function generateBackupPDF() {
     }
 }
 
-/**
- * Basic PDF generation function using html2pdf
- * This serves as a last resort if other methods fail
- */
-async function generateBasicPDFBlob() {
-    try {
-        // Calculate scores
-        const scores = calculateScores();
-        const { totalScore, compensationScore, maskingScore, assimilationScore } = scores;
-
-        // Create container with A4 dimensions
-        const container = document.createElement('div');
-        container.style.cssText = `
-            width: 595px; /* A4 width in points */
-            background: white;
-            position: fixed;
-            left: 0;
-            top: 0;
-            padding: 40px;
-            z-index: -9999;
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-            color: black;
-            box-sizing: border-box;
-        `;
-        document.body.appendChild(container);
-
-        function getScoreColor(score, threshold) {
-		    if (score >= threshold) {
-		        return [244, 67, 54]; // Red (danger)
-		    } else if (score >= threshold * 0.8) {
-		        return [255, 193, 7]; // Yellow/Amber (warning)
-		    } else {
-		        return [76, 175, 80]; // Green (success)
-		    }
-		}
-
-        const contentHtml = `
-            <div style="background: white; color: black; max-width: 515px;">
-                <h1 style="font-size: 16px; text-align: center; margin-bottom: 12px; color: black;">
-                    Rezultate Test CAT-Q
-                </h1>
-
-                <div style="text-align: center; background-color: #f8f9fa; padding: 8px; margin: 12px 0; border-radius: 4px;">
-                    <span style="color: #666; font-size: 10px;">Rezultate generate de</span><br>
-                    <a href="https://www.testautism.ro" style="color: #2196F3; font-size: 12px; font-weight: bold;">
-                        www.testautism.ro
-                    </a>
-                </div>
-
-                <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin: 12px 0; border-radius: 4px;">
-                    <p style="color: #856404; margin: 0; font-size: 10px; line-height: 1.4;">
-                        <strong>IMPORTANT:</strong> Acest test este destinat <strong>EXCLUSIV</strong> în scop informativ și
-                        <strong>NU</strong> trebuie utilizat ca un instrument de diagnostic. Pentru evaluări profesionale,
-                        vă recomandăm să vizitați <a href="https://www.doctoradhd.com" style="color: #856404; font-weight: bold;">www.doctoradhd.com</a>
-                    </p>
-                </div>
-
-                <div style="text-align: center; background-color: #f8f9fa; padding: 12px; margin: 12px 0; border-radius: 4px;">
-                    <h2 style="font-size: 14px; margin-bottom: 8px; color: black;">Scor Total: ${totalScore}</h2>
-                    <p style="color: #666; font-size: 11px; line-height: 1.4;">${getInterpretation(totalScore)}</p>
-                </div>
-
-                <h3 style="font-size: 13px; margin: 12px 0; color: black;">Scoruri pe categorii:</h3>
-
-                <div style="margin-bottom: 20px;">
-                    ${[
-                        {
-                            name: 'Compensare',
-                            score: compensationScore,
-                            max: 63,
-                            threshold: 31
-                        },
-                        {
-                            name: 'Mascare',
-                            score: maskingScore,
-                            max: 56,
-                            threshold: 28
-                        },
-                        {
-                            name: 'Asimilare',
-                            score: assimilationScore,
-                            max: 56,
-                            threshold: 28
-                        }
-                    ].map(category => {
-                        const percentage = (category.score / category.max) * 100;
-                        const color = getScoreColor(category.score, category.threshold);
-                        return `
-                            <div style="margin-bottom: 16px; background: white;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                    <strong style="color: black; font-size: 11px;">${category.name}</strong>
-                                    <span style="color: black; font-size: 11px;">${category.score} / ${category.max}</span>
-                                </div>
-                                <div style="position: relative; height: 16px; background-color: #e9ecef; border-radius: 3px; overflow: hidden;">
-                                    <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${percentage}%; background-color: ${color};"></div>
-                                    <div style="position: absolute; left: ${(category.threshold/category.max)*100}%; top: 0; height: 100%; width: 2px; background-color: black;"></div>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; margin-top: 2px; font-size: 9px; color: #666;">
-                                    <span>0</span>
-                                    <span>Prag: ${category.threshold}</span>
-                                    <span>${category.max}</span>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-
-                <div style="margin: 16px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
-                    <strong style="color: black; font-size: 11px;">Legendă:</strong><br>
-                    <span style="color: #4CAF50;">■</span> Sub prag &nbsp;&nbsp;
-                    <span style="color: #FFC107;">■</span> Aproape de prag &nbsp;&nbsp;
-                    <span style="color: #F44336;">■</span> Peste prag
-                </div>
-
-                <div style="margin-top: 16px; text-align: right; color: #666; font-size: 9px;">
-                    Data testului: ${new Date().toLocaleDateString('ro-RO')}
-                </div>
-            </div>
-        `;
-
-        // Set container content
-        container.innerHTML = contentHtml;
-
-        // Add questions and answers
-        let questionIndex = 0;
-        questions.forEach((question, index) => {
-            const selected = document.querySelector(`input[name="q${index}"]:checked`);
-            if (selected) {
-                const questionDiv = document.createElement('div');
-                questionDiv.style.cssText = `margin-bottom: 30px; color: black;`;
-
-                if ((questionIndex + 1) % 9 === 0) {
-                    questionDiv.style.pageBreakAfter = 'always';
-                }
-
-                const questionText = document.createElement('p');
-                questionText.style.cssText = 'margin-bottom: 5px; font-weight: bold; color: black;';
-                questionText.innerHTML = `${index + 1}. ${question.text}`;
-                questionDiv.appendChild(questionText);
-
-                const categoryText = document.createElement('p');
-                categoryText.style.cssText = 'margin-left: 15px; margin-bottom: 5px; font-style: italic; color: black;';
-                categoryText.innerHTML = `Categorie: ${question.category}`;
-                questionDiv.appendChild(categoryText);
-
-                const answerText = document.createElement('p');
-                answerText.style.cssText = 'margin-left: 15px; margin-bottom: 20px; color: black;';
-                answerText.innerHTML = `Răspuns: ${selected.closest('.form-check').querySelector('.form-check-label').innerHTML.trim()}`;
-                questionDiv.appendChild(answerText);
-
-                container.appendChild(questionDiv);
-                questionIndex++;
-            }
-        });
-
-        // PDF generation options
-        const opt = {
-            margin: [25, 20, 25, 20], // [top, right, bottom, left]
-            filename: 'rezultate_test_cat_q.pdf',
-            image: { type: 'jpeg', quality: 1 },
-            html2canvas: {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                backgroundColor: '#FFFFFF',
-                width: 595,
-                height: container.offsetHeight
-            },
-            jsPDF: {
-                unit: 'pt',
-                format: 'a4',
-                orientation: 'portrait',
-                putOnlyUsedFonts: true,
-                compress: true
-            },
-            pagebreak: {
-                mode: ['avoid-all', 'css', 'legacy']
-            }
-        };
-
-        // Wait for content to render
-        await new Promise(resolve => setTimeout(resolve, 300));
-
-        try {
-            const pdfBlob = await html2pdf().set(opt).from(container).outputPdf('blob');
-            // Clean up
-            document.body.removeChild(container);
-            return pdfBlob;
-        } catch (error) {
-            console.error('Error generating PDF:', error);
-            // Clean up
-            document.body.removeChild(container);
-            throw error;
-        }
-    } catch (error) {
-        console.error('Error in basic PDF blob generation:', error);
-        throw error;
-    }
-}
-
-/**
- * Robust PDF export function that tries multiple methods until one works
- */
-async function exportRobustRomanianPDF() {
+// Unified export function with fallback mechanisms
+async function exportToPDF() {
     // Disable export button while generating
     const exportBtn = document.querySelector('.btn-success');
     if (exportBtn) {
@@ -1086,16 +809,7 @@ async function exportRobustRomanianPDF() {
                 console.log("PDF successfully generated using the backup method!");
             } catch (error2) {
                 console.warn("Second method failed:", error2);
-
-                // Method 3: Try the original method
-                try {
-                    console.log("Trying basic PDF generation method...");
-                    pdfBlob = await generateBasicPDFBlob();
-                    console.log("PDF successfully generated using the basic method!");
-                } catch (error3) {
-                    console.error("All methods failed!", error3);
-                    throw new Error("Could not generate PDF with any available method!");
-                }
+                throw new Error("Could not generate PDF with any available method!");
             }
         }
 
@@ -1135,11 +849,7 @@ async function exportRobustRomanianPDF() {
     }
 }
 
-async function exportToPDF() {
-	return exportRobustRomanianPDF();
-}
-
-// Facebook Share Functionality
+// Facebook Share functionality
 function shareToFacebook() {
     const scores = calculateScores();
     const shareText = `Am obținut un scor de ${scores.totalScore} la testul CAT-Q de evaluare a tendințelor de camuflare a trăsăturilor autiste. Află mai multe despre camuflarea autistă pe testautism.ro`;
@@ -1159,7 +869,6 @@ function showRestartWarning() {
 
 function restartTest() {
     // Reset progress container
-    const progressContainer = document.querySelector('.progress-container');
     if (progressContainer) {
         progressContainer.style.display = '';
         setTimeout(() => progressContainer.classList.add('visible'), 10);
@@ -1208,7 +917,6 @@ function restartTest() {
 
 // Helper function for scrolling
 function scrollToQuestion(questionElement) {
-    const progressContainer = document.querySelector('.progress-container');
     const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
 
     window.scrollTo({
@@ -1217,17 +925,62 @@ function scrollToQuestion(questionElement) {
     });
 }
 
+// Setup Event Listeners
+document.addEventListener('change', (e) => {
+    if (e.target.type === 'radio') {
+        const currentQuestion = e.target.closest('.question');
+        if (currentQuestion) {
+            currentQuestion.classList.add('completed');
+            updateProgress();
+
+            currentQuestion.classList.remove('highlight-unanswered');
+
+            // Also clear any error messages when a question is answered
+            if (errorDiv) {
+                errorDiv.style.display = 'none';
+                errorDiv.innerHTML = '';
+            }
+            if (errorBelowDiv) {
+                errorBelowDiv.style.display = 'none';
+                errorBelowDiv.innerHTML = '';
+            }
+
+            // Find next unanswered question
+            const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
+                .find(q => !q.querySelector('input[type="radio"]:checked'));
+
+            if (nextUnanswered) {
+                document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                nextUnanswered.classList.add('current');
+                scrollToQuestion(nextUnanswered);
+            }
+        }
+    }
+});
+
+// Monitor scroll for progress bar visibility
+window.addEventListener('scroll', () => {
+    const testContainer = document.getElementById('questions');
+    if (testContainer) {
+        const rect = testContainer.getBoundingClientRect();
+        const hasAnswers = document.querySelector('input[type="radio"]:checked') !== null;
+
+        if (rect.top <= 0 && rect.bottom >= 0 && hasAnswers) {
+            progressContainer.classList.add('visible');
+        } else {
+            progressContainer.classList.remove('visible');
+        }
+    }
+});
+
 // Add event listener for restart confirmation
 document.getElementById('confirmRestartBtn').addEventListener('click', restartTest);
 
 // Submit button event handler
-document.getElementById('submitBtn').addEventListener('click', (e) => {
+submitBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
     // Reset error states
-    const errorDiv = document.getElementById('error');
-    const errorBelowDiv = document.getElementById('errorBelow');
-
     if (errorDiv) {
         errorDiv.style.display = 'none';
         errorDiv.innerHTML = '';
@@ -1294,13 +1047,7 @@ document.getElementById('submitBtn').addEventListener('click', (e) => {
         // Find and scroll to first unanswered with proper offset
         const firstUnanswered = document.querySelector('.highlight-unanswered');
         if (firstUnanswered) {
-            const progressContainer = document.querySelector('.progress-container');
-            const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
-
-            window.scrollTo({
-                top: firstUnanswered.getBoundingClientRect().top + window.pageYOffset - offset,
-                behavior: 'smooth'
-            });
+            scrollToQuestion(firstUnanswered);
         }
         return;
     }
@@ -1310,7 +1057,6 @@ document.getElementById('submitBtn').addEventListener('click', (e) => {
     displayResults(scores);
 
     // Hide progress bar and error messages after completion
-    const progressContainer = document.querySelector('.progress-container');
     if (progressContainer) {
         progressContainer.classList.remove('visible');
     }
@@ -1320,11 +1066,6 @@ document.getElementById('submitBtn').addEventListener('click', (e) => {
         radio.disabled = true;
     });
 });
-
-/**
- * Navigation Highlighting System for CAT-Q page
- * Tracks the current section in viewport and updates navigation accordingly
- */
 
 // Navigation highlighting for CAT-Q page
 function updateQuickNav() {
@@ -1368,87 +1109,14 @@ function updateQuickNav() {
     }
 }
 
-// Initialize navigation highlighting when DOM is loaded
+// Help buttons functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Initial update of navigation
+    // Update navigation immediately
     updateQuickNav();
 
     // Update navigation on scroll
     window.addEventListener('scroll', updateQuickNav);
 
-    // Add click handler for smooth scrolling and immediate highlighting
-    document.querySelectorAll('.quick-nav-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            // Get the target section ID from the href attribute
-            const targetId = this.getAttribute('href');
-
-            // Only process if it's an anchor link to a section on this page
-            if (targetId.startsWith('#')) {
-                e.preventDefault();
-
-                // Get the target element
-                const targetElement = document.querySelector(targetId);
-
-                if (targetElement) {
-                    // Scroll to the target element
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-
-                    // Update navigation highlighting immediately for better UX
-                    document.querySelectorAll('.quick-nav-item').forEach(navItem => {
-                        navItem.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                }
-            }
-        });
-    });
-});
-
-// Additional check on full page load (including images)
-window.addEventListener('load', updateQuickNav);
-
-// Enhanced Feature Cards Animation
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if FontAwesome is loaded correctly
-    if (typeof FontAwesome === 'undefined') {
-        // Fallback for FontAwesome in case it's not loaded properly
-        const linkElement = document.createElement('link');
-        linkElement.rel = 'stylesheet';
-        linkElement.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css';
-        linkElement.integrity = 'sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==';
-        linkElement.crossOrigin = 'anonymous';
-        linkElement.referrerPolicy = 'no-referrer';
-        document.head.appendChild(linkElement);
-    }
-
-    // Add subtle animations to the feature cards
-    const featureCards = document.querySelectorAll('.feature-card-hover');
-    featureCards.forEach(card => {
-        // Create a more dynamic hover effect
-        card.addEventListener('mousemove', function(e) {
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left; // x position within the element
-            const y = e.clientY - rect.top;  // y position within the element
-
-            // Calculate rotation based on mouse position (subtle effect)
-            const rotateX = (y / rect.height - 0.5) * 5; // max 5deg rotation
-            const rotateY = (x / rect.width - 0.5) * -5;
-
-            // Apply the transformation (subtle 3D effect)
-            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.02)`;
-        });
-
-        // Reset the transformation when mouse leaves
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = '';
-        });
-    });
-});
-
-// Help buttons functionality for questions
-document.addEventListener('DOMContentLoaded', function() {
     // Find all help buttons and add click event listeners
     document.querySelectorAll('.help-button').forEach(button => {
         button.addEventListener('click', function() {
