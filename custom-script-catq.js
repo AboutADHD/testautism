@@ -250,7 +250,7 @@ function calculateScores() {
 // Results Display
 function displayResults({ totalScore, compensationScore, maskingScore, assimilationScore }) {
     const resultDiv = document.getElementById('section-results');
-    
+
     if (!resultDiv || !submitBtn) return;
 
     const interpretation = getInterpretation(totalScore);
@@ -1137,3 +1137,652 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+/**
+ * Advanced Storage Mechanism with Fallbacks
+ * Provides a unified API for persistent data storage across browsers and devices
+ */
+class StorageManager {
+    constructor(prefix = 'cat_q_') {
+        this.prefix = prefix;
+        this.mechanism = this._detectBestMechanism();
+        this.debounceTimers = {};
+    }
+
+    /**
+     * Detects the best available storage mechanism
+     * @returns {string} The name of the available mechanism
+     */
+    _detectBestMechanism() {
+        // Check for localStorage availability
+        try {
+            localStorage.setItem('test', 'test');
+            localStorage.removeItem('test');
+            return 'localStorage';
+        } catch (e) {
+            // Check for sessionStorage availability
+            try {
+                sessionStorage.setItem('test', 'test');
+                sessionStorage.removeItem('test');
+                return 'sessionStorage';
+            } catch (e) {
+                // Last resort: cookies
+                return 'cookies';
+            }
+        }
+    }
+
+    /**
+     * Builds a prefixed key
+     * @param {string} key Base key
+     * @returns {string} Prefixed key
+     */
+    _buildKey(key) {
+        return `${this.prefix}${key}`;
+    }
+
+    /**
+     * Set a value with optional debouncing
+     * @param {string} key The key to store under
+     * @param {any} value The value to store
+     * @param {number} debounceMs Debounce time in milliseconds (0 for immediate)
+     */
+    set(key, value, debounceMs = 0) {
+        const prefixedKey = this._buildKey(key);
+
+        // Clear existing debounce timer if any
+        if (this.debounceTimers[prefixedKey]) {
+            clearTimeout(this.debounceTimers[prefixedKey]);
+        }
+
+        // Set value immediately or with debounce
+        if (debounceMs <= 0) {
+            this._setValue(prefixedKey, value);
+        } else {
+            this.debounceTimers[prefixedKey] = setTimeout(() => {
+                this._setValue(prefixedKey, value);
+                delete this.debounceTimers[prefixedKey];
+            }, debounceMs);
+        }
+    }
+
+    /**
+     * Internal method to set value based on available mechanism
+     * @param {string} key Prefixed key
+     * @param {any} value Value to store
+     */
+    _setValue(key, value) {
+        // Serialize complex values
+        const serialized = JSON.stringify(value);
+
+        try {
+            switch (this.mechanism) {
+                case 'localStorage':
+                    localStorage.setItem(key, serialized);
+                    break;
+                case 'sessionStorage':
+                    sessionStorage.setItem(key, serialized);
+                    break;
+                case 'cookies':
+                    // Set cookie with 30-day expiration
+                    const expiryDate = new Date();
+                    expiryDate.setDate(expiryDate.getDate() + 30);
+                    document.cookie = `${key}=${encodeURIComponent(serialized)};expires=${expiryDate.toUTCString()};path=/;SameSite=Strict`;
+                    break;
+            }
+        } catch (e) {
+            console.warn(`Failed to store value for ${key}:`, e);
+        }
+    }
+
+    /**
+     * Get a stored value
+     * @param {string} key The key to retrieve
+     * @param {any} defaultValue Default value if key doesn't exist
+     * @returns {any} The stored value or default
+     */
+    get(key, defaultValue = null) {
+        const prefixedKey = this._buildKey(key);
+        let rawValue = null;
+
+        try {
+            switch (this.mechanism) {
+                case 'localStorage':
+                    rawValue = localStorage.getItem(prefixedKey);
+                    break;
+                case 'sessionStorage':
+                    rawValue = sessionStorage.getItem(prefixedKey);
+                    break;
+                case 'cookies':
+                    const cookies = document.cookie.split(';');
+                    for (let cookie of cookies) {
+                        const [cookieKey, cookieValue] = cookie.trim().split('=');
+                        if (cookieKey === prefixedKey) {
+                            rawValue = decodeURIComponent(cookieValue);
+                            break;
+                        }
+                    }
+                    break;
+            }
+
+            if (rawValue === null) {
+                return defaultValue;
+            }
+
+            return JSON.parse(rawValue);
+        } catch (e) {
+            console.warn(`Failed to retrieve value for ${key}:`, e);
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Remove a stored value
+     * @param {string} key The key to remove
+     */
+    remove(key) {
+        const prefixedKey = this._buildKey(key);
+
+        try {
+            switch (this.mechanism) {
+                case 'localStorage':
+                    localStorage.removeItem(prefixedKey);
+                    break;
+                case 'sessionStorage':
+                    sessionStorage.removeItem(prefixedKey);
+                    break;
+                case 'cookies':
+                    document.cookie = `${prefixedKey}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;SameSite=Strict`;
+                    break;
+            }
+        } catch (e) {
+            console.warn(`Failed to remove value for ${key}:`, e);
+        }
+    }
+
+    /**
+     * Clear all stored values with this prefix
+     */
+    clearAll() {
+        try {
+            switch (this.mechanism) {
+                case 'localStorage':
+                case 'sessionStorage':
+                    const storage = this.mechanism === 'localStorage' ? localStorage : sessionStorage;
+                    Object.keys(storage).forEach(key => {
+                        if (key.startsWith(this.prefix)) {
+                            storage.removeItem(key);
+                        }
+                    });
+                    break;
+                case 'cookies':
+                    const cookies = document.cookie.split(';');
+                    for (let cookie of cookies) {
+                        const cookieKey = cookie.trim().split('=')[0];
+                        if (cookieKey.startsWith(this.prefix)) {
+                            document.cookie = `${cookieKey}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;SameSite=Strict`;
+                        }
+                    }
+                    break;
+            }
+        } catch (e) {
+            console.warn('Failed to clear all stored values:', e);
+        }
+    }
+}
+
+/**
+ * AutoSave Manager for CAT-Q Test
+ * Handles saving and restoring test state
+ */
+class AutoSaveManager {
+    constructor() {
+        this.storage = new StorageManager('cat_q_');
+        this.saveNotificationTimeout = null;
+        this.initNotificationSystem();
+    }
+
+    /**
+     * Initialize notification system for save updates
+     */
+    initNotificationSystem() {
+        // Create notification element if it doesn't exist
+        if (!document.getElementById('save-notification')) {
+            const notification = document.createElement('div');
+            notification.id = 'save-notification';
+            notification.className = 'save-notification';
+            notification.setAttribute('role', 'status');
+            notification.setAttribute('aria-live', 'polite');
+            notification.innerHTML = `
+                <i class="fas fa-save"></i>
+                <span id="save-notification-text">Salvat</span>
+            `;
+            document.body.appendChild(notification);
+
+            // Add CSS if not already present
+            if (!document.getElementById('autosave-styles')) {
+                const styleEl = document.createElement('style');
+                styleEl.id = 'autosave-styles';
+                styleEl.textContent = `
+                    .save-notification {
+                        position: fixed;
+                        bottom: 20px;
+                        left: 50%;
+                        transform: translateX(-50%) translateY(100px);
+                        background: #4CAF50;
+                        color: white;
+                        padding: 10px 16px;
+                        border-radius: 50px;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        opacity: 0;
+                        transition: all 0.3s ease;
+                        z-index: 1010;
+                        font-size: 14px;
+                        font-weight: 500;
+                        pointer-events: none;
+                    }
+                    .save-notification.visible {
+                        transform: translateX(-50%) translateY(0);
+                        opacity: 1;
+                    }
+
+                    @media (max-width: 576px) {
+                        .save-notification {
+                            bottom: 70px; /* Adjust for bottom nav on mobile */
+                        }
+                    }
+
+                    .test-restored-banner {
+                        background: linear-gradient(45deg, #9C27B0, #673AB7);
+                        color: white;
+                        padding: 12px 20px;
+                        margin-bottom: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        animation: fadeInDown 0.5s ease forwards;
+                    }
+
+                    @keyframes fadeInDown {
+                        from {
+                            opacity: 0;
+                            transform: translateY(-20px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+
+                    .test-restored-banner .banner-message {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
+
+                    .test-restored-banner .banner-actions {
+                        display: flex;
+                        gap: 10px;
+                    }
+
+                    .test-restored-banner button {
+                        background: rgba(255, 255, 255, 0.2);
+                        border: none;
+                        color: white;
+                        padding: 5px 10px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        transition: background 0.2s ease;
+                    }
+
+                    .test-restored-banner button:hover {
+                        background: rgba(255, 255, 255, 0.3);
+                    }
+
+                    @media (max-width: 768px) {
+                        .test-restored-banner {
+                            flex-direction: column;
+                            align-items: flex-start;
+                            gap: 10px;
+                        }
+
+                        .test-restored-banner .banner-actions {
+                            width: 100%;
+                            justify-content: space-between;
+                        }
+                    }
+                `;
+                document.head.appendChild(styleEl);
+            }
+        }
+
+        return document.getElementById('save-notification');
+    }
+
+    /**
+     * Show save notification with custom message
+     * @param {string} message Message to display
+     * @param {string} type Type of notification (success, info, warning)
+     */
+    showNotification(message, type = 'success') {
+        const notification = document.getElementById('save-notification');
+        if (!notification) return;
+
+        // Update notification content
+        const textSpan = notification.querySelector('#save-notification-text');
+        if (textSpan) textSpan.textContent = message;
+
+        // Update notification appearance based on type
+        notification.style.background = type === 'success' ? '#4CAF50' :
+                                       type === 'info' ? '#2196F3' :
+                                       type === 'warning' ? '#FF9800' : '#4CAF50';
+
+        // Show notification
+        notification.classList.add('visible');
+
+        // Clear previous timeout if any
+        if (this.saveNotificationTimeout) {
+            clearTimeout(this.saveNotificationTimeout);
+        }
+
+        // Hide notification after delay
+        this.saveNotificationTimeout = setTimeout(() => {
+            notification.classList.remove('visible');
+        }, 2000);
+    }
+
+    /**
+     * Save answers and test state
+     */
+    saveTestState() {
+        try {
+            // Get current answers
+            const answers = {};
+            questions.forEach((question, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected) {
+                    answers[index] = selected.value;
+                }
+            });
+
+            // Get completion status
+            const completed = Object.keys(answers).length === questions.length;
+
+            // Get active question
+            const currentQuestionEl = document.querySelector('.question.current');
+            let currentQuestionIndex = null;
+            if (currentQuestionEl) {
+                const questionNumber = currentQuestionEl.getAttribute('data-question-number');
+                if (questionNumber) {
+                    currentQuestionIndex = parseInt(questionNumber) - 1;
+                }
+            }
+
+            // Save test state
+            const testState = {
+                answers,
+                timestamp: new Date().toISOString(),
+                completed,
+                currentQuestionIndex,
+                scrollPosition: window.scrollY,
+                screenWidth: window.innerWidth, // For responsive adjustments on restore
+                lastSaved: new Date().toISOString()
+            };
+
+            this.storage.set('test_state', testState, 500); // Debounce by 500ms
+
+            // Save results if test is completed and results are calculated
+            if (completed && document.getElementById('section-results').style.display !== 'none') {
+                const results = calculateScores();
+                this.storage.set('test_results', results);
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Error saving test state:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Restore test state from storage
+     * @returns {boolean} True if state was restored, false otherwise
+     */
+    restoreTestState() {
+        try {
+            const testState = this.storage.get('test_state');
+            if (!testState || !testState.answers || Object.keys(testState.answers).length === 0) {
+                return false;
+            }
+
+            // Restore answers
+            let answeredCount = 0;
+            Object.entries(testState.answers).forEach(([index, value]) => {
+                const input = document.querySelector(`input[name="q${index}"][value="${value}"]`);
+                if (input) {
+                    input.checked = true;
+                    answeredCount++;
+
+                    // Mark question as completed
+                    const questionDiv = input.closest('.question');
+                    if (questionDiv) {
+                        questionDiv.classList.add('completed');
+                    }
+                }
+            });
+
+            // Handle completed test
+            if (testState.completed) {
+                const results = this.storage.get('test_results');
+
+                // If results exist, show them
+                if (results) {
+                    displayResults(results);
+                    return true;
+                }
+
+                // If no saved results but all questions are answered, calculate results
+                if (answeredCount === questions.length) {
+                    const scores = calculateScores();
+                    displayResults(scores);
+                    return true;
+                }
+            }
+
+            // For incomplete test, set current question
+            if (testState.currentQuestionIndex !== null) {
+                const currentQuestionEl = document.querySelector(`[data-question-number="${testState.currentQuestionIndex + 1}"]`);
+                if (currentQuestionEl) {
+                    document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                    currentQuestionEl.classList.add('current');
+                }
+            }
+
+            // Find next unanswered question if no current question
+            if (!document.querySelector('.question.current')) {
+                const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
+                    .find(q => !q.querySelector('input[type="radio"]:checked'));
+
+                if (nextUnanswered) {
+                    document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                    nextUnanswered.classList.add('current');
+                }
+            }
+
+            // Update progress
+            if (typeof updateProgress === 'function') {
+                updateProgress();
+            }
+
+            // Show restoration banner
+            this.showRestorationBanner(answeredCount, questions.length);
+
+            return true;
+        } catch (error) {
+            console.error('Error restoring test state:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Show banner informing user that test state was restored
+     * @param {number} answered Number of answered questions
+     * @param {number} total Total number of questions
+     */
+    showRestorationBanner(answered, total) {
+        // Create banner if not already showing
+        if (document.querySelector('.test-restored-banner')) return;
+
+        const testForm = document.getElementById('catqForm');
+        if (!testForm) return;
+
+        const banner = document.createElement('div');
+        banner.className = 'test-restored-banner';
+        banner.innerHTML = `
+            <div class="banner-message">
+                <i class="fas fa-history"></i>
+                <div>
+                    <strong>Test restaurat!</strong>
+                    <span class="d-block d-md-inline">Progres: ${answered} din ${total} întrebări completate.</span>
+                </div>
+            </div>
+            <div class="banner-actions">
+                <button id="continue-test-btn">
+                    <i class="fas fa-play"></i> Continuă testul
+                </button>
+                <button id="restart-restored-test-btn">
+                    <i class="fas fa-redo"></i> Începe un nou test
+                </button>
+            </div>
+        `;
+
+        testForm.parentNode.insertBefore(banner, testForm);
+
+        // Add event listeners to buttons
+        document.getElementById('continue-test-btn').addEventListener('click', () => {
+            banner.remove();
+
+            // Scroll to current question
+            const currentQuestion = document.querySelector('.question.current');
+            if (currentQuestion) {
+                const progressContainer = document.querySelector('.progress-container');
+                const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
+
+                window.scrollTo({
+                    top: currentQuestion.getBoundingClientRect().top + window.pageYOffset - offset,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        document.getElementById('restart-restored-test-btn').addEventListener('click', () => {
+            // Show modal for confirmation if available
+            const restartWarningModal = document.getElementById('restartWarningModal');
+            if (restartWarningModal) {
+                const bsModal = bootstrap.Modal.getOrCreateInstance(restartWarningModal);
+                bsModal.show();
+            } else {
+                // If no modal, confirm directly
+                if (confirm('Ești sigur că vrei să începi un nou test? Progresul actual va fi pierdut.')) {
+                    this.clearSavedState();
+                    restartTest();
+                    banner.remove();
+                }
+            }
+        });
+    }
+
+    /**
+     * Clear saved state
+     */
+    clearSavedState() {
+        this.storage.remove('test_state');
+        this.storage.remove('test_results');
+    }
+}
+
+// Create global instance of AutoSaveManager
+const autoSaveManager = new AutoSaveManager();
+
+// Extend the restartTest function to clear saved state
+const originalRestartTest = window.restartTest;
+window.restartTest = function() {
+    // Clear saved state first
+    autoSaveManager.clearSavedState();
+
+    // Then call original function (if available)
+    if (typeof originalRestartTest === 'function') {
+        originalRestartTest();
+    } else {
+        // Basic restart functionality if original function is missing
+        // Reset form elements
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.checked = false;
+            radio.disabled = false;
+        });
+
+        // Reset question states
+        document.querySelectorAll('.question').forEach(question => {
+            question.classList.remove('completed', 'current', 'highlight-unanswered');
+        });
+
+        // Reset UI elements
+        const resultDiv = document.getElementById('section-results');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (resultDiv) resultDiv.style.display = 'none';
+        if (submitBtn) submitBtn.style.display = 'block';
+
+        // Update progress
+        if (typeof updateProgress === 'function') {
+            updateProgress();
+        }
+    }
+
+    // Remove restoration banner if present
+    const banner = document.querySelector('.test-restored-banner');
+    if (banner) banner.remove();
+
+    // Show notification
+    autoSaveManager.showNotification('Test resetat', 'info');
+};
+
+// Add auto-save to form changes
+document.addEventListener('change', (e) => {
+    if (e.target.type === 'radio') {
+        autoSaveManager.saveTestState();
+        autoSaveManager.showNotification('Progres salvat', 'success');
+    }
+});
+
+// Save on window focus/blur (user switching apps/tabs)
+window.addEventListener('focus', () => {
+    autoSaveManager.saveTestState();
+});
+
+window.addEventListener('blur', () => {
+    autoSaveManager.saveTestState();
+});
+
+// Save before unload (user closing page)
+window.addEventListener('beforeunload', () => {
+    autoSaveManager.saveTestState();
+});
+
+// Restore state on page load
+document.addEventListener('DOMContentLoaded', () => {
+    // Attempt to restore state after a slight delay to ensure form is fully loaded
+    setTimeout(() => {
+        autoSaveManager.restoreTestState();
+    }, 300);
+});
+
+// Save periodically (every minute)
+setInterval(() => {
+    autoSaveManager.saveTestState();
+}, 60000);
