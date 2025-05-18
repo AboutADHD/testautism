@@ -2090,19 +2090,235 @@ class StorageManager {
     }
 }
 
+function setProgressState(answered, total, animate = false) {
+    const percentage = (answered / total) * 100;
+    const progressFill = document.querySelector('.progress-fill');
+    const questionsCompleted = document.querySelector('.questions-completed');
+    const timeEstimate = document.querySelector('.time-estimate');
+    const progressMessage = document.querySelector('.progress-message');
+    
+    // Handle progress fill animation
+    if (progressFill) {
+        if (animate) {
+            progressFill.style.transition = 'none';
+            progressFill.style.width = '0%';
+            progressFill.offsetHeight; // Force reflow
+            progressFill.style.transition = 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            setTimeout(() => {
+                progressFill.style.width = percentage + '%';
+            }, 50);
+        } else {
+            progressFill.style.width = percentage + '%';
+        }
+    }
+    
+    // Update completion text
+    if (questionsCompleted) {
+        questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
+    }
+    
+    // Update time estimate
+    if (timeEstimate) {
+        const remainingQuestions = total - answered;
+        const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.375), 1);
+        timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
+    }
+    
+    // Update progress message if function available
+    if (progressMessage && typeof getProgressMessage === 'function') {
+        progressMessage.innerHTML = getProgressMessage(percentage, answered);
+    }
+}
+
+/**
+ * Enhanced progress update during restoration
+ * @param {number} answered - Number of answered questions
+ * @param {number} total - Total number of questions
+ * @param {boolean} animate - Whether to animate the progress transition
+ */
+function updateProgressOnRestore(answered, total, animate = true) {
+    const percentage = (answered / total) * 100;
+    
+    // Step 1: Prepare for animation if requested
+    if (animate) {
+        const progressFill = document.querySelector('.progress-fill');
+        if (progressFill) {
+            progressFill.style.transition = 'none';
+            progressFill.style.width = '0%';
+            // Force reflow to ensure the initial state is rendered
+            progressFill.offsetHeight;
+            progressFill.style.transition = 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+        }
+    }
+    
+    // Step 2: Directly update text elements for immediate feedback
+    const questionsCompleted = document.querySelector('.questions-completed');
+    if (questionsCompleted) {
+        questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
+    }
+    
+    const timeEstimate = document.querySelector('.time-estimate');
+    if (timeEstimate) {
+        const remainingQuestions = total - answered;
+        const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.375), 1);
+        timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
+    }
+    
+    const progressMessage = document.querySelector('.progress-message');
+    if (progressMessage && typeof getProgressMessage === 'function') {
+        progressMessage.innerHTML = getProgressMessage(percentage, answered);
+    }
+    
+    // Step 3: Animate progress bar with slight delay to ensure visual effect
+    if (animate) {
+        setTimeout(() => {
+            const progressFill = document.querySelector('.progress-fill');
+            if (progressFill) {
+                progressFill.style.width = percentage + '%';
+            }
+        }, 50);
+    }
+    
+    // Step 4: Still call the original function to ensure any other side effects
+    // are maintained, but with a slight delay to avoid visual conflicts
+    setTimeout(() => {
+        if (typeof updateProgress === 'function') {
+            updateProgress();
+        }
+    }, animate ? 900 : 0);
+}
+
 /**
  * AutoSave Manager for RAADS-R Test
- * Handles saving and restoring test state
+ * Handles saving and restoring test state with enhanced user feedback
  */
 class AutoSaveManager {
     constructor() {
         this.storage = new StorageManager('raads_r_');
         this.saveNotificationTimeout = null;
+        this.progressNotificationTimeout = null;
+        this.lastSaveIndicator = this.createLastSaveIndicator();
         this.initNotificationSystem();
     }
 
     /**
+     * Create a discreet save time indicator
+     * @returns {HTMLElement} The indicator element
+     */
+    createLastSaveIndicator() {
+        const indicator = document.createElement('div');
+        indicator.id = 'last-save-indicator';
+        indicator.className = 'last-save-indicator';
+        indicator.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span id="last-save-time">Nesalvat</span>';
+        
+        // Add CSS if not already present
+        if (!document.getElementById('save-indicator-styles')) {
+            const styleEl = document.createElement('style');
+            styleEl.id = 'save-indicator-styles';
+            styleEl.textContent = `
+                .last-save-indicator {
+                    position: absolute;
+                    right: 10px;
+                    top: 5px;
+                    font-size: 0.8rem;
+                    color: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    opacity: 0.7;
+                    transition: opacity 0.3s ease;
+                    background: rgba(255, 255, 255, 0.8);
+                    padding: 3px 8px;
+                    border-radius: 20px;
+                    z-index: 10;
+                }
+                
+                .last-save-indicator:hover {
+                    opacity: 1;
+                }
+                
+                .last-save-indicator.saving {
+                    color: #2196F3;
+                }
+                
+                .last-save-indicator i {
+                    font-size: 0.9rem;
+                }
+                
+                .progress-notification {
+                    position: absolute;
+                    right: 10px;
+                    top: 30px;
+                    background: #4CAF50;
+                    color: white;
+                    padding: 5px 10px;
+                    border-radius: 20px;
+                    font-size: 0.8rem;
+                    opacity: 0;
+                    transform: translateY(-10px);
+                    transition: all 0.3s ease;
+                    z-index: 15;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                }
+                
+                .progress-notification.visible {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+                
+                .progress-restoration-toast {
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(-100px);
+                    background: linear-gradient(135deg, #42a5f5, #1976d2);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 5px 20px rgba(25, 118, 210, 0.3);
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    z-index: 2000;
+                    opacity: 0;
+                    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    max-width: 90%;
+                }
+                
+                .progress-restoration-toast.visible {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
+                
+                .progress-restoration-toast .toast-icon {
+                    font-size: 1.5rem;
+                }
+                
+                .progress-restoration-toast .toast-content strong {
+                    display: block;
+                    margin-bottom: 2px;
+                }
+                
+                @media (max-width: 576px) {
+                    .last-save-indicator {
+                        font-size: 0.7rem;
+                        padding: 2px 6px;
+                    }
+                    
+                    .progress-notification {
+                        font-size: 0.7rem;
+                    }
+                }
+            `;
+            document.head.appendChild(styleEl);
+        }
+        
+        return indicator;
+    }
+
+    /**
      * Initialize notification system for save updates
+     * @returns {HTMLElement} The save notification element
      */
     initNotificationSystem() {
         // Create notification element if it doesn't exist
@@ -2117,114 +2333,41 @@ class AutoSaveManager {
                 <span id="save-notification-text">Salvat</span>
             `;
             document.body.appendChild(notification);
-
-            // Add CSS if not already present
-            if (!document.getElementById('autosave-styles')) {
-                const styleEl = document.createElement('style');
-                styleEl.id = 'autosave-styles';
-                styleEl.textContent = `
-                    .save-notification {
-                        position: fixed;
-                        bottom: 20px;
-                        left: 50%;
-                        transform: translateX(-50%) translateY(100px);
-                        background: #4CAF50;
-                        color: white;
-                        padding: 10px 16px;
-                        border-radius: 50px;
-                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-                        display: flex;
-                        align-items: center;
-                        gap: 8px;
-                        opacity: 0;
-                        transition: all 0.3s ease;
-                        z-index: 1010;
-                        font-size: 14px;
-                        font-weight: 500;
-                        pointer-events: none;
-                    }
-                    .save-notification.visible {
-                        transform: translateX(-50%) translateY(0);
-                        opacity: 1;
-                    }
-
-                    @media (max-width: 576px) {
-                        .save-notification {
-                            bottom: 70px; /* Adjust for bottom nav on mobile */
-                        }
-                    }
-
-                    .test-restored-banner {
-                        background: linear-gradient(45deg, #2196F3, #64B5F6);
-                        color: white;
-                        padding: 12px 20px;
-                        margin-bottom: 20px;
-                        border-radius: 8px;
-                        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        animation: fadeInDown 0.5s ease forwards;
-                    }
-
-                    @keyframes fadeInDown {
-                        from {
-                            opacity: 0;
-                            transform: translateY(-20px);
-                        }
-                        to {
-                            opacity: 1;
-                            transform: translateY(0);
-                        }
-                    }
-
-                    .test-restored-banner .banner-message {
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                    }
-
-                    .test-restored-banner .banner-actions {
-                        display: flex;
-                        gap: 10px;
-                    }
-
-                    .test-restored-banner button {
-                        background: rgba(255, 255, 255, 0.2);
-                        border: none;
-                        color: white;
-                        padding: 5px 10px;
-                        border-radius: 4px;
-                        cursor: pointer;
-                        transition: background 0.2s ease;
-                    }
-
-                    .test-restored-banner button:hover {
-                        background: rgba(255, 255, 255, 0.3);
-                    }
-
-                    @media (max-width: 768px) {
-                        .test-restored-banner {
-                            flex-direction: column;
-                            align-items: flex-start;
-                            gap: 10px;
-                        }
-
-                        .test-restored-banner .banner-actions {
-                            width: 100%;
-                            justify-content: space-between;
-                        }
-                    }
-                `;
-                document.head.appendChild(styleEl);
-            }
         }
-
+        
+        // Add a progress notification element
+        if (!document.getElementById('progress-notification')) {
+            const notification = document.createElement('div');
+            notification.id = 'progress-notification';
+            notification.className = 'progress-notification';
+            notification.setAttribute('role', 'status');
+            notification.setAttribute('aria-live', 'polite');
+            notification.innerHTML = 'Progres salvat';
+            document.body.appendChild(notification);
+        }
+        
+        // Add a toast notification for restoration
+        if (!document.getElementById('progress-restoration-toast')) {
+            const toast = document.createElement('div');
+            toast.id = 'progress-restoration-toast';
+            toast.className = 'progress-restoration-toast';
+            toast.setAttribute('role', 'status');
+            toast.setAttribute('aria-live', 'polite');
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="fas fa-history"></i></div>
+                <div class="toast-content">
+                    <strong>Progres restaurat</strong>
+                    <span id="restoration-details">Continuă de unde ai rămas</span>
+                </div>
+            `;
+            document.body.appendChild(toast);
+        }
+        
         return document.getElementById('save-notification');
     }
 
     /**
-     * Show save notification with custom message
+     * Show notification with custom message
      * @param {string} message Message to display
      * @param {string} type Type of notification (success, info, warning)
      */
@@ -2256,7 +2399,78 @@ class AutoSaveManager {
     }
 
     /**
-     * Save answers and test state
+     * Show progress notification near the progress bar
+     * @param {string} message Message to display
+     */
+    showProgressNotification(message) {
+        const notification = document.getElementById('progress-notification');
+        if (!notification) return;
+        
+        // Clear previous timeout if any
+        if (this.progressNotificationTimeout) {
+            clearTimeout(this.progressNotificationTimeout);
+        }
+        
+        // Update text and show
+        notification.textContent = message;
+        notification.classList.add('visible');
+        
+        // Auto-hide after 2 seconds
+        this.progressNotificationTimeout = setTimeout(() => {
+            notification.classList.remove('visible');
+        }, 2000);
+    }
+    
+    /**
+     * Show restoration toast notification
+     * @param {number} answered Number of answered questions
+     * @param {number} total Total number of questions
+     */
+    showRestorationToast(answered, total) {
+        const toast = document.getElementById('progress-restoration-toast');
+        if (!toast) return;
+        
+        // Update details
+        const details = toast.querySelector('#restoration-details');
+        if (details) {
+            details.textContent = `${answered} din ${total} întrebări completate (${Math.round(answered/total*100)}%)`;
+        }
+        
+        // Show toast
+        toast.classList.add('visible');
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            toast.classList.remove('visible');
+        }, 5000);
+    }
+
+    /**
+     * Update last save time indicator
+     */
+    updateLastSaveTime() {
+        const timeIndicator = document.getElementById('last-save-time');
+        if (!timeIndicator) return;
+        
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('ro-RO', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+        
+        // Flash the indicator to show active saving
+        const indicator = document.getElementById('last-save-indicator');
+        if (indicator) {
+            indicator.classList.add('saving');
+            setTimeout(() => indicator.classList.remove('saving'), 1000);
+        }
+        
+        timeIndicator.textContent = `Ultima salvare: ${timeString}`;
+    }
+
+    /**
+     * Save current test state to storage
+     * @returns {boolean} Success status
      */
     saveTestState() {
         try {
@@ -2297,12 +2511,15 @@ class AutoSaveManager {
 
             // Save results if test is completed and results are calculated
             if (completed && document.getElementById('result').style.display !== 'none') {
-                const results = this.storage.get('test_results');
-                if (!results) {
-                    const calculatedScores = calculateSubscores();
-                    this.storage.set('test_results', calculatedScores);
-                }
+                const calculatedScores = calculateSubscores();
+                this.storage.set('test_results', calculatedScores);
             }
+            
+            // Update the last save indicator
+            this.updateLastSaveTime();
+            
+            // Show a discreet notification
+            this.showProgressNotification('Progres salvat');
 
             return true;
         } catch (error) {
@@ -2338,19 +2555,28 @@ class AutoSaveManager {
                 }
             });
 
+            updateProgressOnRestore(answeredCount, questions.length, true);
+
             // Handle completed test
             if (testState.completed) {
                 const results = this.storage.get('test_results');
 
                 // If results exist, show them
                 if (results) {
-                    handleSubmit({ preventDefault: () => {} });
+                    // Call the global handleSubmit function to display results
+                    if (typeof handleSubmit === 'function') {
+                        handleSubmit({ preventDefault: () => {} });
+                    } else {
+                        console.warn('handleSubmit function not found, cannot display results automatically');
+                    }
                     return true;
                 }
 
                 // If no saved results but all questions are answered, calculate results
                 if (answeredCount === questions.length) {
-                    handleSubmit({ preventDefault: () => {} });
+                    if (typeof handleSubmit === 'function') {
+                        handleSubmit({ preventDefault: () => {} });
+                    }
                     return true;
                 }
             }
@@ -2375,14 +2601,52 @@ class AutoSaveManager {
                 }
             }
 
-            // Update progress
+            // For incomplete test, ensure progress bar is updated properly
             if (typeof updateProgress === 'function') {
                 updateProgress();
             }
-
-            // Show restoration banner
-            this.showRestorationBanner(answeredCount, questions.length);
-
+            
+            // Add last save indicator to progress container
+            const progressContainer = document.querySelector('.progress-container');
+            if (progressContainer && !document.getElementById('last-save-indicator')) {
+                progressContainer.appendChild(this.lastSaveIndicator);
+                
+                if (testState.lastSaved) {
+                    const lastSaveDate = new Date(testState.lastSaved);
+                    const timeString = lastSaveDate.toLocaleTimeString('ro-RO', { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+                    
+                    const timeIndicator = document.getElementById('last-save-time');
+                    if (timeIndicator) {
+                        timeIndicator.textContent = `Ultima salvare: ${timeString}`;
+                    }
+                }
+            }
+            
+            // Show restoration toast
+            this.showRestorationToast(answeredCount, questions.length);
+            
+            // Find and scroll to next unanswered question
+            setTimeout(() => {
+                const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
+                    .find(q => !q.querySelector('input[type="radio"]:checked'));
+                
+                if (nextUnanswered) {
+                    document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                    nextUnanswered.classList.add('current');
+                    
+                    const progressContainer = document.querySelector('.progress-container');
+                    const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
+                    
+                    window.scrollTo({
+                        top: nextUnanswered.getBoundingClientRect().top + window.pageYOffset - offset,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 1000); // Delay scrolling to ensure DOM is fully updated
+            
             return true;
         } catch (error) {
             console.error('Error restoring test state:', error);
@@ -2391,79 +2655,17 @@ class AutoSaveManager {
     }
 
     /**
-     * Show banner informing user that test state was restored
-     * @param {number} answered Number of answered questions
-     * @param {number} total Total number of questions
-     */
-    showRestorationBanner(answered, total) {
-        // Create banner if not already showing
-        if (document.querySelector('.test-restored-banner')) return;
-
-        const testForm = document.getElementById('raadsrForm');
-        if (!testForm) return;
-
-        const banner = document.createElement('div');
-        banner.className = 'test-restored-banner';
-        banner.innerHTML = `
-            <div class="banner-message">
-                <i class="fas fa-history"></i>
-                <div>
-                    <strong>Test restaurat!</strong>
-                    <span class="d-block d-md-inline">Progres: ${answered} din ${total} întrebări completate.</span>
-                </div>
-            </div>
-            <div class="banner-actions">
-                <button id="continue-test-btn">
-                    <i class="fas fa-play"></i> Continuă testul
-                </button>
-                <button id="restart-restored-test-btn">
-                    <i class="fas fa-redo"></i> Începe un nou test
-                </button>
-            </div>
-        `;
-
-        testForm.parentNode.insertBefore(banner, testForm);
-
-        // Add event listeners to buttons
-        document.getElementById('continue-test-btn').addEventListener('click', () => {
-            banner.remove();
-
-            // Scroll to current question
-            const currentQuestion = document.querySelector('.question.current');
-            if (currentQuestion) {
-                const progressContainer = document.querySelector('.progress-container');
-                const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
-
-                window.scrollTo({
-                    top: currentQuestion.getBoundingClientRect().top + window.pageYOffset - offset,
-                    behavior: 'smooth'
-                });
-            }
-        });
-
-        document.getElementById('restart-restored-test-btn').addEventListener('click', () => {
-            // Show modal for confirmation if available
-            const restartWarningModal = document.getElementById('restartWarningModal');
-            if (restartWarningModal) {
-                const bsModal = bootstrap.Modal.getOrCreateInstance(restartWarningModal);
-                bsModal.show();
-            } else {
-                // If no modal, confirm directly
-                if (confirm('Ești sigur că vrei să începi un nou test? Progresul actual va fi pierdut.')) {
-                    this.clearSavedState();
-                    restartTest();
-                    banner.remove();
-                }
-            }
-        });
-    }
-
-    /**
      * Clear saved state
      */
     clearSavedState() {
         this.storage.remove('test_state');
         this.storage.remove('test_results');
+        
+        // Remove the last save indicator if present
+        const indicator = document.getElementById('last-save-indicator');
+        if (indicator) {
+            indicator.remove();
+        }
     }
 }
 
@@ -2491,7 +2693,7 @@ window.restartTest = function() {
 document.addEventListener('change', (e) => {
     if (e.target.type === 'radio') {
         autoSaveManager.saveTestState();
-        autoSaveManager.showNotification('Progres salvat', 'success');
+        // autoSaveManager.showNotification('Progres salvat', 'success');
     }
 });
 
