@@ -3230,11 +3230,266 @@ AutoSaveManager.prototype.restoreTestState = function() {
     }
 };
 
-/**
- * Safely creates a restoration banner when the main notification system is unavailable
- * @param {number} answered Number of answered questions
- * @param {number} total Total questions
- */
+// Create global instance of AutoSaveManager
+const autoSaveManager = new AutoSaveManager();
+
+// Extend the restartTest function to clear saved state
+const originalRestartTest = window.restartTest;
+window.restartTest = function() {
+    // Call original function
+    originalRestartTest();
+
+    // Clear saved state
+    autoSaveManager.clearSavedState();
+
+    // Remove restoration banner if present
+    const banner = document.querySelector('.test-restored-banner');
+    if (banner) banner.remove();
+
+    // Show notification
+    autoSaveManager.showNotification('Test resetat', 'info');
+};
+
+// Create a globally accessible notification system
+window.notificationSystem = {
+    initialized: false,
+    
+    init: function() {
+        if (this.initialized) return;
+        
+        // Ensure notification containers exist
+        if (!document.getElementById('progress-restored-toast')) {
+            const toast = document.createElement('div');
+            toast.id = 'progress-restored-toast';
+            toast.className = 'progress-restored-toast';
+            toast.setAttribute('role', 'status');
+            toast.setAttribute('aria-live', 'polite');
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="fas fa-history"></i></div>
+                <div class="toast-content">
+                    <strong>Progres restaurat</strong>
+                    <span id="restoration-details">Continuă de unde ai rămas</span>
+                </div>
+                <button class="toast-close" aria-label="Închide notificarea">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            document.body.appendChild(toast);
+            
+            // Add close button functionality
+            const closeBtn = toast.querySelector('.toast-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    toast.classList.remove('visible');
+                    setTimeout(() => {
+                        if (document.body.contains(toast)) {
+                            toast.remove();
+                        }
+                    }, 300);
+                });
+            }
+        }
+        
+        // Ensure we have styles for the toast
+        if (!document.getElementById('toast-notification-styles')) {
+            const styleEl = document.createElement('style');
+            styleEl.id = 'toast-notification-styles';
+            styleEl.textContent = `
+                .progress-restored-toast {
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(-100px);
+                    background: linear-gradient(135deg, #42a5f5, #1976d2);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 5px 20px rgba(25, 118, 210, 0.3);
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    z-index: 2000;
+                    opacity: 0;
+                    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    max-width: 90%;
+                }
+                
+                .progress-restored-toast.visible {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
+                
+                .toast-icon {
+                    font-size: 1.5rem;
+                }
+                
+                .toast-content strong {
+                    display: block;
+                    margin-bottom: 2px;
+                }
+                
+                .toast-close {
+                    background: transparent;
+                    border: none;
+                    color: white;
+                    opacity: 0.7;
+                    cursor: pointer;
+                    padding: 4px;
+                    margin-left: 12px;
+                    font-size: 1rem;
+                    transition: opacity 0.2s ease;
+                }
+                
+                .toast-close:hover {
+                    opacity: 1;
+                }
+            `;
+            document.head.appendChild(styleEl);
+        }
+        
+        this.initialized = true;
+    },
+    
+    showRestoration: function(answered, total) {
+        this.init(); // Ensure initialization
+        
+        const toast = document.getElementById('progress-restored-toast');
+        if (!toast) return false;
+        
+        // Update details
+        const details = toast.querySelector('#restoration-details');
+        if (details) {
+            details.textContent = `${answered} din ${total} întrebări completate (${Math.round(answered/total*100)}%)`;
+        }
+        
+        // Show toast with animation
+        toast.classList.add('visible');
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            toast.classList.remove('visible');
+        }, 5000);
+        
+        return true;
+    }
+};
+
+// Complete replacement for AutoSaveManager.restoreTestState method
+AutoSaveManager.prototype.restoreTestState = function() {
+    try {
+        const testState = this.storage.get('test_state');
+        if (!testState || !testState.answers || Object.keys(testState.answers).length === 0) {
+            return false;
+        }
+        
+        // Restore answers
+        let answeredCount = 0;
+        Object.entries(testState.answers).forEach(([questionId, value]) => {
+            const input = document.querySelector(`input[name="question_${questionId}"][value="${value}"]`);
+            if (input) {
+                input.checked = true;
+                answeredCount++;
+                
+                // Mark question as completed
+                const questionDiv = input.closest('.question');
+                if (questionDiv) {
+                    questionDiv.classList.add('completed');
+                }
+            }
+        });
+        
+        // Ensure progress bar is initialized and updated
+        if (typeof updateProgressOnRestore === 'function') {
+            updateProgressOnRestore(answeredCount, questions.length, true);
+        } else if (typeof updateProgress === 'function') {
+            updateProgress();
+        }
+        
+        // Always use the global notification system
+        if (answeredCount > 0) {
+            window.notificationSystem.showRestoration(answeredCount, questions.length);
+        }
+        
+        // Handle completed test
+        if (testState.completed) {
+            const results = this.storage.get('test_results');
+            
+            // If results exist, show them
+            if (results) {
+                // Call the global handleSubmit function to display results
+                if (typeof handleSubmit === 'function') {
+                    handleSubmit({ preventDefault: () => {} });
+                } else {
+                    console.warn('handleSubmit function not found, cannot display results automatically');
+                }
+                return true;
+            }
+            
+            // If no saved results but all questions are answered, calculate results
+            if (answeredCount === questions.length) {
+                if (typeof handleSubmit === 'function') {
+                    handleSubmit({ preventDefault: () => {} });
+                }
+                return true;
+            }
+        }
+        
+        // For incomplete test, set current question
+        if (testState.currentQuestion) {
+            const currentQuestionEl = document.querySelector(`input[name="question_${testState.currentQuestion}"]`)?.closest('.question');
+            if (currentQuestionEl) {
+                document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                currentQuestionEl.classList.add('current');
+            }
+        }
+        
+        // Find next unanswered question if no current question
+        if (!document.querySelector('.question.current')) {
+            const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
+                .find(q => !q.querySelector('input[type="radio"]:checked'));
+                
+            if (nextUnanswered) {
+                document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                nextUnanswered.classList.add('current');
+            }
+        }
+        
+        // Add last save indicator to progress container
+        const progressContainer = document.querySelector('.progress-container');
+        if (progressContainer && !document.getElementById('last-save-indicator') && this.lastSaveIndicator) {
+            progressContainer.appendChild(this.lastSaveIndicator);
+            
+            if (testState.lastSaved) {
+                const lastSaveDate = new Date(testState.lastSaved);
+                const timeString = lastSaveDate.toLocaleTimeString('ro-RO', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                const timeIndicator = document.getElementById('last-save-time');
+                if (timeIndicator) {
+                    timeIndicator.textContent = `Ultima salvare: ${timeString}`;
+                }
+            }
+        }
+        
+        return true;
+    } catch (error) {
+        console.error('Error restoring test state:', error);
+        
+        // Create a fallback error notification
+        try {
+            this.createErrorNotification(error.message);
+        } catch (notificationError) {
+            // Last resort - log to console if even notification creation fails
+            console.error('Failed to create error notification:', notificationError);
+        }
+        
+        return false;
+    }
+};
+
+// Safely creates a restoration banner when the main notification system is unavailable
 AutoSaveManager.prototype.createRestorationBanner = function(answered, total) {
     try {
         // Remove any existing banners first
@@ -3242,7 +3497,7 @@ AutoSaveManager.prototype.createRestorationBanner = function(answered, total) {
         if (existingBanner && existingBanner.parentNode) {
             existingBanner.parentNode.removeChild(existingBanner);
         }
-
+        
         // Create a new banner with proper DOM methods
         const banner = document.createElement('div');
         banner.className = 'test-restored-banner';
@@ -3286,10 +3541,7 @@ AutoSaveManager.prototype.createRestorationBanner = function(answered, total) {
     }
 };
 
-/**
- * Creates an error notification for critical failures
- * @param {string} errorMessage The error message to display
- */
+// Creates an error notification for critical failures
 AutoSaveManager.prototype.createErrorNotification = function(errorMessage) {
     try {
         const notification = document.createElement('div');
@@ -3325,90 +3577,6 @@ AutoSaveManager.prototype.createErrorNotification = function(errorMessage) {
     }
 };
 
-// Create CSS styles for notifications if not already present
-function ensureNotificationStyles() {
-    if (!document.getElementById('notification-styles')) {
-        const styleEl = document.createElement('style');
-        styleEl.id = 'notification-styles';
-        styleEl.textContent = `
-            .test-restored-banner {
-                background-color: #e3f2fd;
-                color: #0d47a1;
-                text-align: center;
-                padding: 12px 16px;
-                margin-bottom: 16px;
-                border-radius: 4px;
-                border-left: 4px solid #2196F3;
-                position: relative;
-                animation: fadeIn 0.3s ease;
-            }
-            
-            .close-banner {
-                position: absolute;
-                top: 50%;
-                right: 10px;
-                transform: translateY(-50%);
-                background: transparent;
-                border: none;
-                color: #0d47a1;
-                font-size: 20px;
-                cursor: pointer;
-                padding: 0;
-                width: 24px;
-                height: 24px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                opacity: 0.7;
-                transition: opacity 0.2s ease;
-            }
-            
-            .close-banner:hover {
-                opacity: 1;
-            }
-            
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            
-            .error-notification {
-                animation: errorPulse 2s infinite;
-            }
-            
-            @keyframes errorPulse {
-                0% { box-shadow: 0 4px 20px rgba(244, 67, 54, 0.2); }
-                50% { box-shadow: 0 4px 25px rgba(244, 67, 54, 0.4); }
-                100% { box-shadow: 0 4px 20px rgba(244, 67, 54, 0.2); }
-            }
-        `;
-        document.head.appendChild(styleEl);
-    }
-}
-
-// Ensure styles are added when script loads
-ensureNotificationStyles();
-
-// Create global instance of AutoSaveManager
-const autoSaveManager = new AutoSaveManager();
-
-// Extend the restartTest function to clear saved state
-const originalRestartTest = window.restartTest;
-window.restartTest = function() {
-    // Call original function
-    originalRestartTest();
-
-    // Clear saved state
-    autoSaveManager.clearSavedState();
-
-    // Remove restoration banner if present
-    const banner = document.querySelector('.test-restored-banner');
-    if (banner) banner.remove();
-
-    // Show notification
-    autoSaveManager.showNotification('Test resetat', 'info');
-};
-
 // Add auto-save to form changes
 document.addEventListener('change', (e) => {
     if (e.target.type === 'radio') {
@@ -3433,6 +3601,11 @@ window.addEventListener('beforeunload', () => {
 
 // Execute this after DOM is fully loaded to establish system integration
 document.addEventListener('DOMContentLoaded', function() {
+    // First initialize the notification system
+    if (window.notificationSystem && typeof window.notificationSystem.init === 'function') {
+        window.notificationSystem.init();
+    }
+    
     /**
      * System Integration Initialization Function 
      * Creates bidirectional communication channels between subsystems
@@ -3481,6 +3654,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.progressBarInstance.updateProgress(false); // Don't show notification for regular updates
             }
         };
+        
+        // Re-initialize the notification system for test state
+        if (typeof AutoSaveManager !== 'undefined' && window.autoSaveManager) {
+            const testState = window.autoSaveManager.storage.get('test_state');
+            if (testState && testState.answers && Object.keys(testState.answers).length > 0) {
+                // Force a notification regardless of restoration status
+                const answeredCount = Object.keys(testState.answers).length;
+                if (window.notificationSystem && typeof window.notificationSystem.showRestoration === 'function') {
+                    window.notificationSystem.showRestoration(answeredCount, questions.length);
+                }
+            }
+        }
     }
     
     // Execute integration after a small delay to ensure all systems are loaded
@@ -3491,3 +3676,61 @@ document.addEventListener('DOMContentLoaded', function() {
 setInterval(() => {
     autoSaveManager.saveTestState();
 }, 60000);
+
+function unifyNavigationControls() {
+    // 1. Establish consistent references to navigation elements
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    
+    // 2. Create unified state management function
+    function updateButtonStates(currentIndex, totalQuestions) {
+        if (prevBtn) {
+            const isFirstQuestion = currentIndex === 0;
+            prevBtn.disabled = isFirstQuestion;
+            prevBtn.classList.toggle('nav-btn-disabled', isFirstQuestion);
+            // Ensure ARIA attributes reflect disabled state
+            prevBtn.setAttribute('aria-disabled', isFirstQuestion);
+        }
+        
+        if (nextBtn) {
+            const isLastQuestion = currentIndex === totalQuestions - 1;
+            nextBtn.disabled = isLastQuestion;
+            nextBtn.classList.toggle('nav-btn-disabled', isLastQuestion);
+            nextBtn.setAttribute('aria-disabled', isLastQuestion);
+        }
+    }
+    
+    // 3. Ensure the function is called during initialization
+    const initialIndex = window.questionNavigation ? 
+        window.questionNavigation.getCurrentQuestionIndex() : 0;
+    const totalQuestions = window.questionNavigation ? 
+        window.questionNavigation.getAllQuestionElements().length : 
+        questions.length;
+        
+    updateButtonStates(initialIndex, totalQuestions);
+    
+    // 4. Attach event listeners using the consistent references
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (window.questionNavigation) {
+                window.questionNavigation.navigateToPrevious();
+            }
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (window.questionNavigation) {
+                window.questionNavigation.navigateToNext();
+            }
+        });
+    }
+    
+    // 5. Replace all existing update functions with this unified approach
+    window.updateNavButtonsState = updateButtonStates;
+    
+    return updateButtonStates;
+}
+
+// Call this function after DOM is loaded
+document.addEventListener('DOMContentLoaded', unifyNavigationControls);
