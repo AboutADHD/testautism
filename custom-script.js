@@ -932,20 +932,44 @@ function getProgressMessage(percentage, answered) {
 }
 
 /**
- * Unified progress tracking system
+ * Unified progress tracking system with enhanced navigation controls
+ * Handles progress bar, question navigation, and test reset
  */
 function initProgressTracking() {
-    // Create and insert progress bar
+    // Create and insert progress bar with navigation controls
     const progressHtml = `
         <div class="progress-container">
-            <div class="progress-stats">
-                <span class="questions-completed"><b>0</b> din <b>${questions.length}</b> întrebări</span>
-                <span class="time-estimate">Timp rămas estimat: <b>30 minute</b></span>
+            <div class="progress-wrapper">
+                <!-- Question Navigation Controls -->
+                <div class="question-nav-controls">
+                    <button id="prev-question-btn" class="nav-btn" aria-label="Previous question" title="Previous question (Ctrl+↑)">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    <button id="next-question-btn" class="nav-btn" aria-label="Next question" title="Next question (Ctrl+↓)">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                
+                <div class="progress-stats">
+                    <span class="questions-completed"><b>0</b> din <b>${questions.length}</b> întrebări</span>
+                    <span class="time-estimate">Timp rămas estimat: <b>30 minute</b></span>
+                </div>
+                
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                
+                <div class="progress-message">Hai să începem! Primul pas este cel mai important.</div>
+                
+                <!-- Reset Button -->
+                <div class="reset-control">
+                    <button id="quick-reset-btn" class="reset-btn" aria-label="Reset test" title="Reset test">
+                        <i class="fas fa-redo-alt"></i>
+                    </button>
+                </div>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
-            <div class="progress-message">Hai să începem! Primul pas este cel mai important.</div>
         </div>
     `;
     document.body.insertAdjacentHTML('afterbegin', progressHtml);
@@ -957,6 +981,9 @@ function initProgressTracking() {
     const progressMessage = document.querySelector('.progress-message');
     const progressContainer = document.querySelector('.progress-container');
     const testContainer = document.querySelector('.test-actual-container');
+    const prevQuestionBtn = document.getElementById('prev-question-btn');
+    const nextQuestionBtn = document.getElementById('next-question-btn');
+    const quickResetBtn = document.getElementById('quick-reset-btn');
 
     // Helper function to check if we're within the test section
     function isInTestSection() {
@@ -1000,6 +1027,63 @@ function initProgressTracking() {
         resizeTimeout = setTimeout(handleScroll, 200);
     }, { passive: true });
 
+    // Function to get all question elements
+    function getAllQuestionElements() {
+        return Array.from(document.querySelectorAll('.question'));
+    }
+
+    // Function to find the current question index
+    function getCurrentQuestionIndex() {
+        const allQuestions = getAllQuestionElements();
+        const currentQuestion = document.querySelector('.question.current');
+        
+        if (currentQuestion) {
+            return allQuestions.indexOf(currentQuestion);
+        }
+        
+        // If no current question is marked, find the first unanswered or return 0
+        const firstUnanswered = allQuestions.findIndex(q => !q.querySelector('input[type="radio"]:checked'));
+        return firstUnanswered >= 0 ? firstUnanswered : 0;
+    }
+
+    // Function to navigate to a specific question
+    function navigateToQuestion(index) {
+        const allQuestions = getAllQuestionElements();
+        
+        // Ensure index is within bounds
+        if (index < 0) index = 0;
+        if (index >= allQuestions.length) index = allQuestions.length - 1;
+        
+        // Remove current class from all questions
+        allQuestions.forEach(q => q.classList.remove('current'));
+        
+        // Add current class to target question
+        allQuestions[index].classList.add('current');
+        
+        // Scroll to the question
+        const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
+        window.scrollTo({
+            top: allQuestions[index].getBoundingClientRect().top + window.pageYOffset - offset,
+            behavior: 'smooth'
+        });
+        
+        // Update nav buttons state
+        updateNavButtonsState(index, allQuestions.length);
+    }
+
+    // Function to update navigation buttons state
+    function updateNavButtonsState(currentIndex, totalQuestions) {
+        if (prevQuestionBtn) {
+            prevQuestionBtn.disabled = currentIndex === 0;
+            prevQuestionBtn.classList.toggle('nav-btn-disabled', currentIndex === 0);
+        }
+        
+        if (nextQuestionBtn) {
+            nextQuestionBtn.disabled = currentIndex === totalQuestions - 1;
+            nextQuestionBtn.classList.toggle('nav-btn-disabled', currentIndex === totalQuestions - 1);
+        }
+    }
+
     // Update progress function
     function updateProgress() {
         const answered = document.querySelectorAll('input[type="radio"]:checked').length;
@@ -1025,6 +1109,62 @@ function initProgressTracking() {
         const remainingQuestions = total - answered;
         const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.375), 1);
         timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
+        
+        // Update navigation buttons state
+        const currentIndex = getCurrentQuestionIndex();
+        updateNavButtonsState(currentIndex, total);
+    }
+
+    // Define a navigation controller that can be used by both buttons and keyboard
+    window.questionNavigation = {
+        navigateToPrevious: function() {
+            const currentIndex = getCurrentQuestionIndex();
+            if (currentIndex > 0) {
+                navigateToQuestion(currentIndex - 1);
+                return true;
+            }
+            return false;
+        },
+        navigateToNext: function() {
+            const currentIndex = getCurrentQuestionIndex();
+            const totalQuestions = getAllQuestionElements().length;
+            if (currentIndex < totalQuestions - 1) {
+                navigateToQuestion(currentIndex + 1);
+                return true;
+            }
+            return false;
+        },
+        getCurrentQuestionIndex: getCurrentQuestionIndex,
+        getAllQuestionElements: getAllQuestionElements,
+        navigateToQuestion: navigateToQuestion
+    };
+
+    // Initial update of nav buttons state
+    const initialIndex = getCurrentQuestionIndex();
+    updateNavButtonsState(initialIndex, getAllQuestionElements().length);
+
+    // Previous question button click handler
+    if (prevQuestionBtn) {
+        prevQuestionBtn.addEventListener('click', () => {
+            window.questionNavigation.navigateToPrevious();
+        });
+    }
+
+    // Next question button click handler
+    if (nextQuestionBtn) {
+        nextQuestionBtn.addEventListener('click', () => {
+            window.questionNavigation.navigateToNext();
+        });
+    }
+
+    // Reset button click handler
+    if (quickResetBtn) {
+        quickResetBtn.addEventListener('click', () => {
+            // Show confirmation dialog
+            if (confirm('Sigur doriți să resetați testul? Toate răspunsurile vor fi șterse.')) {
+                restartTest();
+            }
+        });
     }
 
     // Event delegation for radio button changes to improve performance
@@ -1260,6 +1400,27 @@ function handleSubmit(e) {
 function restartTest() {
     // Reset progress container visibility with proper error checking
     const progressContainer = document.querySelector('.progress-container');
+
+    // Update navigation buttons state
+    const navBtns = document.querySelectorAll('.nav-btn');
+    navBtns.forEach(btn => {
+        btn.classList.remove('nav-btn-disabled');
+        btn.disabled = false;
+    });
+
+    // Disable previous button since we're at the first question
+    const prevBtn = document.getElementById('prev-question-btn');
+    if (prevBtn) {
+        prevBtn.disabled = true;
+        prevBtn.classList.add('nav-btn-disabled');
+    }
+
+    // Enable next button since we have more than one question
+    const nextBtn = document.getElementById('next-question-btn');
+    if (nextBtn) {
+        nextBtn.disabled = false;
+        nextBtn.classList.remove('nav-btn-disabled');
+    }
 
     if (progressContainer) {
         progressContainer.style.display = ''; // Remove inline display: none
@@ -1548,6 +1709,8 @@ async function shareToFacebook() {
 
 /**
  * Enhance keyboard navigation for accessibility
+ * - Arrow keys navigate between radio options when a radio button is focused
+ * - Ctrl+Arrow Up/Down navigate between questions
  */
 function setupKeyboardNavigation() {
     document.addEventListener('keydown', (e) => {
@@ -1561,6 +1724,7 @@ function setupKeyboardNavigation() {
             return;
         }
 
+        // Handle radio button group navigation
         if (activeElement.type === 'radio') {
             const currentQuestion = activeElement.closest('.question');
             const radios = Array.from(currentQuestion.querySelectorAll('input[type="radio"]'));
@@ -1587,6 +1751,15 @@ function setupKeyboardNavigation() {
                     e.preventDefault();
                     radios[radios.length - 1].focus();
                     break;
+            }
+        } else {
+            // Handle question navigation with Ctrl+Arrow keys when not focused on radio buttons
+            if (e.key === 'ArrowUp' && e.ctrlKey && window.questionNavigation) {
+                e.preventDefault();
+                window.questionNavigation.navigateToPrevious();
+            } else if (e.key === 'ArrowDown' && e.ctrlKey && window.questionNavigation) {
+                e.preventDefault();
+                window.questionNavigation.navigateToNext();
             }
         }
     });

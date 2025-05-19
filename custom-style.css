@@ -2248,3 +2248,173 @@ a:focus {
         background: #0066CC;
     }
 }
+
+/* Question Navigation Styles */
+.question-nav-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-right: 10px;
+}
+
+.nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: #2196F3;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-btn:hover {
+    background: #1976D2;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.nav-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.nav-btn-disabled,
+.nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #9E9E9E;
+    box-shadow: none;
+}
+
+.nav-btn-disabled:hover,
+.nav-btn:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Reset Button Styles */
+.reset-control {
+    margin-left: 10px;
+}
+
+.reset-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: #f44336;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.reset-btn:hover {
+    background: #d32f2f;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.reset-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced Progress Container Layout */
+.progress-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.progress-stats {
+    min-width: 180px;
+}
+
+.progress-bar-wrapper {
+    flex: 1;
+}
+
+.progress-message {
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* Tooltip styles */
+.nav-btn::after,
+.reset-btn::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.nav-btn:hover::after,
+.reset-btn:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .progress-wrapper {
+        flex-wrap: wrap;
+    }
+
+    .progress-stats {
+        order: 2;
+        width: 100%;
+        min-width: unset;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .question-nav-controls {
+        order: 1;
+        flex-direction: row;
+        margin-right: 0;
+    }
+
+    .reset-control {
+        order: 3;
+        margin-left: 0;
+    }
+
+    .progress-bar-wrapper {
+        order: 4;
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .progress-message {
+        order: 5;
+    }
+}
+
+/* Ensure last save indicator doesn't overlap with new controls */
+.last-save-indicator {
+    margin-right: 50px; /* Give space for the reset button */
+}

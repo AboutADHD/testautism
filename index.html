@@ -209,6 +209,39 @@
             </li>
         </ul>
     </div>
+    <div class="progress-container">
+        <div class="progress-wrapper">
+            <!-- Question Navigation Controls -->
+            <div class="question-nav-controls">
+                <button id="prev-question-btn" class="nav-btn" aria-label="Previous question" title="Previous question (Ctrl+↑)">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+                <button id="next-question-btn" class="nav-btn" aria-label="Next question" title="Next question (Ctrl+↓)">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+
+            <div class="progress-stats">
+                <span class="questions-completed"><b>0</b> din <b>${questions.length}</b> întrebări</span>
+                <span class="time-estimate">Timp rămas estimat: <b>30 minute</b></span>
+            </div>
+
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="progress-message">Hai să începem! Primul pas este cel mai important.</div>
+
+            <!-- Reset Button -->
+            <div class="reset-control">
+                <button id="quick-reset-btn" class="reset-btn" aria-label="Reset test" title="Reset test">
+                    <i class="fas fa-redo-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div class="initial-section justify-content-center">
         <h1 class="text-center mt-4 mb-3" style="font-size: 1.3rem; font-weight: bold;">Teste de Autoevaluare Autism la Adulți Online: RAADS-R (Ritvo Autism Asperger Diagnostic Scale - Revised) și CAT-Q (Camouflaging Autistic Traits Questionnaire)</h1>
