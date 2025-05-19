@@ -3734,3 +3734,64 @@ function unifyNavigationControls() {
 
 // Call this function after DOM is loaded
 document.addEventListener('DOMContentLoaded', unifyNavigationControls);
+
+function enhanceNavigationControls() {
+    // 1. Handle tooltip positioning edge cases
+    document.querySelectorAll('.nav-btn[title], .reset-btn[title]').forEach(btn => {
+        btn.addEventListener('mouseenter', event => {
+            // Check if we're on mobile (where tooltips should be hidden)
+            if (window.innerWidth <= 768) return;
+            
+            // Small delay to ensure tooltip is created
+            setTimeout(() => {
+                const btnRect = event.target.getBoundingClientRect();
+                
+                // Check if right position would be off-screen
+                if (btnRect.right + 150 > window.innerWidth) { // 150px is an estimated tooltip width
+                    // Apply alternative positioning via a class for left side tooltip
+                    event.target.classList.add('tooltip-left');
+                    
+                    // Add dynamic style for left positioning if needed
+                    if (!document.getElementById('tooltip-left-style')) {
+                        const styleEl = document.createElement('style');
+                        styleEl.id = 'tooltip-left-style';
+                        styleEl.textContent = `
+                            .tooltip-left[title]:hover::after {
+                                left: auto;
+                                right: calc(100% + 10px);
+                            }
+                        `;
+                        document.head.appendChild(styleEl);
+                    }
+                } else {
+                    // Default right side tooltip
+                    event.target.classList.remove('tooltip-left');
+                }
+            }, 10);
+        });
+        
+        // Clean up on mouseleave
+        btn.addEventListener('mouseleave', event => {
+            event.target.classList.remove('tooltip-left');
+        });
+    });
+    
+    // 2. Improve accessibility for mobile users (add ARIA attributes)
+    document.querySelectorAll('.nav-btn, .reset-btn').forEach(btn => {
+        // Ensure proper ARIA attributes for better screen reader support
+        const title = btn.getAttribute('title');
+        if (title) {
+            btn.setAttribute('aria-label', title);
+        }
+    });
+}
+
+// Initialize the enhancements after DOM is loaded
+document.addEventListener('DOMContentLoaded', enhanceNavigationControls);
+
+// Update on window resize for responsive behavior
+window.addEventListener('resize', () => {
+    document.querySelectorAll('.tooltip-left').forEach(el => {
+        el.classList.remove('tooltip-left');
+    });
+});

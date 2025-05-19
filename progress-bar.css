@@ -25,12 +25,12 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 
-    /* Layout structure */
+    /* Layout structure - IMPROVED SPACING */
     display: grid;
     grid-template-columns: auto 1fr auto;
     grid-template-rows: auto auto;
-    gap: 8px 12px;
-    padding: 10px 16px;
+    gap: 10px 16px; /* Increased gap for better element separation */
+    padding: 12px 18px; /* Increased padding for better container breathing room */
 
     /* Animation properties */
     transform: translateY(-105%);
@@ -73,13 +73,17 @@
     grid-column: 1;
     grid-row: 1;
     display: flex;
-    gap: 6px;
+    flex-direction: column; /* Vertical layout */
+    gap: 8px; /* Increased gap between buttons */
     align-items: center;
+    /* Better alignment with main content */
+    margin-right: 2px;
+    align-self: center;
 }
 
 .nav-btn {
-    width: 34px;
-    height: 34px;
+    width: 36px; /* Slightly larger buttons */
+    height: 36px;
     border-radius: 50%;
     border: none;
     background: #2196F3;
@@ -90,7 +94,9 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    font-size: 0.9rem;
+    font-size: 1rem;
+    min-width: 36px;
+    min-height: 36px;
 }
 
 .nav-btn:hover:not(:disabled) {
@@ -113,36 +119,70 @@
     transform: none;
 }
 
-/* Replace the existing tooltip CSS with this adaptive implementation */
+/* Updated tooltip CSS for right-side positioning */
 .nav-btn[title]:hover::after,
 .reset-btn[title]:hover::after {
     content: attr(title);
     position: absolute;
     background: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 4px 8px;
+    padding: 6px 10px;
     border-radius: 4px;
     font-size: 12px;
     white-space: nowrap;
     pointer-events: none;
     z-index: 1000;
 
-    /* Adaptive positioning logic */
-    left: 50%;
-    transform: translateX(-50%);
+    /* Right side positioning for desktop */
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
 
-    /* Calculate position dynamically */
-    top: auto;
-    bottom: calc(100% + 5px); /* Default position below */
+    /* Remove default positioning */
+    bottom: auto;
 
     /* Shadow for visual distinction */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Alternative position for when tooltip would be cut off at top */
-.tooltip-bottom[title]:hover::after {
-    top: calc(100% + 5px);
-    bottom: auto;
+/* Alternative left-side tooltip when needed */
+.tooltip-left[title]:hover::after {
+    left: auto;
+    right: calc(100% + 10px);
+}
+
+/* Hide tooltips on mobile */
+@media (max-width: 768px) {
+    .nav-btn[title]:hover::after,
+    .reset-btn[title]:hover::after {
+        display: none;
+    }
+
+    /* Add visual indicator for button functionality on mobile */
+    .nav-btn,
+    .reset-btn {
+        position: relative;
+    }
+
+    .nav-btn::before,
+    .reset-btn::before {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .nav-btn:active::before,
+    .reset-btn:active::before {
+        opacity: 1;
+    }
 }
 
 /* ===== PRIMARY PROGRESS DISPLAY ===== */
@@ -151,17 +191,19 @@
     grid-row: 1;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px; /* Increased gap for better separation */
     width: 100%;
 }
 
 /* Question counter */
 .progress-counter {
-    font-size: 1.2rem;
+    font-size: 1.25rem; /* Increased font size */
     font-weight: 700;
     color: #2196F3;
-    min-width: 60px;
+    min-width: 64px; /* Wider to accommodate larger numbers */
     text-align: center;
+    /* Add slight right margin for better alignment with progress bar */
+    margin-right: 4px;
 }
 
 .current-question {
@@ -180,18 +222,20 @@
 /* Progress bar */
 .progress-bar {
     flex: 1;
-    height: 10px;
+    height: 12px; /* Slightly taller progress bar */
     background: #e3f2fd;
-    border-radius: 5px;
+    border-radius: 6px;
     overflow: hidden;
     position: relative;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* Add margin to improve spacing */
+    margin: 0 4px;
 }
 
 .progress-fill {
     height: 100%;
     background: linear-gradient(to right, #2196F3, #64B5F6);
-    border-radius: 5px;
+    border-radius: 6px;
     width: 0;
     transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
     position: relative;
@@ -224,7 +268,7 @@
 .milestone-marker {
     position: absolute;
     width: 3px;
-    height: 10px;
+    height: 12px; /* Match progress bar height */
     background: rgba(255, 255, 255, 0.8);
     top: 0;
     z-index: 2;
@@ -235,9 +279,11 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.9rem;
+    font-size: 0.95rem; /* Slightly larger font */
     color: #666;
     white-space: nowrap;
+    /* Add right margin for better spacing from save indicator */
+    margin-right: 8px;
 }
 
 .time-estimate i {
@@ -250,7 +296,7 @@
     display: flex;
     align-items: center;
     background: linear-gradient(to right, rgba(235, 245, 255, 0.8), rgba(235, 245, 255, 0.4));
-    padding: 4px 10px;
+    padding: 5px 12px; /* Slightly more padding */
     border-radius: 20px;
     border-left: 2px solid #2196F3;
     margin-left: auto;
@@ -259,7 +305,7 @@
 
 .save-indicator-icon {
     color: #2196F3;
-    margin-right: 6px;
+    margin-right: 8px; /* Increased spacing */
     font-size: 14px;
 }
 
@@ -286,8 +332,8 @@
 }
 
 .reset-btn {
-    width: 34px;
-    height: 34px;
+    width: 36px; /* Match nav buttons */
+    height: 36px;
     border-radius: 50%;
     border: none;
     background: #f44336;
@@ -298,7 +344,9 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    font-size: 0.9rem;
+    font-size: 1rem;
+    min-width: 36px;
+    min-height: 36px;
 }
 
 .reset-btn:hover {
@@ -317,14 +365,16 @@
     grid-column: 1 / -1;
     grid-row: 2;
     text-align: center;
-    font-size: 0.95rem;
+    font-size: 1rem; /* Slightly larger font */
     font-weight: 500;
     color: #333;
-    padding: 6px 8px;
+    padding: 8px 12px; /* More padding */
     background: rgba(240, 247, 255, 0.7);
     border-radius: 6px;
     border-left: 3px solid #2196F3;
     transition: all 0.3s ease;
+    /* Add margin for better spacing */
+    margin: 2px 0 0 0;
 }
 
 /* Animation for milestone celebration */
@@ -341,16 +391,16 @@
 /* ===== RESPONSIVE ADAPTATIONS ===== */
 @media (max-width: 576px) {
     .progress-container {
-        padding: 8px 10px;
+        padding: 10px 12px; /* Slightly more padding than before */
     }
 
     .progress-primary {
-        gap: 8px;
+        gap: 10px; /* Reduced gap on small screens but still larger than original */
     }
 
     .progress-counter {
-        font-size: 1rem;
-        min-width: 50px;
+        font-size: 1.1rem;
+        min-width: 55px;
     }
 
     .time-estimate {
@@ -358,7 +408,7 @@
     }
 
     .save-indicator {
-        padding: 3px 8px;
+        padding: 4px 10px; /* Slightly more padding */
     }
 
     .save-indicator-text {
@@ -366,14 +416,14 @@
     }
 
     .nav-btn, .reset-btn {
-        width: 30px;
-        height: 30px;
-        font-size: 0.8rem;
+        width: 32px; /* Slightly larger than before */
+        height: 32px;
+        font-size: 0.85rem;
     }
 
     .progress-message {
-        font-size: 0.85rem;
-        padding: 4px 6px;
+        font-size: 0.9rem;
+        padding: 6px 8px;
     }
 }
 
@@ -381,7 +431,7 @@
 @media (min-width: 400px) and (max-width: 576px) {
     .time-estimate {
         display: flex;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
     }
 
     .time-estimate i {
@@ -392,30 +442,30 @@
 /* Enhanced tablet layout */
 @media (min-width: 577px) and (max-width: 767px) {
     .progress-container {
-        padding: 10px 12px;
+        padding: 12px 14px; /* More padding */
     }
 
     .progress-counter {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
     }
 
     .progress-bar {
-        height: 8px;
+        height: 10px;
     }
 
     .time-estimate {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
     }
 }
 
 /* Desktop enhancements */
 @media (min-width: 768px) {
     .progress-container {
-        padding: 12px 20px;
+        padding: 14px 22px; /* More padding for better spacing */
     }
 
     .progress-counter {
-        font-size: 1.3rem;
+        font-size: 1.35rem;
     }
 
     .progress-bar {
@@ -424,14 +474,14 @@
 
     .progress-message {
         max-width: 80%;
-        margin: 0 auto;
-        font-size: 1rem;
+        margin: 4px auto 0; /* Better top margin */
+        font-size: 1.05rem;
     }
 
     .nav-btn, .reset-btn {
-        width: 38px;
-        height: 38px;
-        font-size: 1rem;
+        width: 40px; /* Larger buttons on desktop */
+        height: 40px;
+        font-size: 1.1rem;
     }
 }
 
@@ -517,8 +567,8 @@
     background-color: #e3f2fd;
     color: #0d47a1;
     text-align: center;
-    padding: 10px;
-    margin-bottom: 15px;
+    padding: 12px; /* More padding */
+    margin-bottom: 16px;
     border-radius: 4px;
     border-left: 4px solid #2196F3;
 }
@@ -538,7 +588,7 @@
     display: flex;
     align-items: center;
     background: linear-gradient(to right, rgba(235, 245, 255, 0.8), rgba(235, 245, 255, 0.4));
-    padding: 4px 10px;
+    padding: 5px 12px; /* More padding */
     border-radius: 20px;
     border-left: 2px solid #2196F3;
     margin-left: auto;
@@ -547,7 +597,7 @@
 
 .last-save-indicator-icon {
     color: #2196F3;
-    margin-right: 6px;
+    margin-right: 8px; /* More spacing */
     font-size: 14px;
 }
 
@@ -575,7 +625,7 @@
     top: 30px;
     background: #4CAF50;
     color: white;
-    padding: 5px 10px;
+    padding: 6px 12px; /* More padding */
     border-radius: 20px;
     font-size: 0.8rem;
     opacity: 0;
@@ -597,12 +647,12 @@
     transform: translateX(-50%) translateY(-100px);
     background: linear-gradient(135deg, #42a5f5, #1976d2);
     color: white;
-    padding: 12px 20px;
+    padding: 14px 22px; /* More padding */
     border-radius: 8px;
     box-shadow: 0 5px 20px rgba(25, 118, 210, 0.3);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px; /* More spacing */
     z-index: 2000;
     opacity: 0;
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -625,12 +675,12 @@
 
 @media (max-width: 576px) {
     .last-save-indicator {
-        font-size: 0.7rem;
-        padding: 2px 6px;
+        font-size: 0.75rem; /* Slightly larger */
+        padding: 3px 8px;
     }
 
     .progress-notification {
-        font-size: 0.7rem;
+        font-size: 0.75rem; /* Slightly larger */
     }
 }
 
@@ -644,24 +694,6 @@
     100% { opacity: 0.7; background: rgba(235, 245, 255, 0.8); }
 }
 
-/* Navigation buttons */
-.nav-btn[title]:hover::after,
-.reset-btn[title]:hover::after {
-    content: attr(title);
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    pointer-events: none;
-    z-index: 1000;
-}
-
 /* Progress restoration toast styling */
 .progress-restored-toast {
     position: fixed;
@@ -670,12 +702,12 @@
     transform: translateX(-50%) translateY(-100px);
     background: linear-gradient(135deg, #42a5f5, #1976d2);
     color: white;
-    padding: 12px 20px;
+    padding: 14px 22px; /* More padding */
     border-radius: 8px;
     box-shadow: 0 5px 20px rgba(25, 118, 210, 0.3);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px; /* More spacing */
     z-index: 2000;
     opacity: 0;
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -693,7 +725,7 @@
 
 .toast-content strong {
     display: block;
-    margin-bottom: 2px;
+    margin-bottom: 3px; /* Slightly more margin */
 }
 
 .toast-close {
@@ -703,7 +735,7 @@
     opacity: 0.7;
     cursor: pointer;
     padding: 4px;
-    margin-left: 12px;
+    margin-left: 14px; /* More margin */
     font-size: 1rem;
     transition: opacity 0.2s ease;
 }
@@ -711,7 +743,6 @@
 .toast-close:hover {
     opacity: 1;
 }
-
 
 /* Unified notification styling for system coherence */
 .progress-restored-toast,
@@ -726,7 +757,7 @@
     border-left: 4px solid var(--primary-border);
     border-radius: 4px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    padding: 12px 16px;
+    padding: 14px 18px; /* More padding */
     animation: notification-entrance 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -735,8 +766,8 @@
     background-color: #e3f2fd;
     color: #0d47a1;
     text-align: center;
-    padding: 12px 16px;
-    margin-bottom: 16px;
+    padding: 14px 18px; /* More padding */
+    margin-bottom: 18px; /* More margin */
     border-radius: 4px;
     border-left: 4px solid #2196F3;
     position: relative;
@@ -746,7 +777,7 @@
 .close-banner {
     position: absolute;
     top: 50%;
-    right: 10px;
+    right: 12px; /* More space from edge */
     transform: translateY(-50%);
     background: transparent;
     border: none;
@@ -780,4 +811,10 @@
     0% { box-shadow: 0 4px 20px rgba(244, 67, 54, 0.2); }
     50% { box-shadow: 0 4px 25px rgba(244, 67, 54, 0.4); }
     100% { box-shadow: 0 4px 20px rgba(244, 67, 54, 0.2); }
+}
+
+/* Notification entrance animation */
+@keyframes notification-entrance {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
