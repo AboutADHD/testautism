@@ -2539,9 +2539,18 @@ function init() {
     // Initialize the form with questions
     initializeForm();
 
-    // Restore saved progress immediately after form initialization
-    if (window.autoSaveManager) {
-        autoSaveManager.restoreTestState();
+    // Ensure autoSaveManager is attached to window
+    if (typeof autoSaveManager !== 'undefined' && !window.autoSaveManager) {
+        window.autoSaveManager = autoSaveManager;
+    }
+    
+    // Try to restore test state if manager exists
+    if (window.autoSaveManager && typeof window.autoSaveManager.restoreTestState === 'function') {
+        try {
+            window.autoSaveManager.restoreTestState();
+        } catch (error) {
+            console.error('Error restoring test state during init:', error);
+        }
     }
 
     // Initialize progress tracking
@@ -3235,9 +3244,6 @@ AutoSaveManager.prototype.restoreTestState = function() {
     }
 };
 
-// Create global instance of AutoSaveManager
-const autoSaveManager = new AutoSaveManager();
-
 // Extend the restartTest function to clear saved state
 const originalRestartTest = window.restartTest;
 window.restartTest = function() {
@@ -3604,6 +3610,97 @@ window.addEventListener('beforeunload', () => {
     autoSaveManager.saveTestState();
 });
 
+// First, ensure the global manager is explicitly attached to window
+// Create global instance of AutoSaveManager
+const autoSaveManager = new AutoSaveManager();
+window.autoSaveManager = autoSaveManager; // Explicitly attach to window
+
+/**
+ * System Integration Initialization Function 
+ * Creates bidirectional communication channels between subsystems
+ */
+function initializeSystemIntegration() {
+    // Establish stable reference to progress bar instance
+    window.progressBarInstance = initProgressBar();
+    
+    // Create adapter that allows AutoSaveManager to trigger progress updates
+    if (typeof AutoSaveManager !== 'undefined') {
+        // Extend AutoSaveManager with enhanced notification capabilities
+        AutoSaveManager.prototype.notifyProgressUpdated = function(answered, total) {
+            if (window.progressBarInstance && typeof window.progressBarInstance.updateProgress === 'function') {
+                window.progressBarInstance.updateProgress(true); // Show notification
+            } else if (typeof updateProgress === 'function') {
+                updateProgress(); // Fallback to global function
+            }
+        };
+        
+        // Override storage event handler to ensure proper progress updates
+        const originalStorageMethod = AutoSaveManager.prototype.saveTestState;
+        if (typeof originalStorageMethod === 'function') {
+            AutoSaveManager.prototype.saveTestState = function() {
+                const result = originalStorageMethod.apply(this, arguments);
+                
+                // Update save time indicator after save
+                if (window.progressBarInstance && typeof window.progressBarInstance.updateSaveTime === 'function') {
+                    window.progressBarInstance.updateSaveTime(true);
+                }
+                
+                return result;
+            };
+        }
+    }
+    
+    // Enhance global progress update function to communicate with AutoSaveManager
+    const originalUpdateProgress = window.updateProgress;
+    window.updateProgress = function() {
+        // Call original function
+        if (typeof originalUpdateProgress === 'function') {
+            originalUpdateProgress.apply(this, arguments);
+        }
+        
+        // Update our progress bar instance
+        if (window.progressBarInstance && typeof window.progressBarInstance.updateProgress === 'function') {
+            window.progressBarInstance.updateProgress(false); // Don't show notification for regular updates
+        }
+    };
+    
+    // Safely check for autoSaveManager and handle restoration
+    if (window.autoSaveManager && window.autoSaveManager.storage) {
+        try {
+            const testState = window.autoSaveManager.storage.get('test_state');
+            if (testState && testState.answers && Object.keys(testState.answers).length > 0) {
+                // Get count of answered questions
+                const answeredCount = Object.keys(testState.answers).length;
+                
+                // Show notification using our notification system
+                if (window.notificationSystem && typeof window.notificationSystem.showRestoration === 'function') {
+                    window.notificationSystem.showRestoration(answeredCount, questions.length);
+                }
+                
+                // Actually restore the test state
+                window.autoSaveManager.restoreTestState();
+            }
+        } catch (error) {
+            console.error('Error during test state restoration:', error);
+        }
+    } else {
+        console.warn('AutoSaveManager not fully initialized during system integration. Will retry later.');
+        // Schedule another attempt with longer delay
+        setTimeout(function() {
+            if (window.autoSaveManager && window.autoSaveManager.storage) {
+                try {
+                    const testState = window.autoSaveManager.storage.get('test_state');
+                    if (testState && testState.answers && Object.keys(testState.answers).length > 0) {
+                        window.autoSaveManager.restoreTestState();
+                    }
+                } catch (error) {
+                    console.error('Error during delayed test state restoration:', error);
+                }
+            }
+        }, 1000); // Longer 1-second delay
+    }
+}
+
 // Execute this after DOM is fully loaded to establish system integration
 document.addEventListener('DOMContentLoaded', function() {
     // First initialize the notification system
@@ -3611,81 +3708,13 @@ document.addEventListener('DOMContentLoaded', function() {
         window.notificationSystem.init();
     }
     
-    /**
-     * System Integration Initialization Function 
-     * Creates bidirectional communication channels between subsystems
-     */
-    function initializeSystemIntegration() {
-        // Establish stable reference to progress bar instance
-        window.progressBarInstance = initProgressBar();
-        
-        // Create adapter that allows AutoSaveManager to trigger progress updates
-        if (typeof AutoSaveManager !== 'undefined') {
-            // Extend AutoSaveManager with enhanced notification capabilities
-            AutoSaveManager.prototype.notifyProgressUpdated = function(answered, total) {
-                if (window.progressBarInstance && typeof window.progressBarInstance.updateProgress === 'function') {
-                    window.progressBarInstance.updateProgress(true); // Show notification
-                } else if (typeof updateProgress === 'function') {
-                    updateProgress(); // Fallback to global function
-                }
-            };
-            
-            // Override storage event handler to ensure proper progress updates
-            const originalStorageMethod = AutoSaveManager.prototype.saveTestState;
-            if (typeof originalStorageMethod === 'function') {
-                AutoSaveManager.prototype.saveTestState = function() {
-                    const result = originalStorageMethod.apply(this, arguments);
-                    
-                    // Update save time indicator after save
-                    if (window.progressBarInstance && typeof window.progressBarInstance.updateSaveTime === 'function') {
-                        window.progressBarInstance.updateSaveTime(true);
-                    }
-                    
-                    return result;
-                };
-            }
-
-            const testState = window.autoSaveManager.storage.get('test_state');
-            if (testState && testState.answers && Object.keys(testState.answers).length > 0) {
-                // Show notification
-                if (window.notificationSystem && typeof window.notificationSystem.showRestoration === 'function') {
-                    window.notificationSystem.showRestoration(answeredCount, questions.length);
-                }
-                
-                // Actually restore the answers
-                autoSaveManager.restoreTestState();
-            }
-        }
-        
-        // Enhance global progress update function to communicate with AutoSaveManager
-        const originalUpdateProgress = window.updateProgress;
-        window.updateProgress = function() {
-            // Call original function
-            if (typeof originalUpdateProgress === 'function') {
-                originalUpdateProgress.apply(this, arguments);
-            }
-            
-            // Update our progress bar instance
-            if (window.progressBarInstance && typeof window.progressBarInstance.updateProgress === 'function') {
-                window.progressBarInstance.updateProgress(false); // Don't show notification for regular updates
-            }
-        };
-        
-        // Re-initialize the notification system for test state
-        if (typeof AutoSaveManager !== 'undefined' && window.autoSaveManager) {
-            const testState = window.autoSaveManager.storage.get('test_state');
-            if (testState && testState.answers && Object.keys(testState.answers).length > 0) {
-                // Force a notification regardless of restoration status
-                const answeredCount = Object.keys(testState.answers).length;
-                if (window.notificationSystem && typeof window.notificationSystem.showRestoration === 'function') {
-                    window.notificationSystem.showRestoration(answeredCount, questions.length);
-                }
-            }
-        }
+    // Make sure autoSaveManager is available globally
+    if (typeof autoSaveManager !== 'undefined' && !window.autoSaveManager) {
+        window.autoSaveManager = autoSaveManager;
     }
     
-    // Execute integration after a small delay to ensure all systems are loaded
-    setTimeout(initializeSystemIntegration, 100);
+    // Use a longer delay for system integration to ensure everything is loaded
+    setTimeout(initializeSystemIntegration, 300);
 });
 
 // Save periodically (every minute)
