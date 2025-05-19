@@ -2539,6 +2539,11 @@ function init() {
     // Initialize the form with questions
     initializeForm();
 
+    // Restore saved progress immediately after form initialization
+    if (window.autoSaveManager) {
+        autoSaveManager.restoreTestState();
+    }
+
     // Initialize progress tracking
     initProgressTracking();
 
@@ -3638,6 +3643,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     return result;
                 };
+            }
+
+            const testState = window.autoSaveManager.storage.get('test_state');
+            if (testState && testState.answers && Object.keys(testState.answers).length > 0) {
+                // Show notification
+                if (window.notificationSystem && typeof window.notificationSystem.showRestoration === 'function') {
+                    window.notificationSystem.showRestoration(answeredCount, questions.length);
+                }
+                
+                // Actually restore the answers
+                autoSaveManager.restoreTestState();
             }
         }
         
