@@ -1697,16 +1697,54 @@
         </div>
     </div>
     <!-- Progress bar container -->
-    <div class="progress-container">
-        <div class="progress-stats">
-            <span class="questions-completed"><b>0</b> din <b>25</b> întrebări</span>
-            <span class="time-estimate">Timp rămas estimat: <b>10 minute</b></span>
+    <div class="progress-container" role="region" aria-label="Progress tracker">
+        <!-- Navigation Controls -->
+        <div class="progress-controls">
+            <button class="nav-btn prev-btn" aria-label="Previous question" title="Previous question (Ctrl+↑)" disabled>
+                <i class="fas fa-chevron-up"></i>
+            </button>
+            <button class="nav-btn next-btn" aria-label="Next question" title="Next question (Ctrl+↓)">
+                <i class="fas fa-chevron-down"></i>
+            </button>
         </div>
-        <div class="progress-bar">
-            <div class="progress-fill"></div>
+
+        <!-- Primary Progress Display -->
+        <div class="progress-primary">
+            <!-- Question Counter -->
+            <div class="progress-counter" aria-live="polite">
+                <span class="current-question">0</span>/<span class="total-questions">80</span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="progress-fill" style="width: 0%"></div>
+                <!-- Milestone markers (25%, 50%, 75%) -->
+                <div class="milestone-marker" style="left: 25%"></div>
+                <div class="milestone-marker" style="left: 50%"></div>
+                <div class="milestone-marker" style="left: 75%"></div>
+            </div>
+
+            <!-- Time Estimate -->
+            <div class="time-estimate">
+                <i class="fas fa-clock"></i>
+                <span aria-live="polite">30 minute</span>
+            </div>
+
+            <!-- Save Indicator -->
+            <div class="save-indicator" aria-live="polite">
+                <i class="fas fa-cloud-upload-alt save-indicator-icon"></i>
+                <span class="save-indicator-text">Salvat 02:38</span>
+            </div>
         </div>
-        <div class="progress-message">
-            🚀 Hai să începem! Primul pas este cel mai important! 💫
+
+        <!-- Reset Control -->
+        <button class="reset-btn" aria-label="Reset test" title="Reset test">
+            <i class="fas fa-redo-alt"></i>
+        </button>
+
+        <!-- Motivational Message -->
+        <div class="progress-message" aria-live="polite">
+            🌟 Minunat început! Pas cu pas, vei reuși! 💪
         </div>
     </div>
     <!-- Disclaimer Section -->

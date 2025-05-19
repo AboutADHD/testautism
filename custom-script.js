@@ -932,61 +932,584 @@ function getProgressMessage(percentage, answered) {
 }
 
 /**
- * Unified progress tracking system with enhanced navigation controls
- * Handles progress bar, question navigation, and test reset
+ * Initializes the comprehensive progress tracking system
+ * with multidimensional navigation paradigms and cross-platform compatibility
+ * 
+ * @returns {Object} Public interface with methods for external control
  */
-function initProgressTracking() {
-    // Create and insert progress bar with navigation controls
-    const progressHtml = `
-        <div class="progress-container">
-            <div class="progress-wrapper">
-                <!-- Question Navigation Controls -->
-                <div class="question-nav-controls">
-                    <button id="prev-question-btn" class="nav-btn" aria-label="Previous question" title="Previous question (Ctrl+↑)">
-                        <i class="fas fa-chevron-up"></i>
-                    </button>
-                    <button id="next-question-btn" class="nav-btn" aria-label="Next question" title="Next question (Ctrl+↓)">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                
-                <div class="progress-stats">
-                    <span class="questions-completed"><b>0</b> din <b>${questions.length}</b> întrebări</span>
-                    <span class="time-estimate">Timp rămas estimat: <b>30 minute</b></span>
-                </div>
-                
-                <div class="progress-bar-wrapper">
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-                </div>
-                
-                <div class="progress-message">Hai să începem! Primul pas este cel mai important.</div>
-                
-                <!-- Reset Button -->
-                <div class="reset-control">
-                    <button id="quick-reset-btn" class="reset-btn" aria-label="Reset test" title="Reset test">
-                        <i class="fas fa-redo-alt"></i>
-                    </button>
-                </div>
+function initProgressBar() {
+    // ===== CORE ELEMENT SELECTION =====
+    // Main structural elements
+    const progressContainer = document.querySelector('.progress-container');
+    const progressPrimary = document.querySelector('.progress-primary');
+    
+    // Progress indicators
+    const progressCounter = document.querySelector('.progress-counter');
+    const currentQuestionElement = document.querySelector('.current-question');
+    const totalQuestionsElement = document.querySelector('.total-questions');
+    const progressFill = document.querySelector('.progress-fill');
+    const progressMessage = document.querySelector('.progress-message');
+    
+    // Navigation controls
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    const resetBtn = document.querySelector('.reset-btn');
+    
+    // Temporal indicator elements
+    const timeEstimate = document.querySelector('.time-estimate span');
+    const saveIndicator = document.querySelector('.save-indicator');
+    const saveIndicatorText = document.querySelector('.save-indicator-text');
+    
+    // ===== INITIALIZATION PROCEDURES =====
+    
+    // Set total questions from questions array or default to 80
+    const totalQuestions = questions?.length || 80;
+    if (totalQuestionsElement) {
+        totalQuestionsElement.textContent = totalQuestions;
+    }
+    
+    // Add milestone markers if not already present
+    const milestones = [25, 50, 75];
+    const progressBar = document.querySelector('.progress-bar');
+    
+    if (progressBar) {
+        // Check if milestone markers already exist
+        const existingMarkers = progressBar.querySelectorAll('.milestone-marker');
+        
+        if (existingMarkers.length === 0) {
+            milestones.forEach(milestone => {
+                const marker = document.createElement('div');
+                marker.className = 'milestone-marker';
+                marker.style.left = `${milestone}%`;
+                marker.setAttribute('title', `${milestone}% completat`);
+                marker.setAttribute('aria-hidden', 'true'); // Hide from screen readers as it's decorative
+                progressBar.appendChild(marker);
+            });
+        }
+    }
+    
+    // ===== PROGRESS RESTORATION NOTIFICATION =====
+    // Create and show notification for restored progress
+    function showProgressRestorationNotification(answered, total) {
+        // Remove any existing notification first
+        const existingNotification = document.querySelector('.progress-restored-toast');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+        
+        if (answered === 0) return; // Don't show for new tests
+        
+        // Create toast notification
+        const notification = document.createElement('div');
+        notification.className = 'progress-restored-toast';
+        notification.setAttribute('role', 'status');
+        notification.setAttribute('aria-live', 'polite');
+        
+        notification.innerHTML = `
+            <div class="toast-icon"><i class="fas fa-history"></i></div>
+            <div class="toast-content">
+                <strong>Progres restaurat</strong>
+                <span>Ai completat ${answered} din ${total} întrebări (${Math.round(answered/total*100)}%)</span>
             </div>
-        </div>
-    `;
-    document.body.insertAdjacentHTML('afterbegin', progressHtml);
+            <button class="toast-close" aria-label="Închide notificarea">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        // Add to document
+        document.body.appendChild(notification);
+        
+        // Show with animation
+        setTimeout(() => {
+            notification.classList.add('visible');
+        }, 100);
+        
+        // Add close button functionality
+        const closeBtn = notification.querySelector('.toast-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                notification.classList.remove('visible');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            });
+        }
+        
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                notification.classList.remove('visible');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        notification.remove();
+                    }
+                }, 300);
+            }
+        }, 5000);
+    }
+    
+    // ===== EVENT HANDLERS =====
+    
+    // Handle navigation buttons with proper tooltip implementation
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (window.questionNavigation) {
+                window.questionNavigation.navigateToPrevious();
+            }
+        });
+        
+        // Add tooltip directly with title attribute and aria-label
+        prevBtn.setAttribute('title', 'Întrebarea anterioară (Ctrl/⌘+↑)');
+        prevBtn.setAttribute('aria-label', 'Întrebarea anterioară');
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (window.questionNavigation) {
+                window.questionNavigation.navigateToNext();
+            }
+        });
+        
+        // Add tooltip directly with title attribute and aria-label
+        nextBtn.setAttribute('title', 'Întrebarea următoare (Ctrl/⌘+↓)');
+        nextBtn.setAttribute('aria-label', 'Întrebarea următoare');
+    }
+    
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            if (confirm('Sigur doriți să resetați testul? Toate răspunsurile vor fi șterse.')) {
+                restartTest();
+            }
+        });
+        
+        // Add tooltip directly with title attribute and aria-label
+        resetBtn.setAttribute('title', 'Resetează testul');
+        resetBtn.setAttribute('aria-label', 'Resetează testul');
+    }
+    
+    // Visibility control based on scroll position
+    const handleVisibility = () => {
+        const testSection = document.getElementById('section-quiz');
+        if (testSection) {
+            const testRect = testSection.getBoundingClientRect();
+            const headerHeight = 60; // Approximate header height
+            
+            // Show progress bar when top of test section is above viewport top + header
+            if (testRect.top <= headerHeight && testRect.bottom > 0) {
+                progressContainer.classList.add('visible');
+            } else {
+                progressContainer.classList.remove('visible');
+            }
+        }
+    };
+    
+    // Debounced scroll handler
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(handleVisibility, 100);
+    }, { passive: true });
+    
+    // Apply initial visibility check
+    setTimeout(handleVisibility, 300);
+    
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(handleVisibility, 200);
+    }, { passive: true });
+    
+    // ===== CROSS-PLATFORM KEYBOARD NAVIGATION =====
+    
+    document.addEventListener('keydown', (e) => {
+        // Only handle if we're in the test section and progress bar is visible
+        if (!progressContainer.classList.contains('visible')) return;
+        
+        // Support both Ctrl (Windows/Linux) and Command/Meta (macOS)
+        if (e.ctrlKey || e.metaKey) {
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (prevBtn) prevBtn.click();
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (nextBtn) nextBtn.click();
+            }
+        }
+    });
+    
+    // ===== PROGRESS TRACKING =====
+    
+    /**
+     * Updates the save indicator with the current time
+     * @param {boolean} animate Whether to show animation
+     */
+    function updateSaveTime(animate = true) {
+        if (!saveIndicator || !saveIndicatorText) return;
+        
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('ro-RO', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+        
+        saveIndicatorText.textContent = `Salvat ${timeString}`;
+        
+        if (animate) {
+            saveIndicator.classList.add('save-pulse');
+            setTimeout(() => {
+                saveIndicator.classList.remove('save-pulse');
+            }, 2000);
+        }
+    }
+    
+    /**
+     * Gets the appropriate motivational message based on completion percentage
+     * @param {number} percentage Completion percentage (0-100)
+     * @param {number} answered Number of answered questions
+     * @returns {string} Motivational message
+     */
+    function getMotivationalMessage(percentage, answered) {
+        if (percentage === 0) {
+            return '🚀 Hai să începem! Primul pas este cel mai important! 💫';
+        } else if (percentage <= 10) {
+            return '🌟 Minunat început! Pas cu pas, vei reuși! 💪';
+        } else if (percentage <= 20) {
+            return '🎯 Ai prins ritmul! Continui excelent! ⭐';
+        } else if (percentage <= 30) {
+            return `🌈 Super progres! Ai completat deja ${answered} întrebări! 🎉`;
+        } else if (percentage <= 40) {
+            return '💫 Te descurci extraordinar! Ești pe drumul cel bun! 🎈';
+        } else if (percentage <= 50) {
+            return '🎊 WOW! Ai ajuns la jumătate! Ești fantastic(ă)! 🌟';
+        } else if (percentage <= 60) {
+            return '⚡ Impresionant! Mai puțin de jumătate rămas! 🔥';
+        } else if (percentage <= 70) {
+            return '🎯 Extraordinar! Continui să strălucești! ✨';
+        } else if (percentage <= 80) {
+            return '🚀 Ești pe ultima sută de metri! Aproape acolo! 💫';
+        } else if (percentage <= 90) {
+            return '🌟 Fantastic! Mai ai foarte puțin! Ești aproape gata! 🎉';
+        } else if (percentage < 100) {
+            return '✨ Ultima porțiune! Câteva întrebări și ai terminat! 🎯';
+        } else {
+            return `
+                🎉 FELICITĂRI! 🎉
+                <br/>
+                <span style="font-size: 0.9em">Ai completat tot testul! Ești minunat(ă)! 🌟</span>
+                <br/>
+                <span style="font-size: 0.85em; color: #666">Apasă pe butonul albastru <b>CALCULEAZĂ SCORUL</b> pentru rezultate! 🎯</span>
+            `;
+        }
+    }
+    
+    /**
+     * Comprehensively updates all progress indicators
+     * @param {number} answered Number of answered questions
+     * @param {number} total Total number of questions
+     * @param {boolean} showRestorationNotification Whether to show the restoration notification
+     */
+    function updateProgressDisplay(answered, total, showRestorationNotification = false) {
+        const percentage = (answered / total) * 100;
+        
+        // Update question counter
+        if (currentQuestionElement) {
+            currentQuestionElement.textContent = answered;
+        }
+        
+        // Update progress bar fill
+        if (progressFill) {
+            progressFill.style.width = `${percentage}%`;
+            
+            // Update ARIA attributes for accessibility
+            const progressBar = progressFill.closest('.progress-bar');
+            if (progressBar) {
+                progressBar.setAttribute('aria-valuenow', Math.round(percentage));
+            }
+        }
+        
+        // Update navigation button states based on position, not answer status
+        updateNavButtonsState();
+        
+        // Update time estimate calculation
+        if (timeEstimate) {
+            const remainingQuestions = total - answered;
+            const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.375), 1);
+            timeEstimate.textContent = `${estimatedMinutes} minute`;
+        }
+        
+        // Update motivational message
+        if (progressMessage) {
+            const message = getMotivationalMessage(percentage, answered);
+            progressMessage.innerHTML = message;
+            
+            // Celebrate milestone achievements
+            if (milestones.includes(Math.floor(percentage)) && percentage > 0) {
+                progressMessage.classList.add('celebrate');
+                setTimeout(() => {
+                    progressMessage.classList.remove('celebrate');
+                }, 1500);
+            }
+        }
+        
+        // Show restoration notification if requested
+        if (showRestorationNotification && answered > 0) {
+            showProgressRestorationNotification(answered, total);
+        }
+        
+        // Auto-save progress
+        updateSaveTime(answered > 0);
+    }
+    
+    /**
+     * Update navigation button states based on current question position ONLY
+     * Not based on answer status
+     */
+    function updateNavButtonsState() {
+        if (!window.questionNavigation) return;
+        
+        const currentIndex = window.questionNavigation.getCurrentQuestionIndex();
+        const allQuestions = window.questionNavigation.getAllQuestionElements();
+        const totalQuestionElements = allQuestions.length;
+        
+        // Previous button should only be disabled when on the first question
+        if (prevBtn) {
+            const isFirstQuestion = currentIndex === 0;
+            prevBtn.disabled = isFirstQuestion;
+            prevBtn.classList.toggle('nav-btn-disabled', isFirstQuestion);
+        }
+        
+        // Next button should only be disabled when on the last question
+        if (nextBtn) {
+            const isLastQuestion = currentIndex === totalQuestionElements - 1;
+            nextBtn.disabled = isLastQuestion;
+            nextBtn.classList.toggle('nav-btn-disabled', isLastQuestion);
+        }
+    }
+    
+    // ===== FORM CHANGE OBSERVATION =====
+    
+    /**
+     * Set up observer to watch for form changes
+     */
+    function setupChangeObserver() {
+        const form = document.getElementById('raadsrForm');
+        if (form) {
+            form.addEventListener('change', (e) => {
+                if (e.target.type === 'radio') {
+                    const total = questions?.length || 80;
+                    const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+                    
+                    updateProgressDisplay(answered, total);
+                    
+                    // Handle completed question styling
+                    const currentQuestion = e.target.closest('.question');
+                    if (currentQuestion) {
+                        currentQuestion.classList.add('completed');
+                        currentQuestion.classList.remove('highlight-unanswered');
+                        
+                        // Find and navigate to next unanswered question
+                        const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
+                            .find(q => !q.querySelector('input[type="radio"]:checked'));
+                            
+                        if (nextUnanswered) {
+                            // Update current question highlighting
+                            document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                            nextUnanswered.classList.add('current');
+                            
+                            // Calculate scroll position
+                            const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
+                            const targetPosition = nextUnanswered.getBoundingClientRect().top + 
+                                                 window.pageYOffset - offset;
+                            
+                            // Smooth scroll to next question
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                        
+                        // Always update nav button states after changing current question
+                        updateNavButtonsState();
+                    }
+                }
+            });
+        }
+    }
+    
+    // Initialize the change observer
+    setupChangeObserver();
+    
+    // ===== INITIAL PROGRESS UPDATE =====
+    // Calculate current progress on load
+    function initialUpdate() {
+        const total = questions?.length || 80;
+        const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+        
+        // Show restoration notification only if there's saved progress
+        const showNotification = answered > 0;
+        
+        updateProgressDisplay(answered, total, showNotification);
+        
+        // Initialize save indicator with current time
+        updateSaveTime(false);
+    }
+    
+    // Perform initial update
+    initialUpdate();
+    
+    // ===== PUBLIC INTERFACE =====
+    // Return methods that can be called from outside
+    return {
+        /**
+         * Updates progress display
+         * @param {boolean} showRestorationNotification Whether to show restoration notification
+         */
+        updateProgress: function(showRestorationNotification = false) {
+            const total = questions?.length || 80;
+            const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+            updateProgressDisplay(answered, total, showRestorationNotification);
+        },
+        
+        /**
+         * Updates save time indicator
+         * @param {boolean} animate Whether to show animation
+         */
+        updateSaveTime: function(animate) {
+            updateSaveTime(animate);
+        },
+        
+        /**
+         * Manually checks visibility
+         */
+        checkVisibility: handleVisibility,
+        
+        /**
+         * Manually shows the progress restoration notification
+         */
+        showProgressRestorationNotification: function() {
+            const total = questions?.length || 80;
+            const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+            if (answered > 0) {
+                showProgressRestorationNotification(answered, total);
+            }
+        }
+    };
+}
 
-    // Cache DOM elements
+// Replace the existing updateProgress function
+function updateProgress() {
     const progressFill = document.querySelector('.progress-fill');
     const questionsCompleted = document.querySelector('.questions-completed');
     const timeEstimate = document.querySelector('.time-estimate');
     const progressMessage = document.querySelector('.progress-message');
-    const progressContainer = document.querySelector('.progress-container');
-    const testContainer = document.querySelector('.test-actual-container');
+
+    const total = questions.length || 80;
+    const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+    const percentage = (answered / total) * 100;
+
+    // Update progress bar if it exists (legacy element)
+    if (progressFill) {
+        progressFill.style.width = percentage + '%';
+    }
+
+    // Update stats in legacy format if they exist
+    if (questionsCompleted) {
+        questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
+    }
+
+    if (timeEstimate) {
+        const remainingQuestions = total - answered;
+        const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.375), 1);
+        timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
+    }
+
+    // Update motivational message in legacy format if it exists
+    if (progressMessage) {
+        let message = '';
+
+        if (percentage === 0) {
+            message = '🚀 Hai să începem! Primul pas este cel mai important! 💫';
+        } else if (percentage <= 10) {
+            message = '🌟 Minunat început! Pas cu pas, vei reuși! 💪';
+        } else if (percentage <= 20) {
+            message = '🎯 Ai prins ritmul! Continui excelent! ⭐';
+        } else if (percentage <= 30) {
+            message = `🌈 Super progres! Ai completat deja ${answered} întrebări! 🎉`;
+        } else if (percentage <= 40) {
+            message = '💫 Te descurci extraordinar! Ești pe drumul cel bun! 🎈';
+        } else if (percentage <= 50) {
+            message = '🎊 WOW! Ai ajuns la jumătate! Ești fantastic(ă)! 🌟';
+        } else if (percentage <= 60) {
+            message = '⚡ Impresionant! Mai puțin de jumătate rămas! 🔥';
+        } else if (percentage <= 70) {
+            message = '🎯 Extraordinar! Continui să strălucești! ✨';
+        } else if (percentage <= 80) {
+            message = '🚀 Ești pe ultima sută de metri! Aproape acolo! 💫';
+        } else if (percentage <= 90) {
+            message = '🌟 Fantastic! Mai ai foarte puțin! Ești aproape gata! 🎉';
+        } else if (percentage < 100) {
+            message = '✨ Ultima porțiune! Câteva întrebări și ai terminat! 🎯';
+        } else {
+            message = `
+                🎉 FELICITĂRI! 🎉
+                <br/>
+                <span style="font-size: 0.9em">Ai completat tot testul! Ești minunat(ă)! 🌟</span>
+                <br/>
+                <span style="font-size: 0.85em; color: #666">Apasă pe butonul albastru <b>CALCULEAZĂ SCORUL</b> pentru rezultate! 🎯</span>
+            `;
+        }
+
+        progressMessage.innerHTML = message;
+    }
+
+    // Add animated celebration when completing milestones
+    const milestones = [20, 40, 60, 80, 100];
+
+    if (milestones.includes(Math.floor(percentage)) && percentage > 0) {
+        if (progressMessage) {
+            progressMessage.classList.add('milestone-reached');
+            setTimeout(() => {
+                progressMessage.classList.remove('milestone-reached');
+            }, 1500);
+        }
+    }
+
+    // Update navigation buttons state if they exist
+    const currentIndex = window.questionNavigation ? window.questionNavigation.getCurrentQuestionIndex() : 0;
+    const totalQuestions = window.questionNavigation ? window.questionNavigation.getAllQuestionElements().length : total;
+
+    updateNavButtonsState(currentIndex, totalQuestions);
+}
+
+// Function to update navigation buttons state
+function updateNavButtonsState(currentIndex, totalQuestions) {
     const prevQuestionBtn = document.getElementById('prev-question-btn');
     const nextQuestionBtn = document.getElementById('next-question-btn');
-    const quickResetBtn = document.getElementById('quick-reset-btn');
+
+    if (prevQuestionBtn) {
+        prevQuestionBtn.disabled = currentIndex === 0;
+        prevQuestionBtn.classList.toggle('nav-btn-disabled', currentIndex === 0);
+    }
+
+    if (nextQuestionBtn) {
+        nextQuestionBtn.disabled = currentIndex === totalQuestions - 1;
+        nextQuestionBtn.classList.toggle('nav-btn-disabled', currentIndex === totalQuestions - 1);
+    }
+}
+
+/**
+ * Unified progress tracking system with enhanced navigation controls
+ * Handles progress bar, question navigation, and test reset
+ */
+function initProgressTracking() {
+
+    // Initialize the progress bar functionality
+    const progressBar = initProgressBar();
 
     // Helper function to check if we're within the test section
     function isInTestSection() {
+        const testContainer = document.querySelector('.test-actual-container');
         if (!testContainer) return false;
 
         const testRect = testContainer.getBoundingClientRect();
@@ -1007,9 +1530,15 @@ function initProgressTracking() {
 
         scrollTimeout = setTimeout(() => {
             if (isInTestSection()) {
-                progressContainer.classList.add('visible');
+                const progressContainer = document.querySelector('.progress-container');
+                if (progressContainer) {
+                    progressContainer.classList.add('visible');
+                }
             } else {
-                progressContainer.classList.remove('visible');
+                const progressContainer = document.querySelector('.progress-container');
+                if (progressContainer) {
+                    progressContainer.classList.remove('visible');
+                }
             }
         }, 100);
     }
@@ -1036,11 +1565,11 @@ function initProgressTracking() {
     function getCurrentQuestionIndex() {
         const allQuestions = getAllQuestionElements();
         const currentQuestion = document.querySelector('.question.current');
-        
+
         if (currentQuestion) {
             return allQuestions.indexOf(currentQuestion);
         }
-        
+
         // If no current question is marked, find the first unanswered or return 0
         const firstUnanswered = allQuestions.findIndex(q => !q.querySelector('input[type="radio"]:checked'));
         return firstUnanswered >= 0 ? firstUnanswered : 0;
@@ -1049,70 +1578,27 @@ function initProgressTracking() {
     // Function to navigate to a specific question
     function navigateToQuestion(index) {
         const allQuestions = getAllQuestionElements();
-        
+
         // Ensure index is within bounds
         if (index < 0) index = 0;
         if (index >= allQuestions.length) index = allQuestions.length - 1;
-        
+
         // Remove current class from all questions
         allQuestions.forEach(q => q.classList.remove('current'));
-        
+
         // Add current class to target question
         allQuestions[index].classList.add('current');
-        
+
         // Scroll to the question
+        const progressContainer = document.querySelector('.progress-container');
         const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
         window.scrollTo({
             top: allQuestions[index].getBoundingClientRect().top + window.pageYOffset - offset,
             behavior: 'smooth'
         });
-        
+
         // Update nav buttons state
         updateNavButtonsState(index, allQuestions.length);
-    }
-
-    // Function to update navigation buttons state
-    function updateNavButtonsState(currentIndex, totalQuestions) {
-        if (prevQuestionBtn) {
-            prevQuestionBtn.disabled = currentIndex === 0;
-            prevQuestionBtn.classList.toggle('nav-btn-disabled', currentIndex === 0);
-        }
-        
-        if (nextQuestionBtn) {
-            nextQuestionBtn.disabled = currentIndex === totalQuestions - 1;
-            nextQuestionBtn.classList.toggle('nav-btn-disabled', currentIndex === totalQuestions - 1);
-        }
-    }
-
-    // Update progress function
-    function updateProgress() {
-        const answered = document.querySelectorAll('input[type="radio"]:checked').length;
-        const total = questions.length;
-        const percentage = (answered / total) * 100;
-
-        // Update progress bar
-        progressFill.style.width = percentage + '%';
-
-        // Update stats
-        questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
-
-        // Update message with animation
-        progressMessage.classList.add('updating');
-        progressMessage.innerHTML = getProgressMessage(percentage, answered);
-
-        // Remove animation class after it completes
-        setTimeout(() => {
-            progressMessage.classList.remove('updating');
-        }, 300);
-
-        // Update time estimate
-        const remainingQuestions = total - answered;
-        const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.375), 1);
-        timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
-        
-        // Update navigation buttons state
-        const currentIndex = getCurrentQuestionIndex();
-        updateNavButtonsState(currentIndex, total);
     }
 
     // Define a navigation controller that can be used by both buttons and keyboard
@@ -1144,6 +1630,7 @@ function initProgressTracking() {
     updateNavButtonsState(initialIndex, getAllQuestionElements().length);
 
     // Previous question button click handler
+    const prevQuestionBtn = document.getElementById('prev-question-btn');
     if (prevQuestionBtn) {
         prevQuestionBtn.addEventListener('click', () => {
             window.questionNavigation.navigateToPrevious();
@@ -1151,6 +1638,7 @@ function initProgressTracking() {
     }
 
     // Next question button click handler
+    const nextQuestionBtn = document.getElementById('next-question-btn');
     if (nextQuestionBtn) {
         nextQuestionBtn.addEventListener('click', () => {
             window.questionNavigation.navigateToNext();
@@ -1158,6 +1646,7 @@ function initProgressTracking() {
     }
 
     // Reset button click handler
+    const quickResetBtn = document.getElementById('quick-reset-btn');
     if (quickResetBtn) {
         quickResetBtn.addEventListener('click', () => {
             // Show confirmation dialog
@@ -1168,35 +1657,39 @@ function initProgressTracking() {
     }
 
     // Event delegation for radio button changes to improve performance
-    form.addEventListener('change', (e) => {
-        if (e.target.type === 'radio') {
-            const currentQuestion = e.target.closest('.question');
-            if (currentQuestion) {
-                currentQuestion.classList.add('completed');
-                currentQuestion.classList.remove('highlight-unanswered');
+    const form = document.getElementById('raadsrForm');
+    if (form) {
+        form.addEventListener('change', (e) => {
+            if (e.target.type === 'radio') {
+                const currentQuestion = e.target.closest('.question');
+                if (currentQuestion) {
+                    currentQuestion.classList.add('completed');
+                    currentQuestion.classList.remove('highlight-unanswered');
 
-                updateProgress();
+                    updateProgress();
 
-                // Find and scroll to next unanswered question
-                const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
-                    .find(q => !q.querySelector('input[type="radio"]:checked'));
+                    // Find and scroll to next unanswered question
+                    const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
+                        .find(q => !q.querySelector('input[type="radio"]:checked'));
 
-                if (nextUnanswered) {
-                    const offset = progressContainer.offsetHeight + 20;
-                    const targetPosition = nextUnanswered.getBoundingClientRect().top + window.pageYOffset - offset;
+                    if (nextUnanswered) {
+                        const progressContainer = document.querySelector('.progress-container');
+                        const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
+                        const targetPosition = nextUnanswered.getBoundingClientRect().top + window.pageYOffset - offset;
 
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
 
-                    // Update current question highlighting
-                    document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
-                    nextUnanswered.classList.add('current');
+                        // Update current question highlighting
+                        document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                        nextUnanswered.classList.add('current');
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 
     // Initialize progress
     updateProgress();
@@ -2269,7 +2762,7 @@ function setProgressState(answered, total, animate = false) {
     const questionsCompleted = document.querySelector('.questions-completed');
     const timeEstimate = document.querySelector('.time-estimate');
     const progressMessage = document.querySelector('.progress-message');
-    
+
     // Handle progress fill animation
     if (progressFill) {
         if (animate) {
@@ -2284,19 +2777,19 @@ function setProgressState(answered, total, animate = false) {
             progressFill.style.width = percentage + '%';
         }
     }
-    
+
     // Update completion text
     if (questionsCompleted) {
         questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
     }
-    
+
     // Update time estimate
     if (timeEstimate) {
         const remainingQuestions = total - answered;
         const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.375), 1);
         timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
     }
-    
+
     // Update progress message if function available
     if (progressMessage && typeof getProgressMessage === 'function') {
         progressMessage.innerHTML = getProgressMessage(percentage, answered);
@@ -2311,7 +2804,7 @@ function setProgressState(answered, total, animate = false) {
  */
 function updateProgressOnRestore(answered, total, animate = true) {
     const percentage = (answered / total) * 100;
-    
+
     // Step 1: Prepare for animation if requested
     if (animate) {
         const progressFill = document.querySelector('.progress-fill');
@@ -2323,25 +2816,25 @@ function updateProgressOnRestore(answered, total, animate = true) {
             progressFill.style.transition = 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
         }
     }
-    
+
     // Step 2: Directly update text elements for immediate feedback
     const questionsCompleted = document.querySelector('.questions-completed');
     if (questionsCompleted) {
         questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
     }
-    
+
     const timeEstimate = document.querySelector('.time-estimate');
     if (timeEstimate) {
         const remainingQuestions = total - answered;
         const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.375), 1);
         timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
     }
-    
+
     const progressMessage = document.querySelector('.progress-message');
     if (progressMessage && typeof getProgressMessage === 'function') {
         progressMessage.innerHTML = getProgressMessage(percentage, answered);
     }
-    
+
     // Step 3: Animate progress bar with slight delay to ensure visual effect
     if (animate) {
         setTimeout(() => {
@@ -2351,7 +2844,7 @@ function updateProgressOnRestore(answered, total, animate = true) {
             }
         }, 50);
     }
-    
+
     // Step 4: Still call the original function to ensure any other side effects
     // are maintained, but with a slight delay to avoid visual conflicts
     setTimeout(() => {
@@ -2370,7 +2863,7 @@ class AutoSaveManager {
         this.storage = new StorageManager('raads_r_');
         this.saveNotificationTimeout = null;
         this.progressNotificationTimeout = null;
-        this.lastSaveIndicator = this.createLastSaveIndicator();
+        // this.lastSaveIndicator = this.createLastSaveIndicator();
         this.initNotificationSystem();
     }
 
@@ -2382,110 +2875,8 @@ class AutoSaveManager {
         const indicator = document.createElement('div');
         indicator.id = 'last-save-indicator';
         indicator.className = 'last-save-indicator';
-        indicator.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span id="last-save-time">Nesalvat</span>';
-        
-        // Add CSS if not already present
-        if (!document.getElementById('save-indicator-styles')) {
-            const styleEl = document.createElement('style');
-            styleEl.id = 'save-indicator-styles';
-            styleEl.textContent = `
-                .last-save-indicator {
-                    position: absolute;
-                    right: 10px;
-                    top: 5px;
-                    font-size: 0.8rem;
-                    color: rgba(0, 0, 0, 0.5);
-                    display: flex;
-                    align-items: center;
-                    gap: 5px;
-                    opacity: 0.7;
-                    transition: opacity 0.3s ease;
-                    background: rgba(255, 255, 255, 0.8);
-                    padding: 3px 8px;
-                    border-radius: 20px;
-                    z-index: 10;
-                }
-                
-                .last-save-indicator:hover {
-                    opacity: 1;
-                }
-                
-                .last-save-indicator.saving {
-                    color: #2196F3;
-                }
-                
-                .last-save-indicator i {
-                    font-size: 0.9rem;
-                }
-                
-                .progress-notification {
-                    position: absolute;
-                    right: 10px;
-                    top: 30px;
-                    background: #4CAF50;
-                    color: white;
-                    padding: 5px 10px;
-                    border-radius: 20px;
-                    font-size: 0.8rem;
-                    opacity: 0;
-                    transform: translateY(-10px);
-                    transition: all 0.3s ease;
-                    z-index: 15;
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                }
-                
-                .progress-notification.visible {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-                
-                .progress-restoration-toast {
-                    position: fixed;
-                    top: 20px;
-                    left: 50%;
-                    transform: translateX(-50%) translateY(-100px);
-                    background: linear-gradient(135deg, #42a5f5, #1976d2);
-                    color: white;
-                    padding: 12px 20px;
-                    border-radius: 8px;
-                    box-shadow: 0 5px 20px rgba(25, 118, 210, 0.3);
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    z-index: 2000;
-                    opacity: 0;
-                    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    max-width: 90%;
-                }
-                
-                .progress-restoration-toast.visible {
-                    transform: translateX(-50%) translateY(0);
-                    opacity: 1;
-                }
-                
-                .progress-restoration-toast .toast-icon {
-                    font-size: 1.5rem;
-                }
-                
-                .progress-restoration-toast .toast-content strong {
-                    display: block;
-                    margin-bottom: 2px;
-                }
-                
-                @media (max-width: 576px) {
-                    .last-save-indicator {
-                        font-size: 0.7rem;
-                        padding: 2px 6px;
-                    }
-                    
-                    .progress-notification {
-                        font-size: 0.7rem;
-                    }
-                }
-            `;
-            document.head.appendChild(styleEl);
-        }
-        
+        indicator.innerHTML = '<i class="fas fa-cloud-upload-alt last-save-indicator-icon"></i> <span id="last-save-time">Nesalvat</span>';
+
         return indicator;
     }
 
@@ -2507,7 +2898,7 @@ class AutoSaveManager {
             `;
             document.body.appendChild(notification);
         }
-        
+
         // Add a progress notification element
         if (!document.getElementById('progress-notification')) {
             const notification = document.createElement('div');
@@ -2518,7 +2909,7 @@ class AutoSaveManager {
             notification.innerHTML = 'Progres salvat';
             document.body.appendChild(notification);
         }
-        
+
         // Add a toast notification for restoration
         if (!document.getElementById('progress-restoration-toast')) {
             const toast = document.createElement('div');
@@ -2535,7 +2926,7 @@ class AutoSaveManager {
             `;
             document.body.appendChild(toast);
         }
-        
+
         return document.getElementById('save-notification');
     }
 
@@ -2578,22 +2969,22 @@ class AutoSaveManager {
     showProgressNotification(message) {
         const notification = document.getElementById('progress-notification');
         if (!notification) return;
-        
+
         // Clear previous timeout if any
         if (this.progressNotificationTimeout) {
             clearTimeout(this.progressNotificationTimeout);
         }
-        
+
         // Update text and show
         notification.textContent = message;
         notification.classList.add('visible');
-        
+
         // Auto-hide after 2 seconds
         this.progressNotificationTimeout = setTimeout(() => {
             notification.classList.remove('visible');
         }, 2000);
     }
-    
+
     /**
      * Show restoration toast notification
      * @param {number} answered Number of answered questions
@@ -2602,16 +2993,16 @@ class AutoSaveManager {
     showRestorationToast(answered, total) {
         const toast = document.getElementById('progress-restoration-toast');
         if (!toast) return;
-        
+
         // Update details
         const details = toast.querySelector('#restoration-details');
         if (details) {
             details.textContent = `${answered} din ${total} întrebări completate (${Math.round(answered/total*100)}%)`;
         }
-        
+
         // Show toast
         toast.classList.add('visible');
-        
+
         // Auto-hide after 5 seconds
         setTimeout(() => {
             toast.classList.remove('visible');
@@ -2624,20 +3015,20 @@ class AutoSaveManager {
     updateLastSaveTime() {
         const timeIndicator = document.getElementById('last-save-time');
         if (!timeIndicator) return;
-        
+
         const now = new Date();
-        const timeString = now.toLocaleTimeString('ro-RO', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
+        const timeString = now.toLocaleTimeString('ro-RO', {
+            hour: '2-digit',
+            minute: '2-digit'
         });
-        
+
         // Flash the indicator to show active saving
         const indicator = document.getElementById('last-save-indicator');
         if (indicator) {
             indicator.classList.add('saving');
             setTimeout(() => indicator.classList.remove('saving'), 1000);
         }
-        
+
         timeIndicator.textContent = `Ultima salvare: ${timeString}`;
     }
 
@@ -2687,10 +3078,10 @@ class AutoSaveManager {
                 const calculatedScores = calculateSubscores();
                 this.storage.set('test_results', calculatedScores);
             }
-            
+
             // Update the last save indicator
             this.updateLastSaveTime();
-            
+
             // Show a discreet notification
             this.showProgressNotification('Progres salvat');
 
@@ -2702,138 +3093,12 @@ class AutoSaveManager {
     }
 
     /**
-     * Restore test state from storage
-     * @returns {boolean} True if state was restored, false otherwise
-     */
-    restoreTestState() {
-        try {
-            const testState = this.storage.get('test_state');
-            if (!testState || !testState.answers || Object.keys(testState.answers).length === 0) {
-                return false;
-            }
-
-            // Restore answers
-            let answeredCount = 0;
-            Object.entries(testState.answers).forEach(([questionId, value]) => {
-                const input = document.querySelector(`input[name="question_${questionId}"][value="${value}"]`);
-                if (input) {
-                    input.checked = true;
-                    answeredCount++;
-
-                    // Mark question as completed
-                    const questionDiv = input.closest('.question');
-                    if (questionDiv) {
-                        questionDiv.classList.add('completed');
-                    }
-                }
-            });
-
-            updateProgressOnRestore(answeredCount, questions.length, true);
-
-            // Handle completed test
-            if (testState.completed) {
-                const results = this.storage.get('test_results');
-
-                // If results exist, show them
-                if (results) {
-                    // Call the global handleSubmit function to display results
-                    if (typeof handleSubmit === 'function') {
-                        handleSubmit({ preventDefault: () => {} });
-                    } else {
-                        console.warn('handleSubmit function not found, cannot display results automatically');
-                    }
-                    return true;
-                }
-
-                // If no saved results but all questions are answered, calculate results
-                if (answeredCount === questions.length) {
-                    if (typeof handleSubmit === 'function') {
-                        handleSubmit({ preventDefault: () => {} });
-                    }
-                    return true;
-                }
-            }
-
-            // For incomplete test, set current question
-            if (testState.currentQuestion) {
-                const currentQuestionEl = document.querySelector(`input[name="question_${testState.currentQuestion}"]`)?.closest('.question');
-                if (currentQuestionEl) {
-                    document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
-                    currentQuestionEl.classList.add('current');
-                }
-            }
-
-            // Find next unanswered question if no current question
-            if (!document.querySelector('.question.current')) {
-                const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
-                    .find(q => !q.querySelector('input[type="radio"]:checked'));
-
-                if (nextUnanswered) {
-                    document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
-                    nextUnanswered.classList.add('current');
-                }
-            }
-
-            // For incomplete test, ensure progress bar is updated properly
-            if (typeof updateProgress === 'function') {
-                updateProgress();
-            }
-            
-            // Add last save indicator to progress container
-            const progressContainer = document.querySelector('.progress-container');
-            if (progressContainer && !document.getElementById('last-save-indicator')) {
-                progressContainer.appendChild(this.lastSaveIndicator);
-                
-                if (testState.lastSaved) {
-                    const lastSaveDate = new Date(testState.lastSaved);
-                    const timeString = lastSaveDate.toLocaleTimeString('ro-RO', { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                    });
-                    
-                    const timeIndicator = document.getElementById('last-save-time');
-                    if (timeIndicator) {
-                        timeIndicator.textContent = `Ultima salvare: ${timeString}`;
-                    }
-                }
-            }
-            
-            // Show restoration toast
-            this.showRestorationToast(answeredCount, questions.length);
-            
-            // Find and scroll to next unanswered question
-            setTimeout(() => {
-                const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
-                    .find(q => !q.querySelector('input[type="radio"]:checked'));
-                
-                if (nextUnanswered) {
-                    document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
-                    nextUnanswered.classList.add('current');
-                    
-                    const progressContainer = document.querySelector('.progress-container');
-                    const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
-                    
-                    window.scrollTo({
-                        top: nextUnanswered.getBoundingClientRect().top + window.pageYOffset - offset,
-                        behavior: 'smooth'
-                    });
-                }
-            }, 1000); // Delay scrolling to ensure DOM is fully updated
-            
-            return true;
-        } catch (error) {
-            console.error('Error restoring test state:', error);
-            return false;
-        }
-    }
-
-    /**
      * Clear saved state
      */
     clearSavedState() {
         this.storage.remove('test_state');
         this.storage.remove('test_results');
-        
+
         // Remove the last save indicator if present
         const indicator = document.getElementById('last-save-indicator');
         if (indicator) {
@@ -2841,6 +3106,288 @@ class AutoSaveManager {
         }
     }
 }
+
+/**
+ * Complete replacement for AutoSaveManager.restoreTestState method
+ * with robust error handling and integrated notification system
+ */
+AutoSaveManager.prototype.restoreTestState = function() {
+    try {
+        const testState = this.storage.get('test_state');
+        if (!testState || !testState.answers || Object.keys(testState.answers).length === 0) {
+            return false;
+        }
+
+        // Restore answers
+        let answeredCount = 0;
+        Object.entries(testState.answers).forEach(([questionId, value]) => {
+            const input = document.querySelector(`input[name="question_${questionId}"][value="${value}"]`);
+            if (input) {
+                input.checked = true;
+                answeredCount++;
+
+                // Mark question as completed
+                const questionDiv = input.closest('.question');
+                if (questionDiv) {
+                    questionDiv.classList.add('completed');
+                }
+            }
+        });
+
+        // Ensure progress bar is initialized and updated
+        if (typeof updateProgressOnRestore === 'function') {
+            updateProgressOnRestore(answeredCount, questions.length, true);
+        } else if (typeof updateProgress === 'function') {
+            updateProgress();
+        }
+
+        // Show restoration notification using our new progress bar API if available
+        const progressBar = window.progressBarInstance;
+        if (progressBar && typeof progressBar.showProgressRestorationNotification === 'function') {
+            // Use new notification system
+            progressBar.showProgressRestorationNotification();
+        } else {
+            // Fallback to creating a standard notification banner
+            this.createRestorationBanner(answeredCount, questions.length);
+        }
+
+        // Handle completed test
+        if (testState.completed) {
+            const results = this.storage.get('test_results');
+
+            // If results exist, show them
+            if (results) {
+                // Call the global handleSubmit function to display results
+                if (typeof handleSubmit === 'function') {
+                    handleSubmit({ preventDefault: () => {} });
+                } else {
+                    console.warn('handleSubmit function not found, cannot display results automatically');
+                }
+                return true;
+            }
+
+            // If no saved results but all questions are answered, calculate results
+            if (answeredCount === questions.length) {
+                if (typeof handleSubmit === 'function') {
+                    handleSubmit({ preventDefault: () => {} });
+                }
+                return true;
+            }
+        }
+
+        // For incomplete test, set current question
+        if (testState.currentQuestion) {
+            const currentQuestionEl = document.querySelector(`input[name="question_${testState.currentQuestion}"]`)?.closest('.question');
+            if (currentQuestionEl) {
+                document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                currentQuestionEl.classList.add('current');
+            }
+        }
+
+        // Find next unanswered question if no current question
+        if (!document.querySelector('.question.current')) {
+            const nextUnanswered = Array.from(document.querySelectorAll('.question:not(.completed)'))
+                .find(q => !q.querySelector('input[type="radio"]:checked'));
+
+            if (nextUnanswered) {
+                document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
+                nextUnanswered.classList.add('current');
+            }
+        }
+
+        // Add last save indicator to progress container
+        const progressContainer = document.querySelector('.progress-container');
+        if (progressContainer && !document.getElementById('last-save-indicator') && this.lastSaveIndicator) {
+            progressContainer.appendChild(this.lastSaveIndicator);
+            
+            if (testState.lastSaved) {
+                const lastSaveDate = new Date(testState.lastSaved);
+                const timeString = lastSaveDate.toLocaleTimeString('ro-RO', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                const timeIndicator = document.getElementById('last-save-time');
+                if (timeIndicator) {
+                    timeIndicator.textContent = `Ultima salvare: ${timeString}`;
+                }
+            }
+        }
+        
+        return true;
+    } catch (error) {
+        console.error('Error restoring test state:', error);
+        
+        // Create a fallback error notification
+        try {
+            this.createErrorNotification(error.message);
+        } catch (notificationError) {
+            // Last resort - log to console if even notification creation fails
+            console.error('Failed to create error notification:', notificationError);
+        }
+        
+        return false;
+    }
+};
+
+/**
+ * Safely creates a restoration banner when the main notification system is unavailable
+ * @param {number} answered Number of answered questions
+ * @param {number} total Total questions
+ */
+AutoSaveManager.prototype.createRestorationBanner = function(answered, total) {
+    try {
+        // Remove any existing banners first
+        const existingBanner = document.querySelector('.test-restored-banner');
+        if (existingBanner && existingBanner.parentNode) {
+            existingBanner.parentNode.removeChild(existingBanner);
+        }
+
+        // Create a new banner with proper DOM methods
+        const banner = document.createElement('div');
+        banner.className = 'test-restored-banner';
+        banner.setAttribute('role', 'status');
+        banner.setAttribute('aria-live', 'polite');
+        
+        // Safe innerHTML assignment
+        banner.innerHTML = `
+            <strong>Progres restaurat!</strong> Ai completat ${answered} din ${total} întrebări (${Math.round(answered/total*100)}%).
+            <button class="close-banner" aria-label="Închide notificarea">&times;</button>
+        `;
+        
+        // Safely find insertion point
+        const testContainer = document.getElementById('test') || 
+                            document.querySelector('.test-actual-container') || 
+                            document.getElementById('raadsrForm')?.parentNode;
+        
+        if (testContainer) {
+            // Insert at the beginning of the container
+            if (testContainer.firstChild) {
+                testContainer.insertBefore(banner, testContainer.firstChild);
+            } else {
+                testContainer.appendChild(banner);
+            }
+            
+            // Add close functionality
+            const closeButton = banner.querySelector('.close-banner');
+            if (closeButton) {
+                closeButton.addEventListener('click', function() {
+                    if (banner.parentNode) {
+                        banner.parentNode.removeChild(banner);
+                    }
+                });
+            }
+        } else {
+            // If no suitable container found, add to body as fallback
+            document.body.appendChild(banner);
+        }
+    } catch (error) {
+        console.error('Failed to create restoration banner:', error);
+    }
+};
+
+/**
+ * Creates an error notification for critical failures
+ * @param {string} errorMessage The error message to display
+ */
+AutoSaveManager.prototype.createErrorNotification = function(errorMessage) {
+    try {
+        const notification = document.createElement('div');
+        notification.className = 'error-notification';
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f44336;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 10000;
+            max-width: 90%;
+            text-align: center;
+        `;
+        
+        notification.textContent = `Eroare la restaurarea progresului. Vă rugăm să încercați din nou.`;
+        
+        document.body.appendChild(notification);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 5000);
+    } catch (error) {
+        // Last resort - cannot create notifications at all
+        console.error('Critical error in notification system:', error);
+    }
+};
+
+// Create CSS styles for notifications if not already present
+function ensureNotificationStyles() {
+    if (!document.getElementById('notification-styles')) {
+        const styleEl = document.createElement('style');
+        styleEl.id = 'notification-styles';
+        styleEl.textContent = `
+            .test-restored-banner {
+                background-color: #e3f2fd;
+                color: #0d47a1;
+                text-align: center;
+                padding: 12px 16px;
+                margin-bottom: 16px;
+                border-radius: 4px;
+                border-left: 4px solid #2196F3;
+                position: relative;
+                animation: fadeIn 0.3s ease;
+            }
+            
+            .close-banner {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                background: transparent;
+                border: none;
+                color: #0d47a1;
+                font-size: 20px;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.7;
+                transition: opacity 0.2s ease;
+            }
+            
+            .close-banner:hover {
+                opacity: 1;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            .error-notification {
+                animation: errorPulse 2s infinite;
+            }
+            
+            @keyframes errorPulse {
+                0% { box-shadow: 0 4px 20px rgba(244, 67, 54, 0.2); }
+                50% { box-shadow: 0 4px 25px rgba(244, 67, 54, 0.4); }
+                100% { box-shadow: 0 4px 20px rgba(244, 67, 54, 0.2); }
+            }
+        `;
+        document.head.appendChild(styleEl);
+    }
+}
+
+// Ensure styles are added when script loads
+ensureNotificationStyles();
 
 // Create global instance of AutoSaveManager
 const autoSaveManager = new AutoSaveManager();
@@ -2884,12 +3431,60 @@ window.addEventListener('beforeunload', () => {
     autoSaveManager.saveTestState();
 });
 
-// Restore state on page load
-document.addEventListener('DOMContentLoaded', () => {
-    // Attempt to restore state after a slight delay to ensure form is fully loaded
-    setTimeout(() => {
-        autoSaveManager.restoreTestState();
-    }, 300);
+// Execute this after DOM is fully loaded to establish system integration
+document.addEventListener('DOMContentLoaded', function() {
+    /**
+     * System Integration Initialization Function 
+     * Creates bidirectional communication channels between subsystems
+     */
+    function initializeSystemIntegration() {
+        // Establish stable reference to progress bar instance
+        window.progressBarInstance = initProgressBar();
+        
+        // Create adapter that allows AutoSaveManager to trigger progress updates
+        if (typeof AutoSaveManager !== 'undefined') {
+            // Extend AutoSaveManager with enhanced notification capabilities
+            AutoSaveManager.prototype.notifyProgressUpdated = function(answered, total) {
+                if (window.progressBarInstance && typeof window.progressBarInstance.updateProgress === 'function') {
+                    window.progressBarInstance.updateProgress(true); // Show notification
+                } else if (typeof updateProgress === 'function') {
+                    updateProgress(); // Fallback to global function
+                }
+            };
+            
+            // Override storage event handler to ensure proper progress updates
+            const originalStorageMethod = AutoSaveManager.prototype.saveTestState;
+            if (typeof originalStorageMethod === 'function') {
+                AutoSaveManager.prototype.saveTestState = function() {
+                    const result = originalStorageMethod.apply(this, arguments);
+                    
+                    // Update save time indicator after save
+                    if (window.progressBarInstance && typeof window.progressBarInstance.updateSaveTime === 'function') {
+                        window.progressBarInstance.updateSaveTime(true);
+                    }
+                    
+                    return result;
+                };
+            }
+        }
+        
+        // Enhance global progress update function to communicate with AutoSaveManager
+        const originalUpdateProgress = window.updateProgress;
+        window.updateProgress = function() {
+            // Call original function
+            if (typeof originalUpdateProgress === 'function') {
+                originalUpdateProgress.apply(this, arguments);
+            }
+            
+            // Update our progress bar instance
+            if (window.progressBarInstance && typeof window.progressBarInstance.updateProgress === 'function') {
+                window.progressBarInstance.updateProgress(false); // Don't show notification for regular updates
+            }
+        };
+    }
+    
+    // Execute integration after a small delay to ensure all systems are loaded
+    setTimeout(initializeSystemIntegration, 100);
 });
 
 // Save periodically (every minute)
