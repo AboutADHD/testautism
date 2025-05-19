@@ -1777,7 +1777,7 @@ class AutoSaveManager {
             notification.setAttribute('role', 'status');
             notification.setAttribute('aria-live', 'polite');
             notification.innerHTML = `
-                <i class="fas fa-save"></i>
+                <i class="fas fa-floppy-disk"></i>
                 <span id="save-notification-text">Salvat</span>
             `;
             document.body.appendChild(notification);
