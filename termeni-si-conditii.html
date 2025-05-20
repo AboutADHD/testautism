@@ -2237,77 +2237,77 @@ window.AccessibilitySidebar = function() {
 
     // Text-to-speech handler
     // Enhanced handleReadAloud function with optimized Romanian speech synthesis
-    // Enhanced handleReadAloud function with optimized Romanian diacritical handling
-const handleReadAloud = () => {
-  // Part 1: System Capability Verification
+    const handleReadAloud = () => {
+  // Epistemic Foundation: System Capability Verification
   if (!('speechSynthesis' in window)) {
     alert('Browserul dvs. nu suportă citirea cu voce tare');
     return;
   }
 
-  // Part 2: Reading State Management
+  // Phenomenological State Management: Reading Process Ontology
   if (isReading) {
-    // Handle termination process with cleanup
+    // Terminate existing synthesis process with comprehensive cleanup
     window.speechSynthesis.cancel();
     setIsReading(false);
     return;
   }
 
-  // Part 3: Content Acquisition & Processing Pipeline
-  // Identify and extract relevant textual content
+  // Hermeneutic Content Acquisition Framework: Document Interpretation System
   const contentArea = document.querySelector('.content-area');
   if (!contentArea) {
     console.error("Nu s-a putut găsi zona de conținut pentru citire");
     return;
   }
 
-  // Apply content filtering heuristics to isolate meaningful textual elements
+  // Multi-dimensional Semantic Extraction Protocol: Content Filtering Matrix
   const relevantElements = Array.from(contentArea.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6'))
     .filter(el => {
-      // Exclude navigation, controls, and other non-content elements
+      // Apply exclusionary heuristics through categorical imperative
       return !el.closest('.toc') && 
              !el.closest('.content-nav') && 
              !el.closest('.accessibility-sidebar') &&
              el.textContent.trim().length > 0;
     });
 
-  // Extract raw text while preserving semantic structure
+  // Hierarchical Semantic Structure Preservation Framework
   const extractedContent = relevantElements.map(el => {
-    // Apply different emphasis and pausing based on element type
+    // Taxonomic element categorization with prosodic marking
     const tag = el.tagName.toLowerCase();
     let prefix = '';
     let suffix = '.';
     
-    // Hierarchical structure signaling through pauses and tone
+    // Differential treatment based on discourse-structural significance
     if (tag.startsWith('h')) {
-      // Headers get special handling with longer pauses
+      // Heading-specific prosodic enhancement through micropausal insertion
       const level = parseInt(tag.substring(1));
-      prefix = ',, '; // Double pause before headers
-      suffix = level <= 2 ? '... ' : '.. '; // Longer pauses after major headers
+      prefix = ',, '; // Double pause establishes discourse boundary
+      // Hierarchical pause gradation based on heading importance
+      suffix = level <= 2 ? '... ' : '.. '; 
     }
     
     return prefix + el.textContent.trim() + suffix;
   }).join(' ');
 
+  // Existential validation of extracted content
   if (extractedContent.length === 0) {
     alert('Nu s-a găsit conținut pentru citire');
     return;
   }
 
-  // Part 4: Voice Selection & Optimization System
-  // Get all available voices
+  // Asynchronous Voice Acquisition System with Temporal Resilience
   let voices = window.speechSynthesis.getVoices();
   
-  // Create voice loading promise mechanism to handle async voice loading
+  // Promissory architecture for asynchronous voice loading
   let voicesReady;
   if (voices.length === 0) {
     voicesReady = new Promise(resolve => {
+      // Establish event-driven voice detection mechanism
       window.speechSynthesis.onvoiceschanged = () => {
         voices = window.speechSynthesis.getVoices();
         resolve(voices);
       };
       
-      // Safety timeout to prevent hanging if voices never load
+      // Implement temporal safety boundary to prevent indefinite suspension
       setTimeout(() => {
         if (voices.length === 0) {
           resolve([]);
@@ -2318,17 +2318,18 @@ const handleReadAloud = () => {
     voicesReady = Promise.resolve(voices);
   }
 
-  // Part 5: Voice Selection & Synthesis Initialization
+  // Proceed with synthesis preparation once voices materialize
   voicesReady.then(allVoices => {
-    // Multi-layered voice selection strategy
-    // First priority: Exact Romanian match
+    // Multi-tiered Voice Selection Taxonomy with Progressive Fallback Architecture
+    
+    // Primary selection tier: Direct Romanian linguistic mapping
     let romanianVoices = allVoices.filter(voice => 
       voice.lang === 'ro-RO' || 
       voice.lang === 'ro' || 
       voice.name.toLowerCase().includes('român')
     );
     
-    // Second priority: Partial Romanian match
+    // Secondary selection tier: Partial Romanian linguistic mapping
     if (romanianVoices.length === 0) {
       romanianVoices = allVoices.filter(voice => 
         voice.lang.startsWith('ro') || 
@@ -2336,95 +2337,342 @@ const handleReadAloud = () => {
       );
     }
     
-    // Third priority: Latin-based language fallback (for phonetic similarity)
+    // Tertiary selection tier: Romance language approximation through phylogenetic proximity
     if (romanianVoices.length === 0) {
       romanianVoices = allVoices.filter(voice => 
-        voice.lang.startsWith('it') || // Italian
-        voice.lang.startsWith('es') || // Spanish
-        voice.lang.startsWith('fr') || // French
-        voice.lang.startsWith('pt')    // Portuguese
+        voice.lang.startsWith('it') || // Italian: closest phonological system
+        voice.lang.startsWith('es') || // Spanish: shared Romance features
+        voice.lang.startsWith('fr') || // French: historical influence on Romanian
+        voice.lang.startsWith('pt')    // Portuguese: similar vowel inventory
       );
     }
     
-    // Final fallback: Any available voice
+    // Voice selection with qualitative optimization heuristic
     const selectedVoice = romanianVoices.length > 0 ? romanianVoices[0] : null;
+    
+    // Voice typology detection for adaptive processing
+    const voiceType = determineVoiceType(selectedVoice);
 
-    // Part 6: Advanced Text Preprocessing for Romanian with Enhanced Diacritical Handling
-    // Process text for improved Romanian pronunciation
+    // Phenomenological Voice Categorization Framework
+    function determineVoiceType(voice) {
+      if (!voice) return 'generic';
+      
+      const voiceName = voice.name.toLowerCase();
+      const voiceLang = voice.lang.toLowerCase();
+      
+      // Primary typological classification through linguistic-vendor matrix
+      if (voiceLang.includes('ro')) return 'romanian';
+      if (voiceName.includes('google')) return 'google';
+      if (voiceName.includes('microsoft')) return 'microsoft';
+      if (voiceName.includes('apple') || voiceName.includes('samantha')) return 'apple';
+      
+      // Secondary classification through linguistic proximity
+      if (voiceLang.startsWith('it')) return 'italian';
+      if (voiceLang.startsWith('fr')) return 'french';
+      if (voiceLang.startsWith('es')) return 'spanish';
+      
+      // Default classification for ontological completeness
+      return 'generic';
+    }
+
+    // Integrative Romanian Text Processing System - Multi-Dimensional Framework
+    
+    // Consonantal Enhancement Architecture: Romanian Postalveolar Fricative Optimization
+    function enhanceRomanianConsonants(text, voiceType) {
+      // Unicode normalization for diacritical consistency
+      const normalizedText = text
+        .normalize('NFC')
+        .replace(/\u015F\u0327/g, '\u0219') // Normalize ș variants
+        .replace(/\u0053\u0327/g, '\u0218') // Normalize Ș variants
+        .replace(/\u0163\u0327/g, '\u021B') // Normalize ț variants
+        .replace(/\u0054\u0327/g, '\u021A'); // Normalize Ț variants
+      
+      // Voice-adaptive articulatory-acoustic simulation matrix
+      let result = normalizedText;
+      
+      switch (voiceType) {
+        case 'romanian':
+          // Native Romanian voices require minimal intervention
+          result = result
+            // Apply minimal corrections for native voices
+            .replace(/ș/g, 'ș')
+            .replace(/Ș/g, 'Ș')
+            .replace(/ț/g, 'ț')
+            .replace(/Ț/g, 'Ț');
+          break;
+          
+        case 'google':
+          // Google voices optimization through phonetic approximation
+          result = result
+            .replace(/ș/g, 'sh')
+            .replace(/Ș/g, 'Sh')
+            .replace(/ț/g, 'ts')
+            .replace(/Ț/g, 'Ts');
+          break;
+          
+        case 'microsoft':
+          // Microsoft voices require position-sensitive transformation
+          result = result
+            // Position-sensitive transformation for ș
+            .replace(/ș([aeiouăâî])/g, 'sh$1')  // Before vowels
+            .replace(/ș\b/g, 'sh ')             // Word-final
+            .replace(/\bș/g, 'sh')              // Word-initial
+            .replace(/([bcdfghjklmnpqrstvwxyz])ș/g, '$1sh') // After consonants
+            .replace(/Ș/g, 'Sh')               // Uppercase variant
+            
+            // Parallel treatment for ț
+            .replace(/ț([aeiouăâî])/g, 'ts$1')
+            .replace(/ț\b/g, 'ts ')
+            .replace(/\bț/g, 'ts')
+            .replace(/([bcdfghjklmnpqrstvwxyz])ț/g, '$1ts')
+            .replace(/Ț/g, 'Ts');
+          break;
+          
+        case 'apple':
+          // Apple voices respond to different orthographic patterns
+          result = result
+            .replace(/ș/g, 'sh')   // Simple substitution works better for newer voices
+            .replace(/Ș/g, 'Sh')
+            .replace(/ț/g, 'tz')   // Slightly different for better distinction
+            .replace(/Ț/g, 'Tz');
+          break;
+          
+        case 'italian':
+          // Italian-based voices leverage Italian orthography
+          result = result
+            .replace(/ș/g, 'sc')   // Italian orthographic approximation
+            .replace(/Ș/g, 'Sc')
+            .replace(/ț/g, 'tz')   // Italian does not have direct equivalent
+            .replace(/Ț/g, 'Tz');
+          break;
+          
+        case 'french':
+          // French-based voices use French orthographic patterns
+          result = result
+            .replace(/ș/g, 'ch')   // French orthographic equivalent
+            .replace(/Ș/g, 'Ch')
+            .replace(/ț/g, 'ts')   // No direct equivalent
+            .replace(/Ț/g, 'Ts');
+          break;
+          
+        case 'spanish':
+          // Spanish-based voices require approximation
+          result = result
+            .replace(/ș/g, 'sh')   // Spanish has no native /ʃ/ sound
+            .replace(/Ș/g, 'Sh')
+            .replace(/ț/g, 'ts')
+            .replace(/Ț/g, 'Ts');
+          break;
+          
+        case 'generic':
+        default:
+          // Comprehensive approach for unknown voices
+          result = result
+            // Multi-strategy approach for ș
+            .replace(/ș([aeiouăâî])/g, 'sh$1')  // Before vowels
+            .replace(/ș\b/g, 'sh ')             // Word-final
+            .replace(/\bș/g, 'sh')              // Word-initial
+            .replace(/([bcdfghjklmnpqrstvwxyz])ș/g, '$1sh') // After consonants
+            .replace(/Ș([AEIOUĂÂÎ])/g, 'Sh$1')
+            .replace(/Ș\b/g, 'Sh ')
+            .replace(/\bȘ/g, 'Sh')
+            .replace(/([BCDFGHJKLMNPQRSTVWXYZ])Ș/g, '$1Sh')
+            
+            // Parallel multi-strategy approach for ț
+            .replace(/ț([aeiouăâî])/g, 'ts$1')
+            .replace(/ț\b/g, 'ts ')
+            .replace(/\bț/g, 'ts')
+            .replace(/([bcdfghjklmnpqrstvwxyz])ț/g, '$1ts')
+            .replace(/Ț([AEIOUĂÂÎ])/g, 'Ts$1')
+            .replace(/Ț\b/g, 'Ts ')
+            .replace(/\bȚ/g, 'Ts')
+            .replace(/([BCDFGHJKLMNPQRSTVWXYZ])Ț/g, '$1Ts');
+          break;
+      }
+      
+      return result;
+    }
+
+    // Vocalic Normalization Architecture: Romanian Central Vowel Simulation
+    function simulateRomanianVowels(text, voiceType) {
+      // Voice-adaptive vowel transformation strategy
+      let result = text;
+      
+      switch (voiceType) {
+        case 'romanian':
+          // Minimal intervention for native Romanian voices
+          result = result
+            .replace(/ă/g, 'ă')
+            .replace(/â/g, 'â')
+            .replace(/î/g, 'î');
+          break;
+        
+        case 'google':
+          // Google-optimized substitution patterns leverage specific acoustic properties
+          result = result
+            // ă transformation with position sensitivity
+            .replace(/ă\b/g, 'eu')      // Word-final
+            .replace(/\bă/g, 'eu')      // Word-initial
+            .replace(/ă/g, 'eu')        // General case
+            
+            // â/î transformation leveraging Google voice characteristics
+            .replace(/â/g, 'uh')
+            .replace(/î/g, 'uh');
+          break;
+          
+        case 'microsoft':
+          // Microsoft-specific patterns based on empirical testing
+          result = result
+            // Microsoft voices process schwa differently
+            .replace(/ă\b/g, 'uh')      // Word-final
+            .replace(/\bă/g, 'uh')      // Word-initial
+            .replace(/ă/g, 'uh')        // General case
+            
+            // Close central vowel approximation
+            .replace(/â/g, 'î')         // Unify representation
+            .replace(/î/g, 'îi');       // Add vowel extension
+          break;
+          
+        case 'apple':
+          // Apple voice optimization through semivowel approximation
+          result = result
+            .replace(/ă/g, 'a-')        // Mid-central approximation
+            .replace(/\bă/g, 'a-')      // Word-initial
+            .replace(/ă\b/g, 'uh')      // Word-final needs different treatment
+            .replace(/â/g, 'ui')        // Close central approximation
+            .replace(/î/g, 'ui');       // Same phoneme, different orthography
+          break;
+          
+        case 'italian':
+          // Italian-based approximation
+          result = result
+            .replace(/ă/g, 'a')         // Closest Italian vowel
+            .replace(/\bă/g, 'a')
+            .replace(/ă\b/g, 'a')
+            .replace(/â/g, 'î')         // Unify representation
+            .replace(/î/g, 'i');        // Close front vowel approximation
+          break;
+          
+        case 'french':
+          // French-based approximation leveraging French vowel system
+          result = result
+            .replace(/ă/g, 'eu')        // French 'eu' approximates schwa
+            .replace(/\bă/g, 'eu')
+            .replace(/ă\b/g, 'e')       // Word-final schwas often reduced in French
+            .replace(/â/g, 'in')        // Nasal approximation (imperfect)
+            .replace(/î/g, 'in');
+          break;
+          
+        case 'spanish':
+          // Spanish-based approximation (challenging due to limited vowel inventory)
+          result = result
+            .replace(/ă/g, 'a')         // Spanish has only five vowels
+            .replace(/\bă/g, 'a')
+            .replace(/ă\b/g, 'a')
+            .replace(/â/g, 'i')
+            .replace(/î/g, 'i');
+          break;
+          
+        case 'generic':
+        default:
+          // Comprehensive multi-technique approach
+          result = result
+            // TECHNIQUE 1: Advanced phonetic approximation for ă
+            .replace(/ă/g, 'eu')        // Mid-central approximation
+            .replace(/\bă/g, 'eu')      // Word-initial
+            .replace(/ă\b/g, 'euh')     // Word-final requires different treatment
+            
+            // TECHNIQUE 2: Close central vowel approximation for â/î
+            .replace(/â/g, 'ui')        // Close central approximation
+            .replace(/î/g, 'ui')        // Same phoneme, different orthography
+            
+            // TECHNIQUE 3: Syllabic restructuring for better pronunciation
+            .replace(/([bcdfghjklmnpqrstvwxyz])ă([bcdfghjklmnpqrstvwxyz])/gi, '$1eu$2')
+            .replace(/([bcdfghjklmnpqrstvwxyz])[âî]([bcdfghjklmnpqrstvwxyz])/gi, '$1ui$2');
+          break;
+      }
+      
+      return result;
+    }
+
+    // Optimize surrounding syllabic environment for improved articulation
+    function optimizeSyllabicEnvironments(text) {
+      return text
+        // Enhance preceding and following consonants to trigger better vowel quality
+        .replace(/([pbtdkg])eu([bcdfghjklmnpqrstvwxyz])/g, '$1eu$2')
+        .replace(/([sșz])eu([bcdfghjklmnpqrstvwxyz])/g, '$1eu-$2')
+        .replace(/([rlmn])eu([bcdfghjklmnpqrstvwxyz])/g, '$1eu$2');
+    }
+
+    // Add prosodic enhancement markers for natural intonation
+    function enhanceProsodicMarkers(text) {
+      return text
+        // Add subtle timing markers for prosodic enhancement
+        .replace(/\b([A-Za-zĂăÂâÎîȘșȚț]+)\b/g, ' $1 ')
+        .replace(/\s+/g, ' ');
+    }
+
+    // Integrative text processing pipeline with multi-pass transformation
     const processRomanianText = (text) => {
-      // Step 1: Normalize Unicode representations (handle multiple encoding variations)
+      // Phase 1: Fundamental normalization
       const normalizedText = text.normalize('NFC');
       
-      return normalizedText
-        // Step 2: Normalize whitespace and basic formatting
-        .replace(/\s+/g, ' ')
+      // Phase 2: Consonantal enhancement
+      const consonantProcessedText = enhanceRomanianConsonants(normalizedText, voiceType);
+      
+      // Phase 3: Vocalic normalization
+      const vowelProcessedText = simulateRomanianVowels(consonantProcessedText, voiceType);
+      
+      // Phase 4: Syllabic environment optimization
+      const syllableOptimizedText = optimizeSyllabicEnvironments(vowelProcessedText);
+      
+      // Phase 5: Prosodic enhancement
+      const prosodicEnhancedText = enhanceProsodicMarkers(syllableOptimizedText);
+      
+      // Phase 6: Final phonological and orthographic refinements
+      return prosodicEnhancedText
+        // Common digraph enhancement
+        .replace(/ce([aăâouie])/gi, 'che$1')
+        .replace(/ci([aăâouie])/gi, 'chi$1')
+        .replace(/ge([aăâouie])/gi, 'ghe$1')
+        .replace(/gi([aăâouie])/gi, 'ghi$1')
         
-        // Step 3: Advanced diacritical transformation system
-        // Substitute Romanian diacritics with phonetically equivalent forms
-        // ș → sh (explicit phonetic approximation)
-        .replace(/ș/g, 'sh')
-        .replace(/Ș/g, 'Sh')
-        
-        // ț → ts (phonetic transcription)
-        .replace(/ț/g, 'ts')
-        .replace(/Ț/g, 'Ts')
-        
-        // Handle vowels with appropriate phonetic approximations
-        // ă → a (with special handling for ending syllables)
-        .replace(/ă\b/g, 'ah')       // Word-final position
-        .replace(/ă([bcdfghjklmnpqrstvwxyz])/gi, 'a$1') // Before consonants
-        
-        // â,î → i (closest approximation most engines can handle)
-        .replace(/[âî]/g, 'i')
-        .replace(/[ÂÎ]/g, 'I')
-        
-        // Handle potentially problematic letter combinations
-        .replace(/ce([aăâo])/gi, 'che$1')
-        .replace(/ci([aăâo])/gi, 'chi$1')
-        .replace(/ge([aăâo])/gi, 'ghe$1')
-        .replace(/gi([aăâo])/gi, 'ghi$1')
-        
-        // Step 4: Additional phonological processing
-        // Improve pronunciation of problematic consonant clusters
+        // Consonant cluster optimization
         .replace(/str/g, 'shtr')
         
-        // Step 5: Pause optimization
+        // Micropause insertion for prosodic structuring
         .replace(/([.!?])(\s|$)/g, '$1,, ')
         .replace(/([;:])(\s|$)/g, '$1, ')
         .replace(/,(\s|$)/g, ', ')
         
-        // Step 6: Lexical fine-tuning for common words
-        .replace(/(\b)este(\b)/gi, 'esste')
-        .replace(/(\b)sunt(\b)/gi, 'ssunt')
+        // Lexical optimization for high-frequency words
+        .replace(/(\b)este(\b)/gi, 'yeste')
+        .replace(/(\b)sunt(\b)/gi, 'sunt')
+        .replace(/(\b)foarte(\b)/gi, 'foahrte')
+        .replace(/(\b)pentru(\b)/gi, 'pentru')
+        .replace(/(\b)puțin(\b)/gi, 'putsin')
         
-        // Step 7: Handle numbers and abbreviations
-        .replace(/(\d+)\.(\d+)/g, '$1 virgulă $2') // Decimal notation
+        // Number and abbreviation normalization
+        .replace(/(\d+)\.(\d+)/g, '$1 virgulă $2')
         .replace(/(\b)etc\.(\b)/gi, 'etcetera')
         .replace(/(\b)ex\.(\b)/gi, 'exemplu')
         .replace(/(\b)nr\.(\b)/gi, 'numărul')
         .replace(/(\b)art\.(\b)/gi, 'articolul');
     };
 
-    // Part 7: Segmentation & Chunking Algorithm
-    // Split into manageable chunks using linguistic boundaries
-    // This is more sophisticated than the simple regex approach
+    // Linguistic chunking architecture with discourse sensitivity
     const createChunks = (text) => {
-      // Identify sentence boundaries more accurately
+      // Advanced sentential boundary detection
       const sentenceBoundaries = /(?<=[.!?])\s+(?=[A-ZĂÂÎȘȚ])/g;
-      
-      // Split into sentences first
       const sentences = text.split(sentenceBoundaries);
       
-      // Initialize chunks array
       const chunks = [];
       let currentChunk = '';
-      const maxChunkLength = 200; // Optimal for speech synthesis processing
+      const maxChunkLength = 180; // Optimized for processing efficiency
       
-      // Process each sentence
       sentences.forEach(sentence => {
-        // If sentence is too long, split at logical break points
         if (sentence.length > maxChunkLength) {
-          // Split at conjunctions and pause markers for natural breaks
+          // Discourse-sensitive segmentation at logical break points
           const breakPoints = /(?<=,|;|:|\s)\s*(?=și|sau|dar|însă|pentru că|deoarece|fiindcă)/g;
           const sentenceParts = sentence.split(breakPoints).filter(Boolean);
           
@@ -2437,9 +2685,8 @@ const handleReadAloud = () => {
                 currentChunk = '';
               }
               
-              // If part is still too long, force-break it
+              // Recursive word-level segmentation for oversized parts
               if (part.length > maxChunkLength) {
-                // Break at word boundaries
                 const words = part.split(/\s+/);
                 let subChunk = '';
                 
@@ -2461,7 +2708,7 @@ const handleReadAloud = () => {
             }
           });
         } else {
-          // If adding this sentence exceeds max length, start a new chunk
+          // Standard chunk management for appropriate-length sentences
           if ((currentChunk.length + sentence.length + 1) > maxChunkLength) {
             chunks.push(processRomanianText(currentChunk));
             currentChunk = sentence;
@@ -2471,7 +2718,7 @@ const handleReadAloud = () => {
         }
       });
       
-      // Add the last chunk if there is any content
+      // Process final chunk
       if (currentChunk) {
         chunks.push(processRomanianText(currentChunk));
       }
@@ -2479,40 +2726,53 @@ const handleReadAloud = () => {
       return chunks;
     };
 
-    // Generate optimized text chunks
+    // Utterance generation with voice-specific parameter optimization
     const textChunks = createChunks(extractedContent);
-
-    // Part 8: Utterance Generation with Romanian Optimization
-    // Create utterances with detailed Romanian-specific configurations
+    
     const utterances = textChunks.map(chunk => {
       const utterance = new SpeechSynthesisUtterance(chunk);
       
-      // Basic language setting
+      // Fundamental language setting
       utterance.lang = 'ro-RO';
       
-      // Apply voice if available
+      // Voice application with existence validation
       if (selectedVoice) {
         utterance.voice = selectedVoice;
       }
       
-      // Fine-tune parameters specifically for Romanian
-      utterance.rate = 0.88;    // Slightly slower for better diacritical articulation
-      utterance.pitch = 1.05;   // Slightly higher pitch for improved clarity
-      utterance.volume = 1.0;   // Full volume
+      // Voice-adaptive parameter configuration matrix
+      if (voiceType === 'romanian') {
+        utterance.rate = 0.85;   // Modest reduction for native voices
+        utterance.pitch = 1.0;   // Natural pitch for native voices
+      } else if (voiceType === 'google') {
+        utterance.rate = 0.80;   // Greater reduction for Google voices
+        utterance.pitch = 1.05;  // Slight pitch elevation for clarity
+      } else if (voiceType === 'microsoft') {
+        utterance.rate = 0.78;   // Significant reduction for Microsoft voices
+        utterance.pitch = 1.1;   // Moderate pitch elevation
+      } else if (voiceType === 'italian' || voiceType === 'spanish') {
+        utterance.rate = 0.75;   // Maximum reduction for Romance language voices
+        utterance.pitch = 1.05;  // Slight pitch elevation
+      } else {
+        utterance.rate = 0.80;   // Default fallback configuration
+        utterance.pitch = 1.0;   // Natural pitch
+      }
+      
+      // Universal volume normalization
+      utterance.volume = 1.0;
       
       return utterance;
     });
 
-    // Part 9: Synthesis Execution & State Management System
+    // Speech synthesis execution architecture with robust state management
     let currentUtteranceIndex = 0;
     const speakingState = { active: true };
     
-    // Define the recursive speaking function with robust state management
     const speakNextChunk = () => {
-      // Guard condition for termination
+      // Terminal condition validation
       if (!speakingState.active || currentUtteranceIndex >= utterances.length) {
         if (currentUtteranceIndex >= utterances.length) {
-          // Natural completion of all text
+          // Natural completion state transition
           setIsReading(false);
         }
         return;
@@ -2520,75 +2780,73 @@ const handleReadAloud = () => {
       
       const currentUtterance = utterances[currentUtteranceIndex];
       
-      // Handle utterance completion
+      // Utterance completion handler
       currentUtterance.onend = () => {
         if (!speakingState.active) return;
         
+        // Increment utterance counter
         currentUtteranceIndex++;
         
         if (currentUtteranceIndex < utterances.length) {
-          // Add a small pause between chunks for natural reading rhythm
+          // Apply inter-utterance pause for natural rhythm
           setTimeout(() => speakNextChunk(), 300);
         } else {
-          // All chunks completed
+          // Terminal state transition
           setIsReading(false);
         }
       };
       
-      // Handle errors
+      // Error handling architecture
       currentUtterance.onerror = (event) => {
         console.error("Eroare de sinteză vocală:", event);
         speakingState.active = false;
         setIsReading(false);
       };
       
-      // Begin speaking current chunk
+      // Initiate speech synthesis for current utterance
       window.speechSynthesis.speak(currentUtterance);
     };
     
-    // Part 10: Synthesis Initialization & UI State Transition
-    // Update UI state
+    // Global state management and synthesis initialization
     setIsReading(true);
-    
-    // Ensure clean start
     window.speechSynthesis.cancel();
     
-    // Handle potential browser focus/visibility issues
+    // Browser visibility change handler for synthesis resilience
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        // Browser tab is hidden, may pause speech in some browsers
+        // Suspend synthesis during tab inactivity
         speakingState.pausedAt = Date.now();
         window.speechSynthesis.pause();
       } else {
-        // Browser tab is visible again
+        // Resume synthesis with temporal sensitivity
         if (speakingState.pausedAt && (Date.now() - speakingState.pausedAt > 10000)) {
-          // Paused for more than 10 seconds, restart from current chunk
+          // Long absence requires complete reset
           window.speechSynthesis.cancel();
           speakNextChunk();
         } else {
-          // Short pause, just resume
+          // Short absence permits simple resumption
           window.speechSynthesis.resume();
         }
       }
     };
     
-    // Register visibility handler
+    // Register visibility event handler
     document.addEventListener('visibilitychange', handleVisibilityChange);
     
-    // Begin speaking
+    // Initialize synthesis process
     speakNextChunk();
     
-    // Clean up function for component unmount or stopping
+    // Resource management architecture
     const cleanup = () => {
       speakingState.active = false;
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.speechSynthesis.cancel();
     };
     
-    // Store cleanup function for potential early termination
+    // Register cleanup function for component lifecycle integration
     speakingState.cleanup = cleanup;
     
-    // Attach cleanup to component context
+    // Global cleanup registry
     if (!window._speechCleanupFunctions) {
       window._speechCleanupFunctions = [];
     }
