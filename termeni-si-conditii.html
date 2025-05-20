@@ -2085,7 +2085,687 @@ body::before {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.20/babel.min.js"></script>
 
 <!-- Your accessibility component script -->
-<script type="text/babel" src="accessibility-sidebar.jsx"></script>
+<script>
+// Create the accessibility component and expose it to window
+// Definim componenta folosind createElement în loc de JSX
+window.AccessibilitySidebar = function() {
+  // ========== STATE MANAGEMENT ==========
+  // Core panel state hooks
+  const [isPanelOpen, setIsPanelOpen] = React.useState(false);
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [position, setPosition] = React.useState({ x: 16, y: 100 });
+  const [startPos, setStartPos] = React.useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  // Accessibility feature state hooks
+  const [fontSize, setFontSize] = React.useState(0); // 0: normal, 1: larger, 2: largest
+  const [highContrast, setHighContrast] = React.useState(false);
+  const [lineHeight, setLineHeight] = React.useState(0); // 0: normal, 1: larger, 2: largest
+  const [isReading, setIsReading] = React.useState(false);
+
+  // ========== EFFECT HOOKS ==========
+  // Mobile detection effect
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Initial check
+    checkMobile();
+
+    // Set up listener for window resize
+    window.addEventListener('resize', checkMobile);
+
+    // Clean up
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Dragging event listeners effect
+  React.useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    } else {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]);
+
+  // Position reset when switching between mobile and desktop
+  React.useEffect(() => {
+    if (isMobile) {
+      setPosition({ x: 16, y: window.innerHeight - 80 });
+    } else {
+      setPosition({ x: 16, y: 100 });
+    }
+  }, [isMobile]);
+
+  // ========== EVENT HANDLERS ==========
+  // Font size control handler
+  const handleFontSizeChange = () => {
+    const newSize = (fontSize + 1) % 3;
+    setFontSize(newSize);
+
+    // Remove existing classes
+    document.body.classList.remove('font-size-larger', 'font-size-largest');
+
+    // Add appropriate class
+    if (newSize === 1) {
+      document.body.classList.add('font-size-larger');
+    } else if (newSize === 2) {
+      document.body.classList.add('font-size-largest');
+    }
+  };
+
+  // Contrast toggle handler
+  const handleContrastToggle = () => {
+    const newState = !highContrast;
+    setHighContrast(newState);
+
+    if (newState) {
+      document.body.classList.add('high-contrast');
+    } else {
+      document.body.classList.remove('high-contrast');
+    }
+  };
+
+  // Line height control handler
+  const handleLineHeightChange = () => {
+    const newHeight = (lineHeight + 1) % 3;
+    setLineHeight(newHeight);
+
+    // Remove existing classes
+    document.body.classList.remove('line-height-larger', 'line-height-largest');
+
+    // Add appropriate class
+    if (newHeight === 1) {
+      document.body.classList.add('line-height-larger');
+    } else if (newHeight === 2) {
+      document.body.classList.add('line-height-largest');
+    }
+  };
+
+  // Text-to-speech handler
+  const handleReadAloud = () => {
+    if (!('speechSynthesis' in window)) {
+      alert('Browserul dvs. nu suportă citirea cu voce tare');
+      return;
+    }
+
+    if (isReading) {
+      window.speechSynthesis.cancel();
+      setIsReading(false);
+    } else {
+      // Get all the text from the main content
+      const contentArea = document.querySelector('.content-area');
+      if (!contentArea) return;
+
+      // Get text content from main elements, excluding navigation and controls
+      const textContent = Array.from(contentArea.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6'))
+        .filter(el => !el.closest('.toc') && !el.closest('.content-nav') && !el.closest('.accessibility-sidebar'))
+        .map(el => el.textContent)
+        .join('. ');
+
+      // Split into manageable chunks
+      const chunks = textContent.match(/.{1,1000}(?:\.|\?|!|$)/g) || [];
+
+      let utterances = chunks.map(chunk => {
+        const utterance = new SpeechSynthesisUtterance(chunk);
+        utterance.lang = 'ro-RO';
+        return utterance;
+      });
+
+      // Start reading
+      let currentIndex = 0;
+
+      const speakNext = () => {
+        if (currentIndex < utterances.length) {
+          const currentUtterance = utterances[currentIndex];
+
+          currentUtterance.onend = () => {
+            currentIndex++;
+            if (currentIndex < utterances.length && isReading) {
+              setTimeout(speakNext, 500); // Small pause between chunks
+            } else if (currentIndex >= utterances.length) {
+              setIsReading(false);
+            }
+          };
+
+          window.speechSynthesis.speak(currentUtterance);
+        }
+      };
+
+      setIsReading(true);
+
+      // Cancel any previous reading
+      window.speechSynthesis.cancel();
+      speakNext();
+    }
+  };
+
+  // Dragging handlers
+  const handleMouseDown = (e) => {
+    if (isMobile) return; // No dragging on mobile
+
+    setIsDragging(true);
+    setStartPos({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    });
+
+    // Prevent text selection during drag
+    e.preventDefault();
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+
+    // Calculate new position with bounds checking
+    const newX = Math.max(0, Math.min(window.innerWidth - 60, e.clientX - startPos.x));
+    const newY = Math.max(0, Math.min(window.innerHeight - 60, e.clientY - startPos.y));
+
+    setPosition({ x: newX, y: newY });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Keyboard accessibility handler
+  const handleKeyDown = (e, action) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      action();
+    }
+  };
+
+  // ========== RESET HANDLER ==========
+  const handleResetAll = () => {
+    // Reset all settings
+    setFontSize(0);
+    setHighContrast(false);
+    setLineHeight(0);
+    if (isReading) {
+      window.speechSynthesis.cancel();
+      setIsReading(false);
+    }
+
+    // Remove all classes
+    document.body.classList.remove(
+      'font-size-larger',
+      'font-size-largest',
+      'high-contrast',
+      'line-height-larger',
+      'line-height-largest'
+    );
+  };
+
+  // ========== UTILITY FUNCTIONS ==========
+  // Create icon elements
+  const createIcon = (iconName, isLarge = false) => {
+    return React.createElement(
+      'div', 
+      { className: `a11y-icon${isLarge ? ' large' : ''}` },
+      React.createElement('i', { className: `fas fa-${iconName}`, 'aria-hidden': 'true' })
+    );
+  };
+
+  // ========== COMPONENT RENDERING ==========
+  return React.createElement(
+    React.Fragment,
+    null,
+    // CSS Animations
+    React.createElement(
+      'style',
+      null,
+      `
+        @keyframes pulse {
+          0% { opacity: 0.4; }
+          50% { opacity: 1; }
+          100% { opacity: 0.4; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .accessibility-sidebar {
+            transition: none !important;
+          }
+
+          @keyframes pulse {
+            0%, 50%, 100% { opacity: 1; }
+          }
+        }
+
+        .a11y-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 20px;
+          height: 20px;
+        }
+
+        .a11y-icon.large {
+          width: 24px;
+          height: 24px;
+        }
+      `
+    ),
+    
+    // Main Sidebar Container
+    React.createElement(
+      'div',
+      {
+        className: `accessibility-sidebar ${isPanelOpen ? 'expanded' : 'collapsed'} ${isMobile ? 'mobile' : 'desktop'}`,
+        style: {
+          position: 'fixed',
+          top: isMobile ? 'auto' : `${position.y}px`,
+          left: isMobile ? 'auto' : `${position.x}px`,
+          bottom: isMobile ? '20px' : 'auto',
+          right: isMobile ? '20px' : 'auto',
+          zIndex: 9999,
+          transition: 'all 0.3s ease',
+          background: highContrast ? '#000' : 'white',
+          color: highContrast ? '#fff' : '#333',
+          border: `2px solid ${highContrast ? '#fff' : '#2196F3'}`,
+          borderRadius: '12px',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+          padding: isPanelOpen ? '16px' : '8px',
+          width: isPanelOpen ? (isMobile ? '280px' : '280px') : '56px',
+          maxWidth: '90vw',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          cursor: isDragging ? 'grabbing' : 'auto'
+        }
+      },
+      
+      // Panel Header
+      React.createElement(
+        'div',
+        {
+          className: 'accessibility-header',
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '8px',
+            cursor: isMobile ? 'auto' : 'grab',
+            padding: '4px'
+          },
+          onMouseDown: handleMouseDown,
+          role: 'presentation'
+        },
+        
+        // Title (Visible only when panel is open)
+        isPanelOpen && React.createElement(
+          'div',
+          {
+            className: 'title',
+            style: {
+              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }
+          },
+          createIcon('gear'),
+          React.createElement('span', null, 'Accesibilitate')
+        ),
+        
+        // Toggle Button
+        React.createElement(
+          'button',
+          {
+            'aria-label': isPanelOpen ? 'Închide panoul de accesibilitate' : 'Deschide panoul de accesibilitate',
+            title: isPanelOpen ? 'Închide panoul' : 'Opțiuni de accesibilitate',
+            onClick: () => setIsPanelOpen(!isPanelOpen),
+            onKeyDown: (e) => handleKeyDown(e, () => setIsPanelOpen(!isPanelOpen)),
+            style: {
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '8px',
+              borderRadius: '8px',
+              color: highContrast ? '#fff' : '#2196F3',
+              marginLeft: isPanelOpen ? '0' : 'auto',
+              marginRight: isPanelOpen ? '0' : 'auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }
+          },
+          isPanelOpen ? createIcon('compress', true) : createIcon('gear', true)
+        ),
+        
+        // Drag Handle (Desktop only, when panel is open)
+        !isMobile && isPanelOpen && React.createElement(
+          'button',
+          {
+            'aria-label': 'Mută panoul de accesibilitate',
+            title: 'Mută panoul (Trage pentru a muta)',
+            style: {
+              background: 'transparent',
+              border: 'none',
+              cursor: 'grab',
+              padding: '4px',
+              color: highContrast ? '#fff' : '#666',
+              display: 'flex'
+            }
+          },
+          createIcon('arrows-up-down-left-right')
+        )
+      ),
+      
+      // Control Buttons (Visible only when panel is open)
+      isPanelOpen && React.createElement(
+        'div',
+        {
+          className: 'control-buttons',
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          },
+          role: 'group',
+          'aria-label': 'Controale de accesibilitate'
+        },
+        
+        // Font Size Control
+        React.createElement(
+          'button',
+          {
+            'aria-label': `Mărime text: ${fontSize === 0 ? 'normal' : fontSize === 1 ? 'mare' : 'foarte mare'}`,
+            'aria-pressed': fontSize > 0,
+            className: `control-button ${fontSize > 0 ? 'active' : ''}`,
+            onClick: handleFontSizeChange,
+            onKeyDown: (e) => handleKeyDown(e, handleFontSizeChange),
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '10px 12px',
+              borderRadius: '8px',
+              border: 'none',
+              background: fontSize > 0 ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
+              color: fontSize > 0 ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
+              cursor: 'pointer',
+              textAlign: 'left',
+              fontWeight: fontSize > 0 ? 'bold' : 'normal',
+              transition: 'all 0.2s ease'
+            }
+          },
+          createIcon('font'),
+          React.createElement(
+            'div',
+            {
+              style: {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start'
+              }
+            },
+            React.createElement('span', null, 'Mărime text'),
+            React.createElement(
+              'small',
+              { style: { fontSize: '12px', opacity: '0.8' } },
+              fontSize === 0 ? 'Normal' : fontSize === 1 ? 'Mare' : 'Foarte mare'
+            )
+          )
+        ),
+        
+        // Contrast Control
+        React.createElement(
+          'button',
+          {
+            'aria-label': `Contrast: ${highContrast ? 'ridicat' : 'normal'}`,
+            'aria-pressed': highContrast,
+            className: `control-button ${highContrast ? 'active' : ''}`,
+            onClick: handleContrastToggle,
+            onKeyDown: (e) => handleKeyDown(e, handleContrastToggle),
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '10px 12px',
+              borderRadius: '8px',
+              border: 'none',
+              background: highContrast ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
+              color: highContrast ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
+              cursor: 'pointer',
+              textAlign: 'left',
+              fontWeight: highContrast ? 'bold' : 'normal',
+              transition: 'all 0.2s ease'
+            }
+          },
+          createIcon(highContrast ? 'sun' : 'moon'),
+          React.createElement(
+            'div',
+            {
+              style: {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start'
+              }
+            },
+            React.createElement('span', null, 'Contrast'),
+            React.createElement(
+              'small',
+              { style: { fontSize: '12px', opacity: '0.8' } },
+              highContrast ? 'Ridicat' : 'Normal'
+            )
+          )
+        ),
+        
+        // Line Height Control
+        React.createElement(
+          'button',
+          {
+            'aria-label': `Spațiu între rânduri: ${lineHeight === 0 ? 'normal' : lineHeight === 1 ? 'mare' : 'foarte mare'}`,
+            'aria-pressed': lineHeight > 0,
+            className: `control-button ${lineHeight > 0 ? 'active' : ''}`,
+            onClick: handleLineHeightChange,
+            onKeyDown: (e) => handleKeyDown(e, handleLineHeightChange),
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '10px 12px',
+              borderRadius: '8px',
+              border: 'none',
+              background: lineHeight > 0 ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
+              color: lineHeight > 0 ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
+              cursor: 'pointer',
+              textAlign: 'left',
+              fontWeight: lineHeight > 0 ? 'bold' : 'normal',
+              transition: 'all 0.2s ease'
+            }
+          },
+          createIcon('align-justify'),
+          React.createElement(
+            'div',
+            {
+              style: {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start'
+              }
+            },
+            React.createElement('span', null, 'Spațiu între rânduri'),
+            React.createElement(
+              'small',
+              { style: { fontSize: '12px', opacity: '0.8' } },
+              lineHeight === 0 ? 'Normal' : lineHeight === 1 ? 'Mare' : 'Foarte mare'
+            )
+          )
+        ),
+        
+        // Text-to-Speech Control
+        React.createElement(
+          'button',
+          {
+            'aria-label': isReading ? 'Oprește citirea' : 'Citește cu voce tare',
+            'aria-pressed': isReading,
+            className: `control-button ${isReading ? 'active' : ''}`,
+            onClick: handleReadAloud,
+            onKeyDown: (e) => handleKeyDown(e, handleReadAloud),
+            disabled: !('speechSynthesis' in window),
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '10px 12px',
+              borderRadius: '8px',
+              border: 'none',
+              background: isReading ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
+              color: isReading ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
+              cursor: 'speechSynthesis' in window ? 'pointer' : 'not-allowed',
+              textAlign: 'left',
+              fontWeight: isReading ? 'bold' : 'normal',
+              opacity: 'speechSynthesis' in window ? 1 : 0.7,
+              transition: 'all 0.2s ease'
+            }
+          },
+          createIcon(isReading ? 'volume-mute' : 'volume-high'),
+          React.createElement(
+            'div',
+            {
+              style: {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start'
+              }
+            },
+            React.createElement('span', null, isReading ? 'Oprește citirea' : 'Citește cu voce tare'),
+            React.createElement(
+              'small',
+              { style: { fontSize: '12px', opacity: '0.8' } },
+              'speechSynthesis' in window ? (isReading ? 'Activ' : 'Inactiv') : 'Indisponibil'
+            )
+          )
+        ),
+        
+        // Reset All Settings
+        React.createElement(
+          'button',
+          {
+            'aria-label': 'Resetează toate setările',
+            className: 'control-button reset',
+            onClick: handleResetAll,
+            onKeyDown: (e) => handleKeyDown(e, handleResetAll),
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '10px 12px',
+              borderRadius: '8px',
+              border: 'none',
+              background: highContrast ? '#444' : '#f5f5f5',
+              color: highContrast ? '#fff' : '#666',
+              cursor: 'pointer',
+              textAlign: 'left',
+              marginTop: '8px',
+              transition: 'all 0.2s ease'
+            }
+          },
+          createIcon('undo'),
+          React.createElement('span', null, 'Resetează setările')
+        )
+      ),
+      
+      // Status Indicators (Visible only when panel is collapsed)
+      !isPanelOpen && React.createElement(
+        'div',
+        {
+          className: 'status-indicators',
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '8px',
+            marginTop: '8px'
+          }
+        },
+        
+        // Font Size Indicator
+        fontSize > 0 && React.createElement(
+          'div',
+          {
+            'aria-hidden': 'true',
+            title: 'Mărime text mărită',
+            style: {
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: highContrast ? '#fff' : '#2196F3'
+            }
+          }
+        ),
+        
+        // Contrast Indicator
+        highContrast && React.createElement(
+          'div',
+          {
+            'aria-hidden': 'true',
+            title: 'Contrast ridicat activat',
+            style: {
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: highContrast ? '#fff' : '#2196F3'
+            }
+          }
+        ),
+        
+        // Line Height Indicator
+        lineHeight > 0 && React.createElement(
+          'div',
+          {
+            'aria-hidden': 'true',
+            title: 'Spațiu între rânduri mărit',
+            style: {
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: highContrast ? '#fff' : '#2196F3'
+            }
+          }
+        ),
+        
+        // Reading Indicator (with animation)
+        isReading && React.createElement(
+          'div',
+          {
+            'aria-hidden': 'true',
+            title: 'Citire vocală activă',
+            style: {
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: highContrast ? '#fff' : '#2196F3',
+              animation: 'pulse 1.5s infinite'
+            }
+          }
+        )
+      )
+    )
+  );
+};
+
+
+// Renderizarea când DOM-ul este gata
+// Inițializarea când DOM-ul este gata
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('accessibility-root');
+  if (container) {
+    const root = ReactDOM.createRoot(container);
+    root.render(React.createElement(window.AccessibilitySidebar));
+  }
+});
+</script>
 
 <!-- JavaScript for enhanced functionality -->
 <script>
@@ -2564,19 +3244,6 @@ function initSearch() {
     });
 }
 
-function initAccessibilitySidebar() {
-    try {
-        const container = document.getElementById('accessibility-root');
-        console.log("Container found:", !!container);
-        if (container) {
-          const root = ReactDOM.createRoot(container);
-          root.render(React.createElement(AccessibilitySidebar));
-        }
-    } catch (error) {
-        console.error("Accessibility sidebar initialization failed:", error);
-    }
-}
-
 // When the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     initReadingProgress();
@@ -2586,7 +3253,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initTocHighlighting();
     initLanguageSelector();
     initSearch();
-    initAccessibilitySidebar();
     
     // Add temp-highlight class styling
     const style = document.createElement('style');

@@ -1,5 +1,5 @@
-// Create the accessibility component
-const AccessibilitySidebar = () => {
+// Create the accessibility component and expose it to window
+window.AccessibilitySidebar = () => {
   // State for panel visibility and settings
   const [isPanelOpen, setIsPanelOpen] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
