@@ -3106,9 +3106,81 @@ function initializeSystemIntegration() {
 }
 
 /**
+ * Banner Termeni și Condiții
+ */
+function initTermsAndConditions() {
+    const banner = document.getElementById('terms-banner');
+    const dismissButton = document.getElementById('terms-dismiss');
+    const understandButton = document.getElementById('terms-understand');
+    const keyboardHintText = document.getElementById('keyboard-hint-text');
+    
+    // Check if banner was previously dismissed
+    const isDismissed = localStorage.getItem('termsBannerDismissed');
+    
+    if (isDismissed === 'true') {
+        banner.classList.add('dismissed');
+        document.body.classList.add('terms-dismissed');
+    }
+    
+    // Function to dismiss the banner
+    function dismissBanner() {
+        banner.classList.add('dismissed');
+        document.body.classList.add('terms-dismissed');
+        localStorage.setItem('termsBannerDismissed', 'true');
+        
+        // Announce to screen readers that the banner is dismissed
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.classList.add('sr-only');
+        announcement.textContent = 'Notificare despre Termeni și Condiții închisă. Folosirea site-ului constituie în continuare acceptarea acestora.';
+        document.body.appendChild(announcement);
+        
+        // Remove announcement after it's read
+        setTimeout(function() {
+            document.body.removeChild(announcement);
+        }, 3000);
+    }
+    
+    // Add click event to dismiss button
+    if (dismissButton) {
+        dismissButton.addEventListener('click', dismissBanner);
+    }
+    
+    // Add click event to understand button
+    if (understandButton) {
+        understandButton.addEventListener('click', dismissBanner);
+    }
+    
+    // Detect if user is on a Mac
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    
+    // Update keyboard hint text for Mac users
+    if (isMac && keyboardHintText) {
+        keyboardHintText.innerHTML = 'Apasă <kbd>⌥ Option</kbd> + <kbd>A</kbd> pentru a accepta sau <kbd>Esc</kbd> pentru a închide';
+    }
+    
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Escape key to dismiss
+        if (e.key === 'Escape' && !banner.classList.contains('dismissed')) {
+            dismissBanner();
+        }
+        
+        // Alt+A to accept
+        if (e.key === 'a' && e.altKey && !banner.classList.contains('dismissed')) {
+            dismissBanner();
+        }
+    });
+};
+
+/**
  * Funcția principală de inițializare
  */
 function init() {
+    // Inițializează Banner Termeni și Condiții
+    initTermsAndConditions();
+
     // Inițializează formularul cu întrebări
     initializeForm();
     
