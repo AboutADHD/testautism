@@ -2564,6 +2564,19 @@ function initSearch() {
     });
 }
 
+function initAccessibilitySidebar() {
+    try {
+        const container = document.getElementById('accessibility-root');
+        console.log("Container found:", !!container);
+        if (container) {
+          const root = ReactDOM.createRoot(container);
+          root.render(React.createElement(AccessibilitySidebar));
+        }
+    } catch (error) {
+        console.error("Accessibility sidebar initialization failed:", error);
+    }
+}
+
 // When the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     initReadingProgress();
@@ -2573,6 +2586,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTocHighlighting();
     initLanguageSelector();
     initSearch();
+    initAccessibilitySidebar();
     
     // Add temp-highlight class styling
     const style = document.createElement('style');

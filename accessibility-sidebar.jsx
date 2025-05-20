@@ -1,4 +1,3 @@
-
 // Create the accessibility component
 const AccessibilitySidebar = () => {
   // State for panel visibility and settings
@@ -620,12 +619,3 @@ const AccessibilitySidebar = () => {
     </React.Fragment>
   );
 };
-
-// Render the component once the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('accessibility-root');
-  if (container) {
-    const root = ReactDOM.createRoot(container);
-    root.render(React.createElement(AccessibilitySidebar));
-  }
-});

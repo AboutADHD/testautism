@@ -3106,7 +3106,7 @@ function initializeSystemIntegration() {
 }
 
 /**
- * Banner Termeni și Condiții
+ * Banner Termeni și Condiții - Funcționalitate simplificată
  */
 function initTermsAndConditions() {
     const banner = document.getElementById('terms-banner');
@@ -3152,27 +3152,19 @@ function initTermsAndConditions() {
         understandButton.addEventListener('click', dismissBanner);
     }
     
-    // Detect if user is on a Mac
-    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-    
-    // Update keyboard hint text for Mac users
-    if (isMac && keyboardHintText) {
-        keyboardHintText.innerHTML = 'Apasă <kbd>⌥ Option</kbd> + <kbd>A</kbd> pentru a accepta sau <kbd>Esc</kbd> pentru a închide';
+    // Update keyboard hint text - simplify to only show Escape key
+    if (keyboardHintText) {
+        keyboardHintText.innerHTML = 'Apasă <kbd>Esc</kbd> pentru a închide';
     }
     
-    // Add keyboard shortcuts
+    // Add keyboard shortcut - only Escape key
     document.addEventListener('keydown', function(e) {
         // Escape key to dismiss
         if (e.key === 'Escape' && !banner.classList.contains('dismissed')) {
             dismissBanner();
         }
-        
-        // Alt+A to accept
-        if (e.key === 'a' && e.altKey && !banner.classList.contains('dismissed')) {
-            dismissBanner();
-        }
     });
-};
+}
 
 /**
  * Funcția principală de inițializare
