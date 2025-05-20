@@ -2086,244 +2086,599 @@ body::before {
 
 <!-- Your accessibility component script -->
 <script>
-// Create the accessibility component and expose it to window
 // Definim componenta folosind createElement în loc de JSX
 window.AccessibilitySidebar = function() {
-  // ========== STATE MANAGEMENT ==========
-  // Core panel state hooks
-  const [isPanelOpen, setIsPanelOpen] = React.useState(false);
-  const [isDragging, setIsDragging] = React.useState(false);
-  const [position, setPosition] = React.useState({ x: 16, y: 100 });
-  const [startPos, setStartPos] = React.useState({ x: 0, y: 0 });
-  const [isMobile, setIsMobile] = React.useState(false);
 
-  // Accessibility feature state hooks
-  const [fontSize, setFontSize] = React.useState(0); // 0: normal, 1: larger, 2: largest
-  const [highContrast, setHighContrast] = React.useState(false);
-  const [lineHeight, setLineHeight] = React.useState(0); // 0: normal, 1: larger, 2: largest
-  const [isReading, setIsReading] = React.useState(false);
+    // ========== STATE MANAGEMENT ==========
+    // Core panel state hooks
+    const [isPanelOpen, setIsPanelOpen] = React.useState(false);
+    const [isDragging, setIsDragging] = React.useState(false);
+    const [position, setPosition] = React.useState({
+        x: 16,
+        y: 100
+    });
+    const [startPos, setStartPos] = React.useState({
+        x: 0,
+        y: 0
+    });
+    const [isMobile, setIsMobile] = React.useState(false);
+    const [availableRomanianVoices, setAvailableRomanianVoices] = React.useState([]);
+    const [selectedVoice, setSelectedVoice] = React.useState(null);
 
-  // ========== EFFECT HOOKS ==========
-  // Mobile detection effect
-  React.useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+    // Accessibility feature state hooks
+    const [fontSize, setFontSize] = React.useState(0); // 0: normal, 1: larger, 2: largest
+    const [highContrast, setHighContrast] = React.useState(false);
+    const [lineHeight, setLineHeight] = React.useState(0); // 0: normal, 1: larger, 2: largest
+    const [isReading, setIsReading] = React.useState(false);
 
-    // Initial check
-    checkMobile();
+    // ========== EFFECT HOOKS ==========
+    // Mobile detection effect
+    React.useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
 
-    // Set up listener for window resize
-    window.addEventListener('resize', checkMobile);
+        // Initial check
+        checkMobile();
 
-    // Clean up
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+        // Set up listener for window resize
+        window.addEventListener('resize', checkMobile);
 
-  // Dragging event listeners effect
-  React.useEffect(() => {
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-    } else {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    }
+        // Clean up
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [isDragging]);
+    // Add this effect to populate available voices
+    React.useEffect(() => {
+        const updateVoices = () => {
+            const voices = window.speechSynthesis.getVoices();
+            const romanianVoices = voices.filter(voice =>
+                voice.lang.includes('ro') ||
+                voice.name.includes('Romanian') ||
+                voice.name.includes('Română')
+            );
+            setAvailableRomanianVoices(romanianVoices);
 
-  // Position reset when switching between mobile and desktop
-  React.useEffect(() => {
-    if (isMobile) {
-      setPosition({ x: 16, y: window.innerHeight - 80 });
-    } else {
-      setPosition({ x: 16, y: 100 });
-    }
-  }, [isMobile]);
-
-  // ========== EVENT HANDLERS ==========
-  // Font size control handler
-  const handleFontSizeChange = () => {
-    const newSize = (fontSize + 1) % 3;
-    setFontSize(newSize);
-
-    // Remove existing classes
-    document.body.classList.remove('font-size-larger', 'font-size-largest');
-
-    // Add appropriate class
-    if (newSize === 1) {
-      document.body.classList.add('font-size-larger');
-    } else if (newSize === 2) {
-      document.body.classList.add('font-size-largest');
-    }
-  };
-
-  // Contrast toggle handler
-  const handleContrastToggle = () => {
-    const newState = !highContrast;
-    setHighContrast(newState);
-
-    if (newState) {
-      document.body.classList.add('high-contrast');
-    } else {
-      document.body.classList.remove('high-contrast');
-    }
-  };
-
-  // Line height control handler
-  const handleLineHeightChange = () => {
-    const newHeight = (lineHeight + 1) % 3;
-    setLineHeight(newHeight);
-
-    // Remove existing classes
-    document.body.classList.remove('line-height-larger', 'line-height-largest');
-
-    // Add appropriate class
-    if (newHeight === 1) {
-      document.body.classList.add('line-height-larger');
-    } else if (newHeight === 2) {
-      document.body.classList.add('line-height-largest');
-    }
-  };
-
-  // Text-to-speech handler
-  const handleReadAloud = () => {
-    if (!('speechSynthesis' in window)) {
-      alert('Browserul dvs. nu suportă citirea cu voce tare');
-      return;
-    }
-
-    if (isReading) {
-      window.speechSynthesis.cancel();
-      setIsReading(false);
-    } else {
-      // Get all the text from the main content
-      const contentArea = document.querySelector('.content-area');
-      if (!contentArea) return;
-
-      // Get text content from main elements, excluding navigation and controls
-      const textContent = Array.from(contentArea.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6'))
-        .filter(el => !el.closest('.toc') && !el.closest('.content-nav') && !el.closest('.accessibility-sidebar'))
-        .map(el => el.textContent)
-        .join('. ');
-
-      // Split into manageable chunks
-      const chunks = textContent.match(/.{1,1000}(?:\.|\?|!|$)/g) || [];
-
-      let utterances = chunks.map(chunk => {
-        const utterance = new SpeechSynthesisUtterance(chunk);
-        utterance.lang = 'ro-RO';
-        return utterance;
-      });
-
-      // Start reading
-      let currentIndex = 0;
-
-      const speakNext = () => {
-        if (currentIndex < utterances.length) {
-          const currentUtterance = utterances[currentIndex];
-
-          currentUtterance.onend = () => {
-            currentIndex++;
-            if (currentIndex < utterances.length && isReading) {
-              setTimeout(speakNext, 500); // Small pause between chunks
-            } else if (currentIndex >= utterances.length) {
-              setIsReading(false);
+            // Auto-select the best voice
+            if (romanianVoices.length > 0 && !selectedVoice) {
+                const bestVoice = romanianVoices.find(v => !v.name.includes('Standard')) || romanianVoices[0];
+                setSelectedVoice(bestVoice);
             }
-          };
+        };
 
-          window.speechSynthesis.speak(currentUtterance);
+        updateVoices();
+
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+            window.speechSynthesis.onvoiceschanged = updateVoices;
         }
-      };
 
-      setIsReading(true);
+        return () => {
+            if (window.speechSynthesis.onvoiceschanged !== undefined) {
+                window.speechSynthesis.onvoiceschanged = null;
+            }
+        };
+    }, [selectedVoice]);
 
-      // Cancel any previous reading
-      window.speechSynthesis.cancel();
-      speakNext();
-    }
-  };
+    // Dragging event listeners effect
+    React.useEffect(() => {
+        if (isDragging) {
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+        } else {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        }
 
-  // Dragging handlers
-  const handleMouseDown = (e) => {
-    if (isMobile) return; // No dragging on mobile
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isDragging]);
 
-    setIsDragging(true);
-    setStartPos({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
+    // Position reset when switching between mobile and desktop
+    React.useEffect(() => {
+        if (isMobile) {
+            setPosition({
+                x: 16,
+                y: window.innerHeight - 80
+            });
+        } else {
+            setPosition({
+                x: 16,
+                y: 100
+            });
+        }
+    }, [isMobile]);
+
+    // ========== EVENT HANDLERS ==========
+    // Font size control handler
+    const handleFontSizeChange = () => {
+        const newSize = (fontSize + 1) % 3;
+        setFontSize(newSize);
+
+        // Remove existing classes
+        document.body.classList.remove('font-size-larger', 'font-size-largest');
+
+        // Add appropriate class
+        if (newSize === 1) {
+            document.body.classList.add('font-size-larger');
+        } else if (newSize === 2) {
+            document.body.classList.add('font-size-largest');
+        }
+    };
+
+    // Contrast toggle handler
+    const handleContrastToggle = () => {
+        const newState = !highContrast;
+        setHighContrast(newState);
+
+        if (newState) {
+            document.body.classList.add('high-contrast');
+        } else {
+            document.body.classList.remove('high-contrast');
+        }
+    };
+
+    // Line height control handler
+    const handleLineHeightChange = () => {
+        const newHeight = (lineHeight + 1) % 3;
+        setLineHeight(newHeight);
+
+        // Remove existing classes
+        document.body.classList.remove('line-height-larger', 'line-height-largest');
+
+        // Add appropriate class
+        if (newHeight === 1) {
+            document.body.classList.add('line-height-larger');
+        } else if (newHeight === 2) {
+            document.body.classList.add('line-height-largest');
+        }
+    };
+
+    // Text-to-speech handler
+    // Enhanced handleReadAloud function with optimized Romanian speech synthesis
+    // Enhanced handleReadAloud function with optimized Romanian diacritical handling
+const handleReadAloud = () => {
+  // Part 1: System Capability Verification
+  if (!('speechSynthesis' in window)) {
+    alert('Browserul dvs. nu suportă citirea cu voce tare');
+    return;
+  }
+
+  // Part 2: Reading State Management
+  if (isReading) {
+    // Handle termination process with cleanup
+    window.speechSynthesis.cancel();
+    setIsReading(false);
+    return;
+  }
+
+  // Part 3: Content Acquisition & Processing Pipeline
+  // Identify and extract relevant textual content
+  const contentArea = document.querySelector('.content-area');
+  if (!contentArea) {
+    console.error("Nu s-a putut găsi zona de conținut pentru citire");
+    return;
+  }
+
+  // Apply content filtering heuristics to isolate meaningful textual elements
+  const relevantElements = Array.from(contentArea.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6'))
+    .filter(el => {
+      // Exclude navigation, controls, and other non-content elements
+      return !el.closest('.toc') && 
+             !el.closest('.content-nav') && 
+             !el.closest('.accessibility-sidebar') &&
+             el.textContent.trim().length > 0;
     });
 
-    // Prevent text selection during drag
-    e.preventDefault();
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-
-    // Calculate new position with bounds checking
-    const newX = Math.max(0, Math.min(window.innerWidth - 60, e.clientX - startPos.x));
-    const newY = Math.max(0, Math.min(window.innerHeight - 60, e.clientY - startPos.y));
-
-    setPosition({ x: newX, y: newY });
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  // Keyboard accessibility handler
-  const handleKeyDown = (e, action) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      action();
+  // Extract raw text while preserving semantic structure
+  const extractedContent = relevantElements.map(el => {
+    // Apply different emphasis and pausing based on element type
+    const tag = el.tagName.toLowerCase();
+    let prefix = '';
+    let suffix = '.';
+    
+    // Hierarchical structure signaling through pauses and tone
+    if (tag.startsWith('h')) {
+      // Headers get special handling with longer pauses
+      const level = parseInt(tag.substring(1));
+      prefix = ',, '; // Double pause before headers
+      suffix = level <= 2 ? '... ' : '.. '; // Longer pauses after major headers
     }
-  };
+    
+    return prefix + el.textContent.trim() + suffix;
+  }).join(' ');
 
-  // ========== RESET HANDLER ==========
-  const handleResetAll = () => {
-    // Reset all settings
-    setFontSize(0);
-    setHighContrast(false);
-    setLineHeight(0);
-    if (isReading) {
+  if (extractedContent.length === 0) {
+    alert('Nu s-a găsit conținut pentru citire');
+    return;
+  }
+
+  // Part 4: Voice Selection & Optimization System
+  // Get all available voices
+  let voices = window.speechSynthesis.getVoices();
+  
+  // Create voice loading promise mechanism to handle async voice loading
+  let voicesReady;
+  if (voices.length === 0) {
+    voicesReady = new Promise(resolve => {
+      window.speechSynthesis.onvoiceschanged = () => {
+        voices = window.speechSynthesis.getVoices();
+        resolve(voices);
+      };
+      
+      // Safety timeout to prevent hanging if voices never load
+      setTimeout(() => {
+        if (voices.length === 0) {
+          resolve([]);
+        }
+      }, 1000);
+    });
+  } else {
+    voicesReady = Promise.resolve(voices);
+  }
+
+  // Part 5: Voice Selection & Synthesis Initialization
+  voicesReady.then(allVoices => {
+    // Multi-layered voice selection strategy
+    // First priority: Exact Romanian match
+    let romanianVoices = allVoices.filter(voice => 
+      voice.lang === 'ro-RO' || 
+      voice.lang === 'ro' || 
+      voice.name.toLowerCase().includes('român')
+    );
+    
+    // Second priority: Partial Romanian match
+    if (romanianVoices.length === 0) {
+      romanianVoices = allVoices.filter(voice => 
+        voice.lang.startsWith('ro') || 
+        voice.name.toLowerCase().includes('rom')
+      );
+    }
+    
+    // Third priority: Latin-based language fallback (for phonetic similarity)
+    if (romanianVoices.length === 0) {
+      romanianVoices = allVoices.filter(voice => 
+        voice.lang.startsWith('it') || // Italian
+        voice.lang.startsWith('es') || // Spanish
+        voice.lang.startsWith('fr') || // French
+        voice.lang.startsWith('pt')    // Portuguese
+      );
+    }
+    
+    // Final fallback: Any available voice
+    const selectedVoice = romanianVoices.length > 0 ? romanianVoices[0] : null;
+
+    // Part 6: Advanced Text Preprocessing for Romanian with Enhanced Diacritical Handling
+    // Process text for improved Romanian pronunciation
+    const processRomanianText = (text) => {
+      // Step 1: Normalize Unicode representations (handle multiple encoding variations)
+      const normalizedText = text.normalize('NFC');
+      
+      return normalizedText
+        // Step 2: Normalize whitespace and basic formatting
+        .replace(/\s+/g, ' ')
+        
+        // Step 3: Advanced diacritical transformation system
+        // Substitute Romanian diacritics with phonetically equivalent forms
+        // ș → sh (explicit phonetic approximation)
+        .replace(/ș/g, 'sh')
+        .replace(/Ș/g, 'Sh')
+        
+        // ț → ts (phonetic transcription)
+        .replace(/ț/g, 'ts')
+        .replace(/Ț/g, 'Ts')
+        
+        // Handle vowels with appropriate phonetic approximations
+        // ă → a (with special handling for ending syllables)
+        .replace(/ă\b/g, 'ah')       // Word-final position
+        .replace(/ă([bcdfghjklmnpqrstvwxyz])/gi, 'a$1') // Before consonants
+        
+        // â,î → i (closest approximation most engines can handle)
+        .replace(/[âî]/g, 'i')
+        .replace(/[ÂÎ]/g, 'I')
+        
+        // Handle potentially problematic letter combinations
+        .replace(/ce([aăâo])/gi, 'che$1')
+        .replace(/ci([aăâo])/gi, 'chi$1')
+        .replace(/ge([aăâo])/gi, 'ghe$1')
+        .replace(/gi([aăâo])/gi, 'ghi$1')
+        
+        // Step 4: Additional phonological processing
+        // Improve pronunciation of problematic consonant clusters
+        .replace(/str/g, 'shtr')
+        
+        // Step 5: Pause optimization
+        .replace(/([.!?])(\s|$)/g, '$1,, ')
+        .replace(/([;:])(\s|$)/g, '$1, ')
+        .replace(/,(\s|$)/g, ', ')
+        
+        // Step 6: Lexical fine-tuning for common words
+        .replace(/(\b)este(\b)/gi, 'esste')
+        .replace(/(\b)sunt(\b)/gi, 'ssunt')
+        
+        // Step 7: Handle numbers and abbreviations
+        .replace(/(\d+)\.(\d+)/g, '$1 virgulă $2') // Decimal notation
+        .replace(/(\b)etc\.(\b)/gi, 'etcetera')
+        .replace(/(\b)ex\.(\b)/gi, 'exemplu')
+        .replace(/(\b)nr\.(\b)/gi, 'numărul')
+        .replace(/(\b)art\.(\b)/gi, 'articolul');
+    };
+
+    // Part 7: Segmentation & Chunking Algorithm
+    // Split into manageable chunks using linguistic boundaries
+    // This is more sophisticated than the simple regex approach
+    const createChunks = (text) => {
+      // Identify sentence boundaries more accurately
+      const sentenceBoundaries = /(?<=[.!?])\s+(?=[A-ZĂÂÎȘȚ])/g;
+      
+      // Split into sentences first
+      const sentences = text.split(sentenceBoundaries);
+      
+      // Initialize chunks array
+      const chunks = [];
+      let currentChunk = '';
+      const maxChunkLength = 200; // Optimal for speech synthesis processing
+      
+      // Process each sentence
+      sentences.forEach(sentence => {
+        // If sentence is too long, split at logical break points
+        if (sentence.length > maxChunkLength) {
+          // Split at conjunctions and pause markers for natural breaks
+          const breakPoints = /(?<=,|;|:|\s)\s*(?=și|sau|dar|însă|pentru că|deoarece|fiindcă)/g;
+          const sentenceParts = sentence.split(breakPoints).filter(Boolean);
+          
+          sentenceParts.forEach(part => {
+            if ((currentChunk.length + part.length) <= maxChunkLength) {
+              currentChunk += (currentChunk ? ' ' : '') + part;
+            } else {
+              if (currentChunk) {
+                chunks.push(processRomanianText(currentChunk));
+                currentChunk = '';
+              }
+              
+              // If part is still too long, force-break it
+              if (part.length > maxChunkLength) {
+                // Break at word boundaries
+                const words = part.split(/\s+/);
+                let subChunk = '';
+                
+                words.forEach(word => {
+                  if ((subChunk.length + word.length + 1) <= maxChunkLength) {
+                    subChunk += (subChunk ? ' ' : '') + word;
+                  } else {
+                    chunks.push(processRomanianText(subChunk));
+                    subChunk = word;
+                  }
+                });
+                
+                if (subChunk) {
+                  currentChunk = subChunk;
+                }
+              } else {
+                currentChunk = part;
+              }
+            }
+          });
+        } else {
+          // If adding this sentence exceeds max length, start a new chunk
+          if ((currentChunk.length + sentence.length + 1) > maxChunkLength) {
+            chunks.push(processRomanianText(currentChunk));
+            currentChunk = sentence;
+          } else {
+            currentChunk += (currentChunk ? ' ' : '') + sentence;
+          }
+        }
+      });
+      
+      // Add the last chunk if there is any content
+      if (currentChunk) {
+        chunks.push(processRomanianText(currentChunk));
+      }
+      
+      return chunks;
+    };
+
+    // Generate optimized text chunks
+    const textChunks = createChunks(extractedContent);
+
+    // Part 8: Utterance Generation with Romanian Optimization
+    // Create utterances with detailed Romanian-specific configurations
+    const utterances = textChunks.map(chunk => {
+      const utterance = new SpeechSynthesisUtterance(chunk);
+      
+      // Basic language setting
+      utterance.lang = 'ro-RO';
+      
+      // Apply voice if available
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+      
+      // Fine-tune parameters specifically for Romanian
+      utterance.rate = 0.88;    // Slightly slower for better diacritical articulation
+      utterance.pitch = 1.05;   // Slightly higher pitch for improved clarity
+      utterance.volume = 1.0;   // Full volume
+      
+      return utterance;
+    });
+
+    // Part 9: Synthesis Execution & State Management System
+    let currentUtteranceIndex = 0;
+    const speakingState = { active: true };
+    
+    // Define the recursive speaking function with robust state management
+    const speakNextChunk = () => {
+      // Guard condition for termination
+      if (!speakingState.active || currentUtteranceIndex >= utterances.length) {
+        if (currentUtteranceIndex >= utterances.length) {
+          // Natural completion of all text
+          setIsReading(false);
+        }
+        return;
+      }
+      
+      const currentUtterance = utterances[currentUtteranceIndex];
+      
+      // Handle utterance completion
+      currentUtterance.onend = () => {
+        if (!speakingState.active) return;
+        
+        currentUtteranceIndex++;
+        
+        if (currentUtteranceIndex < utterances.length) {
+          // Add a small pause between chunks for natural reading rhythm
+          setTimeout(() => speakNextChunk(), 300);
+        } else {
+          // All chunks completed
+          setIsReading(false);
+        }
+      };
+      
+      // Handle errors
+      currentUtterance.onerror = (event) => {
+        console.error("Eroare de sinteză vocală:", event);
+        speakingState.active = false;
+        setIsReading(false);
+      };
+      
+      // Begin speaking current chunk
+      window.speechSynthesis.speak(currentUtterance);
+    };
+    
+    // Part 10: Synthesis Initialization & UI State Transition
+    // Update UI state
+    setIsReading(true);
+    
+    // Ensure clean start
+    window.speechSynthesis.cancel();
+    
+    // Handle potential browser focus/visibility issues
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Browser tab is hidden, may pause speech in some browsers
+        speakingState.pausedAt = Date.now();
+        window.speechSynthesis.pause();
+      } else {
+        // Browser tab is visible again
+        if (speakingState.pausedAt && (Date.now() - speakingState.pausedAt > 10000)) {
+          // Paused for more than 10 seconds, restart from current chunk
+          window.speechSynthesis.cancel();
+          speakNextChunk();
+        } else {
+          // Short pause, just resume
+          window.speechSynthesis.resume();
+        }
+      }
+    };
+    
+    // Register visibility handler
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // Begin speaking
+    speakNextChunk();
+    
+    // Clean up function for component unmount or stopping
+    const cleanup = () => {
+      speakingState.active = false;
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.speechSynthesis.cancel();
-      setIsReading(false);
+    };
+    
+    // Store cleanup function for potential early termination
+    speakingState.cleanup = cleanup;
+    
+    // Attach cleanup to component context
+    if (!window._speechCleanupFunctions) {
+      window._speechCleanupFunctions = [];
     }
+    window._speechCleanupFunctions.push(cleanup);
+  });
+};
 
-    // Remove all classes
-    document.body.classList.remove(
-      'font-size-larger',
-      'font-size-largest',
-      'high-contrast',
-      'line-height-larger',
-      'line-height-largest'
-    );
-  };
+    // Dragging handlers
+    const handleMouseDown = (e) => {
+        if (isMobile) return; // No dragging on mobile
 
-  // ========== UTILITY FUNCTIONS ==========
-  // Create icon elements
-  const createIcon = (iconName, isLarge = false) => {
+        setIsDragging(true);
+        setStartPos({
+            x: e.clientX - position.x,
+            y: e.clientY - position.y
+        });
+
+        // Prevent text selection during drag
+        e.preventDefault();
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDragging) return;
+
+        // Calculate new position with bounds checking
+        const newX = Math.max(0, Math.min(window.innerWidth - 60, e.clientX - startPos.x));
+        const newY = Math.max(0, Math.min(window.innerHeight - 60, e.clientY - startPos.y));
+
+        setPosition({
+            x: newX,
+            y: newY
+        });
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    // Keyboard accessibility handler
+    const handleKeyDown = (e, action) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            action();
+        }
+    };
+
+    // ========== RESET HANDLER ==========
+    const handleResetAll = () => {
+        // Reset all settings
+        setFontSize(0);
+        setHighContrast(false);
+        setLineHeight(0);
+        if (isReading) {
+            window.speechSynthesis.cancel();
+            setIsReading(false);
+        }
+
+        // Remove all classes
+        document.body.classList.remove(
+            'font-size-larger',
+            'font-size-largest',
+            'high-contrast',
+            'line-height-larger',
+            'line-height-largest'
+        );
+    };
+
+    // ========== UTILITY FUNCTIONS ==========
+    // Create icon elements
+    const createIcon = (iconName, isLarge = false) => {
+        return React.createElement(
+            'div', {
+                className: `a11y-icon${isLarge ? ' large' : ''}`
+            },
+            React.createElement('i', {
+                className: `fas fa-${iconName}`,
+                'aria-hidden': 'true'
+            })
+        );
+    };
+
+    // ========== COMPONENT RENDERING ==========
     return React.createElement(
-      'div', 
-      { className: `a11y-icon${isLarge ? ' large' : ''}` },
-      React.createElement('i', { className: `fas fa-${iconName}`, 'aria-hidden': 'true' })
-    );
-  };
-
-  // ========== COMPONENT RENDERING ==========
-  return React.createElement(
-    React.Fragment,
-    null,
-    // CSS Animations
-    React.createElement(
-      'style',
-      null,
-      `
+        React.Fragment,
+        null,
+        // CSS Animations
+        React.createElement(
+            'style',
+            null,
+            `
         @keyframes pulse {
           0% { opacity: 0.4; }
           50% { opacity: 1; }
@@ -2344,415 +2699,413 @@ window.AccessibilitySidebar = function() {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 20px;
-          height: 20px;
+          width: 24px;
+          height: 24px;
+          font-size: 16px;
         }
 
         .a11y-icon.large {
-          width: 24px;
-          height: 24px;
+          width: 32px;
+          height: 32px;
+          font-size: 20px;
         }
       `
-    ),
-    
-    // Main Sidebar Container
-    React.createElement(
-      'div',
-      {
-        className: `accessibility-sidebar ${isPanelOpen ? 'expanded' : 'collapsed'} ${isMobile ? 'mobile' : 'desktop'}`,
-        style: {
-          position: 'fixed',
-          top: isMobile ? 'auto' : `${position.y}px`,
-          left: isMobile ? 'auto' : `${position.x}px`,
-          bottom: isMobile ? '20px' : 'auto',
-          right: isMobile ? '20px' : 'auto',
-          zIndex: 9999,
-          transition: 'all 0.3s ease',
-          background: highContrast ? '#000' : 'white',
-          color: highContrast ? '#fff' : '#333',
-          border: `2px solid ${highContrast ? '#fff' : '#2196F3'}`,
-          borderRadius: '12px',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-          padding: isPanelOpen ? '16px' : '8px',
-          width: isPanelOpen ? (isMobile ? '280px' : '280px') : '56px',
-          maxWidth: '90vw',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '12px',
-          cursor: isDragging ? 'grabbing' : 'auto'
-        }
-      },
-      
-      // Panel Header
-      React.createElement(
-        'div',
-        {
-          className: 'accessibility-header',
-          style: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '8px',
-            cursor: isMobile ? 'auto' : 'grab',
-            padding: '4px'
-          },
-          onMouseDown: handleMouseDown,
-          role: 'presentation'
-        },
-        
-        // Title (Visible only when panel is open)
-        isPanelOpen && React.createElement(
-          'div',
-          {
-            className: 'title',
-            style: {
-              fontWeight: 'bold',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }
-          },
-          createIcon('gear'),
-          React.createElement('span', null, 'Accesibilitate')
         ),
-        
-        // Toggle Button
+
+        // Main Sidebar Container
         React.createElement(
-          'button',
-          {
-            'aria-label': isPanelOpen ? 'Închide panoul de accesibilitate' : 'Deschide panoul de accesibilitate',
-            title: isPanelOpen ? 'Închide panoul' : 'Opțiuni de accesibilitate',
-            onClick: () => setIsPanelOpen(!isPanelOpen),
-            onKeyDown: (e) => handleKeyDown(e, () => setIsPanelOpen(!isPanelOpen)),
-            style: {
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '8px',
-              borderRadius: '8px',
-              color: highContrast ? '#fff' : '#2196F3',
-              marginLeft: isPanelOpen ? '0' : 'auto',
-              marginRight: isPanelOpen ? '0' : 'auto',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }
-          },
-          isPanelOpen ? createIcon('compress', true) : createIcon('gear', true)
-        ),
-        
-        // Drag Handle (Desktop only, when panel is open)
-        !isMobile && isPanelOpen && React.createElement(
-          'button',
-          {
-            'aria-label': 'Mută panoul de accesibilitate',
-            title: 'Mută panoul (Trage pentru a muta)',
-            style: {
-              background: 'transparent',
-              border: 'none',
-              cursor: 'grab',
-              padding: '4px',
-              color: highContrast ? '#fff' : '#666',
-              display: 'flex'
-            }
-          },
-          createIcon('arrows-up-down-left-right')
+            'div', {
+                className: `accessibility-sidebar ${isPanelOpen ? 'expanded' : 'collapsed'} ${isMobile ? 'mobile' : 'desktop'}`,
+                style: {
+                    position: 'fixed',
+                    top: isMobile ? 'auto' : `${position.y}px`,
+                    left: isMobile ? 'auto' : `${position.x}px`,
+                    bottom: isMobile ? '20px' : 'auto',
+                    right: isMobile ? '20px' : 'auto',
+                    zIndex: 9999,
+                    transition: 'all 0.3s ease',
+                    background: highContrast ? '#000' : 'white',
+                    color: highContrast ? '#fff' : '#333',
+                    border: `2px solid ${highContrast ? '#fff' : '#2196F3'}`,
+                    borderRadius: '12px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                    padding: isPanelOpen ? '16px' : '8px',
+                    width: isPanelOpen ? (isMobile ? '280px' : '280px') : '56px',
+                    maxWidth: '90vw',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px',
+                    cursor: isDragging ? 'grabbing' : 'auto'
+                }
+            },
+
+            // Panel Header
+            React.createElement(
+                'div', {
+                    className: 'accessibility-header',
+                    style: {
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '8px',
+                        cursor: isMobile ? 'auto' : 'grab',
+                        padding: '4px'
+                    },
+                    onMouseDown: handleMouseDown,
+                    role: 'presentation'
+                },
+
+                // Title (Visible only when panel is open)
+                isPanelOpen && React.createElement(
+                    'div', {
+                        className: 'title',
+                        style: {
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px'
+                        }
+                    },
+                    createIcon('wheelchair'),
+                    React.createElement('span', null, 'Accesibilitate')
+                ),
+
+                // Toggle Button
+                React.createElement(
+                    'button', {
+                        'aria-label': isPanelOpen ? 'Închide panoul de accesibilitate' : 'Deschide panoul de accesibilitate',
+                        title: isPanelOpen ? 'Închide panoul' : 'Opțiuni de accesibilitate',
+                        onClick: () => setIsPanelOpen(!isPanelOpen),
+                        onKeyDown: (e) => handleKeyDown(e, () => setIsPanelOpen(!isPanelOpen)),
+                        style: {
+                            background: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: '8px',
+                            borderRadius: '8px',
+                            color: highContrast ? '#fff' : '#2196F3',
+                            marginLeft: isPanelOpen ? '0' : 'auto',
+                            marginRight: isPanelOpen ? '0' : 'auto',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }
+                    },
+                    isPanelOpen ? createIcon('compress', true) : createIcon('wheelchair', true)
+                ),
+
+                // Drag Handle (Desktop only, when panel is open)
+                !isMobile && isPanelOpen && React.createElement(
+                    'button', {
+                        'aria-label': 'Mută panoul de accesibilitate',
+                        title: 'Mută panoul (Trage pentru a muta)',
+                        style: {
+                            background: 'transparent',
+                            border: 'none',
+                            cursor: 'grab',
+                            padding: '4px',
+                            color: highContrast ? '#fff' : '#666',
+                            display: 'flex'
+                        }
+                    },
+                    createIcon('arrows-up-down-left-right')
+                )
+            ),
+
+            // Control Buttons (Visible only when panel is open)
+            isPanelOpen && React.createElement(
+                'div', {
+                    className: 'control-buttons',
+                    style: {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px'
+                    },
+                    role: 'group',
+                    'aria-label': 'Controale de accesibilitate'
+                },
+
+                // Font Size Control
+                React.createElement(
+                    'button', {
+                        'aria-label': `Mărime text: ${fontSize === 0 ? 'normal' : fontSize === 1 ? 'mare' : 'foarte mare'}`,
+                        'aria-pressed': fontSize > 0,
+                        className: `control-button ${fontSize > 0 ? 'active' : ''}`,
+                        onClick: handleFontSizeChange,
+                        onKeyDown: (e) => handleKeyDown(e, handleFontSizeChange),
+                        style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: fontSize > 0 ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
+                            color: fontSize > 0 ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            fontWeight: fontSize > 0 ? 'bold' : 'normal',
+                            transition: 'all 0.2s ease'
+                        }
+                    },
+                    createIcon('font'),
+                    React.createElement(
+                        'div', {
+                            style: {
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start'
+                            }
+                        },
+                        React.createElement('span', null, 'Mărime text'),
+                        React.createElement(
+                            'small', {
+                                style: {
+                                    fontSize: '12px',
+                                    opacity: '0.8'
+                                }
+                            },
+                            fontSize === 0 ? 'Normal' : fontSize === 1 ? 'Mare' : 'Foarte mare'
+                        )
+                    )
+                ),
+
+                // Contrast Control
+                React.createElement(
+                    'button', {
+                        'aria-label': `Contrast: ${highContrast ? 'ridicat' : 'normal'}`,
+                        'aria-pressed': highContrast,
+                        className: `control-button ${highContrast ? 'active' : ''}`,
+                        onClick: handleContrastToggle,
+                        onKeyDown: (e) => handleKeyDown(e, handleContrastToggle),
+                        style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: highContrast ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
+                            color: highContrast ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            fontWeight: highContrast ? 'bold' : 'normal',
+                            transition: 'all 0.2s ease'
+                        }
+                    },
+                    createIcon(highContrast ? 'sun' : 'moon'),
+                    React.createElement(
+                        'div', {
+                            style: {
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start'
+                            }
+                        },
+                        React.createElement('span', null, 'Contrast'),
+                        React.createElement(
+                            'small', {
+                                style: {
+                                    fontSize: '12px',
+                                    opacity: '0.8'
+                                }
+                            },
+                            highContrast ? 'Ridicat' : 'Normal'
+                        )
+                    )
+                ),
+
+                // Line Height Control
+                React.createElement(
+                    'button', {
+                        'aria-label': `Spațiu între rânduri: ${lineHeight === 0 ? 'normal' : lineHeight === 1 ? 'mare' : 'foarte mare'}`,
+                        'aria-pressed': lineHeight > 0,
+                        className: `control-button ${lineHeight > 0 ? 'active' : ''}`,
+                        onClick: handleLineHeightChange,
+                        onKeyDown: (e) => handleKeyDown(e, handleLineHeightChange),
+                        style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: lineHeight > 0 ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
+                            color: lineHeight > 0 ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            fontWeight: lineHeight > 0 ? 'bold' : 'normal',
+                            transition: 'all 0.2s ease'
+                        }
+                    },
+                    createIcon('align-justify'),
+                    React.createElement(
+                        'div', {
+                            style: {
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start'
+                            }
+                        },
+                        React.createElement('span', null, 'Spațiu între rânduri'),
+                        React.createElement(
+                            'small', {
+                                style: {
+                                    fontSize: '12px',
+                                    opacity: '0.8'
+                                }
+                            },
+                            lineHeight === 0 ? 'Normal' : lineHeight === 1 ? 'Mare' : 'Foarte mare'
+                        )
+                    )
+                ),
+
+                // Text-to-Speech Control
+                React.createElement(
+                    'button', {
+                        'aria-label': isReading ? 'Oprește citirea' : 'Citește cu voce tare',
+                        'aria-pressed': isReading,
+                        className: `control-button ${isReading ? 'active' : ''}`,
+                        onClick: handleReadAloud,
+                        onKeyDown: (e) => handleKeyDown(e, handleReadAloud),
+                        disabled: !('speechSynthesis' in window),
+                        style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: isReading ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
+                            color: isReading ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
+                            cursor: 'speechSynthesis' in window ? 'pointer' : 'not-allowed',
+                            textAlign: 'left',
+                            fontWeight: isReading ? 'bold' : 'normal',
+                            opacity: 'speechSynthesis' in window ? 1 : 0.7,
+                            transition: 'all 0.2s ease'
+                        }
+                    },
+                    createIcon(isReading ? 'volume-mute' : 'volume-high'),
+                    React.createElement(
+                        'div', {
+                            style: {
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start'
+                            }
+                        },
+                        React.createElement('span', null, isReading ? 'Oprește citirea' : 'Citește cu voce tare'),
+                        React.createElement(
+                            'small', {
+                                style: {
+                                    fontSize: '12px',
+                                    opacity: '0.8'
+                                }
+                            },
+                            'speechSynthesis' in window ? (isReading ? 'Activ' : 'Inactiv') : 'Indisponibil'
+                        )
+                    )
+                ),
+
+                // Reset All Settings
+                React.createElement(
+                    'button', {
+                        'aria-label': 'Resetează toate setările',
+                        className: 'control-button reset',
+                        onClick: handleResetAll,
+                        onKeyDown: (e) => handleKeyDown(e, handleResetAll),
+                        style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: highContrast ? '#444' : '#f5f5f5',
+                            color: highContrast ? '#fff' : '#666',
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            marginTop: '8px',
+                            transition: 'all 0.2s ease'
+                        }
+                    },
+                    createIcon('undo'),
+                    React.createElement('span', null, 'Resetează setările')
+                )
+            ),
+
+            // Status Indicators (Visible only when panel is collapsed)
+            !isPanelOpen && React.createElement(
+                'div', {
+                    className: 'status-indicators',
+                    style: {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '8px',
+                        marginTop: '8px'
+                    }
+                },
+
+                // Font Size Indicator
+                fontSize > 0 && React.createElement(
+                    'div', {
+                        'aria-hidden': 'true',
+                        title: 'Mărime text mărită',
+                        style: {
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: highContrast ? '#fff' : '#2196F3'
+                        }
+                    }
+                ),
+
+                // Contrast Indicator
+                highContrast && React.createElement(
+                    'div', {
+                        'aria-hidden': 'true',
+                        title: 'Contrast ridicat activat',
+                        style: {
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: highContrast ? '#fff' : '#2196F3'
+                        }
+                    }
+                ),
+
+                // Line Height Indicator
+                lineHeight > 0 && React.createElement(
+                    'div', {
+                        'aria-hidden': 'true',
+                        title: 'Spațiu între rânduri mărit',
+                        style: {
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: highContrast ? '#fff' : '#2196F3'
+                        }
+                    }
+                ),
+
+                // Reading Indicator (with animation)
+                isReading && React.createElement(
+                    'div', {
+                        'aria-hidden': 'true',
+                        title: 'Citire vocală activă',
+                        style: {
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: highContrast ? '#fff' : '#2196F3',
+                            animation: 'pulse 1.5s infinite'
+                        }
+                    }
+                )
+            )
         )
-      ),
-      
-      // Control Buttons (Visible only when panel is open)
-      isPanelOpen && React.createElement(
-        'div',
-        {
-          className: 'control-buttons',
-          style: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px'
-          },
-          role: 'group',
-          'aria-label': 'Controale de accesibilitate'
-        },
-        
-        // Font Size Control
-        React.createElement(
-          'button',
-          {
-            'aria-label': `Mărime text: ${fontSize === 0 ? 'normal' : fontSize === 1 ? 'mare' : 'foarte mare'}`,
-            'aria-pressed': fontSize > 0,
-            className: `control-button ${fontSize > 0 ? 'active' : ''}`,
-            onClick: handleFontSizeChange,
-            onKeyDown: (e) => handleKeyDown(e, handleFontSizeChange),
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '10px 12px',
-              borderRadius: '8px',
-              border: 'none',
-              background: fontSize > 0 ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
-              color: fontSize > 0 ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
-              cursor: 'pointer',
-              textAlign: 'left',
-              fontWeight: fontSize > 0 ? 'bold' : 'normal',
-              transition: 'all 0.2s ease'
-            }
-          },
-          createIcon('font'),
-          React.createElement(
-            'div',
-            {
-              style: {
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start'
-              }
-            },
-            React.createElement('span', null, 'Mărime text'),
-            React.createElement(
-              'small',
-              { style: { fontSize: '12px', opacity: '0.8' } },
-              fontSize === 0 ? 'Normal' : fontSize === 1 ? 'Mare' : 'Foarte mare'
-            )
-          )
-        ),
-        
-        // Contrast Control
-        React.createElement(
-          'button',
-          {
-            'aria-label': `Contrast: ${highContrast ? 'ridicat' : 'normal'}`,
-            'aria-pressed': highContrast,
-            className: `control-button ${highContrast ? 'active' : ''}`,
-            onClick: handleContrastToggle,
-            onKeyDown: (e) => handleKeyDown(e, handleContrastToggle),
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '10px 12px',
-              borderRadius: '8px',
-              border: 'none',
-              background: highContrast ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
-              color: highContrast ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
-              cursor: 'pointer',
-              textAlign: 'left',
-              fontWeight: highContrast ? 'bold' : 'normal',
-              transition: 'all 0.2s ease'
-            }
-          },
-          createIcon(highContrast ? 'sun' : 'moon'),
-          React.createElement(
-            'div',
-            {
-              style: {
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start'
-              }
-            },
-            React.createElement('span', null, 'Contrast'),
-            React.createElement(
-              'small',
-              { style: { fontSize: '12px', opacity: '0.8' } },
-              highContrast ? 'Ridicat' : 'Normal'
-            )
-          )
-        ),
-        
-        // Line Height Control
-        React.createElement(
-          'button',
-          {
-            'aria-label': `Spațiu între rânduri: ${lineHeight === 0 ? 'normal' : lineHeight === 1 ? 'mare' : 'foarte mare'}`,
-            'aria-pressed': lineHeight > 0,
-            className: `control-button ${lineHeight > 0 ? 'active' : ''}`,
-            onClick: handleLineHeightChange,
-            onKeyDown: (e) => handleKeyDown(e, handleLineHeightChange),
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '10px 12px',
-              borderRadius: '8px',
-              border: 'none',
-              background: lineHeight > 0 ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
-              color: lineHeight > 0 ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
-              cursor: 'pointer',
-              textAlign: 'left',
-              fontWeight: lineHeight > 0 ? 'bold' : 'normal',
-              transition: 'all 0.2s ease'
-            }
-          },
-          createIcon('align-justify'),
-          React.createElement(
-            'div',
-            {
-              style: {
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start'
-              }
-            },
-            React.createElement('span', null, 'Spațiu între rânduri'),
-            React.createElement(
-              'small',
-              { style: { fontSize: '12px', opacity: '0.8' } },
-              lineHeight === 0 ? 'Normal' : lineHeight === 1 ? 'Mare' : 'Foarte mare'
-            )
-          )
-        ),
-        
-        // Text-to-Speech Control
-        React.createElement(
-          'button',
-          {
-            'aria-label': isReading ? 'Oprește citirea' : 'Citește cu voce tare',
-            'aria-pressed': isReading,
-            className: `control-button ${isReading ? 'active' : ''}`,
-            onClick: handleReadAloud,
-            onKeyDown: (e) => handleKeyDown(e, handleReadAloud),
-            disabled: !('speechSynthesis' in window),
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '10px 12px',
-              borderRadius: '8px',
-              border: 'none',
-              background: isReading ? (highContrast ? '#fff' : '#e3f2fd') : (highContrast ? '#333' : '#f5f5f5'),
-              color: isReading ? (highContrast ? '#000' : '#2196F3') : (highContrast ? '#fff' : '#333'),
-              cursor: 'speechSynthesis' in window ? 'pointer' : 'not-allowed',
-              textAlign: 'left',
-              fontWeight: isReading ? 'bold' : 'normal',
-              opacity: 'speechSynthesis' in window ? 1 : 0.7,
-              transition: 'all 0.2s ease'
-            }
-          },
-          createIcon(isReading ? 'volume-mute' : 'volume-high'),
-          React.createElement(
-            'div',
-            {
-              style: {
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start'
-              }
-            },
-            React.createElement('span', null, isReading ? 'Oprește citirea' : 'Citește cu voce tare'),
-            React.createElement(
-              'small',
-              { style: { fontSize: '12px', opacity: '0.8' } },
-              'speechSynthesis' in window ? (isReading ? 'Activ' : 'Inactiv') : 'Indisponibil'
-            )
-          )
-        ),
-        
-        // Reset All Settings
-        React.createElement(
-          'button',
-          {
-            'aria-label': 'Resetează toate setările',
-            className: 'control-button reset',
-            onClick: handleResetAll,
-            onKeyDown: (e) => handleKeyDown(e, handleResetAll),
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '10px 12px',
-              borderRadius: '8px',
-              border: 'none',
-              background: highContrast ? '#444' : '#f5f5f5',
-              color: highContrast ? '#fff' : '#666',
-              cursor: 'pointer',
-              textAlign: 'left',
-              marginTop: '8px',
-              transition: 'all 0.2s ease'
-            }
-          },
-          createIcon('undo'),
-          React.createElement('span', null, 'Resetează setările')
-        )
-      ),
-      
-      // Status Indicators (Visible only when panel is collapsed)
-      !isPanelOpen && React.createElement(
-        'div',
-        {
-          className: 'status-indicators',
-          style: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '8px',
-            marginTop: '8px'
-          }
-        },
-        
-        // Font Size Indicator
-        fontSize > 0 && React.createElement(
-          'div',
-          {
-            'aria-hidden': 'true',
-            title: 'Mărime text mărită',
-            style: {
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: highContrast ? '#fff' : '#2196F3'
-            }
-          }
-        ),
-        
-        // Contrast Indicator
-        highContrast && React.createElement(
-          'div',
-          {
-            'aria-hidden': 'true',
-            title: 'Contrast ridicat activat',
-            style: {
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: highContrast ? '#fff' : '#2196F3'
-            }
-          }
-        ),
-        
-        // Line Height Indicator
-        lineHeight > 0 && React.createElement(
-          'div',
-          {
-            'aria-hidden': 'true',
-            title: 'Spațiu între rânduri mărit',
-            style: {
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: highContrast ? '#fff' : '#2196F3'
-            }
-          }
-        ),
-        
-        // Reading Indicator (with animation)
-        isReading && React.createElement(
-          'div',
-          {
-            'aria-hidden': 'true',
-            title: 'Citire vocală activă',
-            style: {
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: highContrast ? '#fff' : '#2196F3',
-              animation: 'pulse 1.5s infinite'
-            }
-          }
-        )
-      )
-    )
-  );
+    );
 };
 
 
@@ -2834,125 +3187,6 @@ function initMobileToc() {
         
         mobileTocToggle.textContent = expanded ? 'Arată cuprinsul' : 'Ascunde cuprinsul';
     });
-}
-
-// Initialize accessibility controls
-function initAccessibilityControls() {
-    // Font size control
-    if (fontSizeToggle) {
-        let fontSizeState = 0; // 0: normal, 1: larger, 2: largest
-        fontSizeToggle.addEventListener('click', () => {
-            fontSizeState = (fontSizeState + 1) % 3;
-            document.body.classList.remove('font-size-larger', 'font-size-largest');
-            
-            if (fontSizeState === 1) {
-                document.body.classList.add('font-size-larger');
-                fontSizeToggle.innerHTML = '<span aria-hidden="true">A+</span> Mărime text (mare)';
-            } else if (fontSizeState === 2) {
-                document.body.classList.add('font-size-largest');
-                fontSizeToggle.innerHTML = '<span aria-hidden="true">A++</span> Mărime text (foarte mare)';
-            } else {
-                fontSizeToggle.innerHTML = '<span aria-hidden="true">A</span> Mărime text (normal)';
-            }
-        });
-    }
-    
-    // High contrast control
-    if (contrastToggle) {
-        contrastToggle.addEventListener('click', () => {
-            document.body.classList.toggle('high-contrast');
-            if (document.body.classList.contains('high-contrast')) {
-                contrastToggle.innerHTML = '<span aria-hidden="true">◐</span> Contrast normal';
-            } else {
-                contrastToggle.innerHTML = '<span aria-hidden="true">◐</span> Contrast ridicat';
-            }
-        });
-    }
-    
-    // Line height control
-    if (lineHeightToggle) {
-        let lineHeightState = 0; // 0: normal, 1: larger, 2: largest
-        lineHeightToggle.addEventListener('click', () => {
-            lineHeightState = (lineHeightState + 1) % 3;
-            document.body.classList.remove('line-height-larger', 'line-height-largest');
-            
-            if (lineHeightState === 1) {
-                document.body.classList.add('line-height-larger');
-                lineHeightToggle.innerHTML = '<span aria-hidden="true">≡</span> Spațiu între rânduri (mare)';
-            } else if (lineHeightState === 2) {
-                document.body.classList.add('line-height-largest');
-                lineHeightToggle.innerHTML = '<span aria-hidden="true">≡</span> Spațiu între rânduri (foarte mare)';
-            } else {
-                lineHeightToggle.innerHTML = '<span aria-hidden="true">≡</span> Spațiu între rânduri (normal)';
-            }
-        });
-    }
-    
-    // Read aloud functionality (if Speech Synthesis is available)
-    if (readAloudToggle && 'speechSynthesis' in window) {
-        let isReading = false;
-        let currentUtterance = null;
-        
-        readAloudToggle.addEventListener('click', () => {
-            if (isReading) {
-                window.speechSynthesis.cancel();
-                isReading = false;
-                readAloudToggle.innerHTML = '<span aria-hidden="true">🔊</span> Citește cu voce tare';
-            } else {
-                // Get all the text from the main content
-                const contentArea = $('.content-area');
-                if (!contentArea) return;
-                
-                // Get all text nodes that are not in the TOC or navigation
-                const textContent = Array.from(contentArea.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6'))
-                    .filter(el => !el.closest('.toc') && !el.closest('.content-nav'))
-                    .map(el => el.textContent)
-                    .join('. ');
-                
-                // Split into manageable chunks (browsers often struggle with very long text)
-                const chunks = textContent.match(/.{1,1000}(?:\.|\?|!|$)/g) || [];
-                
-                let utterances = chunks.map(chunk => {
-                    const utterance = new SpeechSynthesisUtterance(chunk);
-                    utterance.lang = 'ro-RO';
-                    return utterance;
-                });
-                
-                // Start reading
-                let currentIndex = 0;
-                
-                const speakNext = () => {
-                    if (currentIndex < utterances.length) {
-                        currentUtterance = utterances[currentIndex];
-                        
-                        currentUtterance.onend = () => {
-                            currentIndex++;
-                            if (currentIndex < utterances.length && isReading) {
-                                setTimeout(speakNext, 500); // Small pause between chunks
-                            } else if (currentIndex >= utterances.length) {
-                                isReading = false;
-                                readAloudToggle.innerHTML = '<span aria-hidden="true">🔊</span> Citește cu voce tare';
-                            }
-                        };
-                        
-                        window.speechSynthesis.speak(currentUtterance);
-                    }
-                };
-                
-                isReading = true;
-                readAloudToggle.innerHTML = '<span aria-hidden="true">🔊</span> Oprește citirea';
-                
-                // Make sure we cancel any previous reading
-                window.speechSynthesis.cancel();
-                speakNext();
-            }
-        });
-    } else if (readAloudToggle) {
-        // Speech synthesis not available
-        readAloudToggle.disabled = true;
-        readAloudToggle.innerHTML = '<span aria-hidden="true">🔇</span> Citire indisponibilă';
-        readAloudToggle.title = 'Browserul dvs. nu suportă citirea cu voce tare';
-    }
 }
 
 // Initialize table of contents highlighting
@@ -3249,7 +3483,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initReadingProgress();
     initBackToTop();
     initMobileToc();
-    initAccessibilityControls();
     initTocHighlighting();
     initLanguageSelector();
     initSearch();
