@@ -1,0 +1,2601 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termeni și Condiții - testautism.ro</title>
+    <meta name="description" content="Termenii și condițiile de utilizare pentru platforma testautism.ro, care oferă chestionare online de autoevaluare pentru trăsături din spectrul autist.">
+    <style>
+        /* CSS Reset and Base Styles */
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #1976D2;
+            --text-color: #333;
+            --bg-color: #fff;
+            --light-bg: #f5f9ff;
+            --link-color: #0d6efd;
+            --visited-link: #6610f2;
+            --focus-outline: 3px solid #2196F3;
+            --border-color: #e0e0e0;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --error-color: #F44336;
+            --heading-color: #1d3557;
+            --quote-bg: #e3f2fd;
+            --font-size-base: 1rem;
+            --line-height-base: 1.6;
+            --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            --spacing-unit: 1rem;
+            --border-radius: 4px;
+            --container-width: 1200px;
+            --sidebar-width: 280px;
+            --toc-highlight: #2196F3;
+            --summary-bg: #e8f5e9;
+        }
+
+        /* Dark mode variables */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-color: #f0f0f0;
+                --bg-color: #121212;
+                --light-bg: #1e1e1e;
+                --border-color: #444;
+                --link-color: #90caf9;
+                --visited-link: #ce93d8;
+                --heading-color: #bbdefb;
+                --quote-bg: #263238;
+                --summary-bg: #1b5e20;
+            }
+        }
+
+        /* Alternative styles for high contrast mode */
+        @media (prefers-contrast: more) {
+            :root {
+                --primary-color: #0000ff;
+                --secondary-color: #0000cc;
+                --text-color: #000000;
+                --bg-color: #ffffff;
+                --light-bg: #f0f0f0;
+                --link-color: #0000ff;
+                --visited-link: #800080;
+                --focus-outline: 3px solid #000000;
+                --border-color: #000000;
+                --heading-color: #000000;
+                --quote-bg: #f0f0f0;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 100%;
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px; /* Accounts for fixed header */
+            line-height: var(--line-height-base);
+        }
+
+        /* For users who prefer reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            
+            .animated, .fade-in, .slide-in, .back-to-top, 
+            .toc-highlight, .collapsible-transition {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            line-height: var(--line-height-base);
+            font-size: var(--font-size-base);
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--heading-color);
+            margin: 1.5em 0 0.5em;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.3em;
+            margin-top: 0.5em;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.3em;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        h4 {
+            font-size: 1.3rem;
+        }
+
+        h5 {
+            font-size: 1.2rem;
+        }
+
+        h6 {
+            font-size: 1.1rem;
+        }
+
+        p, ul, ol {
+            margin-bottom: 1.5rem;
+        }
+
+        ul, ol {
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: underline;
+            text-underline-offset: 0.15em;
+            text-decoration-thickness: 0.08em;
+            transition: color 0.2s ease-in-out;
+        }
+
+        a:visited {
+            color: var(--visited-link);
+        }
+
+        a:hover, a:active {
+            color: var(--secondary-color);
+            text-decoration-thickness: 0.12em;
+        }
+
+        a:focus {
+            outline: var(--focus-outline);
+            outline-offset: 3px;
+            text-decoration: none;
+        }
+
+        blockquote {
+            margin: 1.5rem 0;
+            padding: 1rem 1.5rem;
+            border-left: 5px solid var(--primary-color);
+            background-color: var(--quote-bg);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        code {
+            font-family: var(--font-family-mono);
+            background-color: var(--light-bg);
+            padding: 0.2em 0.4em;
+            border-radius: var(--border-radius);
+            font-size: 0.9em;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        th, td {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--light-bg);
+            font-weight: 700;
+        }
+
+        /* List styles */
+        dt {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        dd {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Accessibility utilities */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        .sr-only-focusable:not(:focus) {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Skip links */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.2s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+            outline: none;
+        }
+
+        /* Layout */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header-container {
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem 0;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .content-area {
+            flex: 1;
+            min-width: 0; /* Prevent content from overflowing */
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+            padding-right: 1rem;
+            scrollbar-width: thin;
+            display: block;
+        }
+
+        /* Hide sidebar on mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+        }
+
+        .footer {
+            background-color: var(--light-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Table of Contents */
+        .toc {
+            padding: 1rem;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .toc h2 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            border-bottom: none;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0;
+        }
+
+        .toc ol {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.25rem;
+            padding: 0.25rem 0;
+        }
+
+        .toc li a {
+            display: block;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+        }
+
+        .toc li a:hover {
+            background-color: rgba(33, 150, 243, 0.1);
+        }
+
+        .toc li a:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .toc li a.active {
+            background-color: rgba(33, 150, 243, 0.15);
+            border-left: 3px solid var(--toc-highlight);
+            font-weight: 600;
+        }
+
+        .toc-level-2 {
+            padding-left: 1rem;
+        }
+
+        .toc-level-3 {
+            padding-left: 2rem;
+        }
+
+        /* Mobile TOC */
+        .mobile-toc-toggle {
+            display: none;
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .mobile-toc-toggle:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.5);
+        }
+
+        .mobile-toc {
+            display: none;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toc-toggle {
+                display: block;
+            }
+
+            .mobile-toc.show {
+                display: block;
+            }
+        }
+
+        /* Term article styling */
+        .term-article {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .term-article:last-child {
+            border-bottom: none;
+        }
+
+        .term-article h2 {
+            margin-top: 3rem;
+        }
+
+        .term-article h2:first-child {
+            margin-top: 0;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            line-height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 99;
+            border: none;
+        }
+
+        .back-to-top:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.5);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Accordion Styles for Mobile */
+        .accordion-toggle {
+            display: none;
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .accordion-toggle::after {
+            content: "▼";
+            position: absolute;
+            right: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .accordion-toggle[aria-expanded="true"]::after {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .accordion-toggle {
+                display: block;
+            }
+
+            .accordion-content {
+                display: none;
+                padding: 1rem;
+                border: 1px solid var(--border-color);
+                border-top: none;
+                border-radius: 0 0 var(--border-radius) var(--border-radius);
+                margin-top: -1rem;
+                margin-bottom: 1rem;
+            }
+
+            .accordion-content.show {
+                display: block;
+            }
+        }
+
+        /* Executive Summary Styling */
+        .executive-summary {
+            background-color: var(--summary-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .executive-summary h2 {
+            margin-top: 0;
+            border-bottom: none;
+        }
+
+        .simplified-terms {
+            background-color: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .simplified-terms h2 {
+            margin-top: 0;
+            border-bottom: none;
+        }
+
+        /* Accessibility Controls */
+        .accessibility-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .a11y-button {
+            padding: 0.5rem 1rem;
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .a11y-button:hover {
+            background-color: rgba(33, 150, 243, 0.1);
+        }
+
+        .a11y-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.5);
+        }
+
+        /* Font Size Controls */
+        body.font-size-larger {
+            font-size: 1.2rem;
+        }
+
+        body.font-size-largest {
+            font-size: 1.4rem;
+        }
+
+        /* High Contrast Mode */
+        body.high-contrast {
+            --text-color: #ffffff;
+            --bg-color: #000000;
+            --light-bg: #333333;
+            --link-color: #ffff00;
+            --visited-link: #ffccff;
+            --heading-color: #ffffff;
+            --border-color: #ffffff;
+            --primary-color: #ffff00;
+            --secondary-color: #ffff00;
+            --quote-bg: #333333;
+        }
+
+        /* Line Height Controls */
+        body.line-height-larger {
+            line-height: 1.8;
+        }
+
+        body.line-height-largest {
+            line-height: 2;
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 1024px) {
+            :root {
+                --sidebar-width: 240px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            h3 {
+                font-size: 1.3rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .main-content {
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                overflow-y: visible;
+                padding-right: 0;
+            }
+
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+                line-height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .accessibility-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .a11y-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            html, body {
+                font-size: 12pt;
+                line-height: 1.4;
+                background: #fff;
+                color: #000;
+            }
+
+            .header-container, .sidebar, .footer, .skip-link, 
+            .back-to-top, .mobile-toc-toggle, .accessibility-controls {
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+
+            .main-content {
+                display: block;
+                padding: 0;
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                page-break-after: avoid;
+                page-break-inside: avoid;
+            }
+
+            p, blockquote, ul, ol, dl, table {
+                page-break-inside: avoid;
+            }
+
+            a {
+                text-decoration: underline;
+                color: #000;
+            }
+
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+                font-size: 90%;
+            }
+
+            a[href^="#"]:after {
+                display: none;
+            }
+
+            img {
+                max-width: 100% !important;
+                page-break-inside: avoid;
+            }
+
+            @page {
+                margin: 2cm;
+            }
+
+            article {
+                page-break-before: always;
+            }
+
+            h1 {
+                font-size: 24pt;
+            }
+
+            h2 {
+                font-size: 18pt;
+            }
+
+            h3 {
+                font-size: 16pt;
+            }
+            
+            /* Ensure URLs are visible in print */
+            .law-reference:after {
+                content: " (" attr(href) ")";
+                font-size: 90%;
+            }
+        }
+
+        /* Law references styling */
+        .law-reference {
+            font-style: italic;
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--link-color);
+            position: relative;
+        }
+
+        .law-reference:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            white-space: nowrap;
+            z-index: 10;
+            font-style: normal;
+            font-size: 0.9rem;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        /* Responsive iframe for embedded laws */
+        .law-embed-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .law-embed-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+        }
+
+        /* Document Outline Section */
+        .document-outline {
+            margin-bottom: 3rem;
+        }
+
+        .outline-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .outline-list > li {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .outline-list > li > ol {
+            font-weight: normal;
+            margin-top: 0.5rem;
+        }
+
+        /* Helper classes */
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        .mb-5 { margin-bottom: 3rem; }
+
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mt-4 { margin-top: 2rem; }
+        .mt-5 { margin-top: 3rem; }
+
+        .px-1 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-2 { padding-left: 1rem; padding-right: 1rem; }
+        .px-3 { padding-left: 1.5rem; padding-right: 1.5rem; }
+
+        .py-1 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-2 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-3 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+
+        .text-primary { color: var(--primary-color); }
+        .text-secondary { color: var(--secondary-color); }
+        .text-success { color: var(--success-color); }
+        .text-warning { color: var(--warning-color); }
+        .text-danger { color: var(--error-color); }
+        
+        .bg-light { background-color: var(--light-bg); }
+        
+        .border { border: 1px solid var(--border-color); }
+        .rounded { border-radius: var(--border-radius); }
+        
+        .shadow { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        
+        .w-100 { width: 100%; }
+        .d-block { display: block; }
+        .d-flex { display: flex; }
+        .justify-between { justify-content: space-between; }
+        .align-center { align-items: center; }
+        .flex-wrap { flex-wrap: wrap; }
+
+        /* Additional accessibility features */
+        .visually-highlighted:focus {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 3px;
+        }
+
+        /* Content navigation */
+        .content-nav {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-prev, .nav-next {
+            padding: 0.5rem 1rem;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-prev:hover, .nav-next:hover {
+            background-color: rgba(33, 150, 243, 0.1);
+        }
+
+        /* Search box */
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.25);
+        }
+
+        .search-results {
+            margin-top: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .search-results.show {
+            display: block;
+        }
+
+        .search-results ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .search-results li {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-results li:last-child {
+            border-bottom: none;
+        }
+
+        .search-results a {
+            text-decoration: none;
+            display: block;
+            color: var(--text-color);
+        }
+
+        .search-results a:hover {
+            background-color: var(--light-bg);
+        }
+
+        .search-highlight {
+            background-color: var(--warning-color);
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
+        .search-count {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        /* Progress indicator */
+        .reading-progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: transparent;
+            z-index: 1001;
+        }
+
+        .reading-progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Language selection */
+        .language-selector {
+            margin-left: auto;
+            position: relative;
+        }
+
+        .current-language {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+            min-width: 150px;
+        }
+
+        .language-dropdown.show {
+            display: block;
+        }
+
+        .language-option {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .language-option:hover {
+            background-color: var(--light-bg);
+        }
+
+        .language-flag {
+            width: 20px;
+            height: 15px;
+            border-radius: 2px;
+            object-fit: cover;
+        }
+
+        /* Footnotes */
+        .footnote {
+            font-size: 0.85em;
+            vertical-align: super;
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 2px;
+        }
+
+        .footnotes {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footnotes ol {
+            padding-left: 1.5rem;
+        }
+
+        .footnotes li {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .footnote-backref {
+            margin-left: 0.5rem;
+            font-size: 0.85em;
+        }
+
+        /* Legislative Tooltips */
+        .law-tooltip {
+            cursor: help;
+            border-bottom: 1px dotted var(--primary-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            border-radius: var(--border-radius);
+            padding: 0.5rem 1rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 250px;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--primary-color) transparent transparent transparent;
+        }
+
+        .law-tooltip:hover .tooltip-text,
+        .law-tooltip:focus .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* For keyboard users */
+        .law-tooltip:focus {
+            outline: none;
+        }
+
+        .law-tooltip:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Definition lists for terms */
+        .term-definition {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--light-bg);
+        }
+
+        .term-definition dt {
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .term-definition dd {
+            margin-left: 0;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip link for keyboard users -->
+    <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
+
+    <!-- Reading progress indicator -->
+    <div class="reading-progress-container">
+        <div class="reading-progress-bar" id="readingProgress"></div>
+    </div>
+
+    <!-- Page header -->
+    <header class="header-container" id="top">
+        <div class="container">
+            <div class="d-flex justify-between align-center">
+                <div>
+                    <a href="#" class="d-flex align-center" style="text-decoration: none;">
+                        <span style="font-weight: 700; font-size: 1.3rem; color: var(--heading-color);">testautism.ro</span>
+                    </a>
+                </div>
+                <div class="language-selector">
+                    <div class="current-language" id="currentLanguage">
+                        <img src="https://flagcdn.com/w20/ro.png" alt="Romanian flag" class="language-flag">
+                        <span>Română</span>
+                    </div>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <div class="language-option" data-lang="ro">
+                            <img src="https://flagcdn.com/w20/ro.png" alt="Romanian flag" class="language-flag">
+                            <span>Română</span>
+                        </div>
+                        <div class="language-option" data-lang="en">
+                            <img src="https://flagcdn.com/w20/gb.png" alt="English flag" class="language-flag">
+                            <span>English</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <main class="container main-content">
+            <!-- Sidebar with Table of Contents -->
+            <aside class="sidebar" id="sidebar">
+                <div class="toc" id="tableSidebar">
+                    <h2>Cuprins</h2>
+                    <ol class="toc-list">
+                        <li><a href="#rezumat-executiv">Rezumat executiv</a></li>
+                        <li><a href="#rezumat-ce-trebuie-sa-stii">Rezumat pe înțelesul tuturor – Ce trebuie să știi?</a></li>
+                        <li><a href="#versiune-completa">Termenii și Condiții - versiune completă</a></li>
+                        <li><a href="#art-1">Art. 1. Introducere și acceptarea Termenilor</a></li>
+                        <li><a href="#art-2">Art. 2. Definiții</a></li>
+                        <li><a href="#art-3">Art. 3. Eligibilitate și utilizarea de către minori</a></li>
+                        <li><a href="#art-4">Art. 4. Descrierea Serviciului oferit de testautism.ro</a></li>
+                        <li><a href="#art-5">Art. 5. Obligațiile și conduitele permise ale Utilizatorului</a></li>
+                        <li><a href="#art-6">Art. 6. Proprietatea intelectuală</a></li>
+                        <li><a href="#art-7">Art. 7. Protecția datelor personale și Cookies</a></li>
+                        <li><a href="#art-8">Art. 8. Declinator de răspundere</a></li>
+                        <li><a href="#art-9">Art. 9. Limitarea răspunderii Operatorului</a></li>
+                        <li><a href="#art-10">Art. 10. Forța majoră</a></li>
+                        <li><a href="#art-11">Art. 11. Indemnizație</a></li>
+                        <li><a href="#art-12">Art. 12. Legea aplicabilă și soluționarea disputelor</a></li>
+                        <li><a href="#art-13">Art. 13. Modificarea Termenilor</a></li>
+                        <li><a href="#art-14">Art. 14. Contact și comunicări</a></li>
+                        <li><a href="#art-15">Art. 15. Divizibilitatea clauzelor</a></li>
+                        <li><a href="#art-16">Art. 16. Întregul acord</a></li>
+                    </ol>
+                </div>
+            </aside>
+
+            <!-- Main content area -->
+            <article class="content-area" id="main-content">
+                <h1>Termeni și Condiții pentru platforma testautism.ro</h1>
+                
+                <!-- Accessibility controls -->
+                <div class="accessibility-controls">
+                    <button id="fontSizeToggle" class="a11y-button" aria-label="Mărime text">
+                        <span aria-hidden="true">A</span> Mărime text
+                    </button>
+                    <button id="contrastToggle" class="a11y-button" aria-label="Contrast ridicat">
+                        <span aria-hidden="true">◐</span> Contrast ridicat
+                    </button>
+                    <button id="lineHeightToggle" class="a11y-button" aria-label="Spațiu între rânduri">
+                        <span aria-hidden="true">≡</span> Spațiu între rânduri
+                    </button>
+                    <button id="readAloudToggle" class="a11y-button" aria-label="Citește cu voce tare">
+                        <span aria-hidden="true">🔊</span> Citește cu voce tare
+                    </button>
+                </div>
+
+                <!-- Search functionality -->
+                <div class="search-container">
+                    <label for="searchInput" class="sr-only">Caută în document</label>
+                    <input type="text" id="searchInput" class="search-box" placeholder="Caută în document..." aria-label="Caută în document">
+                    <div id="searchCount" class="search-count"></div>
+                    <div id="searchResults" class="search-results" aria-live="polite">
+                        <ul id="searchResultsList"></ul>
+                    </div>
+                </div>
+
+                <!-- Mobile table of contents toggle -->
+                <button class="mobile-toc-toggle" id="mobileTocToggle" aria-expanded="false" aria-controls="mobileToc">
+                    Arată cuprinsul
+                </button>
+                
+                <div class="mobile-toc" id="mobileToc">
+                    <div class="toc">
+                        <h2>Cuprins</h2>
+                        <ol class="toc-list">
+                            <li><a href="#rezumat-executiv">Rezumat executiv</a></li>
+                            <li><a href="#rezumat-ce-trebuie-sa-stii">Rezumat pe înțelesul tuturor – Ce trebuie să știi?</a></li>
+                            <li><a href="#versiune-completa">Termenii și Condiții - versiune completă</a></li>
+                            <li><a href="#art-1">Art. 1. Introducere și acceptarea Termenilor</a></li>
+                            <li><a href="#art-2">Art. 2. Definiții</a></li>
+                            <li><a href="#art-3">Art. 3. Eligibilitate și utilizarea de către minori</a></li>
+                            <li><a href="#art-4">Art. 4. Descrierea Serviciului oferit de testautism.ro</a></li>
+                            <li><a href="#art-5">Art. 5. Obligațiile și conduitele permise ale Utilizatorului</a></li>
+                            <li><a href="#art-6">Art. 6. Proprietatea intelectuală</a></li>
+                            <li><a href="#art-7">Art. 7. Protecția datelor personale și Cookies</a></li>
+                            <li><a href="#art-8">Art. 8. Declinator de răspundere</a></li>
+                            <li><a href="#art-9">Art. 9. Limitarea răspunderii Operatorului</a></li>
+                            <li><a href="#art-10">Art. 10. Forța majoră</a></li>
+                            <li><a href="#art-11">Art. 11. Indemnizație</a></li>
+                            <li><a href="#art-12">Art. 12. Legea aplicabilă și soluționarea disputelor</a></li>
+                            <li><a href="#art-13">Art. 13. Modificarea Termenilor</a></li>
+                            <li><a href="#art-14">Art. 14. Contact și comunicări</a></li>
+                            <li><a href="#art-15">Art. 15. Divizibilitatea clauzelor</a></li>
+                            <li><a href="#art-16">Art. 16. Întregul acord</a></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Executive Summary -->
+                <section id="rezumat-executiv" class="executive-summary">
+                    <h2>Rezumat executiv</h2>
+                    <p>Platforma <strong>testautism.ro</strong> oferă gratuit chestionare online de autoevaluare pentru trăsături din spectrul autist, respectând atât legislația din România, cât și normele europene în vigoare.</p>
+                    
+                    <p>Acest document de "Termeni și Condiții" definește cadrul juridic de utilizare a site-ului, cuprinzând prevederi esențiale privind <strong>acceptarea termenilor</strong>, <strong>drepturile și obligațiile utilizatorilor</strong>, <strong>protecția datelor</strong>, <strong>proprietatea intelectuală</strong>, precum și <strong>limitările de răspundere</strong> ale operatorului site-ului.</p>
+                    
+                    <p>În rezumat, utilizatorii trebuie să știe că accesarea și folosirea platformei implică acordul lor cu acești termeni. Site-ul <strong>nu colectează date cu caracter personal</strong> și <strong>nu folosește cookies</strong> (decât stocare locală temporară pentru comoditatea utilizatorului), aliniindu-se cerințelor <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj" class="law-reference" target="_blank" rel="noopener noreferrer" title="Regulamentul General privind Protecția Datelor">GDPR</a> și legislației privind ePrivacy.</p>
+                    
+                    <p>De asemenea, platforma <strong>nu furnizează un diagnostic medical</strong>; chestionarele servesc strict ca <strong>instrumente orientative de screening</strong>, încurajând consultarea unui specialist calificat pentru un diagnostic oficial.</p>
+                    
+                    <p>Toate rezultatele și informațiile sunt oferite „ca atare", <strong>fără nicio garanție</strong> de acuratețe absolută sau de adecvare pentru un scop medical specific.</p>
+                    
+                    <p>Termenii includ clauze detaliate de <strong>declinare a răspunderii</strong> (atât în ceea ce privește garanțiile, cât și eventuala utilizare eronată a rezultatelor de către utilizatori) și de <strong>limitare a răspunderii legale</strong> a operatorilor site-ului, în limita permisă de lege.</p>
+                    
+                    <p>Se specifică jurisdicția aplicabilă (legea română) și mecanismele de soluționare a disputelor, precum și aspecte legate de <strong>forța majoră</strong>, <strong>modificarea termenilor</strong>, <strong>divizibilitatea</strong> clauzelor și faptul că prezentul document constituie <strong>întregul acord</strong> dintre părți cu privire la utilizarea platformei.</p>
+                    
+                    <p>În elaborarea acestor termeni s-a urmărit un limbaj incluziv și respectuos, în conformitate cu principiile neurodivergenței și cu <a href="https://www.refworld.org/legal/agreements/unga/2006/en/90142" class="law-reference" target="_blank" rel="noopener noreferrer" title="Convenția privind drepturile persoanelor cu dizabilități">Convenția ONU privind drepturile persoanelor cu dizabilități</a>, asigurând totodată transparența și responsabilitatea cerute de <a href="https://eur-lex.europa.eu/eli/reg/2022/2065/oj" class="law-reference" target="_blank" rel="noopener noreferrer" title="Digital Services Act">Digital Services Act</a> și de ghidurile etice ale <a href="https://www.who.int/publications/i/item/9789240029200" class="law-reference" target="_blank" rel="noopener noreferrer" title="Ghidurile OMS pentru sănătatea digitală">OMS pentru sănătatea digitală</a>.</p>
+                </section>
+
+                <!-- Simplified terms summary -->
+                <section id="rezumat-ce-trebuie-sa-stii" class="simplified-terms">
+                    <h2>Rezumat pe înțelesul tuturor – <em>Ce trebuie să știi?</em></h2>
+                    <ul>
+                        <li><strong>Utilizarea site-ului implică acordul tău.</strong> Când folosești testautism.ro, ești de acord cu toți termenii de mai jos. Dacă nu ești de acord, te rugăm să nu folosești site-ul.</li>
+
+                        <li><strong>Scop informativ, nu diagnostic.</strong> Testele de pe site <strong>nu reprezintă un diagnostic medical</strong>. Rezultatele îți pot indica dacă ai trăsături autiste, dar <strong>doar un medic sau psiholog</strong> poate pune un diagnostic oficial. Folosește rezultatele ca punct de pornire și cere sfatul unui specialist.</li>
+
+                        <li><strong>Datele tale rămân la tine.</strong> Nu îți cerem nume, email sau alte date personale. Răspunsurile la chestionar <strong>nu se trimit</strong> către server – ele se salvează temporar <strong>doar în browserul tău</strong>, ca să poți continua testul. Site-ul nu folosește cookie-uri de tracking sau alte urmăritoare.</li>
+
+                        <li><strong>Gratuit și fără obligații.</strong> Toate testele sunt gratuite. Nu avem reclame comerciale ascunse. Există opțiuni de donație, dar sunt <strong>voluntare</strong> și nu condiționează folosirea site-ului.</li>
+
+                        <li><strong>Limbaj prietenos și respectuos.</strong> Ne adresăm tuturor într-un mod incluziv și fără stigmatizare. De exemplu, folosim termenul <em>„persoană autistă"</em> pentru a sublinia identitatea, în linie cu preferințele multor membri ai comunității.</li>
+
+                        <li><strong>Drepturile tale.</strong> Ai dreptul să folosești site-ul liber atâta timp cât respecți regulile de mai jos. Conținutul site-ului (texte, întrebări, rezultate) este protejat de lege – îl poți folosi pentru uz personal, dar <strong>nu-l copia sau distribui</strong> fără permisiune.</li>
+
+                        <li><strong>Fără garanții absolute.</strong> Facem tot posibilul să menținem informațiile corecte și site-ul funcțional, dar nu garantăm că totul va fi perfect. Site-ul poate fi indisponibil temporar sau informațiile pot deveni în timp neactualizate. Nu ne asumăm răspunderea pentru deciziile pe care le iei pe baza rezultatelor testelor – cel mai sigur este să consulți un specialist.</li>
+
+                        <li><strong>Legea care se aplică.</strong> Termenii aceștia sunt guvernați de <strong>legea din România</strong>. Dacă apare vreo dispută, încercăm întâi rezolvarea amiabilă, iar dacă nu merge, se va ocupa o instanță din România.</li>
+                    </ul>
+                </section>
+
+                <!-- Full T&C document -->
+                <section id="versiune-completa" class="term-article">
+                    <h2>Termenii și Condiții - versiune completă</h2>
+                    
+                    <section id="art-1" class="term-article">
+                        <h2>Art. 1. Introducere și acceptarea Termenilor</h2>
+                        
+                        <p>1.1. Prezentele <strong>Termeni și Condiții</strong> ("Termenii") constituie acordul legal între operatorul platformei <strong>testautism.ro</strong> (denumit în continuare "<strong>Operatorul</strong>" sau "<strong>noi</strong>") și fiecare persoană care accesează sau utilizează platforma (denumită "<strong>Utilizatorul</strong>" sau "<strong>tu</strong>").</p>
+                        
+                        <p>Prin accesarea, navigarea sau utilizarea efectivă a oricărei funcționalități a site-ului testautism.ro ("<strong>Site-ul</strong>"), declari că ai citit, ai înțeles și ești de acord să respecți integral acești Termeni.</p>
+                        
+                        <p><strong>Dacă nu ești de acord</strong> cu oricare dintre prevederile de mai jos, te rugăm <strong>să nu utilizezi Site-ul</strong>.</p>
+                        
+                        <p>1.2. Termenii se aplică <strong>oricărei utilizări</strong> a platformei, indiferent dacă ești un utilizator nou sau recurent, și stabilesc condițiile în care furnizăm serviciile noastre informaționale.</p>
+                        
+                        <p>Acești Termeni au fost întocmiți în conformitate cu legislația aplicabilă din România, inclusiv <a href="https://www.legi-internet.ro/legislatie-itc/comert-electronic/legea-comertului-electronic.html" class="law-reference" target="_blank" rel="noopener noreferrer" title="Legea nr. 365/2002 privind comerțul electronic">Legea nr. 365/2002 privind comerțul electronic</a>, și cu reglementările relevante ale Uniunii Europene, precum <a href="https://eur-lex.europa.eu/eli/dir/2000/31/oj" class="law-reference" target="_blank" rel="noopener noreferrer" title="Directiva 2000/31/CE privind comerțul electronic">Directiva privind comerțul electronic 2000/31/CE</a>, asigurând transparența și caracterul echitabil al prezentului acord online.</p>
+                        
+                        <p>1.3. <strong>Acceptarea Termenilor</strong> de către Utilizator se consideră realizată în momentul primei utilizări a Site-ului. Nu este necesară o semnătură fizică a unui contract – folosirea efectivă a platformei echivalează cu un consimțământ valid, în format electronic, în sensul art. 9 din Legea comerțului electronic și al <a href="https://www.codulcivil.ro/art-1169-principiul-consensualismului/" class="law-reference" target="_blank" rel="noopener noreferrer" title="Codul civil - Principiul consensualismului">Codului civil privind încheierea contractelor prin mijloace electronice</a> (Parlamentul României, 2009).</p>
+                    </section>
+                    
+                    <section id="art-2" class="term-article">
+                        <h2>Art. 2. Definiții</h2>
+                        
+                        <p>În cuprinsul acestor Termeni, următorii termeni vor fi interpretați astfel:</p>
+                        
+                        <dl class="term-definition">
+                            <dt>Site / Platformă</dt>
+                            <dd>se referă la website-ul testautism.ro în ansamblul său, incluzând toate paginile, secțiunile și funcționalitățile oferite de acesta.</dd>
+                        </dl>
+                        
+                        <dl class="term-definition">
+                            <dt>Operator / Noi</dt>
+                            <dd>persoana fizică sau juridică ce deține și administrează platforma testautism.ro. Operatorul este responsabil de conținutul și funcționarea Site-ului, în limitele stabilite de legislație. <em>(se va considera Operator echipa de proiect - <strong>Andrei Hodorog</strong> și <strong>Ovidiu Platon</strong>. Identitatea completă și datele de contact ale Operatorului sunt furnizate la Art. 14.)</em></dd>
+                        </dl>
+                        
+                        <dl class="term-definition">
+                            <dt>Utilizator / Tu</dt>
+                            <dd>orice persoană fizică care accesează sau folosește Site-ul, indiferent de scop. În funcție de context, termenul poate include și reprezentantul legal al unui minor care utilizează site-ul.</dd>
+                        </dl>
+                        
+                        <dl class="term-definition">
+                            <dt>Serviciu</dt>
+                            <dd>totalitatea facilităților oferite prin intermediul platformei testautism.ro, incluzând, fără limitare, accesul la chestionarele de screening pentru autism (precum RAADS-R și CAT-Q), afișarea rezultatelor în urma completării acestor chestionare, oferirea de resurse, explicații, îndrumări și legături către site-uri terțe relevante.</dd>
+                        </dl>
+                        
+                        <dl class="term-definition">
+                            <dt>Chestionar</dt>
+                            <dd>setul de întrebări de tip test de screening (precum RAADS-R – Ritvo Autism Asperger Diagnostic Scale-Revised, sau CAT-Q – Camouflaging Autistic Traits Questionnaire) disponibil pe Site, ce poate fi completat de Utilizator în mod anonim, având scop pur orientativ.</dd>
+                        </dl>
+                        
+                        <dl class="term-definition">
+                            <dt>Rezultat</dt>
+                            <dd>scorul sau interpretarea generată automat pe baza răspunsurilor Utilizatorului la un Chestionar. Rezultatul indică potențialul grad de prezență a unor trăsături din spectrul autist, <strong>fără a constitui un diagnostic</strong>.</dd>
+                        </dl>
+                        
+                        <dl class="term-definition">
+                            <dt>Date personale</dt>
+                            <dd>orice informații despre o persoană fizică identificată sau identificabilă. <strong>(Notă:</strong> Conform declarației noastre, Site-ul nu colectează astfel de date de la utilizatori, vezi Art. 7).</dd>
+                        </dl>
+                        
+                        <dl class="term-definition">
+                            <dt>Stocare locală</dt>
+                            <dd>mecanism tehnic prin care datele furnizate de Utilizator (ex: răspunsurile la chestionar) sunt păstrate temporar în memoria dispozitivului și a browser-ului Utilizatorului, <strong>fără a fi transmise serverelor noastre</strong>. Acest mecanism poate include folosirea de cookies esențiale sau tehnologii similare (ex: LocalStorage) strict în scopul funcționării Serviciului la nivelul dispozitivului Utilizatorului.</dd>
+                        </dl>
+                        
+                        <dl class="term-definition">
+                            <dt>Termeni</dt>
+                            <dd>prezentul document "Termeni și Condiții", inclusiv toate secțiunile și politicile la care se face referire în cuprinsul său (ex: Politica de confidențialitate dacă ar exista ca document separat, însă în cazul de față Art. 7 acoperă aspectele de confidențialitate).</dd>
+                        </dl>
+                        
+                        <dl class="term-definition">
+                            <dt>Conținut</dt>
+                            <dd>toate materialele de pe Site, incluzând, dar fără a se limita la text, întrebări, explicații, imagini, grafice, elemente de design, cod sursă, baze de date, logo-uri, mărci sau orice alte creații intelectuale aparținând Operatorului sau partenerilor săi, protejate de <a href="https://legislatie.just.ro/Public/DetaliiDocument/7816" class="law-reference" target="_blank" rel="noopener noreferrer" title="Legea dreptului de autor nr. 8/1996">Legea dreptului de autor nr. 8/1996</a>.</dd>
+                        </dl>
+                        
+                        <p>Aceste definiții se vor aplica atât la singular, cât și la plural, termenilor definiți, în funcție de context. Orice termeni nedefiniți în mod expres în această secțiune vor fi interpretați în sensul lor comun, ținând cont de legislația aplicabilă și de scopul prezentelor Termeni.</p>
+                    </section>
+                    
+                    <section id="art-3" class="term-article">
+                        <h2>Art. 3. Eligibilitate și utilizarea de către minori</h2>
+                        
+                        <h3>3.1. Eligibilitatea generală:</h3>
+                        
+                        <p>Platforma este destinată <strong>persoanelor fizice</strong> care doresc să afle mai multe despre trăsăturile din spectrul autist prin completarea chestionarelor de autoevaluare puse la dispoziție. Utilizarea Site-ului este <strong>gratuită</strong> și nu necesită crearea unui cont sau furnizarea vreunor date personale.</p>
+                        
+                        <p>Prin folosirea Site-ului, declari și garantezi că ai capacitatea juridică de a încheia acest acord (adică ai cel puțin <strong>18 ani</strong> și/sau ești major în jurisdicția ta) sau, dacă ești minor, că respecți prevederile de mai jos privind consimțământul reprezentanților legali.</p>
+                        
+                        <h3>3.2. Utilizarea de către minori:</h3>
+                        
+                        <p>Site-ul și conținutul său nu sunt direcționate în principal către copii sub 16 ani. Totuși, conștientizăm că unii adolescenți cu vârste între 16 și 18 ani sau părinți/tutori ai unor copii mai mici pot fi interesați de testele de pe site.</p>
+                        
+                        <p>Dacă ai <strong>sub 18 ani</strong>, te rugăm să folosești platforma <strong>numai cu acordul și sub supravegherea unui părinte sau tutore legal</strong>. Părintele/tutorele este responsabil pentru monitorizarea și pentru orice consecințe ale utilizării Site-ului de către minor, precum și pentru acceptarea acestor Termeni în numele minorului.</p>
+                        
+                        <p>Dacă ești părinte și permiți copilului tău minor să utilizeze testautism.ro, se consideră că ai citit și ai acceptat tu însuți Termenii, asumându-ți răspunderea pentru supravegherea minorului.</p>
+                        
+                        <h3>3.3. Restricții de vârstă pentru chestionare:</h3>
+                        
+                        <p>Anumite teste disponibile (precum RAADS-R) sunt concepute pentru <strong>adulți și adolescenți de peste 16 ani</strong>, conform specificațiilor originale ale testelor.</p>
+                        
+                        <p>Prin urmare, recomandăm ca doar persoanele de peste 16 ani (sau părinții acestora) să completeze efectiv aceste chestionare, întrucât interpretarea rezultatelor nu este validată științific pentru copii mici.</p>
+                        
+                        <p>Pentru screening-ul persoanelor sub 16 ani, vă rugăm să consultați un specialist sau instrumente dedicate (ex: M-CHAT pentru toddleri).</p>
+                    </section>
+                    
+                    <section id="art-4" class="term-article">
+                        <h2>Art. 4. Descrierea Serviciului oferit de testautism.ro</h2>
+                        
+                        <h3>4.1. Natura și scopul platformei:</h3>
+                        
+                        <p>testautism.ro este o platformă web informativ-educativă care pune la dispoziția Utilizatorilor <strong>chestionare de autoevaluare a unor trăsături autiste</strong>, alături de informații explicative și resurse despre autism la adulți.</p>
+                        
+                        <p><strong>Scopul principal</strong> al Serviciului este de a oferi un <strong>prim pas orientativ</strong> pentru persoanele care se întreabă dacă ar putea prezenta trăsături din spectrul autist, <strong>fără a oferi consultații medicale sau diagnostice profesionale</strong>.</p>
+                        
+                        <p>Platforma își propune să ajute utilizatorii să ia decizii informate privind eventuale demersuri ulterioare (cum ar fi programarea unei evaluări clinice la un specialist), precum și să crească gradul de conștientizare și acceptare a neurodivergenței, în linie cu recomandările internaționale privind <a href="https://legislatie.just.ro/Public/DetaliiDocument/123948" class="law-reference" target="_blank" rel="noopener noreferrer" title="Legea nr. 221/2010 pentru ratificarea Convenției privind drepturile persoanelor cu dizabilități">drepturile persoanelor cu dizabilități</a>.</p>
+                        
+                        <h3>4.2. Screening, nu diagnostic:</h3>
+                        
+                        <p>Toate testele de pe Site (inclusiv RAADS-R și CAT-Q) sunt <strong>instrumente de screening</strong> științifice, recunoscute la nivel internațional, menite să detecteze <strong>posibile indicii</strong> ale prezenței unor trăsături autiste.</p>
+                        
+                        <p>Rezultatele acestor teste sunt prezentate sub forma unui scor numeric și a unei interpretări textuale, însoțite de explicații.</p>
+                        
+                        <p><strong>Important:</strong> Rezultatele oferite <strong>nu constituie un diagnostic medical</strong> și nu pot fi folosite ca atare pentru obținerea de servicii medicale, încadrarea unui handicap sau orice alt scop oficial.</p>
+                        
+                        <p>Singura modalitate de a confirma diagnosticul de Tulburare de Spectru Autist (TSA) este o <strong>evaluare clinică completă</strong> realizată de personal calificat (medic psihiatru sau psiholog clinician, cu experiență în diferențe de neurodezvoltare).</p>
+                        
+                        <p>Site-ul nostru include deseori mesaje de reamintire în acest sens (ex. în FAQ-ul publicat clar pe prima pagină se precizează <em>„Testul RAADS-R este exclusiv un instrument de screening orientativ și NU constituie un diagnostic medical oficial"</em>).</p>
+                        
+                        <h3>4.3. Funcționalitățile cheie:</h3>
+                        
+                        <p>Platforma permite utilizatorilor să:</p>
+                        
+                        <ul>
+                            <li><strong>Acceseze testele de screening</strong> disponibile (RAADS-R pentru autism la adulți și CAT-Q pentru măsurarea camuflajului trăsăturilor autiste). Fiecare test vine însoțit de instrucțiuni de completare și de informații despre proveniența și validitatea sa științifică.</li>
+                            
+                            <li><strong>Completeze chestionarele</strong> integral online. Răspunsurile Utilizatorului sunt salvate pe măsură ce avansează, astfel încât testul poate fi parcurs într-o singură sesiune sau în mai multe sesiuni (datorită stocării locale a progresului – vezi Art. 7.2).</li>
+                            
+                            <li><strong>Vizualizeze instantaneu rezultatele</strong> după finalizarea unui chestionar. Rezultatul include scorul obținut, pragurile de referință și o interpretare generală (ex.: dacă scorul sugerează prezența unor trăsături autiste semnificative sau nu). Sunt furnizate și recomandări succinte despre pașii următori (de exemplu, îndemnul de a consulta un specialist dacă scorul este peste prag).</li>
+                            
+                            <li><strong>Exporte rezultatele</strong> sub formă de raport (de exemplu, PDF) pe care Utilizatorul îl poate salva local. Acest raport poate fi util Utilizatorului dacă decide să discute cu un psiholog sau medic, ca punct de plecare. Menționăm însă în raport că este generat de Utilizator în mod independent și are valoare orientativă.</li>
+                            
+                            <li><strong>Acceseze resurse și link-uri</strong> către site-uri partenere sau informative: de exemplu, bloguri scrise de persoane autiste, grupuri de suport, site-ul unui psiholog clinician care oferă diagnostic etc. (vezi Art. 6 și Art. 8 pentru condițiile asociate acestor link-uri externe).</li>
+                        </ul>
+                        
+                        <h3>4.4. Limitări ale Serviciului:</h3>
+                        
+                        <p>Depunem eforturi ca platforma să fie disponibilă <strong>24/7</strong> și să funcționeze optim, însă nu garantăm o disponibilitate neîntreruptă (vezi Art. 10 – Forță majoră).</p>
+                        
+                        <p>De asemenea, precizăm că nu oferim consultanță personalizată: nu există posibilitatea pentru utilizator de a introduce texte libere pentru interpretare sau de a primi un plan de acțiune personal.</p>
+                        
+                        <p>Serviciul se limitează la afișarea rezultatelor standardizate, conform algoritmilor de scor publici ai testelor.</p>
+                        
+                        <p>Orice <strong>interpretare detaliată</strong> a situației individuale a Utilizatorului <strong>depășește scopul</strong> platformei și intră în sfera actului medical sau de consiliere psihologică, pe care nu le prestăm în cadrul acestui site.</p>
+                        
+                        <h3>4.5. Donații și lipsa caracterului comercial:</h3>
+                        
+                        <p>Site-ul nu vinde bunuri sau servicii și nu condiționează accesul la conținut de vreo plată.</p>
+                        
+                        <p>Există butoane și link-uri de donație prin care utilizatorii pot alege benevol să susțină proiectul. Astfel de donații sunt <strong>complet opționale</strong> și nu constituie contraprestația unui contract de vânzare sau de prestări servicii. Donatorii nu primesc beneficii suplimentare față de utilizatorii care nu donează.</p>
+                        
+                        <p>În eventualitatea în care faci o donație, înțelegi că aceasta este <strong>nerambursabilă</strong> (exceptând cazurile prevăzute de platforma terță de plăți) și că nu creează un raport contractual suplimentar între tine și Operator, fiind tratată ca un <strong>cadou benevol</strong>.</p>
+                    </section>
+                    
+                    <section id="art-5" class="term-article">
+                        <h2>Art. 5. Obligațiile și conduitele permise ale Utilizatorului</h2>
+                        
+                        <h3>5.1. Furnizarea de informații corecte:</h3>
+                        
+                        <p>Atunci când utilizezi chestionarele de pe Site, te obligi să răspunzi <strong>cât mai sincer și exact</strong> la întrebări, în conformitate cu propriile tale trăiri și experiențe. Tu ești pe deplin responsabil pentru acuratețea răspunsurilor introduse. Înțelegi că <strong>oricare rezultat depinde direct de veridicitatea și onestitatea răspunsurilor</strong> tale.</p>
+                        
+                        <p>Operatorul nu are mijloace de a verifica răspunsurile și nu își asumă răspunderea dacă un rezultat este eronat sau înșelător din cauză că ai oferit involuntar sau voit informații incorecte ori incomplete.</p>
+                        
+                        <p>Cu alte cuvinte, <strong>răspunsurile nepotrivite duc la rezultate nepotrivite</strong>, iar această eventualitate ține exclusiv de controlul utilizatorului.</p>
+                        
+                        <h3>5.2. Utilizare licită și de bună-credință:</h3>
+                        
+                        <p>Te angajezi să folosești Site-ul <strong>doar în scopurile sale destinate</strong> (informare personală, autoevaluare) și <strong>în conformitate cu legile aplicabile</strong> și cu acești Termeni. Este interzisă utilizarea platformei în moduri care:</p>
+                        
+                        <ul>
+                            <li>încalcă legea sau drepturile altor persoane (de exemplu, folosirea conținutului site-ului pentru a hărțui sau discrimina persoane autiste ar contraveni atât scopului platformei, cât și legilor privind incitarea la ură);</li>
+                            
+                            <li>încearcă să compromită securitatea sau funcționalitatea Site-ului (ex.: accesarea neautorizată a serverelor, injectarea de cod malițios, efectuarea de atacuri de tip Denial of Service - DoS, modificarea software-ului platformei etc.);</li>
+                            
+                            <li>implică reproducerea, copierea, distribuirea, modificarea sau exploatarea neautorizată a oricăror părți ale Site-ului sau Conținutului, încălcând drepturile de proprietate intelectuală ale Operatorului sau ale terților (vezi Art. 6);</li>
+                            
+                            <li>utilizează metode automatizate (scripturi, bots) de accesare masivă a paginilor sau de completare automată a testelor, care ar putea afecta performanța platformei ori integritatea datelor statistice.</li>
+                        </ul>
+                        
+                        <h3>5.3. Fără utilizare comercială neautorizată:</h3>
+                        
+                        <p>Platforma este destinată uzului personal, necomercial, al Utilizatorilor. <strong>Nu ai dreptul</strong> să reproduci sau să integrezi testele ori rezultatele acestora într-un produs sau serviciu comercial propriu fără acordul scris prealabil al Operatorului.</p>
+                        
+                        <p>De asemenea, <strong>este interzis să percepi bani de la terți</strong> pentru a le facilita accesul la testele de pe site-ul nostru (de exemplu, prin oferirea testului în cadrul unui cabinet fără a menționa sursa) fără o licență sau autorizație din partea noastră.</p>
+                        
+                        <h3>5.4. Obligația de confidențialitate și prudentă:</h3>
+                        
+                        <p>Deoarece platforma nu colectează date, confidențialitatea răspunsurilor depinde de tine.</p>
+                        
+                        <p>Ești responsabil să îți asiguri intimitatea în timp ce completezi testul (de ex., să nu lași ecranul nesupravegheat în prezența altora dacă nu dorești ca cineva să îți vadă răspunsurile).</p>
+                        
+                        <p>Îți recomandăm să nu încerci publicarea pe rețele sociale a rezultatelor PDF conținând interpretări, dacă acestea includ informații sensibile despre tine – deși site-ul nu pune date personale în raport, conținutul răspunsurilor reflectă aspecte din viața ta privată (posibile <em>"date privind sănătatea"</em> conform GDPR, dacă ar fi colectate).</p>
+                        
+                        <h3>5.5. Raportarea problemelor:</h3>
+                        
+                        <p>Te încurajăm, în spirit de cooperare și bună-credință, să ne semnalezi orice problemă tehnică, eroare în conținut sau potențială vulnerabilitate de securitate pe care o întâmpini în utilizarea platformei.</p>
+                        
+                        <p>Ne poți contacta oricând la datele de la Art. 14. Primind feedback-ul tău, vom putea îmbunătăți Serviciul.</p>
+                        
+                        <h3>5.6. Răspunderea Utilizatorului:</h3>
+                        
+                        <p>În măsura permisă de lege, vei fi ținut responsabil pentru orice prejudicii, pierderi sau costuri (inclusiv onorarii de avocat) suferite de Operator și cauzate direct de încălcarea de către tine a prezentelor Termeni sau a legislației aplicabile.</p>
+                        
+                        <p>În special, ești de acord să <strong>despăgubești și să aperi Operatorul</strong> împotriva oricăror pretenții sau acțiuni formulate de terți ce decurg din:</p>
+                        
+                        <p>(i) folosirea neconformă a Site-ului de către tine,</p>
+                        
+                        <p>(ii) încălcarea drepturilor de proprietate intelectuală ale Operatorului sau ale altor persoane prin acțiunile tale, ori</p>
+                        
+                        <p>(iii) orice declarație inexactă făcută de tine în legătură cu acordul la acești Termeni. <em>(Vezi și clauza specifică de indemnizație la Art. 11.)</em></p>
+                    </section>
+                    
+                    <section id="art-6" class="term-article">
+                        <h2>Art. 6. Proprietatea intelectuală</h2>
+                        
+                        <h3>6.1. Drepturile noastre de autor:</h3>
+                        
+                        <p>Întregul Conținut al platformei testautism.ro (texte, grafice, logo-uri, elemente de design UI/UX, codul sursă, baza de date de întrebări și structura lor, precum și selecția și aranjarea acestor elemente) este protejat de <a href="https://legislatie.just.ro/Public/DetaliiDocument/7816" class="law-reference" target="_blank" rel="noopener noreferrer" title="Legea nr. 8/1996 privind dreptul de autor și drepturile conexe">Legea nr. 8/1996 privind dreptul de autor și drepturile conexe</a>, precum și de prevederile corespunzătoare din directivele UE și tratatele internaționale aplicabile.</p>
+                        
+                        <p>Dacă nu este specificat altfel, <strong>Operatorul deține drepturile de autor</strong> și/sau de utilizare asupra acestui Conținut.</p>
+                        
+                        <p>Toate drepturile care nu sunt explicit cedate Utilizatorului conform acestor Termeni sunt rezervate de către Operator.</p>
+                        
+                        <h3>6.2. Licența limitată pentru Utilizator:</h3>
+                        
+                        <p>Operatorul îți acordă o <strong>licență personală, neexclusivă, netransferabilă și revocabilă</strong> de a accesa și utiliza Conținutul Site-ului <strong>strict pentru uzul tău personal, necomercial</strong> și în conformitate cu acești Termeni.</p>
+                        
+                        <p>Această licență îți permite, de exemplu, să vizualizezi textele, să completezi chestionarele, să salvezi local rezultatele testelor tale și să imprimi pentru uz propriu raportul generat.</p>
+                        
+                        <p><strong>Nu îți este permis</strong> să reproduci (copiezi), distribui, transmiți, publici, afișezi, modifici, creezi opere derivate, transferi, vânduți sau exploatezi în orice alt mod Conținutul fără consimțământul scris prealabil al Operatorului.</p>
+                        
+                        <h3>6.3. Referințe la surse terțe:</h3>
+                        
+                        <p>În unele secțiuni ale Site-ului, furnizăm informații preluate sau adaptate din surse externe (de ex., date statistice despre sensibilitatea testului RAADS-R din articolul publicat de Ritvo et al., 2011).</p>
+                        
+                        <p>Asemenea citări sunt marcate corespunzător cu referințe și link-uri. Toate mărcile, logo-urile sau denumirile menționate în contextul acestor referințe (de ex., <em>RAADS-R</em> este acronimul unei scale create de cercetători independenți) aparțin proprietarilor respectivi.</p>
+                        
+                        <p>Menționarea lor pe Site-ul nostru are <strong>exclusiv scop informativ</strong> și <strong>nu implică existența vreunei relații comerciale</strong> între Operator și deținătorii respectivelor mărci, nici aprobarea oficială a platformei noastre de către aceștia. Respectăm drepturile de proprietate intelectuală ale terților și solicităm Utilizatorilor să facă la fel.</p>
+                        
+                        <h3>6.4. Contribuții ale Utilizatorilor:</h3>
+                        
+                        <p>În prezent, platforma nu permite încărcarea sau publicarea de conținut de către utilizatori (ex. comentarii, postări, fișiere media).</p>
+                        
+                        <p>În situația în care pe viitor am implementa astfel de funcționalități (de ex., un forum de discuții), conținutul pe care decizi să îl postezi rămâne în proprietatea ta, dar ne vei acorda o licență gratuită de a-l afișa pe site.</p>
+                        
+                        <p>Totodată, îți asumi să postezi doar conținut original sau pentru care deții drepturile de distribuție – altfel, ești răspunzător pentru încălcarea drepturilor de autor ale altora.</p>
+                        
+                        <h3>6.5. Utilizarea neautorizată a Conținutului:</h3>
+                        
+                        <p>Ne rezervăm dreptul de a dezactiva accesul la Site (temporar sau definitiv) pentru orice Utilizator care încalcă în mod repetat drepturile de autor sau prevederile acestei secțiuni. De asemenea, dacă identificăm pe alte site-uri sau platforme conținut copiat neautorizat de la noi, ne păstrăm dreptul de a întreprinde măsurile legale adecvate (inclusiv notificări DSA, DMCA, acțiuni în contrafacere etc.).</p>
+                        
+                        <h3>6.6. Feedback-ul Utilizatorului:</h3>
+                        
+                        <p>Dacă ne oferi feedback, idei, sugestii de îmbunătățire sau alte comentarii privind Site-ul ("Feedback"), recunoști că acest Feedback nu este confidențial și devine proprietatea noastră. Avem libertatea de a utiliza Feedback-ul tău fără nicio restricție sau obligație față de tine, inclusiv să-l incorporăm în viitoare versiuni ale Site-ului sau în alte proiecte.</p>
+                        
+                        <p>Dacă totuși feedback-ul tău include creații proprii protejate (de ex., propui un text de prezentare), îți rămân drepturile morale, dar ne acorzi o licență globală, nelimitată și irevocabilă să folosim acea creație în contextul platformei.</p>
+                    </section>
+                    
+                    <section id="art-7" class="term-article">
+                        <h2>Art. 7. Protecția datelor personale și Cookies</h2>
+                        
+                        <h3>7.1. Lipsa prelucrării datelor personale de către Operator:</h3>
+                        
+                        <p>Operatorul respectă legislația națională și europeană privind protecția datelor cu caracter personal, inclusiv <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj" class="law-reference" target="_blank" rel="noopener noreferrer" title="Regulamentul General privind Protecția Datelor">Regulamentul General privind Protecția Datelor (GDPR – Regulamentul (UE) 2016/679)</a> (European Parliament & Council, 2016), și <a href="https://legislatie.just.ro/Public/DetaliiDocument/203151" class="law-reference" target="_blank" rel="noopener noreferrer" title="Legea nr. 190/2018 privind măsuri de punere în aplicare a GDPR">Legea nr. 190/2018 de punere în aplicare a GDPR</a> (Parlamentul României, 2018).</p>
+                        
+                        <p>Platforma testautism.ro a fost concepută <strong>pentru a minimiza colectarea de date personale</strong>. În principiu, <strong>nu îți solicităm și nu colectăm niciun fel de date cu caracter personal</strong> (precum nume, adresă de email, CNP, date de sănătate identificabile etc.) atunci când folosești Site-ul.</p>
+                        
+                        <p>Chestionarele de screening pot fi completate <strong>anonim</strong>, fără înregistrare. Răspunsurile tale la întrebări <strong>nu sunt trimise către serverele noastre</strong> și nu sunt stocate într-o bază de date asociată identității tale. Operatorul nu are posibilitatea nici intenția de a identifica utilizatorii individuali pe baza interacțiunii lor cu site-ul.</p>
+                        
+                        <h3>7.2. Stocarea locală a răspunsurilor (Cookies strict necesare):</h3>
+                        
+                        <p>Pentru a îmbunătăți experiența de utilizare, platforma folosește o metodă de stocare locală a progresului testelor. Concret, pe măsură ce completezi un chestionar, răspunsurile tale se păstrează în memoria browser-ului tău (folosind fie un cookie tehnic de sesiune, fie o intrare în LocalStorage – ambele tehnologii fiind în esență guvernate de <a href="https://eur-lex.europa.eu/eli/dir/2002/58/oj" class="law-reference" target="_blank" rel="noopener noreferrer" title="Directiva 2002/58/CE privind prelucrarea datelor personale și protejarea confidențialității în sectorul comunicațiilor publice">Directiva ePrivacy 2002/58/CE</a> și de <a href="https://legislatie.just.ro/Public/DetaliiDocument/56973" class="law-reference" target="_blank" rel="noopener noreferrer" title="Legea nr. 506/2004 privind prelucrarea datelor cu caracter personal și protecția vieții private în sectorul comunicațiilor electronice">Legea nr. 506/2004 în România</a>).</p>
+                        
+                        <p>Acest lucru îți permite să revii ulterior și să reiei testul de unde ai rămas, fără să pierzi răspunsurile deja date. <strong>Informațiile stocate local nu conțin elemente de identificare personală</strong> (sunt doar perechi între numărul întrebării și varianta de răspuns selectată) și <strong>nu sunt transmise către Operator</strong>.</p>
+                        
+                        <p>Ele se șterg automat când finalizezi testul (odată generat rezultatul, stocarea locală poate fi ștearsă) sau poți oricând să le ștergi manual (ex. prin ștergerea cookie-urilor din browser).</p>
+                        
+                        <p>Ținând cont că acest tip de stocare este <strong>strict necesar</strong> pentru furnizarea Serviciului solicitat de Utilizator (fără el ai pierde progresul la completarea unui chestionar lung), în conformitate cu art. 5 alin. (3) din Directiva ePrivacy și legislația echivalentă, consimțământul expres pentru aceste cookies tehnice <strong>nu este obligatoriu</strong>.</p>
+                        
+                        <p>Prin utilizarea platformei, îți exprimi acordul implicit pentru folosirea acestor mecanisme necesare funcționării. Sub nicio formă nu folosim cookies de analiză, tracking sau publicitate comportamentală.</p>
+                        
+                        <h3>7.3. Jurnale tehnice și adrese IP (date colectate de furnizorii noștri tehnici):</h3>
+                        
+                        <p>Ca orice site web, accesarea testautism.ro implică comunicarea unor date tehnice de conexiune (de exemplu, adresa IP a dispozitivului de pe care te conectezi, detalii despre browser și sistemul de operare, marcaj temporal etc.).</p>
+                        
+                        <p><strong>Operatorul nu colectează și nu accesează direct aceste jurnale</strong>. Totuși, ele pot fi colectate automat de către furnizorul nostru de servicii de găzduire și securitate web (în prezent, folosim infrastructura Cloudflare pentru protecție DDoS și caching).</p>
+                        
+                        <p>Aceste date ar putea fi considerate <em>date cu caracter personal</em> (adresă IP) și <em>date privind sănătatea</em> (în măsura în care dezvăluie interesul față de un test de autism), sub incidența art. 4 și art. 9 GDPR. Menționăm că:</p>
+                        
+                        <ul>
+                            <li>Operatorul <strong>nu primește în mod individualizat</strong> aceste date brute. Noi putem vedea doar statistici agregate de trafic (ex.: număr de vizitatori pe zi, țări de proveniență în ansamblu), fără posibilitatea de a identifica un anume utilizator.</li>
+                            
+                            <li>Cloudflare procesează aceste informații în calitate de <strong>împuternicit</strong> al Operatorului, exclusiv pentru scopuri tehnice (asigurarea securității și performanței site-ului). Conform politicii lor, adresele IP și jurnalele de acces sunt păstrate pentru o durată limitată, în principal pentru detectarea atacurilor informatice și diagnoza problemelor de rețea. (Poți consulta <a href="https://www.cloudflare.com/en-gb/privacypolicy/" target="_blank" rel="noopener noreferrer">Politica de confidențialitate Cloudflare</a> pentru mai multe detalii.)</li>
+                            
+                            <li>Temeiul legal al acestor prelucrări tehnice este <strong>interesul nostru legitim</strong> de a asigura funcționarea sigură a site-ului (conform art. 6 alin. (1) lit. f GDPR), coroborat cu excepțiile de la art. 9 (2) GDPR privind prelucrarea unor date sensibile (de exemplu, date privind sănătatea) în contextul în care utilizatorul le divulgă în mod manifest prin acțiunile sale online.</li>
+                        </ul>
+                        
+                        <p>Operatorul nu transmite și nu vinde nimănui aceste date tehnice.</p>
+                        
+                        <h3>7.4. Drepturile persoanelor vizate:</h3>
+                        
+                        <p>Deși nu colectăm date personale direct, în eventualitatea improbabilă în care ne-ai furniza totuși vreo informație identificabilă (de ex., dacă ne trimiți un email de contact în care apar datele tale), ai dreptul să ne ceri oricând: acces la datele tale, rectificarea sau ștergerea acestora, restricționarea prelucrării, portabilitatea datelor (unde aplicabil) și te poți opune prelucrării. Vom facilita exercitarea acestor drepturi conform GDPR.</p>
+                        
+                        <p>Ai de asemenea dreptul de a depune plângere la Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal (ANSPDCP) dacă consideri că ți-au fost încălcate drepturile.</p>
+                        
+                        <h3>7.5. Confidențialitatea rezultatelor și a comunicării:</h3>
+                        
+                        <p>Dat fiind că rezultatele testelor se generează local și nu părăsesc dispozitivul tău, confidențialitatea acestor rezultate ține în primul rând de tine (așa cum s-a menționat la Art. 5.4). Operatorul nu poate vedea și deci nu poate divulga nimănui scorul pe care l-ai obținut sau răspunsurile date.</p>
+                        
+                        <p>În ce privește eventualele comunicări între tine și noi (ex.: prin email dacă ne scrii pentru suport), vom trata orice date personale din acea comunicare cu confidențialitate și le vom utiliza doar pentru a soluționa cererea ta.</p>
+                        
+                        <h3>7.6. Politica de confidențialitate:</h3>
+                        
+                        <p>Momentan, toate aspectele legate de protecția datelor și viața privată sunt incluse în această secțiune a Termenilor. În măsura în care vom publica o <strong>Politică de Confidențialitate</strong> separată, aceasta va fi considerată parte integrantă din Termeni și va detalia suplimentar practicile noastre privind datele.</p>
+                        
+                        <p>În orice caz, vom respecta principiile legalității, echității și transparenței în prelucrarea oricăror date, limitarea la scop, minimizarea datelor și asigurarea securității, conform art. 5 GDPR.</p>
+                    </section>
+                    
+                    <section id="art-8" class="term-article">
+                        <h2>Art. 8. Declinator de răspundere (Disclaimer general și medical)</h2>
+                        
+                        <h3>8.1. Scop informativ, nu consultanță profesională:</h3>
+                        
+                        <p>Informațiile și conținutul furnizate pe testautism.ro au un scop <strong>strict informativ și educativ</strong>. Deși depunem eforturi ca informațiile prezentate să fie corecte, actualizate și bazate pe surse științifice de încredere, <strong>nu garantăm</strong> exhaustivitatea, acuratețea sau actualitatea lor la momentul accesării de către tine.</p>
+                        
+                        <p>Orice acțiune pe care o întreprinzi pe baza informațiilor de pe site (inclusiv pe baza rezultatelor testelor) se face pe propriul tău risc. Conținutul Site-ului <strong>nu constituie și nu înlocuiește</strong> sub nicio formă <strong>sfatul, diagnosticul sau tratamentul medical</strong> furnizat de un profesionist autorizat.</p>
+                        
+                        <p>Operatorul nu este prestator de servicii medicale și nu intră într-o relație medic-pacient cu Utilizatorii. Dacă ai întrebări legate de starea ta de sănătate mintală, de posibile tulburări din spectrul autist sau orice alt aspect medical, <strong>adresează-te unui specialist calificat</strong> (medic sau psiholog) și <strong>nu te baza exclusiv</strong> pe informațiile obținute de pe Site.</p>
+                        
+                        <p>Deși conținutul nostru este bine documentat și fundamentat, el <strong>nu constituie recomandare medicală</strong>.</p>
+                        
+                        <h3>8.2. Fără garanții privind rezultate sau adecvare:</h3>
+                        
+                        <p>Serviciile și Conținutul sunt furnizate „<strong>ca atare</strong>" (<em>"as is"</em>) și „<strong>în funcție de disponibilitate</strong>", fără nicio garanție expresă sau implicită din partea Operatorului. În măsura permisă de lege, Operatorul <strong>exclude expres orice garanții sau răspunderi</strong> de orice fel, incluzând, dar fără a se limita la:</p>
+                        
+                        <ul>
+                            <li><strong>Garanția acurateței sau validității științifice</strong> a rezultatelor. Deși testele utilizate (RAADS-R, CAT-Q etc.) au fost validate prin studii clinice cu anumiți parametri de acuratețe (ex.: sensibilitate 97% și specificitate 100% conform studiului original RAADS-R), Operatorul nu garantează că aceste cifre se aplică fiecărui utilizator sau că rezultatul va reflecta fidel situația ta individuală. Fiecare persoană este unică, iar testele de screening pot da <strong>eroare de tip fals pozitiv sau fals negativ</strong>.</li>
+                            
+                            <li><strong>Garanția adecvării pentru un anumit scop</strong>. Nu afirmăm că utilizarea platformei îți va îndeplini vreun obiectiv specific (de ex., obținerea unui diagnostic oficial sau lămurirea completă a situației tale). Site-ul este un instrument orientativ, nu unul decizional. Orice decizie importantă (precum informarea angajatorului, schimbarea stilului de viață, inițierea unui tratament etc.) ar trebui luată <strong>doar după</strong> o evaluare profesională, indiferent de scorul obținut la testele noastre.</li>
+                            
+                            <li><strong>Garanția neîntreruperii sau lipsei de erori</strong>. Nu putem garanta că Serviciul va fi disponibil în permanență, că va fi lipsit de erori, bug-uri, virusuri sau alte componente dăunătoare. Vom încerca să remediem eventualele probleme tehnice într-un timp rezonabil, dar nu oferim un timp de răspuns garantat. Utilizatorul trebuie să își asume că accesul la Serviciu poate fi ocazional suspendat pentru mentenanță, actualizări sau din cauze ce țin de forța majoră (vezi Art. 10).</li>
+                            
+                            <li><strong>Garanția satisfacției</strong>. Operatorul nu garantează că experiența fiecărui utilizator pe Site va corespunde așteptărilor sale. Percepția conținutului (inclusiv eventualul impact emoțional al aflării unui scor mare) ține de subiectivitatea fiecăruia. Recomandăm prudență emoțională – un rezultat ce sugerează trăsături autiste semnificative poate fi copleșitor, motiv pentru care încurajăm utilizatorii să nu tragă concluzii pripite și să discute cu persoane de încredere sau specialiști.</li>
+                        </ul>
+                        
+                        <h3>8.3. Lipsa relației profesionale:</h3>
+                        
+                        <p>Utilizatorul înțelege că niciun fel de <strong>relație contractuală de natură profesională</strong> (medicală, psihologică, de consiliere, legală etc.) nu se naște între el și Operator doar prin utilizarea Serviciului.</p>
+                        
+                        <p>Orice informație sau comunicare de pe Site <strong>nu</strong> are caracterul unei consultații personalizate. În mod particular, răspundem eventualelor întrebări ale utilizatorilor (ex.: prin email) doar în limita clarificării aspectelor tehnice sau generale despre platformă, <strong>nu oferim interpretări clinice individuale</strong> nici recomandări terapeutice.</p>
+                        
+                        <h3>8.4. Referințe și link-uri externe:</h3>
+                        
+                        <p>Platforma conține link-uri către site-uri terțe (de ex., blogul unei comunități autiste, site-ul unui psiholog, grupuri de suport pe Facebook, resurse de cercetare etc. - vezi secțiunea "Colaboratori și Parteneri" de pe prima pagină).</p>
+                        
+                        <p>Aceste link-uri sunt furnizate exclusiv pentru <strong>conveniența și informarea</strong> Utilizatorilor.</p>
+                        
+                        <p>Operatorul <strong>nu își asumă nicio responsabilitate</strong> pentru conținutul, acuratețea informațiilor, politicile de confidențialitate sau practicile oricăror site-uri terțe. Prezența unui link extern nu constituie o aprobare oficială a respectivei resurse.</p>
+                        
+                        <p>Dacă accesezi aceste link-uri, o faci pe riscul tău, și odată ce părăsești testautism.ro, se vor aplica termenii și politicile propriilor site-uri accesate.</p>
+                        
+                        <p>Totuși, în măsura în care sesizezi că un link de pe site-ul nostru duce către un conținut nepotrivit, ilegal sau care contravine valorilor neuroincluzive (ex.: un site ce promovează terapii abuzive), te rugăm să ne informezi și vom evalua înlocuirea sau eliminarea acelui link.</p>
+                        
+                        <h3>8.5. Opinii și testimoniale:</h3>
+                        
+                        <p>Orice opinii exprimate pe Site (de ex., în articolele explicative sau secțiunea FAQ) reprezintă viziunea noastră sau a colaboratorilor noștri la momentul respectiv, bazată pe experiența și cunoștințele disponibile, dar nu pretind a fi adevăr absolut.</p>
+                        
+                        <p>Nu avem o secțiune de comentarii deschise utilizatorilor; însă dacă în viitor vom afișa testimoniale sau mărturii de la persoane autiste, vom preciza clar că acestea sunt experiențe individuale și nu garanții de rezultat pentru alții.</p>
+                        
+                        <h3>8.6. Declinarea răspunderii extinse:</h3>
+                        
+                        <p>Pe cât posibil conform legislației aplicabile, excludem orice răspundere a Operatorului pentru eventualele consecințe negative directe sau indirecte suferite de Utilizator ca urmare a utilizării sau a incapacității de a utiliza platforma.</p>
+                        
+                        <p>(Detaliile privind limitarea răspunderii sunt în Art. 9 de mai jos.).</p>
+                        
+                        <p>Acest Art. 8 stabilește premisele generale: Utilizatorul folosește platforma <strong>înțelegând limitările și faptul că își asumă riscurile</strong> inerente unei autoevaluări online.</p>
+                    </section>
+                    
+                    <section id="art-9" class="term-article">
+                        <h2>Art. 9. Limitarea răspunderii Operatorului</h2>
+                        
+                        <h3>9.1. Excluderea răspunderii pentru anumite tipuri de prejudicii:</h3>
+                        
+                        <p>În măsura maximă permisă de legislația aplicabilă, inclusiv <a href="https://legislatie.just.ro/Public/DetaliiDocument/175630" class="law-reference" target="_blank" rel="noopener noreferrer" title="Codul Civil - Art. 1355 privind clauzele de neresponsabilitate">art. 1355 Cod Civil (Cartea a V-a, Titlul II, Capitolul IV, Secțiunea II) privind clauzele de nerepsonabilitate</a>, Operatorul, colaboratorii, partenerii sau reprezentanții săi <strong>nu vor fi răspunzători</strong> față de Utilizator pentru niciun fel de prejudiciu indirect, special, incidental sau consecutiv decurgând din sau legat de utilizarea Serviciului sau a Conținutului Site-ului.</p>
+                        
+                        <p>Aceasta include, fără a se limita la, <strong>pierderi de oportunitate</strong>, <strong>afectare emoțională</strong>, <strong>pierderi de date</strong>, <strong>pierderi financiare</strong> (chiar și dacă ai decis să consulți un specialist ca urmare a rezultatului, costurile acelei consultații sunt în responsabilitatea ta exclusivă) sau alte consecințe intangibile.</p>
+                        
+                        <p>De asemenea, nu suntem răspunzători pentru eventuale <strong>defecțiuni tehnice</strong> (ex.: imposibilitatea de a accesa site-ul într-un anumit moment) sau <strong>infectări cu viruși</strong> provenite din cauze externe (precum un atac cibernetic).</p>
+                        
+                        <h3>9.2. Limitarea cuantumului total al răspunderii:</h3>
+                        
+                        <p>În cazul puțin probabil în care Operatorul ar fi totuși găsit răspunzător față de tine pentru vreun prejudiciu rezultat din utilizarea Serviciului, <strong>valoarea totală a despăgubirilor</strong> la care ai putea avea dreptul va fi limitată la <strong>echivalentul sumei pe care ai plătit-o pentru utilizarea Serviciului</strong>.</p>
+                        
+                        <p>Dat fiind că accesul la site este gratuit, această sumă este 0 (zero). Prin urmare, despăgubirea noastră totală, cumulat pe toate pretențiile, nu va depăși 0 lei.</p>
+                        
+                        <p>Această limitare reflectă alocarea riscurilor între părți și faptul că oferim Serviciul fără contraprestație financiară.</p>
+                        
+                        <h3>9.3. Excepții legale:</h3>
+                        
+                        <p>Nimic din acești Termeni nu are scopul sau efectul de a exclude sau limita răspunderea Operatorului în situațiile în care o astfel de excludere/limitare ar fi contrară legii. În special:</p>
+                        
+                        <ul>
+                            <li><strong>Răspunderea pentru deces sau vătămare corporală</strong> cauzată din culpa Operatorului <strong>nu este limitată sau exclusă</strong> (răspunderea pentru astfel de prejudicii nu poate fi înlăturată prin convenție, cf. art. 1355 (3) Cod Civil).</li>
+                            
+                            <li><strong>Răspunderea pentru prejudiciul material cauzat intenționat sau din culpă gravă</strong> nu este exclusă (art. 1355 (1) Cod Civil interzice exonerarea în caz de intenție sau gravă neglijență). Cu toate acestea, Operatorul precizează că nu acționează cu intenție rea sau gravă neglijență; furnizând Serviciul gratuit, scopul nostru este pozitiv, educativ.</li>
+                            
+                            <li><strong>Drepturile legale ale consumatorului</strong> (acolo unde utilizatorul are calitatea de consumator în sensul legislației – deși aici nu avem vânzare de produse, putem asimila noțiunea) rămân neafectate. De exemplu, nimic nu restrânge dreptul de a sesiza ANPC sau alte autorități dacă se consideră că vreo clauză contractuală este abuzivă.</li>
+                        </ul>
+                        
+                        <h3>9.4. Asumarea riscurilor de către Utilizator:</h3>
+                        
+                        <p>Utilizatorul recunoaște că Serviciul este oferit gratuit și "așa cum este", și că a luat cunoștință de disclaimerele din Art. 8. Prin continuarea utilizării, Utilizatorul își asumă răspunderea pentru evaluarea și acceptarea oricăror riscuri inerente.</p>
+                        
+                        <p>Operatorul <strong>nu</strong> poate fi tras la răspundere pentru decizii pe care Utilizatorul le ia sau le omite în urma informațiilor primite de pe site.</p>
+                        
+                        <p>Dacă utilizatorul – în pofida recomandărilor noastre – decide să nu consulte un medic/psiholog și ulterior suferă consecințe (ex.: starea sa se agravează netratată), acesta nu va putea imputa Operatorului faptul de a fi avut un rezultat liniștitor fals sau alte interpretări greșite autoprovocate.</p>
+                        
+                        <h3>9.5. Raportarea erorilor și limitarea remedierilor:</h3>
+                        
+                        <p>Dacă, totuși, consideri că ai suferit un prejudiciu ca urmare directă a unei informații eronate de pe site (ex.: o eroare gravă în interpretarea scorului), îți solicităm să ne semnalezi imediat situația la datele de contact din Art. 14.</p>
+                        
+                        <p>Vom investiga de urgență și, dacă e cazul, vom corecta eroarea în conținut. Aceasta (rectificarea conținutului) va fi, în principiu, <strong>singura măsură reparatorie</strong> la care ai dreptul, orice altă despăgubire fiind exclusă conform celor de mai sus.</p>
+                    </section>
+                    
+                    <section id="art-10" class="term-article">
+                        <h2>Art. 10. Forța majoră</h2>
+                        
+                        <h3>10.1. Definiție:</h3>
+                        
+                        <p>Nici Operatorul, nici Utilizatorul nu vor fi considerați responsabili pentru neîndeplinirea obligațiilor care le revin (conform acestor Termeni) dacă o astfel de neexecutare la termen sau/și în mod corespunzător este cauzată de un eveniment de <strong>forță majoră</strong>.</p>
+                        
+                        <p>Prin forță majoră se înțelege orice eveniment extern, imprevizibil, absolut invincibil și inevitabil, în sensul legislației române (art. 1351 Cod Civil) – de exemplu: calamități naturale (cutremur, inundație, incendiu extins), război, atac terorist, pandemie severă, pene globale de electricitate sau internet, restricții guvernamentale majore (blocarea internetului, cenzură extinsă), atacuri cibernetice de amploare (ex.: compromiterea infrastructurii de către hackeri la nivel global).</p>
+                        
+                        <h3>10.2. Efecte:</h3>
+                        
+                        <p>Dacă un eveniment de forță majoră împiedică sau întârzie, în totalitate sau în parte, prestarea Serviciului nostru, respectiv utilizarea Serviciului de către tine, atunci executarea obligațiilor afectate va fi suspendată pe durata evenimentului de forță majoră, fără răspundere pentru partea care invocă forța majoră.</p>
+                        
+                        <p>De exemplu, dacă infrastructura noastră este distrusă de un cutremur, nu vom putea menține site-ul online – dar această neîndeplinire este scuzabilă.</p>
+                        
+                        <h3>10.3. Obligații în caz de forță majoră:</h3>
+                        
+                        <p>Partea care invocă forța majoră (fie noi, fie tu) va depune eforturi rezonabile pentru a <strong>notifica cealaltă parte</strong> în termen de 15 zile de la apariția evenimentului, aducând la cunoștință existența și natura cazului de forță majoră.</p>
+                        
+                        <p>(În practică, pentru Operator, ar însemna o notificare postată pe site sau transmisă pe canalele de comunicare disponibile, de îndată ce este posibil tehnic.).</p>
+                        
+                        <p>Părțile vor încerca, de asemenea, să reducă pe cât posibil consecințele evenimentului de forță majoră.</p>
+                        
+                        <h3>10.4. Încetarea în caz de forță majoră prelungită:</h3>
+                        
+                        <p>Dacă situația de forță majoră se prelungește peste o perioadă de 60 de zile calendaristice consecutive, oricare parte are dreptul să decidă <strong>încetarea integrală a furnizării Serviciului</strong>, fără vreo despăgubire.</p>
+                        
+                        <p>În cazul nostru, înseamnă că dacă timp de 2 luni site-ul este nefuncțional din cauze de forță majoră, putem alege să-l închidem definitiv, considerând contractul (adică Termenii) reziliat de drept.</p>
+                        
+                        <p>Utilizatorii nu vor avea pretenții financiare sau de altă natură în atare situație, dat fiind caracterul gratuit al Serviciului și natura inevitabilă a evenimentului.</p>
+                    </section>
+                    
+                    <section id="art-11" class="term-article">
+                        <h2>Art. 11. Indemnizație (Despăgubirea Operatorului de către Utilizator)</h2>
+                        
+                        <h3>11.1. Obligația de despăgubire:</h3>
+                        
+                        <p>Ești de acord să despăgubești, să aperi și să exonerezi de răspundere Operatorul, afiliații, partenerii, colaboratorii, angajații, reprezentanții și agenții săi ("Părțile despăgubite") pentru și împotriva oricăror și tuturor pierderilor, daunelor, prejudiciilor, costurilor, proceselor, amenzilor, penalităților, obligațiilor sau cheltuielilor (inclusiv onorarii avocațiale rezonabile) care rezultă din sau au legătură cu oricare din următoarele:</p>
+                        
+                        <p>a) <strong>Încălcarea de către tine a acestor Termeni</strong>, a declarațiilor sau garanțiilor făcute de tine în cadrul lor (ex.: ai utilizat site-ul în scop comercial, contrar art. 5.3, sau ai copiat conținut în violarea art. 6);</p>
+                        
+                        <p>b) <strong>Folosirea neautorizată sau ilegală a Serviciului</strong> de către tine sau sub contolul tău (ex.: ai folosit un script pentru a obține în masă rezultate, afectând serverul, sau ai introdus intenționat date false ducând la concluzii defăimătoare pe care le-ai atribuit apoi nouă);</p>
+                        
+                        <p>c) <strong>Orice pretenție a unui terț</strong> că un conținut furnizat de tine (dacă în viitor permițem conținut generat de utilizatori) încalcă drepturile acelui terț (de ex. drepturi de autor, de confidențialitate sau ale personalității);</p>
+                        
+                        <p>d) <strong>Orice acțiune delictuală</strong> comisă de tine prin folosirea platformei noastre (ex.: ai folosit informațiile de pe site pentru a sfătui neautorizat pe altcineva într-un mod care i-a cauzat rău, iar acea persoană ne dă în judecată pe noi – vom căuta să te tragă la răspundere pe tine în regres).</p>
+                        
+                        <h3>11.2. Procedura:</h3>
+                        
+                        <p>În cazul oricărei astfel de pretenții sau acțiuni formulate împotriva Părților despăgubite, ne rezervăm dreptul de a ne conduce propria apărare (alegându-ne avocații și strategia, la discreția noastră), însă cu informarea ta.</p>
+                        
+                        <p>Te angajezi să cooperezi cu bună-credință la apărarea noastră în caz de litigiu (de ex., să ne furnizezi informațiile pe care le deții, în măsura rezonabilă).</p>
+                        
+                        <h3>11.3. Protejarea drepturilor Operatorului:</h3>
+                        
+                        <p>Această obligație de despăgubire rămâne valabilă și după încetarea acestor Termeni, indiferent din ce motiv (adică dacă ai folosit site-ul și apoi nu-l mai folosești, dar ulterior apare o pretenție ce decurge din faptele din perioada utilizării, tot va trebui să ne despăgubești).</p>
+                        
+                        <p>Vom notifica prompt orice astfel de pretenție și vom încerca, pe cât posibil, să minimalizăm costurile, însă ne rezervăm dreptul de a soluționa amiabil eventual litigiul cu un terț (ex. prin tranzacție) iar tu vei fi ținut să ne achiți sumele tranzacționate dacă pretenția a survenit din fapta ta.</p>
+                    </section>
+                    
+                    <section id="art-12" class="term-article">
+                        <h2>Art. 12. Legea aplicabilă și soluționarea disputelor</h2>
+                        
+                        <h3>12.1. Legea aplicabilă:</h3>
+                        
+                        <p>Acești Termeni și relația dintre Operator și Utilizator (inclusiv eventualele dispute sau revendicări necontractuale) sunt guvernate de <strong>legea română</strong>.</p>
+                        
+                        <p>Se vor aplica în principal prevederile Codului Civil al României privind contractele și orice legislație specială menționată în cuprinsul Termenilor (ex.: Legea 365/2002 pentru aspecte de comerț electronic, Regulamentul (UE) 2016/679 pentru protecția datelor etc.), precum și alte reglementări române relevante. Alegerea legii române nu va avea ca efect privarea</p>
+                        
+                        <p>Utilizatorului consumator (dacă este cazul) de protecția oferită de dispozițiile imperative ale legii din țara sa de reședință, în conformitate cu Regulamentul (CE) 593/2008 (Roma I) privind legea aplicabilă obligațiilor contractuale.</p>
+                        
+                        <h3>12.2. Jurisdicția instanțelor:</h3>
+                        
+                        <p>Orice litigiu decurgând din sau în legătură cu acești Termeni (incluzând, dar fără a se limita la, executarea, interpretarea, validitatea, sau rezilierea lor) care nu poate fi soluționat pe cale amiabilă va fi supus spre soluționare <strong>instanțelor judecătorești competente din România</strong>.</p>
+                        
+                        <p>În mod specific, părțile sunt de acord cu competența exclusivă a instanțelor din circumscriptia sediului Operatorului (de ex., instanțele din Municipiul București, dacă Operatorul este acolo) pentru soluționarea oricăror asemenea dispute.</p>
+                        
+                        <h3>12.3. Soluționare amiabilă:</h3>
+                        
+                        <p>Înainte de a recurge la instanță, te încurajăm să ne contactezi pentru a discuta pe cale amiabilă orice nemulțumire ai avea. Vom depune eforturi de bună-credință să rezolvăm reclamația ta rapid și satisfăcător, acolo unde este posibil.</p>
+                        
+                        <p>Poți oricând trimite o plângere sau sesizare direct către noi la adresa menționată la Art. 14, iar noi îți vom răspunde în cel mult 30 de zile calendaristice.</p>
+                        
+                        <h3>12.4. ADR (Alternative Dispute Resolution):</h3>
+                        
+                        <p>În cazul Utilizatorilor consumatori rezidenți în Uniunea Europeană, dacă apare un conflict legat de Serviciu, ai dreptul să apelezi la procedurile facultative de soluționare alternativă a litigiilor. Poți consulta platforma europeană de Soluționare Online a Litigiilor (SOL) la adresa <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr</a> pentru a depune o cerere de rezolvare extrajudiciară.</p>
+                        
+                        <p>Menționăm însă că, dat fiind caracterul gratuit al Serviciului și natura necomercială, este posibil ca organismele de mediere/negociere să decline competența. În orice caz, această opțiune stă la dispoziția ta.</p>
+                        
+                        <h3>12.5. Limitare în timp a acțiunilor:</h3>
+                        
+                        <p>În măsura permisă de lege, orice acțiune în justiție a Utilizatorului împotriva Operatorului, decurgând din utilizarea Serviciului, trebuie inițiată <strong>în termen de 1 (un) an</strong> de la data la care Utilizatorul a cunoscut sau ar fi trebuit să cunoască fapta ce a generat pretenția.</p>
+                        
+                        <p>Depășirea acestui termen poate fi invocată de Operator ca mijloc de apărare (prescripție extintivă convențional redusă). Această clauză nu se aplică acțiunilor pentru care legea prevede în mod imperativ un termen mai lung ce nu poate fi redus convențional (ex.: în materie de vătămare corporală).</p>
+                    </section>
+                    
+                    <section id="art-13" class="term-article">
+                        <h2>Art. 13. Modificarea Termenilor</h2>
+                        
+                        <h3>13.1. Actualizarea Termenilor:</h3>
+                        
+                        <p>Operatorul își rezervă dreptul de a modifica, adăuga sau înlătura clauze din prezentele Termeni și Condiții <strong>oricând</strong>, dacă consideră necesar (de exemplu pentru a reflecta schimbări legislative, noi funcționalități ale Serviciului, modificări ale practicilor noastre etc.). Când vom face astfel de modificări, vom publica pe Site versiunea actualizată a Termenilor, împreună cu data la care au intrat în vigoare modificările. <strong>Data ultimei actualizări</strong> este indicată la începutul documentului.</p>
+                        
+                        <h3>13.2. Notificare și acceptare:</h3>
+                        
+                        <p>Dacă modificările sunt substanțiale și afectează drepturile sau obligațiile Utilizatorului într-un mod semnificativ, ne angajăm să facem tot posibilul să aducem aceste schimbări în atenția utilizatorilor – de exemplu, putem posta un anunț vizibil pe site, putem trimite un email dacă am avea adrese (deși nu colectăm emailuri), sau putem folosi alte mijloace rezonabile.</p>
+                        
+                        <p>În orice caz, continuarea utilizării Site-ului după data intrării în vigoare a noilor Termeni constituie <strong>acceptarea implicită</strong> de către tine a modificărilor. Dacă nu ești de acord cu Termenii revizuiți, te rugăm să încetezi utilizarea platformei.</p>
+                        
+                        <h3>13.3. Vechii Termeni:</h3>
+                        
+                        <p>Pentru transparență, vom păstra într-un istoric (de ex., într-o arhivă accesibilă pe site) versiunile anterioare ale Termenilor și datele lor de valabilitate, astfel încât să poți consulta oricând condițiile care se aplicau la un anumit moment în trecut.</p>
+                        
+                        <p>Totuși, reține că noua versiune va guverna relația noastră pentru viitor – versiunile anterioare nu se mai aplică odată ce au fost înlocuite.</p>
+                        
+                        <h3>13.4. Asistență la modificări:</h3>
+                        
+                        <p>Dacă ai întrebări sau nelămuriri cu privire la modificările aduse Termenilor, ne poți contacta (vezi Art. 14) pentru clarificări.</p>
+                    </section>
+                    
+                    <section id="art-14" class="term-article">
+                        <h2>Art. 14. Contact și comunicări</h2>
+                        
+                        <h3>14.1. Date de contact ale Operatorului:</h3>
+                        
+                        <p>Pentru orice întrebări, sesizări sau solicitări legate de acești Termeni sau de funcționarea platformei, ne poți contacta utilizând următoarele coordonate:</p>
+                        
+                        <ul>
+                            <li><strong>Nume Operator:</strong> Andrei Hodorog</li>
+                            <li><strong>Adresă de e-mail de contact:</strong> <a href="mailto:contact@aboutadhd.ro">contact@aboutadhd.ro</a></li>
+                            <li><strong>Reprezentant legal:</strong> Andrei Hodorog – Colaborator de proiect</li>
+                        </ul>
+                        
+                        <hr>
+                        
+                        <ul>
+                            <li><strong>Nume Operator:</strong> Ovidiu Platon</li>
+                            <li><strong>Adresă de e-mail de contact:</strong> <a href="mailto:hello@ovidiuplaton.com">hello@ovidiuplaton.com</a></li>
+                            <li><strong>Reprezentant legal:</strong> Ovidiu Platon – Colaborator de proiect</li>
+                        </ul>
+                        
+                        <p>Ne poți scrie oricând prin e-mail; preferăm comunicarea în format scris (electronic), pentru a putea răspunde mai eficient. Depunem eforturi să răspundem tuturor solicitărilor într-un termen rezonabil (de obicei în 2-3 zile lucrătoare).</p>
+                        
+                        <h3>14.2. Comunicări electronice:</h3>
+                        
+                        <p>Orice notificare sau comunicare pe care ne-o trimiți în legătură cu Termenii, fie prin e-mail, fie prin formular de contact de pe site (dacă există), se va considera primită în ziua lucrătoare următoare confirmării de primire din partea noastră (vom încerca să confirmăm primirea mesajelor importante).</p>
+                        
+                        <p>Comunicările de la noi către tine vor fi făcute tot în format electronic (de regulă prin afișări pe site sau, dacă situația o impune și avem datele tale de contact, prin e-mail). Utilizatorul consimte că toate comunicările electronice satisfac orice cerință legală de a fi în scris.</p>
+                        
+                        <h3>14.3. Limbaj:</h3>
+                        
+                        <p>Comunicările oficiale se vor realiza în limba română, deoarece acești Termeni există doar în limba română și serviciul este destinat publicului vorbitor de română. Dacă ne scrii într-o altă limbă, vom încerca să răspundem, dar nu garantăm acuratețea traducerii.</p>
+                        
+                        <h3>14.4. Sesizări și suport:</h3>
+                        
+                        <p>Pentru probleme tehnice legate de funcționarea site-ului (ex.: site indisponibil, erori de afișare), te rugăm să ne semnalezi la adresa de mai sus, furnizând detalii (browser, capturi de ecran etc.).</p>
+                        
+                        <p>Vom încerca remedierea cât mai curând posibil. Pentru întrebări legate de interpretarea rezultatelor testului sau implicațiile acestora, reamintim că nu putem oferi consultanță personalizată (vezi Art. 8.1 și 8.3), dar putem oferi clarificări generale despre cum se calculează scorul, ce înseamnă anumiți termeni folosiți în raport etc.</p>
+                    </section>
+                    
+                    <section id="art-15" class="term-article">
+                        <h2>Art. 15. Divizibilitatea clauzelor</h2>
+                        
+                        <h3>15.1. Validitatea separată a clauzelor:</h3>
+                        
+                        <p>Dacă orice prevedere (clauză) din acești Termeni este sau devine, într-o anumită jurisdicție, nulă, nevalidă, neaplicabilă sau inaplicabilă (de exemplu, o instanță o declară clauză abuzivă față de un consumator, sau contrară ordinii publice), acea prevedere va fi interpretată în sensul cel mai apropiat intenției inițiale permis de lege sau, dacă e necesar, considerată <strong>separabilă</strong> de restul Termenilor.</p>
+                        
+                        <p>Într-o asemenea situație, nulitatea sau inaplicabilitatea acelei prevederi <strong>nu va afecta valabilitatea celorlalte prevederi</strong> ale Termenilor, care vor continua să producă efecte juridice depline între părți. Părțile (sau instanța, după caz) vor depune eforturi să înlocuiască clauza nulă cu o dispoziție valabilă care să reflecte cât mai bine scopul economic și juridic avut în vedere de părți la momentul acceptării acestor Termeni.</p>
+                        
+                        <h3>15.2. Clauze neuzuale:</h3>
+                        
+                        <p>În conformitate cu art. 1203 Cod Civil, părțile confirmă că au negociat și au acceptat expres (acolo unde este cazul) orice clauze care ar putea fi calificate drept "neuzuale", cum ar fi cele referitoare la limitarea răspunderii, exonerarea de răspundere, restrângerea drepturilor utilizatorilor etc., așa cum sunt ele prezente în Termeni.</p>
+                        
+                        <p><em>(Operatorul a depus toate eforturile de a redacta Termenii într-un limbaj clar și transparent – rezumatul pe înțelesul tuturor de la început servește drept dovadă a acestui angajament.)</em></p>
+                    </section>
+                    
+                    <section id="art-16" class="term-article">
+                        <h2>Art. 16. Întregul acord</h2>
+                        
+                        <h3>16.1. Caracter unitar:</h3>
+                        
+                        <p>Acești Termeni și Condiții (inclusiv orice documente sau politici la care se face referire în conținutul lor, cum ar fi eventuale Politici de Confidențialitate sau Acorduri de Licență) constituie <strong>întregul acord</strong> dintre tine și Operator privind utilizarea platformei testautism.ro și înlocuiesc orice înțelegeri, negocieri, discuții sau acorduri anterioare (orale sau scrise) referitoare la același subiect.</p>
+                        
+                        <p>Orice declarații, promisiuni sau asigurări făcute în alt context (de exemplu, pe pagini de social media sau prin corespondență privată), care nu sunt incluse în mod explicit în acești Termeni, nu vor fi obligatorii pentru părți.</p>
+                        
+                        <h3>16.2. Absența dependenței de afirmații externe:</h3>
+                        
+                        <p>Atunci când ai acceptat acești Termeni, ai făcut-o <strong>bazându-te exclusiv</strong> pe conținutul acestui document și pe informațiile oficiale furnizate pe Site, nu pe eventuale reprezentări din afara lui. Operatorul nu va fi ținut de nicio interpretare eronată a Termenilor dacă aceasta provine din surse neoficiale.</p>
+                        
+                        <h3>16.3. Modificări ulterioare:</h3>
+                        
+                        <p>Orice modificare sau completare a prezentului acord va fi valabilă doar dacă este efectuată de Operator în conformitate cu procedura de la Art. 13 (sau, în ipoteza teoretică a unei negocieri individuale, dacă este consemnată în scris și semnată/agreată explicit de ambele părți).</p>
+                        
+                        <h3>16.4. Relația dintre părți:</h3>
+                        
+                        <p>Acceptând acești Termeni, se creează un raport juridic de natură contractuală între tine și Operator, <strong>neexclusiv și necomercial</strong>.</p>
+                        
+                        <p>Nicio prevedere din Termeni nu trebuie interpretată ca creând între părți o relație de asociere, joint venture, angajator-angajat, mandant-mandatar sau de reprezentare reciprocă.</p>
+                        
+                        <p>Ești un <strong>utilizator independent</strong>, iar Operatorul – un furnizor de servicii informaționale; niciuna din părți nu are dreptul să asume obligații sau răspunderi în numele celeilalte.</p>
+                        
+                        <h3>16.5. Renunțarea la drepturi:</h3>
+                        
+                        <p>Neexercitarea sau întârzierea în exercitarea de către Operator a oricărui drept prevăzut în Termeni (sau de lege) nu constituie și nu trebuie interpretată ca o <strong>renunțare la acel drept</strong>.</p>
+                        
+                        <p>Dacă Operatorul iartă o încălcare a Termenilor de către un anumit Utilizator, această indulgență este valabilă doar pentru situația concretă și nu va prelungi sau renunța la dreptul Operatorului de a acționa în caz de încălcări similare viitoare.</p>
+                        
+                        <p>Orice renunțare la un drept va fi eficace numai dacă este realizată în scris și comunicată celeilalte părți.</p>
+                    </section>
+                    
+                    <!-- End of document notice -->
+                    <div class="text-center mt-5 mb-5 py-3 bg-light rounded">
+                        <p><em>(Sfârșitul Termenilor și Condițiilor. Versiune actualizată la 19 mai 2025.)</em></p>
+                    </div>
+                    
+                    <!-- Navigation between sections -->
+                    <div class="content-nav">
+                        <a href="#rezumat-executiv" class="nav-prev">
+                            <i class="fas fa-arrow-left" aria-hidden="true"></i> Înapoi la Rezumat
+                        </a>
+                        <a href="#top" class="nav-next">
+                            Sus la început <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Back to top button -->
+                <button id="backToTop" class="back-to-top" aria-label="Înapoi la început">
+                    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                </button>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="text-center">
+                        <p>© 2025 testautism.ro. Toate drepturile rezervate.</p>
+                        <p>Pentru întrebări despre acești termeni, contactați <a href="mailto:contact@aboutadhd.ro">contact@aboutadhd.ro</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- FontAwesome fallback (if CDN fails) -->
+        <noscript>
+            <style>
+                /* Basic icon fallbacks when FontAwesome is not available */
+                [class*="fas fa-"], [class*="fab fa-"] {
+                    display: inline-block;
+                    width: 1em;
+                    height: 1em;
+                    background-color: currentColor;
+                    margin-right: 0.5em;
+                }
+                .fa-arrow-up::before { content: "↑"; }
+                .fa-arrow-down::before { content: "↓"; }
+                .fa-arrow-left::before { content: "←"; }
+                .fa-arrow-right::before { content: "→"; }
+                .fa-question-circle::before { content: "?"; }
+                .fa-info-circle::before { content: "i"; }
+                .fa-exclamation-circle::before { content: "!"; }
+                .fa-facebook::before { content: "f"; }
+                .fa-twitter::before { content: "t"; }
+                .fa-linkedin::before { content: "in"; }
+            </style>
+        </noscript>
+
+        <!-- No-JS fallbacks -->
+        <noscript>
+            <style>
+                /* Show all content without JS */
+                .mobile-toc { display: block !important; }
+                .accordion-content { display: block !important; }
+                .back-to-top { display: none !important; }
+                .toc-toggle { display: none !important; }
+                .mobile-toc-toggle { display: none !important; }
+                .search-container { display: none !important; }
+                
+                /* Add print-like styling for better readability without JS */
+                body {
+                    font-size: 16px;
+                    line-height: 1.6;
+                }
+                
+                .content-area {
+                    margin: 0 auto;
+                    max-width: 800px;
+                }
+                
+                /* Hide elements that require JS */
+                .accessibility-controls { display: none !important; }
+                .reading-progress-container { display: none !important; }
+                
+                /* Add navigation indicators */
+                .term-article {
+                    border-left: 3px solid #ddd;
+                    padding-left: 1em;
+                    margin-bottom: 2em;
+                }
+                
+                /* Add notice at the top */
+                body::before {
+                    content: "JavaScript este dezactivat. Unele funcționalități, cum ar fi navigarea îmbunătățită și căutarea, nu sunt disponibile.";
+                    display: block;
+                    padding: 10px;
+                    background-color: #fff3cd;
+                    color: #856404;
+                    border: 1px solid #ffeeba;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+            </style>
+        </noscript>
+
+        <!-- JavaScript for enhanced functionality -->
+        <script>
+            // Safely select elements, handling potential nulls
+            // const $ = (selector) => document.querySelector(selector);
+            const $ = (selector) => document.querySelectorAll(selector);
+            
+            // DOM elements
+            const readingProgress = $('#readingProgress');
+            const backToTopButton = $('#backToTop');
+            const mobileTocToggle = $('#mobileTocToggle');
+            const mobileToc = $('#mobileToc');
+            const fontSizeToggle = $('#fontSizeToggle');
+            const contrastToggle = $('#contrastToggle');
+            const lineHeightToggle = $('#lineHeightToggle');
+            const readAloudToggle = $('#readAloudToggle');
+            const currentLanguage = $('#currentLanguage');
+            const languageDropdown = $('#languageDropdown');
+            const searchInput = $('#searchInput');
+            const searchResults = $('#searchResults');
+            const searchResultsList = $('#searchResultsList');
+            const searchCount = $('#searchCount');
+            
+            // Initialize reading progress functionality
+            function initReadingProgress() {
+                if (!readingProgress) return;
+                
+                window.addEventListener('scroll', () => {
+                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                    const scrollHeight = document.documentElement.scrollHeight;
+                    const clientHeight = document.documentElement.clientHeight;
+                    
+                    const scrolled = ((scrollTop / (scrollHeight - clientHeight)) * 100);
+                    readingProgress.style.width = scrolled + '%';
+                });
+            }
+            
+            // Initialize back to top button
+            function initBackToTop() {
+                if (!backToTopButton) return;
+                
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        backToTopButton.classList.add('show');
+                    } else {
+                        backToTopButton.classList.remove('show');
+                    }
+                });
+                
+                backToTopButton.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            // Initialize mobile TOC
+            function initMobileToc() {
+                if (!mobileTocToggle || !mobileToc) return;
+                
+                mobileTocToggle.addEventListener('click', () => {
+                    const expanded = mobileTocToggle.getAttribute('aria-expanded') === 'true';
+                    mobileTocToggle.setAttribute('aria-expanded', !expanded);
+                    mobileToc.classList.toggle('show');
+                    
+                    mobileTocToggle.textContent = expanded ? 'Arată cuprinsul' : 'Ascunde cuprinsul';
+                });
+            }
+            
+            // Initialize accessibility controls
+            function initAccessibilityControls() {
+                // Font size control
+                if (fontSizeToggle) {
+                    let fontSizeState = 0; // 0: normal, 1: larger, 2: largest
+                    fontSizeToggle.addEventListener('click', () => {
+                        fontSizeState = (fontSizeState + 1) % 3;
+                        document.body.classList.remove('font-size-larger', 'font-size-largest');
+                        
+                        if (fontSizeState === 1) {
+                            document.body.classList.add('font-size-larger');
+                            fontSizeToggle.innerHTML = '<span aria-hidden="true">A+</span> Mărime text (mare)';
+                        } else if (fontSizeState === 2) {
+                            document.body.classList.add('font-size-largest');
+                            fontSizeToggle.innerHTML = '<span aria-hidden="true">A++</span> Mărime text (foarte mare)';
+                        } else {
+                            fontSizeToggle.innerHTML = '<span aria-hidden="true">A</span> Mărime text (normal)';
+                        }
+                    });
+                }
+                
+                // High contrast control
+                if (contrastToggle) {
+                    contrastToggle.addEventListener('click', () => {
+                        document.body.classList.toggle('high-contrast');
+                        if (document.body.classList.contains('high-contrast')) {
+                            contrastToggle.innerHTML = '<span aria-hidden="true">◐</span> Contrast normal';
+                        } else {
+                            contrastToggle.innerHTML = '<span aria-hidden="true">◐</span> Contrast ridicat';
+                        }
+                    });
+                }
+                
+                // Line height control
+                if (lineHeightToggle) {
+                    let lineHeightState = 0; // 0: normal, 1: larger, 2: largest
+                    lineHeightToggle.addEventListener('click', () => {
+                        lineHeightState = (lineHeightState + 1) % 3;
+                        document.body.classList.remove('line-height-larger', 'line-height-largest');
+                        
+                        if (lineHeightState === 1) {
+                            document.body.classList.add('line-height-larger');
+                            lineHeightToggle.innerHTML = '<span aria-hidden="true">≡</span> Spațiu între rânduri (mare)';
+                        } else if (lineHeightState === 2) {
+                            document.body.classList.add('line-height-largest');
+                            lineHeightToggle.innerHTML = '<span aria-hidden="true">≡</span> Spațiu între rânduri (foarte mare)';
+                        } else {
+                            lineHeightToggle.innerHTML = '<span aria-hidden="true">≡</span> Spațiu între rânduri (normal)';
+                        }
+                    });
+                }
+                
+                // Read aloud functionality (if Speech Synthesis is available)
+                if (readAloudToggle && 'speechSynthesis' in window) {
+                    let isReading = false;
+                    let currentUtterance = null;
+                    
+                    readAloudToggle.addEventListener('click', () => {
+                        if (isReading) {
+                            window.speechSynthesis.cancel();
+                            isReading = false;
+                            readAloudToggle.innerHTML = '<span aria-hidden="true">🔊</span> Citește cu voce tare';
+                        } else {
+                            // Get all the text from the main content
+                            const contentArea = $('.content-area');
+                            if (!contentArea) return;
+                            
+                            // Get all text nodes that are not in the TOC or navigation
+                            const textContent = Array.from(contentArea.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6'))
+                                .filter(el => !el.closest('.toc') && !el.closest('.content-nav'))
+                                .map(el => el.textContent)
+                                .join('. ');
+                            
+                            // Split into manageable chunks (browsers often struggle with very long text)
+                            const chunks = textContent.match(/.{1,1000}(?:\.|\?|!|$)/g) || [];
+                            
+                            let utterances = chunks.map(chunk => {
+                                const utterance = new SpeechSynthesisUtterance(chunk);
+                                utterance.lang = 'ro-RO';
+                                return utterance;
+                            });
+                            
+                            // Start reading
+                            let currentIndex = 0;
+                            
+                            const speakNext = () => {
+                                if (currentIndex < utterances.length) {
+                                    currentUtterance = utterances[currentIndex];
+                                    
+                                    currentUtterance.onend = () => {
+                                        currentIndex++;
+                                        if (currentIndex < utterances.length && isReading) {
+                                            setTimeout(speakNext, 500); // Small pause between chunks
+                                        } else if (currentIndex >= utterances.length) {
+                                            isReading = false;
+                                            readAloudToggle.innerHTML = '<span aria-hidden="true">🔊</span> Citește cu voce tare';
+                                        }
+                                    };
+                                    
+                                    window.speechSynthesis.speak(currentUtterance);
+                                }
+                            };
+                            
+                            isReading = true;
+                            readAloudToggle.innerHTML = '<span aria-hidden="true">🔊</span> Oprește citirea';
+                            
+                            // Make sure we cancel any previous reading
+                            window.speechSynthesis.cancel();
+                            speakNext();
+                        }
+                    });
+                } else if (readAloudToggle) {
+                    // Speech synthesis not available
+                    readAloudToggle.disabled = true;
+                    readAloudToggle.innerHTML = '<span aria-hidden="true">🔇</span> Citire indisponibilă';
+                    readAloudToggle.title = 'Browserul dvs. nu suportă citirea cu voce tare';
+                }
+            }
+            
+            // Initialize table of contents highlighting
+            function initTocHighlighting() {
+                const articles = $('.term-article');
+                const tocLinks = $('.toc-list a');
+                
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '-100px 0px -80% 0px',
+                    threshold: 0
+                };
+                
+                const observerCallback = (entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            // Remove active class from all links
+                            tocLinks.forEach(link => link.classList.remove('active'));
+                            
+                            // Add active class to corresponding TOC link
+                            const id = entry.target.id;
+                            const correspondingLink = Array.from(tocLinks).find(link => 
+                                link.getAttribute('href') === `#${id}`
+                            );
+                            
+                            if (correspondingLink) {
+                                correspondingLink.classList.add('active');
+                            }
+                        }
+                    });
+                };
+                
+                // Create an observer instance
+                const observer = new IntersectionObserver(observerCallback, observerOptions);
+                
+                // Observe each section
+                articles.forEach(article => {
+                    observer.observe(article);
+                });
+                
+                // Add smooth scrolling to TOC links
+                tocLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        const targetElement = $(targetId);
+                        
+                        if (targetElement) {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 80,
+                                behavior: 'smooth'
+                            });
+                            
+                            // Update URL without triggering a jump
+                            history.pushState(null, null, targetId);
+                            
+                            // If on mobile, close the TOC
+                            if (mobileToc && mobileToc.classList.contains('show')) {
+                                mobileToc.classList.remove('show');
+                                if (mobileTocToggle) {
+                                    mobileTocToggle.setAttribute('aria-expanded', 'false');
+                                    mobileTocToggle.textContent = 'Arată cuprinsul';
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Initialize language selector
+            function initLanguageSelector() {
+                if (!currentLanguage || !languageDropdown) return;
+                
+                currentLanguage.addEventListener('click', () => {
+                    languageDropdown.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!currentLanguage.contains(e.target)) {
+                        languageDropdown.classList.remove('show');
+                    }
+                });
+                
+                // Language selection (just for demonstration - would need backend integration for actual language switch)
+                const languageOptions = $('.language-option');
+                languageOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        const lang = option.getAttribute('data-lang');
+                        const flagSrc = option.querySelector('.language-flag').src;
+                        const langText = option.querySelector('span').textContent;
+                        
+                        // Update current language display
+                        currentLanguage.querySelector('.language-flag').src = flagSrc;
+                        currentLanguage.querySelector('span').textContent = langText;
+                        
+                        // Close dropdown
+                        languageDropdown.classList.remove('show');
+                        
+                        // Show message about language limitations
+                        alert('În prezent, documentul este disponibil doar în limba română. Versiunile în alte limbi vor fi adăugate în viitor.');
+                    });
+                });
+            }
+            
+            // Initialize search functionality
+            function initSearch() {
+                if (!searchInput || !searchResults || !searchResultsList || !searchCount) return;
+                
+                // Debounce function for search
+                const debounce = (func, delay) => {
+                    let timeout;
+                    return function() {
+                        const context = this;
+                        const args = arguments;
+                        clearTimeout(timeout);
+                        timeout = setTimeout(() => func.apply(context, args), delay);
+                    };
+                };
+                
+                // Extract text content from document for search
+                const contentSections = $('.term-article');
+                const searchableContent = [];
+                
+                contentSections.forEach(section => {
+                    const headings = section.querySelectorAll('h2, h3, h4');
+                    const paragraphs = section.querySelectorAll('p');
+                    const lists = section.querySelectorAll('li');
+                    
+                    headings.forEach(heading => {
+                        searchableContent.push({
+                            id: section.id,
+                            text: heading.textContent,
+                            type: 'heading',
+                            element: heading
+                        });
+                    });
+                    
+                    paragraphs.forEach(paragraph => {
+                        searchableContent.push({
+                            id: section.id,
+                            text: paragraph.textContent,
+                            type: 'paragraph',
+                            element: paragraph
+                        });
+                    });
+                    
+                    lists.forEach(item => {
+                        searchableContent.push({
+                            id: section.id,
+                            text: item.textContent,
+                            type: 'list-item',
+                            element: item
+                        });
+                    });
+                });
+                
+                // Function to perform search
+                const performSearch = (query) => {
+                    if (!query.trim()) {
+                        searchResults.classList.remove('show');
+                        searchCount.textContent = '';
+                        return;
+                    }
+                    
+                    // Search for matches
+                    const matches = searchableContent.filter(item => 
+                        item.text.toLowerCase().includes(query.toLowerCase())
+                    );
+                    
+                    // Display results
+                    if (matches.length > 0) {
+                        searchResults.classList.add('show');
+                        searchResultsList.innerHTML = '';
+                        
+                        // Group matches by section ID
+                        const groupedMatches = matches.reduce((acc, match) => {
+                            if (!acc[match.id]) {
+                                acc[match.id] = [];
+                            }
+                            acc[match.id].push(match);
+                            return acc;
+                        }, {});
+                        
+                        // Build results list
+                        Object.entries(groupedMatches).forEach(([sectionId, sectionMatches]) => {
+                            const section = $(`#${sectionId}`);
+                            if (!section) return;
+                            
+                            const sectionHeading = section.querySelector('h2')?.textContent || sectionId;
+                            
+                            const listItem = document.createElement('li');
+                            const link = document.createElement('a');
+                            link.href = `#${sectionId}`;
+                            
+                            // Create text content with first match highlighted
+                            const firstMatch = sectionMatches[0];
+                            const matchText = firstMatch.text;
+                            const matchIndex = matchText.toLowerCase().indexOf(query.toLowerCase());
+                            
+                            let displayText = sectionHeading + ': ';
+                            
+                            if (matchIndex !== -1) {
+                                const beforeMatch = matchText.substring(0, matchIndex);
+                                const match = matchText.substring(matchIndex, matchIndex + query.length);
+                                const afterMatch = matchText.substring(matchIndex + query.length);
+                                
+                                // Truncate if too long
+                                const maxLength = 100;
+                                let before = beforeMatch;
+                                let after = afterMatch;
+                                
+                                if (before.length > 40) {
+                                    before = '...' + before.substring(before.length - 40);
+                                }
+                                
+                                if (after.length > 40) {
+                                    after = after.substring(0, 40) + '...';
+                                }
+                                
+                                displayText += before + '<span class="search-highlight">' + match + '</span>' + after;
+                            } else {
+                                displayText += matchText.substring(0, 100) + (matchText.length > 100 ? '...' : '');
+                            }
+                            
+                            link.innerHTML = displayText;
+                            
+                            // Add click event
+                            link.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                
+                                // Close search results
+                                searchResults.classList.remove('show');
+                                
+                                // Scroll to section
+                                window.scrollTo({
+                                    top: section.offsetTop - 80,
+                                    behavior: 'smooth'
+                                });
+                                
+                                // Update URL
+                                history.pushState(null, null, `#${sectionId}`);
+                                
+                                // Highlight the relevant text
+                                const elementToHighlight = firstMatch.element;
+                                if (elementToHighlight) {
+                                    // Remove any existing highlights
+                                    $('.temp-highlight').forEach(el => {
+                                        el.classList.remove('temp-highlight');
+                                    });
+                                    
+                                    // Add highlight
+                                    elementToHighlight.classList.add('temp-highlight');
+                                    elementToHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    
+                                    // Remove highlight after a delay
+                                    setTimeout(() => {
+                                        elementToHighlight.classList.remove('temp-highlight');
+                                    }, 3000);
+                                }
+                            });
+                            
+                            listItem.appendChild(link);
+                            searchResultsList.appendChild(listItem);
+                        });
+                        
+                        // Update count
+                        searchCount.textContent = `${matches.length} rezultate găsite pentru "${query}"`;
+                    } else {
+                        searchResults.classList.add('show');
+                        searchResultsList.innerHTML = '<li>Nu s-au găsit rezultate pentru "' + query + '"</li>';
+                        searchCount.textContent = 'Nu s-au găsit rezultate';
+                    }
+                };
+                
+                // Debounced search
+                const debouncedSearch = debounce(performSearch, 300);
+                
+                // Add event listener for search input
+                searchInput.addEventListener('input', () => {
+                    debouncedSearch(searchInput.value);
+                });
+                
+                // Handle click outside to close search results
+                document.addEventListener('click', (e) => {
+                    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                        searchResults.classList.remove('show');
+                    }
+                });
+            }
+            
+            // When the DOM is fully loaded
+            document.addEventListener('DOMContentLoaded', () => {
+                initReadingProgress();
+                initBackToTop();
+                initMobileToc();
+                initAccessibilityControls();
+                initTocHighlighting();
+                initLanguageSelector();
+                initSearch();
+                
+                // Add temp-highlight class styling
+                const style = document.createElement('style');
+                style.textContent = `
+                    .temp-highlight {
+                        background-color: var(--warning-color);
+                        animation: highlight-fade 3s;
+                    }
+                    
+                    @keyframes highlight-fade {
+                        0% { background-color: var(--warning-color); }
+                        70% { background-color: var(--warning-color); }
+                        100% { background-color: transparent; }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                // Add CSS animation for back to top button
+                const animStyle = document.createElement('style');
+                animStyle.textContent = `
+                    .back-to-top:hover {
+                        animation: gentle-bounce 0.5s;
+                    }
+                    
+                    @keyframes gentle-bounce {
+                        0%, 100% { transform: translateY(0); }
+                        50% { transform: translateY(-10px); }
+                    }
+                `;
+                document.head.appendChild(animStyle);
+                
+                // Add CSS for tooltips
+                const tooltipStyle = document.createElement('style');
+                tooltipStyle.textContent = `
+                    .law-reference:hover::after {
+                        content: attr(title);
+                        position: absolute;
+                        bottom: 100%;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background-color: var(--primary-color);
+                        color: white;
+                        padding: 0.5rem;
+                        border-radius: var(--border-radius);
+                        white-space: nowrap;
+                        z-index: 10;
+                        font-style: normal;
+                        font-size: 0.9rem;
+                        max-width: 300px;
+                        text-align: center;
+                    }
+                `;
+                document.head.appendChild(tooltipStyle);
+            });
+        </script>
+    </body>
+</html>
