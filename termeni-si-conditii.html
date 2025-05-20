@@ -1150,9 +1150,10 @@
         <div class="container">
             <div class="d-flex justify-between align-center">
                 <div>
-                    <a href="#" class="d-flex align-center" style="text-decoration: none;">
-                        <span style="font-weight: 700; font-size: 1.3rem; color: var(--heading-color);">testautism.ro</span>
-                    </a>
+                    <span style="font-weight: 700; font-size: 1.3rem; color: var(--heading-color);">
+                        Termeni și Condiții de Utilizare a platformei 
+                        <a href="https://www.testautism.ro" target="_blank">testautism.ro</a>
+                    </span>
                 </div>
                 <div class="language-selector">
                     <div class="current-language" id="currentLanguage">
@@ -2059,8 +2060,8 @@
         <!-- JavaScript for enhanced functionality -->
         <script>
             // Safely select elements, handling potential nulls
-            // const $ = (selector) => document.querySelector(selector);
-            const $ = (selector) => document.querySelectorAll(selector);
+            const $ = (selector) => document.querySelector(selector);
+            const $$ = (selector) => document.querySelectorAll(selector);
             
             // DOM elements
             const readingProgress = $('#readingProgress');
@@ -2246,8 +2247,8 @@
             
             // Initialize table of contents highlighting
             function initTocHighlighting() {
-                const articles = $('.term-article');
-                const tocLinks = $('.toc-list a');
+                const articles = $$('.term-article');
+                const tocLinks = $$('.toc-list a');
                 
                 const observerOptions = {
                     root: null,
@@ -2327,7 +2328,7 @@
                 });
                 
                 // Language selection (just for demonstration - would need backend integration for actual language switch)
-                const languageOptions = $('.language-option');
+                const languageOptions = $$('.language-option');
                 languageOptions.forEach(option => {
                     option.addEventListener('click', () => {
                         const lang = option.getAttribute('data-lang');
@@ -2363,7 +2364,7 @@
                 };
                 
                 // Extract text content from document for search
-                const contentSections = $('.term-article');
+                const contentSections = $$('.term-article');
                 const searchableContent = [];
                 
                 contentSections.forEach(section => {
@@ -2489,7 +2490,7 @@
                                 const elementToHighlight = firstMatch.element;
                                 if (elementToHighlight) {
                                     // Remove any existing highlights
-                                    $('.temp-highlight').forEach(el => {
+                                    $$('.temp-highlight').forEach(el => {
                                         el.classList.remove('temp-highlight');
                                     });
                                     
