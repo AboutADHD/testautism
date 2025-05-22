@@ -1892,8 +1892,139 @@ window.addEventListener('beforeunload', () => {
     autoSaveManager.saveTestState();
 });
 
+/**
+ * Banner Termeni și Condiții - Funcționalitate pentru CAT-Q
+ */
+function initTermsAndConditions() {
+    const banner = document.getElementById('terms-banner');
+    const dismissButton = document.getElementById('terms-dismiss');
+    const understandButton = document.getElementById('terms-understand');
+    const keyboardHintText = document.getElementById('keyboard-hint-text');
+
+    // Check if banner exists
+    if (!banner) {
+        console.warn('Terms banner element not found');
+        return;
+    }
+
+    // Check if banner was previously dismissed
+    const isDismissed = localStorage.getItem('termsBannerDismissed');
+
+    if (isDismissed === 'true') {
+        banner.classList.add('dismissed');
+        document.body.classList.add('terms-dismissed');
+        return; // Exit early if already dismissed
+    }
+
+    // Ensure banner is visible by removing any dismissed class
+    banner.classList.remove('dismissed');
+    document.body.classList.remove('terms-dismissed');
+
+    // Add entrance animation
+    banner.style.transform = 'translateY(-100%)';
+    setTimeout(() => {
+        banner.style.transform = 'translateY(0)';
+    }, 100);
+
+    // Function to dismiss the banner
+    function dismissBanner() {
+        banner.classList.add('dismissed');
+        document.body.classList.add('terms-dismissed');
+        localStorage.setItem('termsBannerDismissed', 'true');
+
+        // Announce to screen readers that the banner is dismissed
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.classList.add('sr-only');
+        announcement.textContent = 'Notificare despre Termeni și Condiții închisă. Folosirea site-ului constituie în continuare acceptarea acestora.';
+        document.body.appendChild(announcement);
+
+        // Remove announcement after it's read
+        setTimeout(function() {
+            document.body.removeChild(announcement);
+        }, 3000);
+    }
+
+    // Add click event to dismiss button
+    if (dismissButton) {
+        dismissButton.addEventListener('click', dismissBanner);
+    }
+
+    // Add click event to understand button
+    if (understandButton) {
+        understandButton.addEventListener('click', dismissBanner);
+    }
+
+    // Update keyboard hint text - simplify to only show Escape key
+    if (keyboardHintText) {
+        keyboardHintText.innerHTML = 'Apasă <kbd>Esc</kbd> pentru a închide';
+    }
+
+    // Add keyboard shortcut - only Escape key
+    document.addEventListener('keydown', function(e) {
+        // Escape key to dismiss
+        if (e.key === 'Escape' && !banner.classList.contains('dismissed')) {
+            dismissBanner();
+        }
+
+        // Debug: Ctrl+Shift+T to reset banner (for testing)
+        if (e.ctrlKey && e.shiftKey && e.key === 'T') {
+            localStorage.removeItem('termsBannerDismissed');
+            banner.classList.remove('dismissed');
+            document.body.classList.remove('terms-dismissed');
+            console.log('Terms banner reset - page will reload');
+            location.reload();
+        }
+    });
+
+    // Debug info
+    console.log('Terms banner initialized:', {
+        bannerExists: !!banner,
+        isDismissed: isDismissed,
+        bannerClasses: banner ? banner.className : 'N/A'
+    });
+}
+
+/**
+ * Enhanced progress and navigation tracking for CAT-Q
+ */
+function initEnhancedProgressTracking() {
+    // Ensure progress updates when scrolling to see which section is active
+    let ticking = false;
+
+    function updateOnScroll() {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                updateQuickNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }
+
+    // Update quick nav on scroll
+    window.addEventListener('scroll', updateOnScroll);
+
+    // Update quick nav when questions are answered
+    document.addEventListener('change', (e) => {
+        if (e.target.type === 'radio') {
+            setTimeout(updateQuickNav, 100); // Small delay to ensure DOM updates
+        }
+    });
+
+    // Initial update
+    updateQuickNav();
+}
+
 // Restore state on page load
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Terms and Conditions Banner
+    initTermsAndConditions();
+
+    // Initialize enhanced progress tracking
+    initEnhancedProgressTracking();
+
     // Attempt to restore state after a slight delay to ensure form is fully loaded
     setTimeout(() => {
         autoSaveManager.restoreTestState();
