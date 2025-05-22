@@ -3114,13 +3114,30 @@ function initTermsAndConditions() {
     const understandButton = document.getElementById('terms-understand');
     const keyboardHintText = document.getElementById('keyboard-hint-text');
     
+    // Check if banner exists
+    if (!banner) {
+        console.warn('Terms banner element not found');
+        return;
+    }
+    
     // Check if banner was previously dismissed
     const isDismissed = localStorage.getItem('termsBannerDismissed');
     
     if (isDismissed === 'true') {
         banner.classList.add('dismissed');
         document.body.classList.add('terms-dismissed');
+        return; // Exit early if already dismissed
     }
+    
+    // Ensure banner is visible by removing any dismissed class
+    banner.classList.remove('dismissed');
+    document.body.classList.remove('terms-dismissed');
+    
+    // Add entrance animation
+    banner.style.transform = 'translateY(-100%)';
+    setTimeout(() => {
+        banner.style.transform = 'translateY(0)';
+    }, 100);
     
     // Function to dismiss the banner
     function dismissBanner() {
@@ -3163,6 +3180,22 @@ function initTermsAndConditions() {
         if (e.key === 'Escape' && !banner.classList.contains('dismissed')) {
             dismissBanner();
         }
+        
+        // Debug: Ctrl+Shift+T to reset banner (for testing)
+        if (e.ctrlKey && e.shiftKey && e.key === 'T') {
+            localStorage.removeItem('termsBannerDismissed');
+            banner.classList.remove('dismissed');
+            document.body.classList.remove('terms-dismissed');
+            console.log('Terms banner reset - page will reload');
+            location.reload();
+        }
+    });
+    
+    // Debug info
+    console.log('Terms banner initialized:', {
+        bannerExists: !!banner,
+        isDismissed: isDismissed,
+        bannerClasses: banner ? banner.className : 'N/A'
     });
 }
 

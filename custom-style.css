@@ -2065,17 +2065,20 @@ a:focus {
     top: 0;
     left: 0;
     right: 0;
-    background-color: rgba(255, 255, 255, 0.98);
+    width: 100%;
+    background-color: #ffffff;
     color: #333;
+    backdrop-filter: blur(10px);
     z-index: 9999; /* Increased z-index to ensure it's above everything else */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease-in-out;
     font-family: Arial, sans-serif;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 2px solid rgba(33, 150, 243, 0.2);
     min-height: 30px; /* Changed from fixed height to min-height to allow expansion if needed */
     display: flex;
     align-items: center;
     padding: 4px 0; /* Added padding for better spacing */
+    transform: translateY(0); /* Ensure it starts visible */
 }
 
 .terms-content {
@@ -2300,4 +2303,18 @@ body {
 /* When banner is dismissed, remove the body padding */
 body.terms-dismissed {
     padding-top: 0;
+}
+
+/* Force banner visibility - override any conflicts */
+.terms-banner:not(.dismissed) {
+    display: flex !important;
+    transform: translateY(0) !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Force banner hiding when dismissed */
+.terms-banner.dismissed {
+    transform: translateY(-100%) !important;
+    transition: transform 0.3s ease-in-out;
 }
