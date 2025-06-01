@@ -1163,7 +1163,7 @@ body {
 }
 
 .question-text {
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 1.5rem;
     color: #2c3e50;
@@ -1171,6 +1171,12 @@ body {
     padding: 0.8rem;
     border-radius: 8px;
     background-color: #f8f9fa;
+}
+
+@media (max-width: 480px) {
+    .question-text {
+        font-size: 0.9rem;
+    }
 }
 
 /* Enhanced form check styles */
@@ -1207,7 +1213,7 @@ body {
 
 /* Enhanced label text */
 .form-check-label {
-    font-size: 1.1rem;
+    font-size: 1rem;
     padding: 0.5rem;
     color: #455a64;
     cursor: pointer;
@@ -1293,7 +1299,7 @@ body {
     }
 
     .form-check-label {
-        font-size: 1rem;
+        font-size: 0.95rem;
         line-height: 1.5;
         padding: 0.75rem;
     }
@@ -1328,8 +1334,8 @@ body {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.08);
     z-index: 1000;
-    padding: 12px 0; /* Larger base padding */
-    min-height: 75px; /* Larger minimum height */
+    padding: 8px 0; /* Compact base padding */
+    min-height: 60px; /* Reduced height */
     display: block !important; /* Always visible on all screen sizes */
     visibility: visible !important; /* Force visibility */
 }
@@ -1352,26 +1358,26 @@ body {
     justify-content: center;
     color: #666;
     text-decoration: none;
-    font-size: 1rem; /* Much larger base font size */
+    font-size: 0.9rem; /* Compact base font size */
     font-weight: 500;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    min-height: 50px; /* Larger touch targets */
-    padding: 8px 12px; /* More generous padding */
+    min-height: 44px; /* Smaller touch targets */
+    padding: 6px 8px; /* Compact padding */
     border-radius: 8px;
     position: relative;
     flex: 1; /* Equal distribution */
-    max-width: 140px; /* Allow more space for text */
+    max-width: 120px; /* Allow more space for text */
 }
 
 .quick-nav-item i {
-    font-size: 1.5rem; /* Much larger icons */
+    font-size: 1.3rem; /* Compact icon size */
     margin-bottom: 4px;
     transition: all 0.3s ease;
     color: inherit;
 }
 
 .quick-nav-item span {
-    font-size: 0.85rem; /* Larger text */
+    font-size: 0.75rem; /* Compact text */
     line-height: 1.2;
     text-align: center;
     transition: all 0.3s ease;
@@ -1406,21 +1412,21 @@ body {
 /* Desktop - Large screens (≥1200px) */
 @media (min-width: 1200px) {
     .quick-nav-container {
-        padding: 16px 0;
-        min-height: 85px;
+        padding: 12px 0;
+        min-height: 70px;
         display: block !important;
         visibility: visible !important;
     }
     
     .quick-nav-item {
-        font-size: 1.1rem;
-        padding: 12px 16px;
-        min-height: 60px;
-        max-width: 160px;
+        font-size: 1rem;
+        padding: 10px 14px;
+        min-height: 56px;
+        max-width: 150px;
     }
     
     .quick-nav-item i {
-        font-size: 1.7rem;
+        font-size: 1.5rem;
         margin-bottom: 6px;
     }
     
@@ -1433,21 +1439,21 @@ body {
 /* Desktop - Standard screens (769px - 1199px) */
 @media (min-width: 769px) and (max-width: 1199px) {
     .quick-nav-container {
-        padding: 14px 0;
-        min-height: 80px;
+        padding: 10px 0;
+        min-height: 65px;
         display: block !important;
         visibility: visible !important;
     }
     
     .quick-nav-item {
-        font-size: 1.05rem;
-        padding: 10px 14px;
-        min-height: 55px;
-        max-width: 150px;
+        font-size: 0.95rem;
+        padding: 8px 12px;
+        min-height: 50px;
+        max-width: 130px;
     }
     
     .quick-nav-item i {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         margin-bottom: 5px;
     }
     
@@ -1460,21 +1466,21 @@ body {
 /* Tablet screens (481px - 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
     .quick-nav-container {
-        padding: 12px 0;
-        min-height: 75px;
+        padding: 9px 0;
+        min-height: 60px;
         display: block !important;
         visibility: visible !important;
     }
     
     .quick-nav-item {
-        font-size: 1rem;
-        padding: 8px 12px;
-        min-height: 50px;
-        max-width: 130px;
+        font-size: 0.9rem;
+        padding: 6px 8px;
+        min-height: 46px;
+        max-width: 120px;
     }
     
     .quick-nav-item i {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         margin-bottom: 4px;
     }
     
@@ -1487,26 +1493,26 @@ body {
 /* Mobile screens (≤480px) */
 @media (max-width: 480px) {
     .quick-nav-container {
-        padding: 10px 0;
-        min-height: 70px;
+        padding: 6px 0;
+        min-height: 50px;
         display: block !important;
         visibility: visible !important;
     }
     
     .quick-nav-item {
-        font-size: 0.95rem;
-        padding: 6px 8px;
-        min-height: 48px;
-        max-width: 110px;
+        font-size: 0.85rem;
+        padding: 4px 6px;
+        min-height: 40px;
+        max-width: 90px;
     }
     
     .quick-nav-item i {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         margin-bottom: 3px;
     }
     
     .quick-nav-item span {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         line-height: 1.15;
     }
 }
@@ -2637,7 +2643,7 @@ body.terms-dismissed {
     }
 
     .form-check-label {
-        font-size: 1rem; /* Maximum readability on small screens */
+        font-size: 0.9rem; /* Compact font for small screens */
         line-height: 1.6;
         padding: 1rem;
     }

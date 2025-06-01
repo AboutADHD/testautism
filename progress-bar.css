@@ -675,29 +675,29 @@
 /* Common small mobile (361px - 480px) */
 @media (min-width: 361px) and (max-width: 480px) {
     .progress-container {
-        padding: 11px 13px;
-        gap: 16px;
+        padding: 8px 10px;
+        gap: 12px;
         grid-template-columns: auto minmax(68%, 1fr) auto;
     }
 
     .progress-primary {
-        gap: 9px;
+        gap: 8px;
     }
     
     .progress-primary-controls {
-        gap: 14px;
+        gap: 12px;
     }
 
     .nav-btn, .reset-btn {
-        width: 44px;
-        height: 44px;
-        font-size: 1.1rem;
-        min-width: 44px;
-        min-height: 44px;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+        min-width: 40px;
+        min-height: 40px;
     }
 
     .counter-value {
-        font-size: 1.35rem;
+        font-size: 1.2rem;
     }
 
     .counter-label {
@@ -709,13 +709,13 @@
     }
 
     .progress-bar {
-        height: 12px;
-        margin: 0 9px;
+        height: 10px;
+        margin: 0 6px;
     }
 
     .time-estimate {
-        font-size: 0.85rem;
-        gap: 6px;
+        font-size: 0.8rem;
+        gap: 5px;
     }
 
     .time-value {
@@ -723,8 +723,8 @@
     }
 
     .progress-message {
-        font-size: 0.95rem;
-        padding: 8px 11px;
+        font-size: 0.9rem;
+        padding: 6px 9px;
         margin-top: 6px;
     }
 
@@ -741,29 +741,29 @@
 /* Standard mobile (481px - 576px) */
 @media (min-width: 481px) and (max-width: 576px) {
     .progress-container {
-        padding: 12px 14px;
-        gap: 18px;
+        padding: 9px 12px;
+        gap: 14px;
         grid-template-columns: auto minmax(70%, 1fr) auto;
     }
 
     .progress-primary {
-        gap: 10px;
+        gap: 9px;
     }
     
     .progress-primary-controls {
-        gap: 16px;
+        gap: 14px;
     }
 
     .nav-btn, .reset-btn {
-        width: 48px;
-        height: 48px;
-        font-size: 1.15rem;
-        min-width: 48px;
-        min-height: 48px;
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
+        min-width: 44px;
+        min-height: 44px;
     }
 
     .counter-value {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
 
     .counter-label {
@@ -775,13 +775,13 @@
     }
 
     .progress-bar {
-        height: 13px;
-        margin: 0 10px;
+        height: 11px;
+        margin: 0 8px;
     }
 
     .time-estimate {
-        font-size: 0.9rem;
-        gap: 7px;
+        font-size: 0.85rem;
+        gap: 6px;
     }
 
     .time-value {
@@ -789,8 +789,8 @@
     }
 
     .progress-message {
-        font-size: 1rem;
-        padding: 8px 12px;
+        font-size: 0.95rem;
+        padding: 7px 10px;
         margin-top: 6px;
     }
 
