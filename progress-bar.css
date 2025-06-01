@@ -30,7 +30,7 @@
     grid-template-columns: auto minmax(70%, 1fr) auto;
     grid-template-rows: auto auto;
     gap: 16px; /* Base gap for desktop */
-    padding: 16px 20px; /* Base padding for desktop */
+    padding: calc(16px + env(safe-area-inset-top)) 20px 16px; /* Account for safe areas */
 
     /* Responsive width management */
     width: 100%;
@@ -74,7 +74,7 @@
 @media (min-width: 1200px) {
     .progress-container {
         max-width: min(1100px, 85vw); /* Larger max-width for large screens */
-        padding: 18px 24px; /* More generous padding */
+        padding: calc(18px + env(safe-area-inset-top)) 24px 18px; /* More generous padding with safe area */
         gap: 20px; /* Increased gap for large screens */
     }
 }
@@ -83,7 +83,7 @@
 @media (min-width: 1600px) {
     .progress-container {
         max-width: min(1200px, 80vw); /* Constrain width on ultra-wide screens */
-        padding: 20px 28px; /* Maximum padding */
+        padding: calc(20px + env(safe-area-inset-top)) 28px 20px; /* Maximum padding with safe area */
         gap: 22px; /* Maximum gap */
     }
 }
@@ -819,7 +819,7 @@
 /* Enhanced tablet layout */
 @media (min-width: 577px) and (max-width: 767px) {
     .progress-container {
-        padding: 14px 16px; /* More padding for tablets */
+        padding: calc(14px + env(safe-area-inset-top)) 16px 14px; /* More padding for tablets with safe area */
         gap: 18px;
     }
 
@@ -847,7 +847,7 @@
 /* Desktop enhancements with larger touch targets */
 @media (min-width: 768px) {
     .progress-container {
-        padding: 16px 24px; /* Enhanced desktop padding */
+        padding: calc(16px + env(safe-area-inset-top)) 24px 16px; /* Enhanced desktop padding with safe area */
         gap: 20px;
     }
 
