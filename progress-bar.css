@@ -29,8 +29,8 @@
     display: grid;
     grid-template-columns: auto minmax(70%, 1fr) auto;
     grid-template-rows: auto auto;
-    gap: 16px; /* Base gap for desktop */
-    padding: calc(16px + env(safe-area-inset-top)) 20px 16px; /* Account for safe areas */
+    gap: clamp(12px, 2vw, 16px); /* Responsive gap */
+    padding: calc(clamp(12px, 2vh, 16px) + env(safe-area-inset-top)) clamp(1rem, 3vw, 20px) clamp(12px, 2vh, 16px); /* Responsive padding with safe area */
 
     /* Responsive width management */
     width: 100%;
@@ -43,7 +43,7 @@
     visibility: hidden;
 
     /* Font size scaling base */
-    font-size: 14px; /* Base font size for scaling */
+    font-size: clamp(0.85rem, 1vw, 1rem); /* Responsive font size */
 }
 
 /* Active state */
