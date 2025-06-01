@@ -2946,6 +2946,19 @@ function setupEventListeners() {
         confirmRestartBtn.addEventListener('click', restartTest);
     }
 
+    // Handler buton de reset din progress container
+    const resetBtn = document.querySelector('.reset-btn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const restartWarningModal = document.getElementById('restartWarningModal');
+            if (restartWarningModal) {
+                const bsModal = bootstrap.Modal.getOrCreateInstance(restartWarningModal);
+                bsModal.show();
+            }
+        });
+    }
+
     // Handler buton de start test
     if (startBtn) {
         startBtn.addEventListener('click', (e) => {
@@ -3243,6 +3256,9 @@ function init() {
     
     // Inițializează integrarea sistemelor
     setTimeout(initializeSystemIntegration, 300);
+    
+    // Inițializează Mobile FAB cu comportament scroll-based
+    initMobileFAB();
 }
 
 // Inițializează când DOM-ul este încărcat
@@ -3251,3 +3267,620 @@ if (document.readyState === 'loading') {
 } else {
     init();
 }
+
+// ===== MOBILE FLOATING ACTION BUTTON (FAB) FUNCTIONALITY =====
+
+/**
+ * Enhanced Mobile FAB (Floating Action Button) Management
+ * Shows "Jump to Test" button when scrolling past hero section on mobile
+ */
+function initMobileFAB() {
+    const fabContainer = document.getElementById('mobile-fab-container');
+    const heroSection = document.querySelector('.cta-button-wrapper'); // Hero section with main CTA
+    
+    if (!fabContainer) return;
+    
+    let isVisible = false;
+    let scrollTimeout;
+    
+    function toggleFABVisibility() {
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        
+        scrollTimeout = setTimeout(() => {
+            // Show on all screen sizes now (removed desktop restriction)
+            const scrollPosition = window.pageYOffset;
+            const heroBottom = heroSection ? heroSection.getBoundingClientRect().bottom + window.pageYOffset : 500;
+            
+            // Check if user is scrolling over the test section
+            const testSection = document.querySelector('.test-actual-container');
+            let isInTestSection = false;
+            
+            if (testSection) {
+                const testRect = testSection.getBoundingClientRect();
+                const testTop = testRect.top + window.pageYOffset;
+                const testBottom = testRect.bottom + window.pageYOffset;
+                isInTestSection = scrollPosition >= testTop && scrollPosition <= testBottom;
+            }
+            
+            // Show FAB when scrolled past hero section but NOT in test section
+            const shouldShow = scrollPosition > heroBottom && !isInTestSection;
+            
+            if (shouldShow && !isVisible) {
+                fabContainer.style.display = 'block';
+                fabContainer.classList.add('visible', 'show');
+                fabContainer.classList.remove('hidden');
+                isVisible = true;
+            } else if (!shouldShow && isVisible) {
+                fabContainer.classList.remove('visible', 'show');
+                fabContainer.classList.add('hidden');
+                setTimeout(() => {
+                    if (!isVisible) { // Double-check in case state changed
+                        fabContainer.style.display = 'none';
+                    }
+                }, 300); // Wait for animation to complete
+                isVisible = false;
+            }
+        }, 10); // Small debounce for performance
+    }
+    
+    // Enhanced resize handler for responsive behavior
+    function handleResize() {
+        // Show on all screen sizes now (removed desktop restriction)
+        // Re-evaluate visibility on all devices
+        toggleFABVisibility();
+    }
+    
+    // Event listeners with performance optimization
+    window.addEventListener('scroll', toggleFABVisibility, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
+    
+    // Initial check
+    handleResize();
+    
+    // Enhanced click handling with haptic feedback (if available)
+    const fabButton = document.getElementById('mobile-jump-to-test');
+    if (fabButton) {
+        fabButton.addEventListener('click', (e) => {
+            // Haptic feedback for mobile devices (if supported)
+            if (navigator.vibrate) {
+                navigator.vibrate(50); // Short vibration feedback
+            }
+            
+            // Visual feedback
+            fabButton.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                fabButton.style.transform = '';
+            }, 150);
+        });
+    }
+    
+    return {
+        show: () => {
+            // Show on all screen sizes now (removed device restriction)
+            fabContainer.style.display = 'block';
+            fabContainer.classList.add('visible', 'show');
+            fabContainer.classList.remove('hidden');
+            isVisible = true;
+        },
+        hide: () => {
+            fabContainer.classList.remove('visible', 'show');
+            fabContainer.classList.add('hidden');
+            setTimeout(() => fabContainer.style.display = 'none', 300);
+            isVisible = false;
+        },
+        destroy: () => {
+            window.removeEventListener('scroll', toggleFABVisibility);
+            window.removeEventListener('resize', handleResize);
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+        }
+    };
+}
+
+// ===== ENHANCED MOBILE NAVIGATION AND ACCESSIBILITY =====
+
+/**
+ * Enhanced mobile navigation improvements
+ * Improves thumb navigation and accessibility on mobile devices
+ */
+function enhanceMobileNavigation() {
+    // Enhanced touch feedback for mobile form elements
+    const formChecks = document.querySelectorAll('.form-check');
+    
+    formChecks.forEach(formCheck => {
+        // Add enhanced mobile touch feedback
+        formCheck.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        }, { passive: true });
+        
+        formCheck.addEventListener('touchend', function() {
+            this.style.transform = '';
+        }, { passive: true });
+        
+        // Enhanced accessibility for screen readers
+        const input = formCheck.querySelector('input[type="radio"]');
+        const label = formCheck.querySelector('.form-check-label');
+        
+        if (input && label) {
+            // Improve voice-over experience on mobile
+            input.addEventListener('focus', () => {
+                formCheck.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', () => {
+                formCheck.classList.remove('focused');
+            });
+        }
+    });
+    
+    // Enhanced CTA button mobile feedback
+    const ctaButtons = document.querySelectorAll('.cta-button, .action-btn');
+    
+    ctaButtons.forEach(button => {
+        button.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        }, { passive: true });
+        
+        button.addEventListener('touchend', function() {
+            this.style.transform = '';
+        }, { passive: true });
+    });
+    
+    // Enhanced mobile keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        // Improved mobile keyboard handling
+        if (e.key === 'Tab' && window.innerWidth <= 768) {
+            // Ensure focused elements are visible on mobile
+            setTimeout(() => {
+                const focused = document.activeElement;
+                if (focused && focused.getBoundingClientRect) {
+                    const rect = focused.getBoundingClientRect();
+                    const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+                    
+                    if (!isVisible) {
+                        focused.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center',
+                            inline: 'nearest'
+                        });
+                    }
+                }
+            }, 100);
+        }
+    });
+}
+
+// ===== ENHANCED RESPONSIVE TEXT SCALING =====
+
+/**
+ * Dynamic text scaling based on viewport and device characteristics
+ * Ensures optimal readability across all mobile devices
+ */
+function initResponsiveTextScaling() {
+    function updateTextScaling() {
+        const viewport = window.innerWidth;
+        const isLandscape = window.innerWidth > window.innerHeight;
+        const root = document.documentElement;
+        
+        // Dynamic font scaling based on viewport
+        if (viewport <= 480) {
+            // Ultra-mobile: larger text for small screens
+            root.style.fontSize = isLandscape ? '17px' : '18px';
+        } else if (viewport <= 768) {
+            // Mobile: balanced text size
+            root.style.fontSize = isLandscape ? '16px' : '17px';
+        } else {
+            // Desktop: standard size
+            root.style.fontSize = '16px';
+        }
+        
+        // Adjust line-height for better mobile readability
+        if (viewport <= 768) {
+            document.body.style.lineHeight = '1.7';
+        } else {
+            document.body.style.lineHeight = '1.6';
+        }
+    }
+    
+    // Update on resize with debouncing
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(updateTextScaling, 150);
+    }, { passive: true });
+    
+    // Initial setup
+    updateTextScaling();
+}
+
+// ===== INITIALIZATION =====
+
+// Initialize all mobile enhancements when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize mobile FAB
+    const mobileFAB = initMobileFAB();
+    
+    // Initialize enhanced mobile navigation
+    enhanceMobileNavigation();
+    
+    // Initialize responsive text scaling
+    initResponsiveTextScaling();
+    
+    // Enhanced mobile viewport detection and optimization
+    function optimizeForMobile() {
+        const isMobile = window.innerWidth <= 768;
+        const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        if (isMobile || isTouch) {
+            // Add mobile-optimized class to body
+            document.body.classList.add('mobile-optimized');
+            
+            // Enhanced mobile viewport meta tag handling
+            let viewport = document.querySelector('meta[name=viewport]');
+            if (viewport) {
+                viewport.setAttribute('content', 
+                    'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes'
+                );
+            }
+            
+            // Prevent zoom on input focus (iOS Safari)
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.style.fontSize !== '16px') {
+                    input.style.fontSize = '16px'; // Prevent zoom on iOS
+                }
+            });
+        }
+    }
+    
+    // Run mobile optimization
+    optimizeForMobile();
+    
+    // Re-run on orientation change
+    window.addEventListener('orientationchange', () => {
+        setTimeout(optimizeForMobile, 300); // Wait for orientation change to complete
+    });
+    
+    // Cleanup function for single-page applications
+    window.cleanupMobileEnhancements = () => {
+        if (mobileFAB && mobileFAB.destroy) {
+            mobileFAB.destroy();
+        }
+    };
+});
+
+// ===== ENHANCED MOBILE NAVIGATION WITH SECTION HIGHLIGHTING =====
+
+/**
+ * Enhanced mobile navigation with automatic section highlighting
+ * Provides better visual feedback and smoother navigation experience
+ */
+function initEnhancedMobileNavigation() {
+    const quickNavItems = document.querySelectorAll('.quick-nav-item');
+    const sections = document.querySelectorAll('[id^="section-"]');
+    
+    if (!quickNavItems.length || !sections.length) {
+        return; // Exit if navigation elements not found
+    }
+    
+    // Function to highlight active navigation item based on scroll position
+    function highlightActiveSection() {
+        let currentSection = '';
+        const scrollPosition = window.scrollY + window.innerHeight / 3;
+        
+        // Determine which section is currently in view
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                currentSection = section.id;
+            }
+        });
+        
+        // Update navigation item states - only highlight if there's an active section
+        quickNavItems.forEach(item => {
+            const href = item.getAttribute('href');
+            // Remove active class from all items first
+            item.classList.remove('active');
+            
+            // Only add active class if there's a current section and this item links to it
+            if (currentSection && href && href === `#${currentSection}`) {
+                item.classList.add('active');
+            }
+        });
+    }
+    
+    // Enhanced click handler for smooth scrolling and visual feedback
+    quickNavItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Add visual feedback
+            this.style.transform = 'scale(0.95)';
+            this.style.transition = 'transform 0.15s ease';
+            
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+            
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                const navHeight = document.querySelector('.quick-nav-container')?.offsetHeight || 60;
+                const targetPosition = targetElement.offsetTop - navHeight - 20;
+                
+                // Smooth scroll to target
+                window.scrollTo({
+                    top: Math.max(0, targetPosition),
+                    behavior: 'smooth'
+                });
+                
+                // Manually update active state immediately for better UX
+                quickNavItems.forEach(navItem => navItem.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Haptic feedback on mobile devices
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            }
+        });
+        
+        // Enhanced touch feedback for mobile
+        item.addEventListener('touchstart', function(e) {
+            this.style.backgroundColor = 'rgba(33, 150, 243, 0.2)';
+            this.style.transform = 'scale(0.98)';
+        }, { passive: true });
+        
+        item.addEventListener('touchend', function(e) {
+            setTimeout(() => {
+                this.style.backgroundColor = '';
+                this.style.transform = '';
+            }, 200);
+        }, { passive: true });
+        
+        // Handle touch cancel (when user drags finger away)
+        item.addEventListener('touchcancel', function(e) {
+            this.style.backgroundColor = '';
+            this.style.transform = '';
+        }, { passive: true });
+    });
+    
+    // Throttled scroll handler for performance
+    let scrollTimeout;
+    let isScrolling = false;
+    
+    function handleScroll() {
+        if (!isScrolling) {
+            window.requestAnimationFrame(() => {
+                highlightActiveSection();
+                isScrolling = false;
+            });
+            isScrolling = true;
+        }
+    }
+    
+    // Listen for scroll events
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Initial highlight on page load
+    setTimeout(highlightActiveSection, 100);
+    
+    // Update highlighting when window is resized
+    window.addEventListener('resize', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(highlightActiveSection, 200);
+    }, { passive: true });
+    
+    // console.log('✅ Enhanced mobile navigation initialized with section highlighting');
+}
+
+/**
+ * Initialize mobile-specific FAB improvements
+ * Better positioning and interaction for longer text labels
+ */
+function initMobileFABEnhancements() {
+    const fabContainer = document.getElementById('mobile-fab-container');
+    const fab = document.querySelector('.mobile-fab');
+    
+    if (!fabContainer || !fab) {
+        return;
+    }
+    
+    // Enhanced FAB positioning logic for longer text
+    function adjustFABForContent() {
+        const quickNav = document.querySelector('.quick-nav-container');
+        const fabText = fab.querySelector('.fab-text');
+        
+        if (quickNav && fabText) {
+            const quickNavHeight = quickNav.offsetHeight;
+            const textLength = fabText.textContent.length;
+            
+            // Adjust bottom position based on navigation height and text length
+            let bottomOffset = quickNavHeight + 15;
+            
+            // Add extra spacing for longer text
+            if (textLength > 8) {
+                bottomOffset += 5;
+            }
+            
+            fabContainer.style.bottom = `${bottomOffset}px`;
+        }
+    }
+    
+    // Enhanced touch interaction
+    fab.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.95)';
+        this.style.transition = 'transform 0.1s ease';
+    }, { passive: true });
+    
+    fab.addEventListener('touchend', function() {
+        this.style.transform = '';
+    }, { passive: true });
+    
+    // Adjust positioning on resize and initial load
+    adjustFABForContent();
+    window.addEventListener('resize', adjustFABForContent, { passive: true });
+    
+    console.log('✅ Mobile FAB enhancements initialized');
+}
+
+// Initialize enhanced mobile navigation when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        // Small delay to ensure all elements are rendered
+        setTimeout(() => {
+            initEnhancedMobileNavigation();
+            initMobileFABEnhancements();
+        }, 100);
+    });
+} else {
+    setTimeout(() => {
+        initEnhancedMobileNavigation();
+        initMobileFABEnhancements();
+    }, 100);
+}
+
+// ===== ENHANCED MOBILE FAB VISIBILITY - SCROLL-BASED =====
+function initializeMobileFAB() {
+    const fabContainer = document.getElementById('mobile-fab-container');
+    const fab = document.getElementById('mobile-jump-to-test');
+    const quickNav = document.getElementById('quick-nav');
+    
+    if (fabContainer && fab) {
+        // Ensure FAB is hidden initially
+        fabContainer.style.display = 'none';
+        fabContainer.style.visibility = 'hidden';
+        fabContainer.style.opacity = '0';
+        fabContainer.classList.remove('visible');
+        
+        // Add hidden class to ensure it's hidden initially
+        fabContainer.classList.add('hidden');
+        
+        // Enhanced click feedback
+        fab.addEventListener('click', function() {
+            // Add ripple effect
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+        
+        // Add touch feedback for mobile
+        fab.addEventListener('touchstart', function() {
+            this.style.background = 'linear-gradient(135deg, #1976D2 0%, #1565C0 100%)';
+        });
+        
+        fab.addEventListener('touchend', function() {
+            setTimeout(() => {
+                this.style.background = '';
+            }, 200);
+        });
+        
+        // Handle resize without forcing visibility
+        window.addEventListener('resize', function() {
+            // Let the scroll-based visibility handler manage display state
+            adjustFABPosition();
+        });
+        
+        // Position adjustment based on quick nav visibility
+        function adjustFABPosition() {
+            if (quickNav && quickNav.offsetHeight > 0) {
+                const navHeight = quickNav.offsetHeight;
+                fabContainer.style.bottom = (navHeight + 20) + 'px';
+            }
+        }
+        
+        // Initial adjustment and on scroll
+        adjustFABPosition();
+        window.addEventListener('resize', adjustFABPosition);
+        window.addEventListener('scroll', adjustFABPosition);
+        
+        console.log('FAB initialized and visible on all screen sizes');
+    }
+}
+
+// ===== RESPONSIVE FAB POSITIONING BASED ON SCREEN SIZE =====
+function adjustFABPosition() {
+    const fabContainer = document.getElementById('mobile-fab-container');
+    if (!fabContainer) return;
+    
+    const screenWidth = window.innerWidth;
+    const quickNav = document.getElementById('quick-nav');
+    
+    // Only adjust position, don't force visibility - let scroll handler manage that
+    
+    // Ensure FAB never overlaps with bottom navigation
+    if (quickNav) {
+        const quickNavHeight = quickNav.offsetHeight;
+        const baseBottom = quickNavHeight + 15; // 15px margin above nav
+        
+        // Responsive positioning
+        if (screenWidth >= 1200) {
+            // Large desktop
+            fabContainer.style.bottom = Math.max(baseBottom, 110) + 'px';
+            fabContainer.style.right = '40px';
+        } else if (screenWidth >= 769) {
+            // Standard desktop
+            fabContainer.style.bottom = Math.max(baseBottom, 100) + 'px';
+            fabContainer.style.right = '30px';
+        } else if (screenWidth >= 481) {
+            // Tablet
+            fabContainer.style.bottom = Math.max(baseBottom, 85) + 'px';
+            fabContainer.style.right = '25px';
+        } else {
+            // Mobile
+            fabContainer.style.bottom = Math.max(baseBottom, 80) + 'px';
+            fabContainer.style.right = '20px';
+        }
+    }
+}
+
+// ===== ENSURE FAB IS PROPERLY INITIALIZED =====
+function ensureFABInitialization() {
+    const fabContainer = document.getElementById('mobile-fab-container');
+    if (fabContainer) {
+        // Ensure FAB is hidden initially - let scroll handler show it when appropriate
+        if (!fabContainer.classList.contains('initialized')) {
+            fabContainer.style.display = 'none';
+            fabContainer.style.visibility = 'hidden';
+            fabContainer.style.opacity = '0';
+            fabContainer.classList.remove('visible');
+            fabContainer.classList.add('hidden', 'initialized');
+        }
+    }
+}
+
+// ===== WINDOW RESIZE HANDLER =====
+function handleResize() {
+    adjustFABPosition();
+    // Don't force visibility - let scroll handler manage that
+}
+
+// ===== INITIALIZE ON PAGE LOAD =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize FAB - starts hidden
+    initializeMobileFAB();
+    adjustFABPosition();
+    ensureFABInitialization();
+    
+    // Ensure FAB stays hidden initially 
+    setTimeout(() => {
+        ensureFABInitialization();
+    }, 100);
+    
+    // Add resize listener with debounce
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(handleResize, 250);
+    });
+    
+    // Ensure proper initialization on window load
+    window.addEventListener('load', function() {
+        setTimeout(() => {
+            ensureFABInitialization();
+        }, 200);
+    });
+});

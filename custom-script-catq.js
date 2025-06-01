@@ -192,31 +192,291 @@ questions.forEach((question, index) => {
     questionsContainer.appendChild(questionDiv);
 });
 
-// Progress Tracking
-const progressContainer = document.querySelector('.progress-container');
-const progressFill = document.querySelector('.progress-fill');
-const questionsCompleted = document.querySelector('.questions-completed');
-const timeEstimate = document.querySelector('.time-estimate');
-const progressMessage = document.querySelector('.progress-message');
+// Initial progress update after questions are loaded
+setTimeout(() => {
+    updateProgress();
+}, 100);
 
-// Update progress function
+// Progress Tracking - Properly initialized for CAT-Q
+function initProgressBar() {
+    const progressContainer = document.querySelector('.progress-container');
+    const progressFill = document.querySelector('.progress-fill');
+    const currentQuestionElement = document.querySelector('.current-question');
+    const totalQuestionsElement = document.querySelector('.total-questions');
+    const timeEstimate = document.querySelector('.time-estimate span');
+    const progressMessage = document.querySelector('.progress-message');
+    const saveIndicatorText = document.querySelector('.save-indicator-text');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+
+    // Set correct total questions for CAT-Q
+    const totalQuestions = questions?.length || 25;
+    if (totalQuestionsElement) {
+        totalQuestionsElement.textContent = totalQuestions;
+    }
+
+    // Add keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (!progressContainer.classList.contains('visible')) return;
+        
+        if (e.ctrlKey || e.metaKey) {
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (prevBtn && !prevBtn.disabled) scrollToPreviousQuestion();
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (nextBtn && !nextBtn.disabled) scrollToNextQuestion();
+            }
+        }
+    });
+
+    // Wire up navigation buttons
+    if (prevBtn) {
+        // Remove any existing listeners first
+        prevBtn.removeEventListener('click', scrollToPreviousQuestion);
+        prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Previous button clicked');
+            scrollToPreviousQuestion();
+        });
+    }
+    if (nextBtn) {
+        // Remove any existing listeners first  
+        nextBtn.removeEventListener('click', scrollToNextQuestion);
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Next button clicked');
+            scrollToNextQuestion();
+        });
+    }
+
+    // Show/hide progress bar based on scroll position
+    function handleVisibility() {
+        const testSection = document.getElementById('section-quiz');
+        if (testSection && progressContainer) {
+            const testRect = testSection.getBoundingClientRect();
+            const headerHeight = 60;
+            
+            if (testRect.top <= headerHeight && testRect.bottom > 0) {
+                progressContainer.classList.add('visible');
+                // Update navigation buttons when progress bar becomes visible
+                updateNavigationButtons();
+            } else {
+                progressContainer.classList.remove('visible');
+            }
+        }
+    }
+
+    // Add scroll listener with debouncing
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            handleVisibility();
+            // Update navigation buttons on scroll if progress bar is visible
+            if (progressContainer.classList.contains('visible')) {
+                updateNavigationButtons();
+            }
+        }, 50); // Reduced debounce time for more responsive navigation
+    }, { passive: true });
+
+    // Initial visibility check
+    setTimeout(() => {
+        handleVisibility();
+        updateNavigationButtons();
+        console.log('Progress bar initialized with navigation buttons');
+    }, 300);
+
+    return {
+        updateProgress: updateProgress,
+        handleVisibility: handleVisibility,
+        updateNavigationButtons: updateNavigationButtons
+    };
+}
+
+// Update progress function - properly wired for CAT-Q
 function updateProgress() {
     const answered = document.querySelectorAll('input[type="radio"]:checked').length;
     const total = questions.length;
     const percentage = (answered / total) * 100;
 
-    if (progressFill) progressFill.style.width = `${percentage}%`;
-    if (questionsCompleted) questionsCompleted.innerHTML = `<b>${answered}</b> din <b>${total}</b> întrebări`;
+    // Update progress bar
+    const progressFill = document.querySelector('.progress-fill');
+    if (progressFill) {
+        progressFill.style.width = `${percentage}%`;
+        // Update ARIA attributes
+        const progressBar = progressFill.closest('.progress-bar');
+        if (progressBar) {
+            progressBar.setAttribute('aria-valuenow', Math.round(percentage));
+        }
+    }
 
-    const remainingQuestions = total - answered;
-    const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.4), 1);
-    if (timeEstimate) timeEstimate.innerHTML = `Timp rămas estimat: <b>${estimatedMinutes} minute</b>`;
+    // Update question counter
+    const currentQuestionElement = document.querySelector('.current-question');
+    if (currentQuestionElement) {
+        currentQuestionElement.textContent = answered;
+    }
 
-    if (progressMessage) progressMessage.innerHTML = getProgressMessage(percentage, answered);
+    // Update time estimate
+    const timeEstimate = document.querySelector('.time-estimate span');
+    if (timeEstimate) {
+        const remainingQuestions = total - answered;
+        const estimatedMinutes = Math.max(Math.ceil(remainingQuestions * 0.4), 1);
+        timeEstimate.textContent = `${estimatedMinutes} minute`;
+    }
+
+    // Update motivational message
+    const progressMessage = document.querySelector('.progress-message');
+    if (progressMessage) {
+        progressMessage.innerHTML = getProgressMessage(percentage, answered);
+    }
+
+    // Update save indicator with current time
+    const saveIndicatorText = document.querySelector('.save-indicator-text');
+    if (saveIndicatorText) {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('ro-RO', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+        saveIndicatorText.textContent = `Salvat ${timeString}`;
+    }
+
+    // Update navigation buttons
+    updateNavigationButtons();
 }
 
-// Initial progress update
-updateProgress();
+// Navigation functions
+function scrollToPreviousQuestion() {
+    const questions = Array.from(document.querySelectorAll('.question'));
+    const currentIndex = getCurrentQuestionIndex();
+    
+    console.log(`Current question index: ${currentIndex}, total questions: ${questions.length}`);
+    
+    if (currentIndex > 0) {
+        const targetQuestion = questions[currentIndex - 1];
+        console.log('Scrolling to previous question:', targetQuestion);
+        scrollToQuestion(targetQuestion);
+        setTimeout(updateNavigationButtons, 500); // Delay to allow scroll to complete
+    } else {
+        console.log('Already at first question');
+    }
+}
+
+function scrollToNextQuestion() {
+    const questions = Array.from(document.querySelectorAll('.question'));
+    const currentIndex = getCurrentQuestionIndex();
+    
+    console.log(`Current question index: ${currentIndex}, total questions: ${questions.length}`);
+    
+    if (currentIndex < questions.length - 1) {
+        const targetQuestion = questions[currentIndex + 1];
+        console.log('Scrolling to next question:', targetQuestion);
+        scrollToQuestion(targetQuestion);
+        setTimeout(updateNavigationButtons, 500); // Delay to allow scroll to complete
+    } else {
+        console.log('Already at last question');
+    }
+}
+
+function getCurrentQuestionIndex() {
+    const questions = Array.from(document.querySelectorAll('.question'));
+    const viewportCenter = window.pageYOffset + window.innerHeight / 2;
+    
+    // Find which question is currently in the center of the viewport
+    for (let i = 0; i < questions.length; i++) {
+        const questionTop = questions[i].getBoundingClientRect().top + window.pageYOffset;
+        const questionBottom = questionTop + questions[i].offsetHeight;
+        
+        if (questionTop <= viewportCenter && questionBottom >= viewportCenter) {
+            return i;
+        }
+    }
+    
+    // If no question is exactly in center, find the closest one
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+    
+    for (let i = 0; i < questions.length; i++) {
+        const questionTop = questions[i].getBoundingClientRect().top + window.pageYOffset;
+        const distance = Math.abs(questionTop - viewportCenter);
+        
+        if (distance < closestDistance) {
+            closestDistance = distance;
+            closestIndex = i;
+        }
+    }
+    
+    return closestIndex;
+}
+
+function updateNavigationButtons() {
+    const questions = Array.from(document.querySelectorAll('.question'));
+    const currentIndex = getCurrentQuestionIndex();
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+
+    if (prevBtn && nextBtn && questions.length > 0) {
+        // Enable/disable based on current position
+        const isAtFirst = currentIndex <= 0;
+        const isAtLast = currentIndex >= questions.length - 1;
+
+        prevBtn.disabled = isAtFirst;
+        nextBtn.disabled = isAtLast;
+        
+        prevBtn.classList.toggle('nav-btn-disabled', isAtFirst);
+        nextBtn.classList.toggle('nav-btn-disabled', isAtLast);
+        
+        // Debug logging
+        console.log(`Navigation buttons updated: currentIndex=${currentIndex}, isAtFirst=${isAtFirst}, isAtLast=${isAtLast}`);
+    }
+}
+
+// Initialize progress bar when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    const progressBarInstance = initProgressBar();
+    updateProgress();
+    
+    // Add change listeners to update progress when questions are answered
+    document.addEventListener('change', (e) => {
+        if (e.target.type === 'radio') {
+            updateProgress();
+            
+            // Mark question as completed
+            const currentQuestion = e.target.closest('.question');
+            if (currentQuestion) {
+                currentQuestion.classList.add('completed');
+                currentQuestion.classList.remove('highlight-unanswered');
+            }
+        }
+    });
+    
+    // Debug: Add manual navigation testing
+    window.testNavigation = {
+        goToQuestion: (index) => {
+            const questions = document.querySelectorAll('.question');
+            if (questions[index]) {
+                scrollToQuestion(questions[index]);
+                console.log(`Manually navigated to question ${index + 1}`);
+            }
+        },
+        showProgressBar: () => {
+            const progressContainer = document.querySelector('.progress-container');
+            if (progressContainer) {
+                progressContainer.classList.add('visible');
+                console.log('Progress bar made visible');
+            }
+        },
+        updateNavButtons: () => {
+            if (progressBarInstance && progressBarInstance.updateNavigationButtons) {
+                progressBarInstance.updateNavigationButtons();
+                console.log('Navigation buttons updated manually');
+            }
+        }
+    };
+});
 
 // Score Calculation
 function calculateScores() {
@@ -351,6 +611,7 @@ function displayResults({ totalScore, compensationScore, maskingScore, assimilat
     resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     // Hide progress bar
+    const progressContainer = document.querySelector('.progress-container');
     if (progressContainer) {
         progressContainer.classList.remove('visible');
     }
@@ -917,12 +1178,28 @@ function restartTest() {
 
 // Helper function for scrolling
 function scrollToQuestion(questionElement) {
-    const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
+    if (!questionElement) {
+        console.log('No question element provided to scrollToQuestion');
+        return;
+    }
+
+    const progressContainer = document.querySelector('.progress-container');
+    const offset = progressContainer ? progressContainer.offsetHeight + 20 : 80; // Default larger offset
+    const targetTop = questionElement.getBoundingClientRect().top + window.pageYOffset - offset;
+    
+    console.log(`Scrolling to question. Current position: ${window.pageYOffset}, Target: ${targetTop}, Offset: ${offset}`);
 
     window.scrollTo({
-        top: questionElement.offsetTop - offset,
+        top: targetTop,
         behavior: 'smooth'
     });
+    
+    // Highlight the target question temporarily
+    questionElement.style.transition = 'background-color 0.3s ease';
+    questionElement.style.backgroundColor = 'rgba(0, 123, 255, 0.1)';
+    setTimeout(() => {
+        questionElement.style.backgroundColor = '';
+    }, 2000);
 }
 
 // Setup Event Listeners
@@ -961,7 +1238,8 @@ document.addEventListener('change', (e) => {
 // Monitor scroll for progress bar visibility
 window.addEventListener('scroll', () => {
     const testContainer = document.getElementById('questions');
-    if (testContainer) {
+    const progressContainer = document.querySelector('.progress-container');
+    if (testContainer && progressContainer) {
         const rect = testContainer.getBoundingClientRect();
         const hasAnswers = document.querySelector('input[type="radio"]:checked') !== null;
 
@@ -975,6 +1253,15 @@ window.addEventListener('scroll', () => {
 
 // Add event listener for restart confirmation
 document.getElementById('confirmRestartBtn').addEventListener('click', restartTest);
+
+// Handler buton de reset din progress container
+const resetBtn = document.querySelector('.reset-btn');
+if (resetBtn) {
+    resetBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showRestartWarning();
+    });
+}
 
 // Submit button event handler
 submitBtn.addEventListener('click', (e) => {
@@ -1057,6 +1344,7 @@ submitBtn.addEventListener('click', (e) => {
     displayResults(scores);
 
     // Hide progress bar and error messages after completion
+    const progressContainer = document.querySelector('.progress-container');
     if (progressContainer) {
         progressContainer.classList.remove('visible');
     }
@@ -1761,23 +2049,17 @@ class AutoSaveManager {
                 updateProgress();
             }
 
-            // Add last save indicator to progress container
+            // Update save indicator in progress container
             const progressContainer = document.querySelector('.progress-container');
-            if (progressContainer && !document.getElementById('last-save-indicator')) {
-                progressContainer.appendChild(this.lastSaveIndicator);
-
-                if (testState.lastSaved) {
-                    const lastSaveDate = new Date(testState.lastSaved);
-                    const timeString = lastSaveDate.toLocaleTimeString('ro-RO', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-
-                    const timeIndicator = document.getElementById('last-save-time');
-                    if (timeIndicator) {
-                        timeIndicator.textContent = `Ultima salvare: ${timeString}`;
-                    }
-                }
+            const saveIndicatorText = document.querySelector('.save-indicator-text');
+            
+            if (testState.lastSaved && saveIndicatorText) {
+                const lastSaveDate = new Date(testState.lastSaved);
+                const timeString = lastSaveDate.toLocaleTimeString('ro-RO', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                saveIndicatorText.textContent = `Salvat ${timeString}`;
             }
 
             // Show restoration toast
@@ -1792,13 +2074,8 @@ class AutoSaveManager {
                     document.querySelectorAll('.question').forEach(q => q.classList.remove('current'));
                     nextUnanswered.classList.add('current');
 
-                    const progressContainer = document.querySelector('.progress-container');
-                    const offset = progressContainer ? progressContainer.offsetHeight + 20 : 20;
-
-                    window.scrollTo({
-                        top: nextUnanswered.getBoundingClientRect().top + window.pageYOffset - offset,
-                        behavior: 'smooth'
-                    });
+                    // Use the scrollToQuestion function for consistent scrolling
+                    scrollToQuestion(nextUnanswered);
                 }
             }, 1000); // Delay scrolling to ensure DOM is fully updated
 
@@ -1852,14 +2129,16 @@ window.restartTest = function() {
         // Reset UI elements
         const resultDiv = document.getElementById('section-results');
         const submitBtn = document.getElementById('submitBtn');
+        const errorDiv = document.getElementById('error');
+        const errorBelowDiv = document.getElementById('errorBelow');
 
         if (resultDiv) resultDiv.style.display = 'none';
         if (submitBtn) submitBtn.style.display = 'block';
+        if (errorDiv) errorDiv.style.display = 'none';
+        if (errorBelowDiv) errorBelowDiv.style.display = 'none';
 
         // Update progress
-        if (typeof updateProgress === 'function') {
-            updateProgress();
-        }
+        updateProgress();
     }
 
     // Remove restoration banner if present
@@ -2035,3 +2314,531 @@ document.addEventListener('DOMContentLoaded', () => {
 setInterval(() => {
     autoSaveManager.saveTestState();
 }, 60000);
+
+// ===== MOBILE FLOATING ACTION BUTTON (FAB) FUNCTIONALITY =====
+
+/**
+ * Enhanced Mobile FAB (Floating Action Button) Management for CAT-Q
+ * Shows "Jump to Test" button when scrolling past hero section on mobile
+ */
+function initMobileFAB() {
+    const fabContainer = document.getElementById('mobile-fab-container');
+    const heroSection = document.querySelector('.cta-button-wrapper') || document.querySelector('.lead'); // Hero section with main CTA
+    
+    if (!fabContainer) return;
+    
+    let isVisible = false;
+    let scrollTimeout;
+    
+    function toggleFABVisibility() {
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        
+        scrollTimeout = setTimeout(() => {
+            const scrollPosition = window.pageYOffset;
+            const heroBottom = heroSection ? heroSection.getBoundingClientRect().bottom + window.pageYOffset : 500;
+            
+            // Check if user is scrolling over the test container
+            const testContainer = document.querySelector('.test-actual-container');
+            let isInTestSection = false;
+            
+            if (testContainer) {
+                const testRect = testContainer.getBoundingClientRect();
+                const testTop = testRect.top + window.pageYOffset;
+                const testBottom = testRect.bottom + window.pageYOffset;
+                isInTestSection = scrollPosition >= testTop && scrollPosition <= testBottom;
+            }
+            
+            // Show FAB when scrolled past hero section but NOT in test section
+            const shouldShow = scrollPosition > heroBottom && !isInTestSection;
+            
+            if (shouldShow && !isVisible) {
+                fabContainer.style.display = 'block';
+                fabContainer.classList.add('visible', 'show');
+                fabContainer.classList.remove('hidden');
+                isVisible = true;
+            } else if (!shouldShow && isVisible) {
+                fabContainer.classList.remove('visible', 'show');
+                fabContainer.classList.add('hidden');
+                setTimeout(() => {
+                    if (!isVisible) { // Double-check in case state changed
+                        fabContainer.style.display = 'none';
+                    }
+                }, 300); // Wait for animation to complete
+                isVisible = false;
+            }
+        }, 10); // Small debounce for performance
+    }
+    
+    // Enhanced resize handler for responsive behavior
+    function handleResize() {
+        // Show on all screen sizes now (removed desktop restriction)
+        // Re-evaluate visibility on all devices
+        toggleFABVisibility();
+    }
+    
+    // Event listeners with performance optimization
+    window.addEventListener('scroll', toggleFABVisibility, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
+    
+    // Initial check
+    handleResize();
+    
+    // Enhanced click handling with haptic feedback (if available)
+    const fabButton = document.getElementById('mobile-jump-to-test');
+    if (fabButton) {
+        fabButton.addEventListener('click', (e) => {
+            // Haptic feedback for mobile devices (if supported)
+            if (navigator.vibrate) {
+                navigator.vibrate(50); // Short vibration feedback
+            }
+            
+            // Visual feedback
+            fabButton.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                fabButton.style.transform = '';
+            }, 150);
+        });
+    }
+    
+    return {
+        show: () => {
+            // Show on all screen sizes now (removed device restriction)
+            fabContainer.style.display = 'block';
+            fabContainer.classList.add('visible', 'show');
+            fabContainer.classList.remove('hidden');
+            isVisible = true;
+        },
+        hide: () => {
+            fabContainer.classList.remove('visible', 'show');
+            fabContainer.classList.add('hidden');
+            setTimeout(() => fabContainer.style.display = 'none', 300);
+            isVisible = false;
+        },
+        destroy: () => {
+            window.removeEventListener('scroll', toggleFABVisibility);
+            window.removeEventListener('resize', handleResize);
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+        }
+    };
+}
+
+// ===== ENHANCED MOBILE NAVIGATION AND ACCESSIBILITY =====
+
+/**
+ * Enhanced mobile navigation improvements for CAT-Q
+ * Improves thumb navigation and accessibility on mobile devices
+ */
+function enhanceMobileNavigation() {
+    // Enhanced touch feedback for mobile form elements
+    const formChecks = document.querySelectorAll('.form-check');
+    
+    formChecks.forEach(formCheck => {
+        // Add enhanced mobile touch feedback
+        formCheck.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        }, { passive: true });
+        
+        formCheck.addEventListener('touchend', function() {
+            this.style.transform = '';
+        }, { passive: true });
+        
+        // Enhanced accessibility for screen readers
+        const input = formCheck.querySelector('input[type="radio"]');
+        const label = formCheck.querySelector('.form-check-label');
+        
+        if (input && label) {
+            // Improve voice-over experience on mobile
+            input.addEventListener('focus', () => {
+                formCheck.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', () => {
+                formCheck.classList.remove('focused');
+            });
+        }
+    });
+    
+    // Enhanced CTA button mobile feedback
+    const ctaButtons = document.querySelectorAll('.cta-button, .action-btn');
+    
+    ctaButtons.forEach(button => {
+        button.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        }, { passive: true });
+        
+        button.addEventListener('touchend', function() {
+            this.style.transform = '';
+        }, { passive: true });
+    });
+}
+
+// Initialize mobile enhancements when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize mobile FAB with scroll-based behavior
+    const mobileFAB = initMobileFAB();
+    
+    // Initialize enhanced mobile navigation
+    enhanceMobileNavigation();
+    
+    // Initialize position adjustments
+    adjustFABPosition();
+    
+    // Enhanced mobile viewport detection and optimization
+    function optimizeForMobile() {
+        const isMobile = window.innerWidth <= 768;
+        const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        if (isMobile || isTouch) {
+            // Add mobile-optimized class to body
+            document.body.classList.add('mobile-optimized');
+            
+            // Prevent zoom on input focus (iOS Safari)
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.style.fontSize !== '16px') {
+                    input.style.fontSize = '16px'; // Prevent zoom on iOS
+                }
+            });
+        }
+    }
+    
+    // Run mobile optimization
+    optimizeForMobile();
+    
+    // Re-run on orientation change
+    window.addEventListener('orientationchange', () => {
+        setTimeout(optimizeForMobile, 300); // Wait for orientation change to complete
+    });
+    
+    // Cleanup function for single-page applications
+    window.cleanupMobileEnhancements = () => {
+        if (mobileFAB && mobileFAB.destroy) {
+            mobileFAB.destroy();
+        }
+    };
+});
+
+// ===== ENHANCED MOBILE NAVIGATION WITH SECTION HIGHLIGHTING =====
+
+/**
+ * Enhanced mobile navigation with automatic section highlighting
+ * Provides better visual feedback and smoother navigation experience
+ */
+function initEnhancedMobileNavigation() {
+    const quickNavItems = document.querySelectorAll('.quick-nav-item');
+    const sections = document.querySelectorAll('[id^="section-"]');
+    
+    if (!quickNavItems.length || !sections.length) {
+        return; // Exit if navigation elements not found
+    }
+    
+    // Function to highlight active navigation item based on scroll position
+    function highlightActiveSection() {
+        let currentSection = '';
+        const scrollPosition = window.scrollY + window.innerHeight / 3;
+        
+        // Determine which section is currently in view
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                currentSection = section.id;
+            }
+        });
+        
+        // Update navigation item states - only highlight if there's an active section
+        quickNavItems.forEach(item => {
+            const href = item.getAttribute('href');
+            // Remove active class from all items first
+            item.classList.remove('active');
+            
+            // Only add active class if there's a current section and this item links to it
+            if (currentSection && href && href === `#${currentSection}`) {
+                item.classList.add('active');
+            }
+        });
+    }
+    
+    // Enhanced click handler for smooth scrolling and visual feedback
+    quickNavItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Add visual feedback
+            this.style.transform = 'scale(0.95)';
+            this.style.transition = 'transform 0.15s ease';
+            
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+            
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                const navHeight = document.querySelector('.quick-nav-container')?.offsetHeight || 60;
+                const targetPosition = targetElement.offsetTop - navHeight - 20;
+                
+                // Smooth scroll to target
+                window.scrollTo({
+                    top: Math.max(0, targetPosition),
+                    behavior: 'smooth'
+                });
+                
+                // Manually update active state immediately for better UX
+                quickNavItems.forEach(navItem => navItem.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Haptic feedback on mobile devices
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            }
+        });
+        
+        // Enhanced touch feedback for mobile
+        item.addEventListener('touchstart', function(e) {
+            this.style.backgroundColor = 'rgba(33, 150, 243, 0.2)';
+            this.style.transform = 'scale(0.98)';
+        }, { passive: true });
+        
+        item.addEventListener('touchend', function(e) {
+            setTimeout(() => {
+                this.style.backgroundColor = '';
+                this.style.transform = '';
+            }, 200);
+        }, { passive: true });
+        
+        // Handle touch cancel (when user drags finger away)
+        item.addEventListener('touchcancel', function(e) {
+            this.style.backgroundColor = '';
+            this.style.transform = '';
+        }, { passive: true });
+    });
+    
+    // Throttled scroll handler for performance
+    let scrollTimeout;
+    let isScrolling = false;
+    
+    function handleScroll() {
+        if (!isScrolling) {
+            window.requestAnimationFrame(() => {
+                highlightActiveSection();
+                isScrolling = false;
+            });
+            isScrolling = true;
+        }
+    }
+    
+    // Listen for scroll events
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Initial highlight on page load
+    setTimeout(highlightActiveSection, 100);
+    
+    // Update highlighting when window is resized
+    window.addEventListener('resize', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(highlightActiveSection, 200);
+    }, { passive: true });
+    
+    console.log('✅ Enhanced mobile navigation initialized with section highlighting for CAT-Q');
+}
+
+/**
+ * Initialize mobile-specific FAB improvements for CAT-Q
+ * Better positioning and interaction for longer text labels
+ */
+function initMobileFABEnhancements() {
+    const fabContainer = document.getElementById('mobile-fab-container');
+    const fab = document.querySelector('.mobile-fab');
+    
+    if (!fabContainer || !fab) {
+        return;
+    }
+    
+    // Enhanced FAB positioning logic for longer text
+    function adjustFABForContent() {
+        const quickNav = document.querySelector('.quick-nav-container');
+        const fabText = fab.querySelector('.fab-text');
+        
+        if (quickNav && fabText) {
+            const quickNavHeight = quickNav.offsetHeight;
+            const textLength = fabText.textContent.length;
+            
+            // Adjust bottom position based on navigation height and text length
+            let bottomOffset = quickNavHeight + 15;
+            
+            // Add extra spacing for longer text
+            if (textLength > 8) {
+                bottomOffset += 5;
+            }
+            
+            fabContainer.style.bottom = `${bottomOffset}px`;
+        }
+    }
+    
+    // Enhanced touch interaction
+    fab.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.95)';
+        this.style.transition = 'transform 0.1s ease';
+    }, { passive: true });
+    
+    fab.addEventListener('touchend', function() {
+        this.style.transform = '';
+    }, { passive: true });
+    
+    // Adjust positioning on resize and initial load
+    adjustFABForContent();
+    window.addEventListener('resize', adjustFABForContent, { passive: true });
+    
+    console.log('✅ Mobile FAB enhancements initialized for CAT-Q');
+}
+
+// Initialize enhanced mobile navigation when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        // Small delay to ensure all elements are rendered
+        setTimeout(() => {
+            initEnhancedMobileNavigation();
+            initMobileFABEnhancements();
+        }, 100);
+    });
+} else {
+    setTimeout(() => {
+        initEnhancedMobileNavigation();
+        initMobileFABEnhancements();
+    }, 100);
+}
+
+// ===== LEGACY MOBILE FAB FUNCTION - COMMENTED OUT =====
+// This function was forcing FAB visibility - replaced by scroll-based initMobileFAB()
+/*
+function initializeMobileFAB() {
+    const fabContainer = document.getElementById('mobile-fab-container');
+    const fab = document.getElementById('mobile-jump-to-test');
+    const quickNav = document.getElementById('quick-nav');
+    
+    if (fabContainer && fab) {
+        // Ensure FAB starts hidden and is controlled by scroll
+        fabContainer.style.display = 'none';
+        fabContainer.style.visibility = 'hidden';
+        fabContainer.style.opacity = '0';
+        fabContainer.classList.remove('visible', 'show');
+        fabContainer.classList.add('hidden');
+        
+        // Enhanced click feedback
+        fab.addEventListener('click', function() {
+            // Add ripple effect
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+        
+        // Add touch feedback for mobile
+        fab.addEventListener('touchstart', function() {
+            this.style.background = 'linear-gradient(135deg, #1976D2 0%, #1565C0 100%)';
+        });
+        
+        fab.addEventListener('touchend', function() {
+            setTimeout(() => {
+                this.style.background = '';
+            }, 200);
+        });
+        
+        // Handle resize without forcing visibility
+        window.addEventListener('resize', function() {
+            // Let the scroll-based visibility handler manage display state
+            adjustFABPosition();
+        });
+        
+        // Position adjustment based on quick nav visibility
+        function adjustFABPosition() {
+            if (quickNav && quickNav.offsetHeight > 0) {
+                const navHeight = quickNav.offsetHeight;
+                fabContainer.style.bottom = (navHeight + 20) + 'px';
+            }
+        }
+        
+        // Initial adjustment and on scroll
+        adjustFABPosition();
+        window.addEventListener('resize', adjustFABPosition);
+        window.addEventListener('scroll', adjustFABPosition);
+        
+        console.log('CAT-Q FAB initialized and visible on all screen sizes');
+    }
+}
+*/
+
+// ===== RESPONSIVE FAB POSITIONING BASED ON SCREEN SIZE =====
+function adjustFABPosition() {
+    const fabContainer = document.getElementById('mobile-fab-container');
+    if (!fabContainer) return;
+    
+    const screenWidth = window.innerWidth;
+    const quickNav = document.getElementById('quick-nav');
+    
+    // Only adjust position, don't force visibility - let scroll handler manage that
+    
+    // Ensure FAB never overlaps with bottom navigation
+    if (quickNav) {
+        const quickNavHeight = quickNav.offsetHeight;
+        const baseBottom = quickNavHeight + 15; // 15px margin above nav
+        
+        // Responsive positioning
+        if (screenWidth >= 1200) {
+            // Large desktop
+            fabContainer.style.bottom = Math.max(baseBottom, 110) + 'px';
+            fabContainer.style.right = '40px';
+        } else if (screenWidth >= 769) {
+            // Standard desktop
+            fabContainer.style.bottom = Math.max(baseBottom, 100) + 'px';
+            fabContainer.style.right = '30px';
+        } else if (screenWidth >= 481) {
+            // Tablet
+            fabContainer.style.bottom = Math.max(baseBottom, 85) + 'px';
+            fabContainer.style.right = '25px';
+        } else {
+            // Mobile
+            fabContainer.style.bottom = Math.max(baseBottom, 80) + 'px';
+            fabContainer.style.right = '20px';
+        }
+    }
+}
+
+// ===== ENSURE FAB IS PROPERLY INITIALIZED =====
+function ensureFABInitialization() {
+    const fabContainer = document.getElementById('mobile-fab-container');
+    if (fabContainer) {
+        // Ensure FAB is hidden initially - let scroll handler show it when appropriate
+        if (!fabContainer.classList.contains('initialized')) {
+            fabContainer.style.display = 'none';
+            fabContainer.style.visibility = 'hidden';
+            fabContainer.style.opacity = '0';
+            fabContainer.classList.add('hidden', 'initialized');
+            fabContainer.classList.remove('visible', 'show');
+        }
+    }
+}
+
+// ===== WINDOW RESIZE HANDLER =====
+function handleResize() {
+    adjustFABPosition();
+    // Don't force visibility - let scroll handler manage that
+}
+
+// ===== ADDITIONAL FAB POSITIONING SETUP =====
+// This runs after the main initialization to handle additional positioning
+window.addEventListener('load', function() {
+    // Ensure proper initial state after all content loads
+    ensureFABInitialization();
+    
+    // Add resize listener with debounce for responsive positioning
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(handleResize, 250);
+    });
+});

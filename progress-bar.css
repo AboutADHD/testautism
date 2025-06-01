@@ -25,17 +25,25 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 
-    /* Layout structure - IMPROVED SPACING */
+    /* Layout structure - RESPONSIVE GRID */
     display: grid;
     grid-template-columns: auto minmax(70%, 1fr) auto;
     grid-template-rows: auto auto;
-    gap: 16px; /* Increased gap for better element separation */
-    padding: 16px 20px; /* Increased padding for better container breathing room */
+    gap: 16px; /* Base gap for desktop */
+    padding: 16px 20px; /* Base padding for desktop */
+
+    /* Responsive width management */
+    width: 100%;
+    max-width: 100vw; /* Prevent horizontal overflow */
+    box-sizing: border-box;
 
     /* Animation properties */
     transform: translateY(-105%);
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     visibility: hidden;
+
+    /* Font size scaling base */
+    font-size: 14px; /* Base font size for scaling */
 }
 
 /* Active state */
@@ -44,20 +52,39 @@
     visibility: visible;
 }
 
-/* Desktop optimization */
+/* Desktop optimization with responsive width scaling */
 @media (min-width: 768px) {
     .progress-container {
-        max-width: 960px;
+        max-width: min(960px, 90vw); /* Responsive max-width */
         left: 50%;
         transform: translateX(-50%) translateY(-105%);
         border-radius: 0 0 12px 12px;
         border-left: 1px solid rgba(0, 0, 0, 0.08);
         border-right: 1px solid rgba(0, 0, 0, 0.08);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        width: auto; /* Override full width for desktop */
     }
 
     .progress-container.visible {
         transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Large desktop optimization */
+@media (min-width: 1200px) {
+    .progress-container {
+        max-width: min(1100px, 85vw); /* Larger max-width for large screens */
+        padding: 18px 24px; /* More generous padding */
+        gap: 20px; /* Increased gap for large screens */
+    }
+}
+
+/* Ultra-wide desktop optimization */
+@media (min-width: 1600px) {
+    .progress-container {
+        max-width: min(1200px, 80vw); /* Constrain width on ultra-wide screens */
+        padding: 20px 28px; /* Maximum padding */
+        gap: 22px; /* Maximum gap */
     }
 }
 
@@ -68,22 +95,22 @@
     display: contents;
 }
 
-/* ===== NAVIGATION CONTROLS ===== */
+/* ===== ENHANCED MOBILE-FIRST NAVIGATION CONTROLS ===== */
 .progress-controls {
     grid-column: 1;
     grid-row: 1;
     display: flex;
     flex-direction: column; /* Vertical layout */
-    gap: 10px; /* Increased gap between buttons */
+    gap: 12px; /* Increased gap between buttons for easier thumb navigation */
     align-items: center;
     /* Better alignment with main content */
-    margin-right: 2px;
+    margin-right: 4px;
     align-self: center;
 }
 
 .nav-btn {
-    width: 36px; /* Slightly larger buttons */
-    height: 36px;
+    width: 44px; /* Minimum iOS/Android touch target size */
+    height: 44px;
     border-radius: 50%;
     border: none;
     background: #2196F3;
@@ -94,9 +121,11 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    font-size: 1rem;
-    min-width: 36px;
-    min-height: 36px;
+    font-size: 1.1rem; /* Larger icon for better visibility */
+    min-width: 44px;
+    min-height: 44px;
+    /* Enhanced mobile interaction feedback */
+    position: relative;
 }
 
 .nav-btn:hover:not(:disabled) {
@@ -151,52 +180,72 @@
     right: calc(100% + 10px);
 }
 
-/* Hide tooltips on mobile */
+/* Enhanced mobile navigation buttons */
 @media (max-width: 768px) {
-    .nav-btn[title]:hover::after,
-    .reset-btn[title]:hover::after {
-        display: none;
+    .progress-controls {
+        gap: 16px; /* More space between buttons on mobile */
+        margin-right: 6px;
     }
-
-    /* Add visual indicator for button functionality on mobile */
-    .nav-btn,
+    
+    .nav-btn {
+        width: 52px; /* Larger touch targets for mobile */
+        height: 52px;
+        font-size: 1rem; /* Larger icons for mobile */
+        min-width: 52px;
+        min-height: 52px;
+        /* Enhanced shadow for better mobile visibility */
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+    }
+    
     .reset-btn {
-        position: relative;
-    }
-
-    .nav-btn::before,
-    .reset-btn::before {
-        content: '';
-        position: absolute;
-        bottom: -3px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 4px;
-        height: 4px;
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: 50%;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-    }
-
-    .nav-btn:active::before,
-    .reset-btn:active::before {
-        opacity: 1;
+        width: 52px; /* Consistent sizing with nav buttons */
+        height: 52px;
+        font-size: 1rem;
+        min-width: 52px;
+        min-height: 52px;
     }
 }
 
-/* ===== PRIMARY PROGRESS DISPLAY ===== */
+/* Ultra-mobile optimizations */
+@media (max-width: 480px) {
+    .nav-btn {
+        width: 56px; /* Maximum thumb-friendly size */
+        height: 56px;
+        font-size: 1rem;
+        min-width: 56px;
+        min-height: 56px;
+    }
+    
+    .reset-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 1rem;
+        min-width: 56px;
+        min-height: 56px;
+    }
+}
+
+/* ===== ENHANCED PROGRESS DISPLAY WITH MOBILE-FIRST DESIGN ===== */
 .progress-primary {
     grid-column: 2;
     grid-row: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 16px; /* Increased gap for better separation */
     width: 100%;
 }
 
-/* Question counter with label */
+.progress-primary-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+}
+
+/* Question counter with label - enhanced for mobile */
 .progress-counter {
     display: flex;
     flex-direction: column;
@@ -206,14 +255,14 @@
 }
 
 .counter-label {
-    font-size: 0.75rem;
+    font-size: 0.8rem; /* Slightly larger for mobile readability */
     color: #666;
     margin-bottom: 2px;
     white-space: nowrap;
 }
 
 .counter-value {
-    font-size: 1.25rem;
+    font-size: 1.35rem; /* Larger for better mobile visibility */
     font-weight: 700;
     color: #2196F3;
 }
@@ -231,20 +280,74 @@
     color: #555;
 }
 
+/* Enhanced mobile progress display */
+@media (max-width: 768px) {
+    .progress-primary {
+        gap: 12px; /* Adjusted for vertical layout */
+    }
+    
+    .progress-primary-controls {
+        gap: 20px; /* More space on mobile */
+    }
+    
+    .progress-counter {
+        min-width: 70px; /* More space for larger text */
+    }
+    
+    .counter-label {
+        font-size: 0.9rem; /* Larger text for mobile */
+    }
+    
+    .counter-value {
+        font-size: 1.5rem; /* Even larger for mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .progress-primary {
+        gap: 10px; /* Adjusted for vertical layout */
+    }
+    
+    .progress-primary-controls {
+        gap: 24px; /* Maximum spacing for ultra-mobile */
+    }
+    
+    .counter-value {
+        font-size: 1.6rem; /* Maximum size for readability */
+    }
+    
+    .counter-label {
+        font-size: 1rem; /* Larger label text */
+    }
+}
+
 /* Progress bar */
 .progress-bar {
     flex: 1;
-    flex-grow: 1;
-    width: 100%;
-    min-width: 60%;
-    height: 16px; /* Slightly taller progress bar */
-    background: #e3f2fd;
-    border-radius: 7px;
-    overflow: hidden;
+    height: 8px; /* Slightly thicker base size */
+    background-color: #e9ecef;
+    border-radius: 4px;
     position: relative;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    /* Add margin to improve spacing */
-    margin: 0 4px;
+    overflow: hidden;
+    margin: 0 8px; /* Consistent margins */
+    transition: height 0.2s ease; /* Smooth height transitions */
+}
+
+/* Enhanced mobile progress bar */
+@media (max-width: 768px) {
+    .progress-bar {
+        height: 12px; /* Thicker for better mobile visibility */
+        margin: 0 12px; /* More margin space */
+        border-radius: 6px; /* More rounded for modern feel */
+    }
+}
+
+@media (max-width: 480px) {
+    .progress-bar {
+        height: 14px; /* Thickest for ultra-mobile */
+        margin: 0 10px;
+        border-radius: 7px;
+    }
 }
 
 .progress-fill {
@@ -290,34 +393,47 @@
     z-index: 2;
 }
 
-/* Time estimate with label */
+/* ===== ENHANCED TIME ESTIMATE WITH MOBILE READABILITY ===== */
 .time-estimate {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    min-width: 60px; /* Ensure consistent width */
-    flex-shrink: 1;
+    gap: 6px;
+    font-size: 0.85rem; /* Slightly larger base size */
+    color: #555;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .time-label {
     font-size: 0.75rem;
-    color: #666;
-    margin-bottom: 2px;
-    white-space: nowrap;
+    color: #777;
 }
 
 .time-value {
-    display: flex;
-    align-items: center;
-    font-size: 0.95rem;
-    color: #4CAF50;
-    gap: 4px;
+    font-weight: 600;
+    color: #2196F3;
+    font-size: 0.9rem; /* Slightly larger for better readability */
 }
 
 .time-estimate i {
     color: #4CAF50;
     font-size: 1rem;
+}
+
+/* Enhanced mobile time estimate */
+@media (max-width: 768px) {
+    .time-estimate {
+        font-size: 0.95rem; /* Larger for mobile */
+        gap: 8px;
+    }
+    
+    .time-label {
+        font-size: 0.85rem; /* Larger label */
+    }
+    
+    .time-value {
+        font-size: 1rem; /* Larger value for mobile */
+    }
 }
 
 /* Save indicator */
@@ -392,8 +508,6 @@
 
 /* ===== MOTIVATIONAL MESSAGE ===== */
 .progress-message {
-    grid-column: 1 / -1;
-    grid-row: 2;
     text-align: center;
     font-size: 1.05rem; /* Slightly larger font */
     font-weight: 500;
@@ -404,7 +518,9 @@
     border-left: 3px solid #2196F3;
     transition: all 0.3s ease;
     /* Add margin for better spacing */
-    margin: 4px 0 0 0;
+    margin: 8px 0 0 0;
+    width: 100%;
+    max-width: 400px;
 }
 
 /* Animation for milestone celebration */
@@ -418,100 +534,349 @@
     100% { transform: scale(1); background-color: rgba(240, 247, 255, 0.7); border-color: #2196F3; }
 }
 
-/* ===== RESPONSIVE ADAPTATIONS ===== */
-@media (max-width: 576px) {
+/* ===== ENHANCED RESPONSIVE ADAPTATIONS FOR MOBILE-FIRST ===== */
+
+/* Ultra-small screens (320px and below) - Aggressive optimization */
+@media (max-width: 320px) {
     .progress-container {
-        padding: 10px 12px; /* Slightly more padding than before */
+        padding: 8px 10px; /* Minimal padding for tiny screens */
+        gap: 12px; /* Reduced gap to save space */
+        grid-template-columns: auto minmax(60%, 1fr) auto; /* Optimize grid ratios */
     }
 
     .progress-primary {
-        gap: 10px; /* Reduced gap on small screens but still larger than original */
+        gap: 6px; /* Minimal gap */
     }
-
-    .progress-counter {
-        font-size: 1.1rem;
-        min-width: 55px;
-    }
-
-    .time-estimate {
-        display: none; /* Hide on very small screens */
-    }
-
-    .save-indicator {
-        padding: 4px 10px; /* Slightly more padding */
-    }
-
-    .save-indicator-text {
-        font-size: 11px;
+    
+    .progress-primary-controls {
+        gap: 10px; /* Tight spacing */
     }
 
     .nav-btn, .reset-btn {
-        width: 32px; /* Slightly larger than before */
-        height: 32px;
+        width: 36px; /* Smaller buttons for tiny screens */
+        height: 36px;
+        font-size: 0.9rem;
+        min-width: 36px;
+        min-height: 36px;
+    }
+
+    .progress-controls {
+        gap: 8px; /* Minimal button spacing */
+    }
+
+    .counter-value {
+        font-size: 1.1rem; /* Smaller counter text */
+    }
+
+    .counter-label {
+        font-size: 0.7rem; /* Tiny label text */
+    }
+
+    .progress-counter {
+        min-width: 45px; /* Compact counter */
+    }
+
+    .progress-bar {
+        height: 10px; /* Thinner progress bar */
+        margin: 0 6px; /* Reduced margins */
+    }
+
+    .time-estimate {
+        font-size: 0.75rem; /* Smaller time text */
+        gap: 4px;
+    }
+
+    .time-value {
+        font-size: 0.8rem;
+    }
+
+    .progress-message {
+        font-size: 0.85rem; /* Smaller message text */
+        padding: 6px 8px; /* Minimal padding */
+        margin-top: 4px;
+    }
+
+    .save-indicator {
+        padding: 3px 6px; /* Minimal save indicator */
+        font-size: 0.7rem;
+    }
+
+    .save-indicator-text {
+        font-size: 0.65rem;
+    }
+}
+
+/* Small screens (321px - 360px) - Balanced optimization */
+@media (min-width: 321px) and (max-width: 360px) {
+    .progress-container {
+        padding: 10px 12px;
+        gap: 14px;
+        grid-template-columns: auto minmax(65%, 1fr) auto;
+    }
+
+    .progress-primary {
+        gap: 8px;
+    }
+    
+    .progress-primary-controls {
+        gap: 12px;
+    }
+
+    .nav-btn, .reset-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    .counter-value {
+        font-size: 1.25rem;
+    }
+
+    .counter-label {
+        font-size: 0.75rem;
+    }
+
+    .progress-counter {
+        min-width: 50px;
+    }
+
+    .progress-bar {
+        height: 11px;
+        margin: 0 8px;
+    }
+
+    .time-estimate {
+        font-size: 0.8rem;
+        gap: 5px;
+    }
+
+    .time-value {
         font-size: 0.85rem;
     }
 
     .progress-message {
-        font-size: 0.9rem;
-        padding: 6px 8px;
+        font-size: 0.85rem;
+        padding: 7px 10px;
+        margin-top: 5px;
+    }
+
+    .save-indicator {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+    }
+
+    .save-indicator-text {
+        font-size: 0.7rem;
     }
 }
 
-/* Show time estimate on slightly larger screens */
-@media (min-width: 400px) and (max-width: 576px) {
+/* Common small mobile (361px - 480px) */
+@media (min-width: 361px) and (max-width: 480px) {
+    .progress-container {
+        padding: 11px 13px;
+        gap: 16px;
+        grid-template-columns: auto minmax(68%, 1fr) auto;
+    }
+
+    .progress-primary {
+        gap: 9px;
+    }
+    
+    .progress-primary-controls {
+        gap: 14px;
+    }
+
+    .nav-btn, .reset-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .counter-value {
+        font-size: 1.35rem;
+    }
+
+    .counter-label {
+        font-size: 0.8rem;
+    }
+
+    .progress-counter {
+        min-width: 55px;
+    }
+
+    .progress-bar {
+        height: 12px;
+        margin: 0 9px;
+    }
+
     .time-estimate {
-        display: flex;
+        font-size: 0.85rem;
+        gap: 6px;
+    }
+
+    .time-value {
+        font-size: 0.9rem;
+    }
+
+    .progress-message {
+        font-size: 0.95rem;
+        padding: 8px 11px;
+        margin-top: 6px;
+    }
+
+    .save-indicator {
+        padding: 5px 10px;
+        font-size: 0.78rem;
+    }
+
+    .save-indicator-text {
+        font-size: 0.72rem;
+    }
+}
+
+/* Standard mobile (481px - 576px) */
+@media (min-width: 481px) and (max-width: 576px) {
+    .progress-container {
+        padding: 12px 14px;
+        gap: 18px;
+        grid-template-columns: auto minmax(70%, 1fr) auto;
+    }
+
+    .progress-primary {
+        gap: 10px;
+    }
+    
+    .progress-primary-controls {
+        gap: 16px;
+    }
+
+    .nav-btn, .reset-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1.15rem;
+        min-width: 48px;
+        min-height: 48px;
+    }
+
+    .counter-value {
+        font-size: 1.4rem;
+    }
+
+    .counter-label {
         font-size: 0.85rem;
     }
 
-    .time-estimate i {
+    .progress-counter {
+        min-width: 60px;
+    }
+
+    .progress-bar {
+        height: 13px;
+        margin: 0 10px;
+    }
+
+    .time-estimate {
         font-size: 0.9rem;
+        gap: 7px;
+    }
+
+    .time-value {
+        font-size: 0.95rem;
+    }
+
+    .progress-message {
+        font-size: 1rem;
+        padding: 8px 12px;
+        margin-top: 6px;
+    }
+
+    .save-indicator {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+
+    .save-indicator-text {
+        font-size: 0.75rem;
+    }
+}
+
+/* Show time estimate on mobile screens that can accommodate it */
+@media (min-width: 400px) and (max-width: 576px) {
+    .time-estimate {
+        display: flex;
+        font-size: 0.9rem;
+    }
+
+    .time-estimate i {
+        font-size: 1rem; /* Larger icon */
     }
 }
 
 /* Enhanced tablet layout */
 @media (min-width: 577px) and (max-width: 767px) {
     .progress-container {
-        padding: 12px 14px; /* More padding */
+        padding: 14px 16px; /* More padding for tablets */
+        gap: 18px;
+    }
+
+    .progress-primary {
+        gap: 12px; /* Adjusted for vertical layout on tablets */
+    }
+    
+    .progress-primary-controls {
+        gap: 18px; /* Tablet gap for horizontal controls */
     }
 
     .progress-counter {
-        font-size: 1.15rem;
+        font-size: 1.25rem; /* Optimized for tablet */
     }
 
     .progress-bar {
-        height: 10px;
+        height: 11px; /* Tablet-optimized thickness */
     }
 
     .time-estimate {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
     }
 }
 
-/* Desktop enhancements */
+/* Desktop enhancements with larger touch targets */
 @media (min-width: 768px) {
     .progress-container {
-        padding: 14px 22px; /* More padding for better spacing */
+        padding: 16px 24px; /* Enhanced desktop padding */
+        gap: 20px;
+    }
+
+    .progress-primary {
+        gap: 14px; /* Adjusted for vertical layout on desktop */
+    }
+    
+    .progress-primary-controls {
+        gap: 20px; /* Desktop gap for horizontal controls */
     }
 
     .progress-counter {
-        font-size: 1.35rem;
+        font-size: 1.4rem; /* Larger desktop display */
     }
 
     .progress-bar {
-        height: 12px;
+        height: 12px; /* Thicker desktop progress bar */
     }
 
     .progress-message {
-        max-width: 80%;
-        margin: 4px auto 0; /* Better top margin */
-        font-size: 1.05rem;
+        max-width: 85%; /* Better desktop layout */
+        margin: 6px auto 0;
+        font-size: 1.1rem;
     }
 
     .nav-btn, .reset-btn {
-        width: 40px; /* Larger buttons on desktop */
-        height: 40px;
-        font-size: 1.1rem;
+        width: 48px; /* Larger desktop buttons */
+        height: 48px;
+        font-size: 1rem;
     }
 }
 
@@ -854,4 +1219,189 @@
 @keyframes notification-entrance {
     0% { opacity: 0; transform: translateY(-20px); }
     100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== ENHANCED MOBILE TOOLTIP ALTERNATIVES ===== */
+
+/* Enhanced visual feedback for mobile since tooltips are hidden */
+@media (max-width: 768px) {
+    .nav-btn[title]:hover::after,
+    .reset-btn[title]:hover::after {
+        display: none;
+    }
+
+    /* Enhanced visual indicator for button functionality on mobile */
+    .nav-btn,
+    .reset-btn {
+        position: relative;
+    }
+
+    .nav-btn::before,
+    .reset-btn::before {
+        content: '';
+        position: absolute;
+        bottom: -4px; /* Slightly more visible */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px; /* Larger indicator */
+        height: 6px;
+        background: rgba(255, 255, 255, 0.8); /* More visible */
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .nav-btn:active::before,
+    .reset-btn:active::before {
+        opacity: 1;
+    }
+    
+    /* Enhanced active state feedback */
+    .nav-btn:active,
+    .reset-btn:active {
+        transform: scale(0.95); /* Slight press feedback */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* ===== ENHANCED LANDSCAPE MOBILE SUPPORT ===== */
+
+/* Ultra-small landscape phones */
+@media (max-width: 568px) and (orientation: landscape) and (max-height: 320px) {
+    .progress-container {
+        padding: 6px 12px; /* Minimal vertical padding */
+        gap: 8px; /* Tight spacing for very limited height */
+        grid-template-columns: auto minmax(55%, 1fr) auto; /* More space for content */
+    }
+    
+    .nav-btn, .reset-btn {
+        width: 32px; /* Ultra-compact buttons */
+        height: 32px;
+        font-size: 0.85rem;
+        min-width: 32px;
+        min-height: 32px;
+    }
+    
+    .progress-controls {
+        gap: 6px; /* Minimal vertical spacing */
+    }
+    
+    .progress-primary {
+        gap: 4px; /* Minimal spacing */
+    }
+    
+    .progress-primary-controls {
+        gap: 10px; /* Compact horizontal spacing */
+    }
+    
+    .counter-value {
+        font-size: 1rem; /* Compact text */
+    }
+    
+    .counter-label {
+        font-size: 0.65rem; /* Tiny labels */
+    }
+    
+    .progress-bar {
+        height: 8px; /* Thinner bar for landscape */
+        margin: 0 6px;
+    }
+    
+    .time-estimate {
+        font-size: 0.7rem; /* Compact time display */
+        gap: 3px;
+    }
+    
+    .time-value {
+        font-size: 0.75rem;
+    }
+    
+    .progress-message {
+        font-size: 0.8rem; /* Compact message */
+        padding: 4px 8px;
+        margin-top: 2px;
+    }
+    
+    .save-indicator {
+        padding: 2px 6px; /* Ultra-compact save indicator */
+        font-size: 0.65rem;
+    }
+    
+    .save-indicator-text {
+        font-size: 0.6rem;
+    }
+}
+
+/* Standard landscape mobile */
+@media (min-width: 569px) and (max-width: 896px) and (orientation: landscape) and (max-height: 500px) {
+    .progress-container {
+        padding: 8px 16px; /* Reduced padding for landscape */
+        gap: 10px; /* Tighter vertical spacing */
+        max-width: 95%; /* Constrain width for better proportions */
+    }
+    
+    .nav-btn, .reset-btn {
+        width: 38px; /* Compact for landscape to save space */
+        height: 38px;
+        font-size: 0.95rem;
+        min-width: 38px;
+        min-height: 38px;
+    }
+    
+    .progress-controls {
+        gap: 8px; /* Reduced vertical spacing */
+    }
+    
+    .progress-primary {
+        gap: 6px; /* Tighter spacing for landscape */
+    }
+    
+    .progress-primary-controls {
+        gap: 12px; /* Tighter spacing for landscape */
+    }
+    
+    .counter-value {
+        font-size: 1rem; /* Adjusted for landscape */
+    }
+    
+    .counter-label {
+        font-size: 0.75rem;
+    }
+    
+    .progress-bar {
+        height: 10px; /* Slightly thinner for landscape */
+        margin: 0 8px;
+    }
+    
+    .time-estimate {
+        font-size: 0.8rem;
+        gap: 4px;
+    }
+    
+    .time-value {
+        font-size: 0.85rem;
+    }
+    
+    .progress-message {
+        font-size: 0.85rem; /* Smaller text for landscape */
+        padding: 5px 8px;
+        margin-top: 3px;
+    }
+    
+    .save-indicator {
+        padding: 3px 8px;
+        font-size: 0.7rem;
+    }
+    
+    .save-indicator-text {
+        font-size: 0.65rem;
+    }
+}
+
+/* Large landscape tablets/phones */
+@media (min-width: 897px) and (orientation: landscape) and (max-height: 600px) {
+    .progress-container {
+        max-width: 85%; /* Better proportions for large landscape */
+        padding: 12px 20px;
+    }
 }

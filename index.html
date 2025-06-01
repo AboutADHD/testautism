@@ -175,6 +175,20 @@
 <!-- Skip to content link for keyboard users -->
 <a href="#main-content" class="sr-only sr-only-focusable">Sari la conținut</a>
 
+<!-- Mobile-First Floating Action Button for Quick Test Access -->
+<div id="mobile-fab-container" class="mobile-fab-container" style="display: none;">
+    <button 
+        id="mobile-jump-to-test" 
+        class="mobile-fab" 
+        aria-label="Începe testul RAADS-R acum"
+        title="Începe testul RAADS-R"
+        onclick="document.getElementById('start-test').click()"
+    >
+        <i class="fas fa-clipboard-list" aria-hidden="true"></i>
+        <span class="fab-text">Test<br>RAADS-R</span>
+    </button>
+</div>
+
 <div class="container" id="main-content">
     <!-- Terms and Conditions Banner - Desktop Only -->
     <div id="terms-banner" class="terms-banner" role="alert" aria-live="polite">
@@ -203,31 +217,19 @@
             <li>
                 <a href="#section-faq" class="quick-nav-item">
                     <i class="fas fa-info-circle"></i>
-                    <span>Despre testul RAADS-R</span>
+                    <span>Despre test<br>RAADS-R</span>
                 </a>
             </li>
             <li>
                 <a href="#section-instructions" class="quick-nav-item">
                     <i class="fas fa-clipboard-list"></i>
-                    <span>Componența testului</span>
-                </a>
-            </li>
-            <li>
-                <a href="#section-quiz" class="quick-nav-item">
-                    <i class="fa-solid fa-circle-play"></i>
-                    <span>Testul RAADS-R - ÎNCEPE AICI!</span>
+                    <span>Componența<br>RAADS-R</span>
                 </a>
             </li>
             <li>
                 <a href="#section-results" class="quick-nav-item">
                     <i class="fas fa-chart-line"></i>
-                    <span>Rezultate</span>
-                </a>
-            </li>
-            <li>
-                <a href="#section-support" class="quick-nav-item">
-                    <i class="fas fa-headset"></i>
-                    <span>Suport</span>
+                    <span>Rezultate<br>RAADS-R</span>
                 </a>
             </li>
         </ul>
@@ -246,30 +248,37 @@
 
         <!-- Primary Progress Display -->
         <div class="progress-primary">
-            <!-- Question Counter -->
-            <div class="progress-counter" aria-live="polite">
-                <span class="current-question">0</span>/<span class="total-questions">80</span>
+            <div class="progress-primary-controls">
+                <!-- Question Counter -->
+                <div class="progress-counter" aria-live="polite">
+                    <span class="current-question">0</span>/<span class="total-questions">80</span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                    <div class="progress-fill" style="width: 0%"></div>
+                    <!-- Milestone markers (25%, 50%, 75%) -->
+                    <div class="milestone-marker" style="left: 25%"></div>
+                    <div class="milestone-marker" style="left: 50%"></div>
+                    <div class="milestone-marker" style="left: 75%"></div>
+                </div>
+
+                <!-- Time Estimate -->
+                <div class="time-estimate">
+                    <i class="fas fa-clock"></i>
+                    <span aria-live="polite">30 minute</span>
+                </div>
+
+                <!-- Save Indicator -->
+                <div class="save-indicator" aria-live="polite">
+                    <i class="fas fa-floppy-disk save-indicator-icon"></i>
+                    <span class="save-indicator-text">Salvat 02:38</span>
+                </div>
             </div>
 
-            <!-- Progress Bar -->
-            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                <div class="progress-fill" style="width: 0%"></div>
-                <!-- Milestone markers (25%, 50%, 75%) -->
-                <div class="milestone-marker" style="left: 25%"></div>
-                <div class="milestone-marker" style="left: 50%"></div>
-                <div class="milestone-marker" style="left: 75%"></div>
-            </div>
-
-            <!-- Time Estimate -->
-            <div class="time-estimate">
-                <i class="fas fa-clock"></i>
-                <span aria-live="polite">30 minute</span>
-            </div>
-
-            <!-- Save Indicator -->
-            <div class="save-indicator" aria-live="polite">
-                <i class="fas fa-floppy-disk save-indicator-icon"></i>
-                <span class="save-indicator-text">Salvat 02:38</span>
+            <!-- Motivational Message -->
+            <div class="progress-message" aria-live="polite">
+                🌟 Minunat început! Pas cu pas, vei reuși! 💪
             </div>
         </div>
 
@@ -277,11 +286,6 @@
         <button class="reset-btn" aria-label="Reset test" title="Reset test">
             <i class="fas fa-redo-alt"></i>
         </button>
-
-        <!-- Motivational Message -->
-        <div class="progress-message" aria-live="polite">
-            🌟 Minunat început! Pas cu pas, vei reuși! 💪
-        </div>
     </div>
 
     <div class="initial-section justify-content-center">
@@ -305,7 +309,7 @@
             </div>
             <div class="col-xs-12 col-sm-6">
                 <!-- Stylish CAT-Q Button with animations and effects -->
-                <div class="cat-q-button-container my-4 d-flex justify-content-center">
+                <div class="cat-q-button-container mb-4 d-flex justify-content-center">
                     <a href="cat-q.html" class="cat-q-button position-relative d-inline-flex align-items-center" style="text-decoration: none; overflow: hidden; border-radius: 16px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
                         <!-- Main button with gradient background -->
                         <div class="button-content d-flex align-items-center px-5 py-2" style="background: linear-gradient(135deg, #9C27B0, #673AB7); position: relative; overflow: hidden; z-index: 1;">
@@ -317,7 +321,7 @@
                             <!-- Button text with gradient -->
                             <div class="button-text">
                                 <div class="d-flex flex-column">
-                                    <span class="cat-q-title" style="font-size: 1.3rem; font-weight: 700; color: white; line-height: 1.2; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">CAT-Q (test de mască)</span>
+                                    <span class="cat-q-title" style="font-size: 1.25rem; font-weight: 700; color: white; line-height: 1.2; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">CAT-Q (test de mască)</span>
                                 </div>
                             </div>
 
@@ -592,8 +596,7 @@
                         </h3>
                         <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
                             <div class="accordion-body">
-                                <p>RAADS-R este unul dintre cele mai fiabile instrumente de screening pentru autism la adulți, cu o sensibilitate de 97% (identifică corect 97% dintre persoanele autiste) și o specificitate de 100% (identifică corect toate persoanele non-autiste) conform studiului de validare original. Aceste valori indică o precizie foarte ridicată în comparație cu alte instrumente de screening disponibile.</p>
-                                <p>Alte teste frecvent utilizate pentru screening-ul autismului la adulți includ AQ (Autism Quotient), cu o sensibilitate de aproximativ 80%, și RAADS-14, o versiune scurtă a acestui test cu 14 întrebări. RAADS-R oferă însă o evaluare mai comprehensivă, analizând patru domenii cheie: limbaj, relaționare socială, senzorial-motor și interese circumscrise.</p>
+                                <p>RAADS-R este unul dintre cele mai fiabile instrumente de screening pentru autism la adulți, cu o sensibilitate de 97% (identifică corect 97% dintre persoanele autiste) și o specificitate de 100% (identifică corect toate persoanele non-autiste) conform studiului de validare original. Aceste valori indică o precizie foarte ridicată în comparație cu alte instrumente de screening disponibile. Alte teste frecvent utilizate pentru screening-ul autismului la adulți includ AQ (Autism Quotient), cu o sensibilitate de aproximativ 80%, și RAADS-14, o versiune scurtă a acestui test cu 14 întrebări. RAADS-R oferă însă o evaluare mai comprehensivă, analizând patru domenii cheie: limbaj, relaționare socială, senzorial-motor și interese circumscrise.</p>
                             </div>
                         </div>
                     </div>

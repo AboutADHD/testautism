@@ -191,6 +191,20 @@
     <!-- Skip to content link for keyboard users -->
     <a href="#main-content" class="sr-only sr-only-focusable">Sari la conținut</a>
 
+    <!-- Mobile-First Floating Action Button for Quick Test Access -->
+    <div id="mobile-fab-container" class="mobile-fab-container" style="display: none;">
+        <button 
+            id="mobile-jump-to-test" 
+            class="mobile-fab" 
+            aria-label="Începe testul CAT-Q acum"
+            title="Începe testul CAT-Q"
+            onclick="document.getElementById('start-test').click()"
+        >
+            <i class="fas fa-mask" aria-hidden="true"></i>
+            <span class="fab-text">Test<br>CAT-Q</span>
+        </button>
+    </div>
+
     <!-- Terms and Conditions Banner -->
     <div id="terms-banner" class="terms-banner" role="alert" aria-live="polite">
         <div class="terms-content">
@@ -220,31 +234,19 @@
             <li>
                 <a href="#section-faq" class="quick-nav-item">
                     <i class="fas fa-info-circle"></i>
-                    <span>Despre testul CAT-Q</span>
+                    <span>Despre test<br>CAT-Q</span>
                 </a>
             </li>
             <li>
                 <a href="#section-instructions" class="quick-nav-item">
                     <i class="fas fa-clipboard-list"></i>
-                    <span>Componența testului</span>
+                    <span>Componența<br>CAT-Q</span>
                 </a>
             </li>
             <li>
-                <a href="#first-disclaimer" class="quick-nav-item">
-                    <i class="fa-solid fa-circle-play"></i>
-                    <span>Testul CAT-Q - ÎNCEPE AICI!</span>
-                </a>
-            </li>
-            <li>
-                <a href="#section-self-scoring" class="quick-nav-item">
+                <a href="#section-results" class="quick-nav-item">
                     <i class="fas fa-chart-line"></i>
-                    <span>Rezultate & interpretare</span>
-                </a>
-            </li>
-            <li>
-                <a href="#section-support" class="quick-nav-item">
-                    <i class="fas fa-headset"></i>
-                    <span>Suport</span>
+                    <span>Rezultate<br>CAT-Q</span>
                 </a>
             </li>
         </ul>
@@ -263,6 +265,17 @@
             <p>Ai observat vreodată că depui efort semnificativ pentru a părea "normal" în situații sociale? Poate ai dezvoltat strategii complexe pentru a ascunde anumite comportamente sau pentru a te adapta mediilor sociale. Aceste strategii sunt cunoscute sub numele de camuflare sau "masking".</p>
         </div>
 
+        <!-- Move CTA button higher for better mobile viewport -->
+        <div class="cta-button-wrapper my-4">
+            <div class="cta-emphasis">
+                <a id="start-test" href="#first-disclaimer" class="cta-button pulse">
+                    <i class="fas fa-clipboard-list"></i>
+                    Mergi direct la Testul CAT-Q
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
         <p><strong>Chestionarul pentru Camuflarea Trăsăturilor Autiste</strong> (CAT-Q) este destinat adulților cu vârsta de peste 16 ani și cu inteligență medie sau superioară. Scopul testului este de a măsura gradul în care persoanele folosesc strategii de camuflare în interacțiunile sociale.</p>
 
         <div class="alert alert-info mt-3">
@@ -276,181 +289,8 @@
                 </div>
             </div>
         </div>
-
-        <div class="cta-button-wrapper">
-            <div class="cta-emphasis">
-                <a id="start-test" href="#first-disclaimer" class="cta-button pulse">
-                    <i class="fas fa-clipboard-list"></i>
-                    Mergi direct la Testul CAT-Q
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- Enhanced Partners Section with Visual Appeal -->
-        <div class="partners-showcase py-5 my-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 16px; position: relative; overflow: hidden;">
-            <!-- Decorative Elements -->
-            <div class="decorative-shapes">
-                <!-- Animated circles -->
-                <div class="shape shape-1" style="position: absolute; width: 300px; height: 300px; border-radius: 50%; background: linear-gradient(45deg, rgba(33, 150, 243, 0.1), rgba(33, 150, 243, 0.05)); top: -150px; left: -100px; z-index: 0; animation: float 8s ease-in-out infinite alternate;"></div>
-                <div class="shape shape-2" style="position: absolute; width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(45deg, rgba(156, 39, 176, 0.08), rgba(156, 39, 176, 0.03)); bottom: -100px; right: -50px; z-index: 0; animation: float 12s ease-in-out infinite alternate-reverse;"></div>
-
-                <!-- Additional decorative elements -->
-                <div class="shape shape-3" style="position: absolute; width: 150px; height: 150px; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; background: linear-gradient(45deg, rgba(255, 152, 0, 0.05), rgba(255, 87, 34, 0.03)); top: 50px; right: 50px; z-index: 0; animation: morphing 15s ease-in-out infinite alternate;"></div>
-
-                <!-- Small decorative dots -->
-                <div class="dots-pattern" style="position: absolute; width: 100%; height: 100%; background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 0); background-size: 20px 20px; z-index: 0; opacity: 0.3;"></div>
-            </div>
-
-            <div class="container position-relative" style="z-index: 1;">
-                <!-- Stylish heading with icon and gradient text -->
-                <div class="text-center mb-4">
-                    <h3 class="d-inline-block position-relative px-4 py-2" style="font-weight: 700;">
-                        <span style="background: linear-gradient(90deg, #2196F3, #9C27B0); -webkit-background-clip: text; background-clip: text; color: transparent;">Colaboratori și Parteneri</span>
-                        <span class="position-absolute" style="width: 40px; height: 3px; background: linear-gradient(90deg, #2196F3, #9C27B0); bottom: 0; left: 50%; transform: translateX(-50%);"></span>
-                    </h3>
-                </div>
-
-                <!-- Creator credits with heart animation -->
-                <div class="text-center mb-4 creator-credits">
-                    <p class="mb-0" style="font-size: 1.1rem;">
-                        <span>Website realizat cu</span>
-                        <span class="position-relative d-inline-block mx-1" style="animation: heartbeat 1.5s ease-in-out infinite; transform-origin: center;">
-                            <span style="font-size: 1.3rem; background: linear-gradient(45deg, #ff758c, #ff7eb3); -webkit-background-clip: text; background-clip: text; color: transparent;">💖</span>
-                        </span>
-                        <span>de către</span>
-                        <span class="fw-bold ms-1" style="background: linear-gradient(90deg, #03A9F4, #00BCD4); -webkit-background-clip: text; background-clip: text; color: transparent;">Andrei Hodorog</span>
-                        <span class="mx-1">și</span>
-                        <span class="fw-bold" style="background: linear-gradient(90deg, #00BCD4, #009688); -webkit-background-clip: text; background-clip: text; color: transparent;">Ovidiu Platon</span>
-                    </p>
-                </div>
-
-                <!-- Partner logos in enhanced cards -->
-                <div class="row justify-content-center g-4">
-                    <!-- Ovidiu Platon -->
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <a href="https://www.ovidiuplaton.com" target="_blank" class="text-decoration-none partner-card-link">
-                            <div class="partner-card h-100 d-flex flex-column align-items-center justify-content-center px-4 py-4" style="background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; position: relative; overflow: hidden;">
-                                <!-- Hover effect overlay -->
-                                <div class="card-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(3, 169, 244, 0.1), rgba(0, 188, 212, 0.1)); opacity: 0; transition: all 0.3s ease;"></div>
-
-                                <!-- Corner ribbon -->
-                                <div class="corner-ribbon" style="position: absolute; top: 0; right: 0; background: linear-gradient(45deg, #03A9F4, #00BCD4); color: white; padding: 8px 30px; transform: rotate(45deg) translate(15px, -15px); font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 3; opacity: 0; transition: all 0.3s ease;">Vizitează</div>
-
-                                <div class="partner-logo text-center" style="position: relative; z-index: 2; transition: all 0.3s ease;">
-                                    <img src="https://www.ovidiuplaton.com/content/images/2024/07/ovidiu-platon---consilier-autism-adhd--audhd.png"
-                                         class="img-fluid"
-                                         style="max-width: 240px; max-height: 80px; aspect-ratio: 3/1; width: auto;"
-                                         alt="Ovidiu Platon - Consilier Parental si de Dezvoltare Personala - autism ADHD"/>
-                                </div>
-
-                                <!-- Tag line with subtle animation -->
-                                <div class="mt-3 text-center partner-tagline" style="font-size: 0.9rem; color: #555; opacity: 0.9; transform: translateY(5px); transition: all 0.3s ease;">
-                                    <span>Consilier Parental și de Dezvoltare Personală</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- SuntAutist -->
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <a href="https://www.suntautist.ro" target="_blank" class="text-decoration-none partner-card-link">
-                            <div class="partner-card h-100 d-flex flex-column align-items-center justify-content-center px-4 py-4" style="background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; position: relative; overflow: hidden;">
-                                <!-- Hover effect overlay -->
-                                <div class="card-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(156, 39, 176, 0.1), rgba(233, 30, 99, 0.1)); opacity: 0; transition: all 0.3s ease;"></div>
-
-                                <!-- Corner ribbon -->
-                                <div class="corner-ribbon" style="position: absolute; top: 0; right: 0; background: linear-gradient(45deg, #9C27B0, #E91E63); color: white; padding: 8px 30px; transform: rotate(45deg) translate(15px, -15px); font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 3; opacity: 0; transition: all 0.3s ease;">Vizitează</div>
-
-                                <div class="partner-logo text-center" style="position: relative; z-index: 2; transition: all 0.3s ease;">
-                                    <img src="https://www.doctoradhd.com/wp-content/uploads/2023/08/suntautist-logo-1024x385.png"
-                                         class="img-fluid"
-                                         style="max-width: 240px; max-height: 80px; aspect-ratio: 8/3; width: auto;"
-                                         alt="Asociatia Sunt Autist - Autismul explicat de autisti"/>
-                                </div>
-
-                                <!-- Tag line with subtle animation -->
-                                <div class="mt-3 text-center partner-tagline" style="font-size: 0.9rem; color: #555; opacity: 0.9; transform: translateY(5px); transition: all 0.3s ease;">
-                                    <span>Autismul explicat de autiști</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- About ADHD -->
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <a href="https://www.despreadhd.ro" target="_blank" class="text-decoration-none partner-card-link">
-                            <div class="partner-card h-100 d-flex flex-column align-items-center justify-content-center px-4 py-4" style="background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; position: relative; overflow: hidden;">
-                                <!-- Hover effect overlay -->
-                                <div class="card-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(0, 150, 136, 0.1), rgba(76, 175, 80, 0.1)); opacity: 0; transition: all 0.3s ease;"></div>
-
-                                <!-- Corner ribbon -->
-                                <div class="corner-ribbon" style="position: absolute; top: 0; right: 0; background: linear-gradient(45deg, #009688, #4CAF50); color: white; padding: 8px 30px; transform: rotate(45deg) translate(15px, -15px); font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 3; opacity: 0; transition: all 0.3s ease;">Vizitează</div>
-
-                                <div class="partner-logo text-center" style="position: relative; z-index: 2; transition: all 0.3s ease;">
-                                    <img src="https://www.despreadhd.ro/content/images/2024/10/despreadhd-ro.jpg"
-                                         class="img-fluid"
-                                         style="max-width: 240px; max-height: 80px; aspect-ratio: 4/3; width: auto;"
-                                         alt="About ADHD România - Știință, diagnostic, tratament, suport"/>
-                                </div>
-
-                                <!-- Tag line with subtle animation -->
-                                <div class="mt-3 text-center partner-tagline" style="font-size: 0.9rem; color: #555; opacity: 0.9; transform: translateY(5px); transition: all 0.3s ease;">
-                                    <span>Știință, diagnostic, tratament, suport</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- DoctorADHD.com - NEW CARD -->
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <a href="https://www.doctoradhd.com" target="_blank" class="text-decoration-none partner-card-link">
-                            <div class="partner-card h-100 d-flex flex-column align-items-center justify-content-center px-4 py-4" style="background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; position: relative; overflow: hidden;">
-                                <!-- Hover effect overlay -->
-                                <div class="card-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255, 87, 34, 0.1), rgba(255, 193, 7, 0.1)); opacity: 0; transition: all 0.3s ease;"></div>
-
-                                <!-- Corner ribbon -->
-                                <div class="corner-ribbon" style="position: absolute; top: 0; right: 0; background: linear-gradient(45deg, #FF5722, #FFC107); color: white; padding: 8px 30px; transform: rotate(45deg) translate(15px, -15px); font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 3; opacity: 0; transition: all 0.3s ease;">Vizitează</div>
-
-                                <div class="partner-logo text-center" style="position: relative; z-index: 2; transition: all 0.3s ease;">
-                                    <img src="https://www.doctoradhd.com/wp-content/uploads/2023/01/logo-doctoradhd-e1673835983539.png"
-                                         class="img-fluid"
-                                         style="max-width: 240px; max-height: 80px; width: auto;"
-                                         alt="Diagnostic profesionional autism și ADHD"/>
-                                </div>
-
-                                <!-- Tag line with subtle animation -->
-                                <div class="mt-3 text-center partner-tagline" style="font-size: 0.9rem; color: #555; opacity: 0.9; transform: translateY(5px); transition: all 0.3s ease;">
-                                    <span>Diagnostic profesionist pentru ADHD și autism</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Support groups in modern styled container -->
-                <div class="support-groups mt-4">
-                    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center gap-3 py-3 px-4" style="background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);">
-                        <div class="support-label" style="font-weight: 600; color: #333; position: relative;">
-                            <span style="background: linear-gradient(45deg, #2196F3, #9C27B0); -webkit-background-clip: text; background-clip: text; color: transparent;">Grupuri de suport:</span>
-                            <span class="position-absolute" style="width: 100%; height: 2px; background: linear-gradient(90deg, #2196F3, #9C27B0); bottom: -4px; left: 0;"></span>
-                        </div>
-
-                        <a href="https://fb.com/groups/suntautist" target="_blank" rel="nofollow" class="support-link d-flex align-items-center text-decoration-none px-3 py-2" style="background: white; border-radius: 50px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; border: 1px solid rgba(33, 150, 243, 0.2);">
-                            <i class="fa-brands fa-facebook me-2" style="color: #1877F2; font-size: 1.2rem;"></i>
-                            <span style="color: #333; font-weight: 500;">Autismul explicat de autiști - SuntAutist</span>
-                        </a>
-
-                        <a href="https://fb.com/groups/aboutadhd" target="_blank" rel="nofollow" class="support-link d-flex align-items-center text-decoration-none px-3 py-2" style="background: white; border-radius: 50px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; border: 1px solid rgba(33, 150, 243, 0.2);">
-                            <i class="fa-brands fa-facebook me-2" style="color: #1877F2; font-size: 1.2rem;"></i>
-                            <span style="color: #333; font-weight: 500;">About ADHD România</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr>
     </div>
+    <hr>
     <div class="features-container premium-features" id="enhanced-features">
         <div class="features-header position-relative overflow-hidden">
             <div class="header-accent-line"></div>
@@ -533,6 +373,170 @@
             </div>
         </div>
     </div>
+    <hr>
+    <!-- Enhanced Partners Section with Visual Appeal -->
+    <div class="partners-showcase py-5 my-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 16px; position: relative; overflow: hidden;">
+        <!-- Decorative Elements -->
+        <div class="decorative-shapes">
+            <!-- Animated circles -->
+            <div class="shape shape-1" style="position: absolute; width: 300px; height: 300px; border-radius: 50%; background: linear-gradient(45deg, rgba(33, 150, 243, 0.1), rgba(33, 150, 243, 0.05)); top: -150px; left: -100px; z-index: 0; animation: float 8s ease-in-out infinite alternate;"></div>
+            <div class="shape shape-2" style="position: absolute; width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(45deg, rgba(156, 39, 176, 0.08), rgba(156, 39, 176, 0.03)); bottom: -100px; right: -50px; z-index: 0; animation: float 12s ease-in-out infinite alternate-reverse;"></div>
+
+            <!-- Additional decorative elements -->
+            <div class="shape shape-3" style="position: absolute; width: 150px; height: 150px; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; background: linear-gradient(45deg, rgba(255, 152, 0, 0.05), rgba(255, 87, 34, 0.03)); top: 50px; right: 50px; z-index: 0; animation: morphing 15s ease-in-out infinite alternate;"></div>
+
+            <!-- Small decorative dots -->
+            <div class="dots-pattern" style="position: absolute; width: 100%; height: 100%; background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 0); background-size: 20px 20px; z-index: 0; opacity: 0.3;"></div>
+        </div>
+
+        <div class="container position-relative" style="z-index: 1;">
+            <!-- Stylish heading with icon and gradient text -->
+            <div class="text-center mb-4">
+                <h3 class="d-inline-block position-relative px-4 py-2" style="font-weight: 700;">
+                    <span style="background: linear-gradient(90deg, #2196F3, #9C27B0); -webkit-background-clip: text; background-clip: text; color: transparent;">Colaboratori și Parteneri</span>
+                    <span class="position-absolute" style="width: 40px; height: 3px; background: linear-gradient(90deg, #2196F3, #9C27B0); bottom: 0; left: 50%; transform: translateX(-50%);"></span>
+                </h3>
+            </div>
+
+            <!-- Creator credits with heart animation -->
+            <div class="text-center mb-4 creator-credits">
+                <p class="mb-0" style="font-size: 1.1rem;">
+                    <span>Website realizat cu</span>
+                    <span class="position-relative d-inline-block mx-1" style="animation: heartbeat 1.5s ease-in-out infinite; transform-origin: center;">
+                        <span style="font-size: 1.3rem; background: linear-gradient(45deg, #ff758c, #ff7eb3); -webkit-background-clip: text; background-clip: text; color: transparent;">💖</span>
+                    </span>
+                    <span>de către</span>
+                    <span class="fw-bold ms-1" style="background: linear-gradient(90deg, #03A9F4, #00BCD4); -webkit-background-clip: text; background-clip: text; color: transparent;">Andrei Hodorog</span>
+                    <span class="mx-1">și</span>
+                    <span class="fw-bold" style="background: linear-gradient(90deg, #00BCD4, #009688); -webkit-background-clip: text; background-clip: text; color: transparent;">Ovidiu Platon</span>
+                </p>
+            </div>
+
+            <!-- Partner logos in enhanced cards -->
+            <div class="row justify-content-center g-4">
+                <!-- Ovidiu Platon -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <a href="https://www.ovidiuplaton.com" target="_blank" class="text-decoration-none partner-card-link">
+                        <div class="partner-card h-100 d-flex flex-column align-items-center justify-content-center px-4 py-4" style="background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; position: relative; overflow: hidden;">
+                            <!-- Hover effect overlay -->
+                            <div class="card-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(3, 169, 244, 0.1), rgba(0, 188, 212, 0.1)); opacity: 0; transition: all 0.3s ease;"></div>
+
+                            <!-- Corner ribbon -->
+                            <div class="corner-ribbon" style="position: absolute; top: 0; right: 0; background: linear-gradient(45deg, #03A9F4, #00BCD4); color: white; padding: 8px 30px; transform: rotate(45deg) translate(15px, -15px); font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 3; opacity: 0; transition: all 0.3s ease;">Vizitează</div>
+
+                            <div class="partner-logo text-center" style="position: relative; z-index: 2; transition: all 0.3s ease;">
+                                <img src="https://www.ovidiuplaton.com/content/images/2024/07/ovidiu-platon---consilier-autism-adhd--audhd.png"
+                                     class="img-fluid"
+                                     style="max-width: 240px; max-height: 80px; aspect-ratio: 3/1; width: auto;"
+                                     alt="Ovidiu Platon - Consilier Parental si de Dezvoltare Personala - autism ADHD"/>
+                            </div>
+
+                            <!-- Tag line with subtle animation -->
+                            <div class="mt-3 text-center partner-tagline" style="font-size: 0.9rem; color: #555; opacity: 0.9; transform: translateY(5px); transition: all 0.3s ease;">
+                                <span>Consilier Parental și de Dezvoltare Personală</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- SuntAutist -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <a href="https://www.suntautist.ro" target="_blank" class="text-decoration-none partner-card-link">
+                        <div class="partner-card h-100 d-flex flex-column align-items-center justify-content-center px-4 py-4" style="background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; position: relative; overflow: hidden;">
+                            <!-- Hover effect overlay -->
+                            <div class="card-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(156, 39, 176, 0.1), rgba(233, 30, 99, 0.1)); opacity: 0; transition: all 0.3s ease;"></div>
+
+                            <!-- Corner ribbon -->
+                            <div class="corner-ribbon" style="position: absolute; top: 0; right: 0; background: linear-gradient(45deg, #9C27B0, #E91E63); color: white; padding: 8px 30px; transform: rotate(45deg) translate(15px, -15px); font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 3; opacity: 0; transition: all 0.3s ease;">Vizitează</div>
+
+                            <div class="partner-logo text-center" style="position: relative; z-index: 2; transition: all 0.3s ease;">
+                                <img src="https://www.doctoradhd.com/wp-content/uploads/2023/08/suntautist-logo-1024x385.png"
+                                     class="img-fluid"
+                                     style="max-width: 240px; max-height: 80px; aspect-ratio: 8/3; width: auto;"
+                                     alt="Asociatia Sunt Autist - Autismul explicat de autisti"/>
+                            </div>
+
+                            <!-- Tag line with subtle animation -->
+                            <div class="mt-3 text-center partner-tagline" style="font-size: 0.9rem; color: #555; opacity: 0.9; transform: translateY(5px); transition: all 0.3s ease;">
+                                <span>Autismul explicat de autiști</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- About ADHD -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <a href="https://www.despreadhd.ro" target="_blank" class="text-decoration-none partner-card-link">
+                        <div class="partner-card h-100 d-flex flex-column align-items-center justify-content-center px-4 py-4" style="background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; position: relative; overflow: hidden;">
+                            <!-- Hover effect overlay -->
+                            <div class="card-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(0, 150, 136, 0.1), rgba(76, 175, 80, 0.1)); opacity: 0; transition: all 0.3s ease;"></div>
+
+                            <!-- Corner ribbon -->
+                            <div class="corner-ribbon" style="position: absolute; top: 0; right: 0; background: linear-gradient(45deg, #009688, #4CAF50); color: white; padding: 8px 30px; transform: rotate(45deg) translate(15px, -15px); font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 3; opacity: 0; transition: all 0.3s ease;">Vizitează</div>
+
+                            <div class="partner-logo text-center" style="position: relative; z-index: 2; transition: all 0.3s ease;">
+                                <img src="https://www.despreadhd.ro/content/images/2024/10/despreadhd-ro.jpg"
+                                     class="img-fluid"
+                                     style="max-width: 240px; max-height: 80px; aspect-ratio: 4/3; width: auto;"
+                                     alt="About ADHD România - Știință, diagnostic, tratament, suport"/>
+                            </div>
+
+                            <!-- Tag line with subtle animation -->
+                            <div class="mt-3 text-center partner-tagline" style="font-size: 0.9rem; color: #555; opacity: 0.9; transform: translateY(5px); transition: all 0.3s ease;">
+                                <span>Știință, diagnostic, tratament, suport</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- DoctorADHD.com -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <a href="https://www.doctoradhd.com" target="_blank" class="text-decoration-none partner-card-link">
+                        <div class="partner-card h-100 d-flex flex-column align-items-center justify-content-center px-4 py-4" style="background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; position: relative; overflow: hidden;">
+                            <!-- Hover effect overlay -->
+                            <div class="card-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255, 87, 34, 0.1), rgba(255, 193, 7, 0.1)); opacity: 0; transition: all 0.3s ease;"></div>
+
+                            <!-- Corner ribbon -->
+                            <div class="corner-ribbon" style="position: absolute; top: 0; right: 0; background: linear-gradient(45deg, #FF5722, #FFC107); color: white; padding: 8px 30px; transform: rotate(45deg) translate(15px, -15px); font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 3; opacity: 0; transition: all 0.3s ease;">Vizitează</div>
+
+                            <div class="partner-logo text-center" style="position: relative; z-index: 2; transition: all 0.3s ease;">
+                                <img src="https://www.doctoradhd.com/wp-content/uploads/2023/01/logo-doctoradhd-e1673835983539.png"
+                                     class="img-fluid"
+                                     style="max-width: 240px; max-height: 80px; width: auto;"
+                                     alt="Diagnostic profesionist pentru ADHD și autism"/>
+                            </div>
+
+                            <!-- Tag line with subtle animation -->
+                            <div class="mt-3 text-center partner-tagline" style="font-size: 0.9rem; color: #555; opacity: 0.9; transform: translateY(5px); transition: all 0.3s ease;">
+                                <span>Diagnostic profesionist pentru ADHD și autism</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Support groups in modern styled container -->
+            <div class="support-groups mt-4">
+                <div class="d-flex flex-column flex-md-row align-items-center justify-content-center gap-3 py-3 px-4" style="background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);">
+                    <div class="support-label" style="font-weight: 600; color: #333; position: relative;">
+                        <span style="background: linear-gradient(45deg, #2196F3, #9C27B0); -webkit-background-clip: text; background-clip: text; color: transparent;">Grupuri de suport:</span>
+                        <span class="position-absolute" style="width: 100%; height: 2px; background: linear-gradient(90deg, #2196F3, #9C27B0); bottom: -4px; left: 0;"></span>
+                    </div>
+
+                    <a href="https://fb.com/groups/suntautist" target="_blank" rel="nofollow" class="support-link d-flex align-items-center text-decoration-none px-3 py-2" style="background: white; border-radius: 50px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; border: 1px solid rgba(33, 150, 243, 0.2);">
+                        <i class="fa-brands fa-facebook me-2" style="color: #1877F2; font-size: 1.2rem;"></i>
+                        <span style="color: #333; font-weight: 500;">Autismul explicat de autiști - SuntAutist</span>
+                    </a>
+
+                    <a href="https://fb.com/groups/aboutadhd" target="_blank" rel="nofollow" class="support-link d-flex align-items-center text-decoration-none px-3 py-2" style="background: white; border-radius: 50px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; border: 1px solid rgba(33, 150, 243, 0.2);">
+                        <i class="fa-brands fa-facebook me-2" style="color: #1877F2; font-size: 1.2rem;"></i>
+                        <span style="color: #333; font-weight: 500;">About ADHD România</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
     <!-- FAQ Section with Scientifically Accurate Information -->
     <div class="faq-section container my-5" id="section-faq">
         <h2 class="text-center mb-4">Întrebări frecvente despre testul de camuflare a trăsăturilor autiste CAT-Q</h2>
@@ -1701,7 +1705,7 @@
 
             <div class="alert alert-warning">
                 <i class="fas fa-exclamation-triangle me-2"></i>
-                <strong>Important:</strong> Răspundeți cât mai sincer posibil. Nu există răspunsuri "corecte" sau "greșite". Dacă preferi să îți auto-evaluezi scorul, vei găsi secțiunea „Self-scoring" cu explicații detaliate pentru calcularea punctajului la finalul testului.
+                <strong>Important:</strong> Răspundeți cât mai sincer posibil. Nu există răspunsuri "corecte" sau "greșite". Dacă preferi să îți auto-evaluezi scorul, vei găsi secțiunea "Self-scoring" cu explicații detaliate pentru calcularea punctajului la finalul testului.
             </div>
         </div>
     </div>
@@ -1733,78 +1737,83 @@
 
         <!-- Primary Progress Display -->
         <div class="progress-primary">
-            <!-- Question Counter -->
-            <div class="progress-counter" aria-live="polite">
-                <span class="current-question">0</span>/<span class="total-questions">80</span>
+            <div class="progress-primary-controls">
+                <!-- Question Counter -->
+                <div class="progress-counter" aria-live="polite">
+                    <span class="current-question">0</span>/<span class="total-questions">25</span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                    <div class="progress-fill" style="width: 0%"></div>
+                    <!-- Milestone markers (25%, 50%, 75%) -->
+                    <div class="milestone-marker" style="left: 25%"></div>
+                    <div class="milestone-marker" style="left: 50%"></div>
+                    <div class="milestone-marker" style="left: 75%"></div>
+                </div>
+
+                <!-- Time Estimate -->
+                <div class="time-estimate">
+                    <i class="fas fa-clock"></i>
+                    <span aria-live="polite">10 minute</span>
+                </div>
+
+                <!-- Save Indicator -->
+                <div class="save-indicator" aria-live="polite">
+                    <i class="fas fa-floppy-disk save-indicator-icon"></i>
+                    <span class="save-indicator-text">Salvat</span>
+                </div>
             </div>
 
-            <!-- Progress Bar -->
-            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                <div class="progress-fill" style="width: 0%"></div>
-                <!-- Milestone markers (25%, 50%, 75%) -->
-                <div class="milestone-marker" style="left: 25%"></div>
-                <div class="milestone-marker" style="left: 50%"></div>
-                <div class="milestone-marker" style="left: 75%"></div>
-            </div>
-
-            <!-- Time Estimate -->
-            <div class="time-estimate">
-                <i class="fas fa-clock"></i>
-                <span aria-live="polite">30 minute</span>
-            </div>
-
-            <!-- Save Indicator -->
-            <div class="save-indicator" aria-live="polite">
-                <i class="fas fa-floppy-disk save-indicator-icon"></i>
-                <span class="save-indicator-text">Salvat 02:38</span>
+            <!-- Motivational Message -->
+            <div class="progress-message" aria-live="polite">
+                🌟 Minunat început! Pas cu pas, vei reuși! 💪
             </div>
         </div>
 
         <!-- Reset Control -->
-        <button class="reset-btn" aria-label="Reset test" title="Reset test">
+        <button class="reset-btn" aria-label="Reset test" title="Reset test" onclick="showRestartWarning()">
             <i class="fas fa-redo-alt"></i>
         </button>
-
-        <!-- Motivational Message -->
-        <div class="progress-message" aria-live="polite">
-            🌟 Minunat început! Pas cu pas, vei reuși! 💪
+    </div>
+    <div class="section-divider d-md-none"></div>
+    <div class="test-actual-container" id="section-quiz">
+        <!-- Disclaimer Section -->
+        <div id="first-disclaimer" class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+            <h2 class="alert-heading h3 mb-3">Avertisment <strong>IMPORTANT</strong> și <strong>Disclaimer</strong> - <strong>Citește ÎNAINTE</strong> de a începe testul!</h2>
+            <p>
+                Acest test este destinat <b>EXCLUSIV</b> în scop informativ și <b>NU</b> trebuie utilizat ca un instrument de diagnostic. Deși testul CAT-Q a fost validat științific pentru măsurarea camuflării sociale, el <b>NU</b> înlocuiește o evaluare profesională efectuată de un specialist în domeniul sănătății mintale.
+            </p>
+    
+            <p>Scorurile ridicate la CAT-Q pot indica prezența unor strategii de camuflare utilizate frecvent de persoanele autiste, dar nu reprezintă în sine un diagnostic de autism. Camuflarea socială poate fi prezentă și în alte condiții precum anxietatea socială.</p>
+    
+            <p>Pentru evaluări profesionale și diagnostic, vă recomandăm să vizitați <a href="https://www.doctoradhd.com/" target="_blank">doctoradhd.com</a>.</p>
+            <p>
+                Vă încurajăm să folosiți rezultatele în mod <strong>responsabil</strong> și să căutați <b>suport profesional calificat, de specialitate</b> dacă aveți nevoie de o evaluare detaliată.
+            </p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    </div>
-    <!-- Disclaimer Section -->
-    <div id="first-disclaimer" class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
-        <h2 class="alert-heading h3 mb-3">Avertisment <strong>IMPORTANT</strong> și <strong>Disclaimer</strong> - <strong>Citește ÎNAINTE</strong> de a începe testul!</h2>
-        <p>
-            Acest test este destinat <b>EXCLUSIV</b> în scop informativ și <b>NU</b> trebuie utilizat ca un instrument de diagnostic. Deși testul CAT-Q a fost validat științific pentru măsurarea camuflării sociale, el <b>NU</b> înlocuiește o evaluare profesională efectuată de un specialist în domeniul sănătății mintale.
-        </p>
-
-        <p>Scorurile ridicate la CAT-Q pot indica prezența unor strategii de camuflare utilizate frecvent de persoanele autiste, dar nu reprezintă în sine un diagnostic de autism. Camuflarea socială poate fi prezentă și în alte condiții precum anxietatea socială.</p>
-
-        <p>Pentru evaluări profesionale și diagnostic, vă recomandăm să vizitați <a href="https://www.doctoradhd.com/" target="_blank">doctoradhd.com</a>.</p>
-        <p>
-            Vă încurajăm să folosiți rezultatele în mod <strong>responsabil</strong> și să căutați <b>suport profesional calificat, de specialitate</b> dacă aveți nevoie de o evaluare detaliată.
-        </p>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
-            <h2 class="text-center mt-4 mb-3">Chestionarul CAT-Q</h2>
-            <p class="lead text-center mb-4">Chestionarul de evaluare a tendințelor de camuflare a trăsăturilor autiste</p>
-
-            <form id="catqForm" class="mb-4">
-                <div id="questions" class="mb-4">
-                    <!-- Questions will be populated here -->
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <h2 class="text-center mt-4 mb-3">Chestionarul CAT-Q</h2>
+                <p class="lead text-center mb-4">Chestionarul de evaluare a tendințelor de camuflare a trăsăturilor autiste</p>
+    
+                <form id="catqForm" class="mb-4">
+                    <div id="questions" class="mb-4">
+                        <!-- Questions will be populated here -->
+                    </div>
+                    <div id="error" class="alert alert-danger" style="display: none;"></div>
+                    <div id="errorBelow" class="alert alert-danger" style="display: none;"></div>
+    
+                    <button type="button" id="submitBtn" class="btn btn-primary btn-lg w-100 mb-4 action-btn calculate-btn">
+                        <i class="fas fa-calculator"></i>
+                        Calculează Scorul
+                    </button>
+                </form>
+    
+                <div id="section-results" class="result" style="display: none;">
+                    <!-- Results will be populated here by JavaScript -->
                 </div>
-                <div id="error" class="alert alert-danger" style="display: none;"></div>
-                <div id="errorBelow" class="alert alert-danger" style="display: none;"></div>
-
-                <button type="button" id="submitBtn" class="btn btn-primary btn-lg w-100 mb-4 action-btn calculate-btn">
-                    <i class="fas fa-calculator"></i>
-                    Calculează Scorul
-                </button>
-            </form>
-
-            <div id="section-results" class="result" style="display: none;">
-                <!-- Results will be populated here by JavaScript -->
             </div>
         </div>
     </div>
@@ -2453,6 +2462,8 @@
             </div>
         </div>
     </div>
+
+    <hr>
 </div>
 
 <!-- Update the restart warning modal HTML -->
