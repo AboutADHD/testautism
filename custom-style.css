@@ -1936,6 +1936,16 @@ a:focus {
     }
 }
 
+/* Base style for CAT-Q button */
+.cat-q-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    text-decoration: none;
+}
+
 /* Hover effects */
 .cat-q-button:hover {
     transform: translateY(-5px);
