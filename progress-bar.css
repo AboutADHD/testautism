@@ -238,15 +238,20 @@
 }
 
 .progress-primary-controls {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+        "bar bar bar bar"
+        "counter time save save";
     align-items: center;
-    justify-content: center;
-    gap: 16px;
+    gap: clamp(8px, 2vw, 16px);
     width: 100%;
 }
 
 /* Question counter with label - enhanced for mobile */
 .progress-counter {
+    grid-area: counter;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -323,13 +328,15 @@
 
 /* Progress bar */
 .progress-bar {
+    grid-area: bar;
     flex: 1;
+    min-width: 0;
     height: 8px; /* Slightly thicker base size */
     background-color: #e9ecef;
     border-radius: 4px;
     position: relative;
     overflow: hidden;
-    margin: 0 8px; /* Consistent margins */
+    margin: 0;
     transition: height 0.2s ease; /* Smooth height transitions */
 }
 
@@ -337,7 +344,7 @@
 @media (max-width: 768px) {
     .progress-bar {
         height: 12px; /* Thicker for better mobile visibility */
-        margin: 0 12px; /* More margin space */
+        margin: 0;
         border-radius: 6px; /* More rounded for modern feel */
     }
 }
@@ -345,7 +352,7 @@
 @media (max-width: 480px) {
     .progress-bar {
         height: 14px; /* Thickest for ultra-mobile */
-        margin: 0 10px;
+        margin: 0;
         border-radius: 7px;
     }
 }
@@ -395,6 +402,7 @@
 
 /* ===== ENHANCED TIME ESTIMATE WITH MOBILE READABILITY ===== */
 .time-estimate {
+    grid-area: time;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -438,16 +446,15 @@
 
 /* Save indicator */
 .save-indicator {
-    position: absolute;
-    right: 15px;
-    top: 0;
-    z-index: 100;
+    grid-area: save;
+    display: flex;
     align-items: center;
+    justify-content: flex-end;
+    justify-self: end;
     background: linear-gradient(to right, rgba(235, 245, 255, 0.8), rgba(235, 245, 255, 0.4));
     padding: 5px 12px; /* Slightly more padding */
     border-radius: 20px;
     border-left: 2px solid #2196F3;
-    margin-left: auto;
     transition: opacity 0.3s ease;
 }
 
@@ -578,7 +585,7 @@
 
     .progress-bar {
         height: 10px; /* Thinner progress bar */
-        margin: 0 6px; /* Reduced margins */
+        margin: 0;
     }
 
     .time-estimate {
@@ -644,7 +651,7 @@
 
     .progress-bar {
         height: 11px;
-        margin: 0 8px;
+        margin: 0;
     }
 
     .time-estimate {
@@ -710,7 +717,7 @@
 
     .progress-bar {
         height: 10px;
-        margin: 0 6px;
+        margin: 0;
     }
 
     .time-estimate {
@@ -776,7 +783,7 @@
 
     .progress-bar {
         height: 11px;
-        margin: 0 8px;
+        margin: 0;
     }
 
     .time-estimate {
@@ -1304,7 +1311,7 @@
     
     .progress-bar {
         height: 8px; /* Thinner bar for landscape */
-        margin: 0 6px;
+        margin: 0;
     }
     
     .time-estimate {
@@ -1370,7 +1377,7 @@
     
     .progress-bar {
         height: 10px; /* Slightly thinner for landscape */
-        margin: 0 8px;
+        margin: 0;
     }
     
     .time-estimate {

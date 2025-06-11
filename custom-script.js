@@ -2274,7 +2274,7 @@ function highlightInViewSection() {
         { id: 'section-instructions', navItem: document.querySelector('a[href="#section-instructions"]') },
         { id: 'section-quiz', navItem: document.querySelector('a[href="#section-quiz"]') },
         { id: 'section-results', navItem: document.querySelector('a[href="#section-results"]') },
-        { id: 'section-support', navItem: document.querySelector('a[href="#section-support"]') }
+        { id: 'section-contact', navItem: document.querySelector('a[href="#section-contact"]') }
     ];
 
     // Folosește un handler de derulare cu debouncing pentru performanță mai bună

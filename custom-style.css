@@ -1346,13 +1346,13 @@ body {
 
 .quick-nav {
     display: flex;
-    justify-content: center; /* Center alignment */
+    justify-content: space-around;
     align-items: center;
     margin: 0;
     padding: 0;
     list-style: none;
     max-width: 100%;
-    gap: 0; /* Remove gap, let flex handle spacing */
+    gap: clamp(4px, 1vw, 8px);
 }
 
 .quick-nav-item {
